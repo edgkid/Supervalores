@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sitema CxC</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <link href="/css/bootstrap.min.css" rel="stylesheet">
+      <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+      <link href="/css/animate.css" rel="stylesheet">
+      <link href="/css/style.css" rel="stylesheet">
+
+  </head>
+<% if user_signed_in? %>
+<body>
+  <%= render "layouts/principalbody" %>
+<%else%>
+<body class="gray-bg">
+  <%= yield %>
+<%end%>
+    
+
+  </body>
+</html>

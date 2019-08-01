@@ -1,0 +1,42 @@
+<div class="row">
+	<div class="col-lg-12">
+		<div class="ibox-title">
+		        <h5>Datos del Usuario</h5>
+		    </div>
+		<div class="ibox-content">
+			<%= form_for @user do |f| %>
+				<div class="form-group  row"><label class="col-sm-2 col-form-label">Nombre</label>
+			    	<div class="col-sm-10">
+			    		<%= text_field_tag 'nombre', @user.nombre,  class:"form-control", disabled: true %> 
+			    	</div>
+			    </div>
+			    <div class="hr-line-dashed"></div>
+			    <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido</label>
+			    	<div class="col-sm-10">
+			    		<%= text_field_tag 'apellido', @user.apellido,  class:"form-control", disabled: true %> 
+			    	</div>
+			    </div>
+			    <div class="hr-line-dashed"></div>
+			    <div class="form-group row">
+			    	<label class="col-sm-2 col-form-label">Estado</label>
+			        <div class="col-sm-10">
+			        	<%= text_field_tag 'estado', @user.estado,  class:"form-control", disabled: true %> 
+			        </div>
+			    </div>
+			    <div class="hr-line-dashed"></div>
+			    <div class="form-group row">
+			    	<label class="col-sm-2 col-form-label">Email</label>
+			    	<div class="col-sm-10">
+			    		<%= text_field_tag 'email', @user.email,  class:"form-control", disabled: true %>
+			    	</div>
+			    </div>
+			    <div class="form-group row">
+				    <div class="col-sm-4 col-sm-offset-2">
+				    	<%= link_to "Editar", edit_user_path(@user), {:class=>"btn btn-white btn-sm" }  %>
+				        <%= link_to 'Volver',users_path, {:class =>"btn btn-primary btn-sm"} %>
+				    </div>
+			    </div>
+			<% end %>
+		</div>
+	</div>
+</div>
