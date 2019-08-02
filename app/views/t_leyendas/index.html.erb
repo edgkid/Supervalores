@@ -1,0 +1,20 @@
+<h1 align="center">Leyendas</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Anio</th>
+      <th>Descripción</th>
+      <th>Estatus</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @t_leyendas.each do |t_leyenda| %>
+      <tr onclick="window.location='<%=t_leyenda_path(t_leyenda)%>';" onmouseover="document.body.style.cursor = 'pointer'" onmouseout="document.body.style.cursor = 'default'">
+        <td><%= t_leyenda.anio %></td>
+        <td><%= t_leyenda.descripcion %></td>
+        <td><%= t_leyenda.estatus %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
