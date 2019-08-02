@@ -1,5 +1,4 @@
 class TRecibo < ApplicationRecord
-
 	belongs_to :t_factura
   belongs_to :t_cliente
   belongs_to :t_periodo
@@ -7,10 +6,9 @@ class TRecibo < ApplicationRecord
   belongs_to :user
 
   #has_many :t_recibo_detalle
-  has_many :t_caja
-  has_many :t_nota_credito
+  has_many :t_cajas, dependent: :destroy
+  has_many :t_nota_creditos, dependent: :destroy
 
-  has_many :t_estado_cuentum
-  has_many :t_cliente, through: :t_estado_cuentum
-    
+  has_many :t_estado_cuentums, dependent: :destroy
+  has_many :t_clientes, through: :t_estado_cuentum
 end

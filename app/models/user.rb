@@ -1,16 +1,15 @@
 class User < ApplicationRecord
-	
-	has_and_belongs_to_many :t_rol
+	has_and_belongs_to_many :t_roles
 
-	has_many :t_cliente
-	has_many :t_factura
-	has_many :t_recibo
-	has_many :t_caja
-	has_many :t_estado_cuentum
-	has_many :t_email_masivo
-	has_many :t_emision
-	has_many :t_nota_credito
+	has_many :t_clientes, dependent: :destroy
+	has_many :t_facturas, dependent: :destroy
+	has_many :t_recibos, dependent: :destroy
+	has_many :t_cajas, dependent: :destroy
+	has_many :t_estado_cuentums, dependent: :destroy
+	has_many :t_email_masivos, dependent: :destroy
+	has_many :t_emisions, dependent: :destroy
+	has_many :t_nota_creditos, dependent: :destroy
 	
-  	devise :database_authenticatable, :registerable,
+	devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable, :timeoutable
 end

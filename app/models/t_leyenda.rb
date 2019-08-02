@@ -1,3 +1,3 @@
 class TLeyenda < ApplicationRecord
-	has_many :t_factura
+	has_many :t_facturas, dependent: :destroy
 end
