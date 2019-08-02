@@ -1,0 +1,29 @@
+<h1 align="center">Periodos</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Descripción</th>
+      <th>Rango de días</th>
+      <th>Día tope</th>
+      <th>Mes tope</th>
+      <th>Descripción del mes tope</th>
+      <th>Estatus</th>
+      <th><%= link_to 'Crear', new_t_periodo_path, class: 'btn btn-info btn-xs' %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @t_periodos.each do |t_periodo| %>
+      <!-- <tr onclick="window.location='<%=t_periodo_path(t_periodo)%>';" onmouseover="document.body.style.cursor = 'pointer'" onmouseout="document.body.style.cursor = 'default'"> -->
+      <tr>
+        <td><%= t_periodo.descripcion %></td>
+        <td><%= t_periodo.rango_dias %></td>
+        <td><%= t_periodo.dia_tope %></td>
+        <td><%= t_periodo.mes_tope %></td>
+        <td><%= t_periodo.mes_tope_desc %></td>
+        <td><%= t_periodo.estatus %></td>
+        <td><%= link_to 'editar', edit_t_periodo_path(t_periodo), class: 'btn btn-warning btn-xs' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

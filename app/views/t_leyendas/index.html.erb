@@ -6,14 +6,16 @@
       <th>Anio</th>
       <th>Descripción</th>
       <th>Estatus</th>
+      <th><%= link_to 'Crear', new_t_leyenda_path, class: 'btn btn-info btn-xs' %></th>
     </tr>
   </thead>
   <tbody>
     <% @t_leyendas.each do |t_leyenda| %>
-      <tr onclick="window.location='<%=t_leyenda_path(t_leyenda)%>';" onmouseover="document.body.style.cursor = 'pointer'" onmouseout="document.body.style.cursor = 'default'">
+      <tr>
         <td><%= t_leyenda.anio %></td>
         <td><%= t_leyenda.descripcion %></td>
         <td><%= t_leyenda.estatus %></td>
+        <td><%= link_to 'editar', edit_t_leyenda_path(t_leyenda), class: 'btn btn-warning btn-xs' %></td>
       </tr>
     <% end %>
   </tbody>

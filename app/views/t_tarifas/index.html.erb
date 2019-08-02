@@ -1,0 +1,26 @@
+<h1 align="center">Tarifas</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Rango del monto</th>
+      <th>Recargo</th>
+      <th>Estatus</th>
+      <th><%= link_to 'Crear', new_t_tarifa_path, class: 'btn btn-info btn-xs' %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @t_tarifas.each do |t_tarifa| %>
+      <tr>
+        <td><%= t_tarifa.nombre %></td>
+        <td><%= t_tarifa.descripcion %></td>
+        <td><%= t_tarifa.rango_monto %></td>
+        <td><%= t_tarifa.recargo %></td>
+        <td><%= t_tarifa.estatus %></td>
+        <td><%= link_to 'editar', edit_t_tarifa_path(t_tarifa), class: 'btn btn-warning btn-xs' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
