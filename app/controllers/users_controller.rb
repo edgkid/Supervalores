@@ -1,3 +1,5 @@
+require "user.rb"
+
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
@@ -10,7 +12,9 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @rol =TRol.find(params[:id])
+    @user =User.find(params[:id])
+    #user_rol = @user.get_user_rol(params[:id])
+
   end
 
   # GET /users/new
