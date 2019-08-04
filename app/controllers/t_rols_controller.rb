@@ -31,10 +31,10 @@ class TRolsController < ApplicationController
     redirect_to(:action => 'index')
   end
 
-  def delete
-  end
-
   def destroy
+    @rol = TRol.find(params[:id])
+    @rol.delete
+    redirect_to(:action => 'index')
   end
 
   private
