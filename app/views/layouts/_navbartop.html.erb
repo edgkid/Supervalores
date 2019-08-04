@@ -5,13 +5,9 @@
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Bienvenido a CxC</span>
-                            <br>
-                            <%= current_user.nombre != nil ?  current_user.nombre: " " %>
-                            &nbsp;
-                            <%= current_user.apellido != nil ?  current_user.apellido: " " %>
+                            <span class="m-r-sm text-muted welcome-message">Sistema Cuentas por Cobrar CxC</span>
                         </li>
-                        <li class="dropdown">
+                        <!--<li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                                 <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
                             </a>
@@ -63,8 +59,8 @@
                                     </div>
                                 </li>
                             </ul>
-                        </li>
-                        <li class="dropdown">
+                        </li>-->
+                        <!--<li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                                 <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
                             </a>
@@ -105,15 +101,15 @@
                                     </div>
                                 </li>
                             </ul>
-                        </li>
+                        </li>-->
                         <li>
-                            <%= link_to 'Log out', destroy_user_session_path ,method: :delete %>
+                            <%= link_to 'Salir', destroy_user_session_path ,method: :delete %>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a class="right-sidebar-toggle">
                                 <i class="fa fa-tasks"></i>
                             </a>
-                        </li>
+                        </li>-->
                     </ul>
                 </nav>
                 <!-- ####################### Navbar header ######################### -->
