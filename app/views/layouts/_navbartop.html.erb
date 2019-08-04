@@ -5,7 +5,11 @@
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Bienvenido a CxC</span><br><%= current_user.nombre + " " +current_user.apellido %> 
+                            <span class="m-r-sm text-muted welcome-message">Bienvenido a CxC</span>
+                            <br>
+                            <%= current_user.nombre != nil ?  current_user.nombre: " " %>
+                            &nbsp;
+                            <%= current_user.apellido != nil ?  current_user.apellido: " " %>
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">

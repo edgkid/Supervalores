@@ -6,7 +6,11 @@
                         <div class="dropdown profile-element">
                             <img alt="image" class="rounded-circle" src="/img/profile_small.jpg"/>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="block m-t-xs font-bold"><%= current_user.nombre + " " +current_user.apellido %></span>
+                                <span class="block m-t-xs font-bold">
+                                <%= current_user.nombre != nil ?  current_user.nombre: " " %>
+                                &nbsp;
+                                <%= current_user.apellido != nil ?  current_user.apellido: " " %>
+                                </span>
                                 <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
@@ -23,18 +27,18 @@
                     </li>
                     <li>
                         <a href="#">
-                            <i class="fa fa-pie-chart"></i> 
+                            <i class="fa fa-pie-chart"></i>
                             <span class="nav-label">
                                 Dashboard
-                            </span>  
+                            </span>
                         </a>
                     </li>
                     <li>
                         <a href="#">
-                            <i class="fa fa-pie-chart"></i> 
+                            <i class="fa fa-pie-chart"></i>
                             <span class="nav-label">
                                 Formularios
-                            </span>  
+                            </span>
                         </a>
                     </li>
                     <li class="active">
@@ -101,25 +105,25 @@
                                 </a>
                             </li>
                             <li>
-                                <%= link_to 'Usuarios', url: users_path ,method: :index %>       
+                                <%= link_to 'Usuarios', url: users_path ,method: :index %>
                             </li>
-    
+
 
                         </ul>
                     </li>
                     <li>
                         <a href="#">
-                            <i class="fa fa-diamond"></i> 
+                            <i class="fa fa-diamond"></i>
                             <span class="nav-label">Administrador App
                             </span>
                         </a>
                     </li>
                     <li>
                         <a href="#">
-                            <i class="fa fa-pie-chart"></i> 
+                            <i class="fa fa-pie-chart"></i>
                             <span class="nav-label">
                                 Informes
-                            </span>  
+                            </span>
                         </a>
                     </li>
                 </ul>
