@@ -8,24 +8,24 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="ibox-title">
-		    <img src="/img/a4.jpg" alt="Smiley face" height="15%" width="15%">
+		    <img src="/img/user_icon.png" alt="Smiley face" height="15%" width="15%">
 		</div>
 		<div class="ibox-content">
 			<%= form_for @user do |f| %>
 				<div class="form-group  row"><label class="col-sm-2 col-form-label">Nombre</label>
 			    	<div class="col-sm-10">
-			    		<%= text_field_tag 'nombre', @user.nombre,  class:"form-control", disabled: true %> 
+			    		<%= text_field_tag 'nombre', @user.nombre,  class:"form-control", disabled: true %>
 			    	</div>
 			    </div>
 			    <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido</label>
 			    	<div class="col-sm-10">
-			    		<%= text_field_tag 'apellido', @user.apellido,  class:"form-control", disabled: true %> 
+			    		<%= text_field_tag 'apellido', @user.apellido,  class:"form-control", disabled: true %>
 			    	</div>
 			    </div>
 			    <div class="form-group row">
 			    	<label class="col-sm-2 col-form-label">Estado</label>
 			        <div class="col-sm-10">
-			        	<%= text_field_tag 'estado', @user.estado ? 'Activo' : 'Inactivo',  class:"form-control", disabled: true %> 
+			        	<%= text_field_tag 'estado', @user.estado ? 'Activo' : 'Inactivo',  class:"form-control", disabled: true %>
 			        </div>
 			    </div>
 			    <div class="hr-line-dashed"></div>
@@ -67,4 +67,3 @@
 </div>
 
 <%= @user.inspect %>
-<%= @user.t_rols.inspect %>
