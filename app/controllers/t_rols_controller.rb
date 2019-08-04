@@ -21,9 +21,14 @@ class TRolsController < ApplicationController
   end
 
   def edit
+    @rol =TRol.find(params[:id])
   end
 
   def update
+    @rol = TRol.find(params[:id])
+    @rol.update_attributes(t_rols_params)
+
+    redirect_to(:action => 'index')
   end
 
   def delete
