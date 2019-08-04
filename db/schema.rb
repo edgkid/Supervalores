@@ -459,6 +459,7 @@ ActiveRecord::Schema.define(version: 2019_08_01_154150) do
     t.string "nombre"
     t.string "apellido"
     t.boolean "estado"
+    t.string "avatar"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", default: "", null: false
