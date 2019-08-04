@@ -10,10 +10,14 @@ class TRolsController < ApplicationController
     @rol =TRol.find(params[:id])
   end
 
-  def create
+  def new
+    @rol=TRol.new
   end
 
-  def new
+  def create
+    @rol = TRol.new(t_rols_params)
+    @rol.save
+    redirect_to(:action => 'index')
   end
 
   def edit
