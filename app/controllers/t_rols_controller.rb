@@ -6,6 +6,10 @@ class TRolsController < ApplicationController
     @rols = TRol.all
   end
 
+  def show
+    @rol =TRol.find(params[:id])
+  end
+
   def create
   end
 
