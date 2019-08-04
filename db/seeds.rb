@@ -44,6 +44,7 @@
 
 #Datos prueba Tarifa
 #TTarifa.create(nombre: "Tarifa A", descripcion: "descripcion Tarifa A", rango_monto: "rango prueba", recargo: 12.5, estatus: 1)
+
 #Datos prueba tipo persona
 #TTipoPersona.create(descripcion: "descripcio A", estatus: 1)
 
