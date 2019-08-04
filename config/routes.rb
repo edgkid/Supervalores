@@ -20,6 +20,19 @@ Rails.application.routes.draw do
   get 't_periodos/edit'
   get 't_periodos/index'
   get 't_periodos/show'
+
+  #routes roles
+  get 'rols/index' => 't_rols#index'
+  get 'rols/show/:id' => 't_rols#show'
+
+  get 'rols/edit/:id' => 't_rols#edit'
+  post 'rols/update/:id' =>'t_rols#update'
+
+  get 'rols/new' => 't_rols#new'
+  post 'rols/create' => "t_rols#create"
+
+  get 'rols/destroy/:id' => 't_rols#destroy'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   #root to: 'users#index'
 end
