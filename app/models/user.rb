@@ -14,7 +14,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :trackable, :timeoutable
 
    def get_user_rol(id)
-
 	 	select = " SELECT r.nombre, r.descripcion, r.peso, r.estatus"
 		from = " FROM users u, t_users_rols ur, t_rols r"
 		where = " WHERE u.id = ur.user_id AND ur.t_rol_id = r.id AND r.estatus = 1 AND u.id = " << id
@@ -28,7 +27,10 @@ class User < ApplicationRecord
 		else
 			return nil
 		end
+	end
 
+	def get_all_rols
+		return TRol.all
 	end
 
 end

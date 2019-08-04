@@ -19,7 +19,8 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    #@user = User.new
+    @user = User.new
+    @rols = @user.get_all_rols
   end
 
   # GET /users/1/edit
@@ -40,6 +41,11 @@ class UsersController < ApplicationController
     #    format.json { render json: @user.errors, status: :unprocessable_entity }
     #  end
     #end
+
+    @user = User.new(user_params)
+    @user.save
+    redirect_to(:action => 'index')
+
   end
 
   # PATCH/PUT /users/1
@@ -74,6 +80,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:nombre, :apellido, :estado)
+      params.require(:user).permit(:nombre, :apellido, :estado, :email, :encrypted_password)
     end
 end
