@@ -1,5 +1,4 @@
-require "user.rb"
-
+# require "user.rb"
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
@@ -23,9 +22,9 @@ class UsersController < ApplicationController
   end
 
   def create
-
     @user = User.new(user_params)
-    if @user.save
+    
+    if @user.save!
       redirect_to(:action => 'index')
     else
       render action: 'new'

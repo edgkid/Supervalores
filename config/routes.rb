@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
-
-
   root to: 'dashboard#index'
 
   devise_for :users
 
-  resources :users
+  namespace :admin do
+    resources :users
+  end
   resources :t_leyendas
   resources :t_periodos
   resources :t_tarifas
