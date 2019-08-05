@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+
   root to: 'dashboard#index'
 
   devise_for :users
@@ -9,7 +10,9 @@ Rails.application.routes.draw do
   resources :t_periodos
   resources :t_tarifas
 
-  match '/users/sign_up', to: 'users#new', via: 'get'
+  get 't_users/new' => 't_users#new'
+  post 't_users/create' => 't_users#create'
+  get 't_users/edit'
 
   #routes tarifas
   get 't_tarifas/new'
