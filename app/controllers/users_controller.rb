@@ -25,8 +25,12 @@ class UsersController < ApplicationController
   def create
 
     @user = User.new(user_params)
-    @user.save
-    redirect_to(:action => 'index')
+    #@user.save
+    if @user.save
+      redirect_to(:action => 'index')
+    else
+      render action: 'new'
+    end
 
   end
 

@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   resources :t_periodos
   resources :t_tarifas
 
+  match '/users/sign_up', to: 'users#new', via: 'get'
+
   #routes tarifas
   get 't_tarifas/new'
   get 't_tarifas/edit'
