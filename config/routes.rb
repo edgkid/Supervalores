@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   root to: 'dashboard#index'
 
   devise_for :users
@@ -8,6 +7,7 @@ Rails.application.routes.draw do
   resources :t_leyendas
   resources :t_periodos
   resources :t_tarifas
+  resources :t_facturas
 
   #routes tarifas
   get 't_tarifas/new'
