@@ -1,0 +1,2 @@
+class TUser < ApplicationRecord
+end

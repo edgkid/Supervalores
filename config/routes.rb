@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :users
+  namespace :admin do
+    resources :users
+  end
   resources :t_leyendas
   resources :t_periodos
   resources :t_tarifas
