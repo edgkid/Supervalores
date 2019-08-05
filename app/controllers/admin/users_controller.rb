@@ -36,7 +36,7 @@ class Admin::UsersController < ApplicationController
   end
 
   def destroy
-    @user.destroy
+    @user.delete
     # flash[:warning] = "Usuario eliminado para siempre"
     redirect_to admin_users_path
   end
