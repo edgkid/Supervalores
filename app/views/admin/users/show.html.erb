@@ -23,9 +23,9 @@
 			    	</div>
 			    </div>
 			    <div class="form-group row">
-			    	<label class="col-sm-2 col-form-label">Estado</label>
+			    	<label class="col-sm-2 col-form-label">Activo</label>
 			        <div class="col-sm-10">
-			        	<%= text_field_tag 'estado', @user.estado ? 'Activo' : 'Inactivo',  class:"form-control", disabled: true %>
+			        	<%= text_field_tag 'estado', @user.estado ? 'Si' : 'No',  class:"form-control", disabled: true %>
 			        </div>
 			    </div>
 			    <div class="hr-line-dashed"></div>
@@ -42,20 +42,20 @@
 			    	</div>
 			    </div>
 			    <div class="form-group row">
-			    	<label class="col-sm-2 col-form-label">Ultima Sesion</label>
+			    	<label class="col-sm-2 col-form-label">Ùltima Sesiòn</label>
 			    	<div class="col-sm-10">
 							<%= text_field_tag 'last_sign_in_at', @user.last_sign_in_at != nil ?  @user.last_sign_in_at.strftime("%F %H:%M") : "dd/mm/yyyy",  class:"form-control", disabled: true %>
 			    	</div>
 			    </div>
 			    <div class="form-group row">
-			    	<label class="col-sm-2 col-form-label">Ultima IP</label>
+			    	<label class="col-sm-2 col-form-label">Ùltima IP</label>
 			    	<div class="col-sm-10">
 			    		<%= text_field_tag 'last_sign_in_ip', @user.last_sign_in_ip != nil ? @user.last_sign_in_ip : "0.0.0.0",  class:"form-control", disabled: true %>
 			    	</div>
 			    </div>
 			    <div class="form-group row">
 				    <div class="col-sm-4 col-sm-offset-2">
-				    	<%= link_to "Editar", edit_admin_user_path(@user.id), {:class=>"btn btn-white btn-sm col-12" }  %>
+				    	<%= link_to "Editar Usuario", edit_admin_user_path(@user.id), {:class=>"btn btn-white btn-sm col-12" }  %>
 				    </div>
 				    <div class="col-sm-4 col-sm-offset-2">
 				    	<%= link_to 'Volver',admin_users_path	, {:class =>"btn btn-primary btn-sm col-12"} %>
