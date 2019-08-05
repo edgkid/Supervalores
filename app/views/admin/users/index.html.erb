@@ -8,7 +8,7 @@
               <h5>Usuarios del Sistema</h5>
             </div>
             <div class="col-2">
-              <%= link_to 'Añadir Usuario',new_user_path, class: "btn btn-primary" %>
+              <%= link_to 'Añadir Usuario',new_admin_user_path, class: "btn btn-primary" %>
             </div>
           </div>
         </div>
@@ -31,12 +31,12 @@
                     <td><%= user.nombre %> &nbsp; <%= user.apellido %></td>
                     <td><%= user.email %></td>
                     <td>
-                      <center><%= user.last_sign_in_at.strftime("%F %H:%M") %></center>
+                      <center><%#= user.last_sign_in_at.strftime("%F %H:%M") %></center>
                     </td>
                     <td><%= user.estado ? 'Activo' : 'Inactivo'%></td>
-                    <td><%= link_to 'Ver', user, class: "btn btn-white" %></td>
-                    <td><%= link_to 'Editar', edit_user_path(user), class: "btn btn-white" %></td>
-                    <td><%= link_to 'Eliminar', user, method: :delete, data: { confirm: 'Are you sure?'}, class: "btn btn-white" %></td>
+                    <td><%= link_to 'Ver', [:admin, user], class: "btn btn-white" %></td>
+                    <td><%= link_to 'Editar', edit_admin_user_path(user), class: "btn btn-white" %></td>
+                    <td><%= link_to 'Eliminar', [:admin, user], method: :delete, data: { confirm: 'Are you sure?'}, class: "btn btn-white" %></td>
                   </tr>
                 <% end %>
               </tbody>

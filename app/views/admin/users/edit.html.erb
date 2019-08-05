@@ -1,0 +1,64 @@
+<div class="row">
+	<div class="col-lg-12">
+		<div class="ibox-title">
+			<h5>Editar Datos de Usuario</h5>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="ibox-title">
+		    <img src="/img/user_icon.png" alt="Smiley face" height="15%" width="15%">
+		</div>
+		<div class="ibox-content">
+			<%= form_for [:admin, @user] do |f| %>
+				<div class="form-group  row"><label class="col-sm-2 col-form-label">Nombre</label>
+			    	<div class="col-sm-10">
+			    		<%= f.text_field :nombre, autofocus: true, autocomplete: "nombre", class: "form-control" %>
+			    	</div>
+			    </div>
+			    <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido</label>
+			    	<div class="col-sm-10">
+			    		<%= f.text_field :apellido, autofocus: true, autocomplete: "apellido", class: "form-control" %>
+			    	</div>
+			    </div>
+			    <div class="form-group row">
+			    	<label class="col-sm-2 col-form-label">Activo</label>
+			        <div class="col-sm-10">
+								<%= check_box(:estado, tag.id, {checked:  @user.estado ? true : false}) %>
+			        </div>
+			    </div>
+			    <div class="hr-line-dashed"></div>
+			    <div class="form-group row">
+			    	<label class="col-sm-2 col-form-label">Email</label>
+			    	<div class="col-sm-10">
+			    		<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+			    	</div>
+			    </div>
+			    <div class="form-group row">
+			    	<label class="col-sm-2 col-form-label">Password</label>
+			    	<div class="col-sm-10">
+							<% if @minimum_password_length %>
+								<em>(<%= @minimum_password_length %> characters minimum)</em>
+							<% end %>
+							<%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+			    	</div>
+			    </div>
+			    <div class="form-group row">
+			    	<label class="col-sm-2 col-form-label">Confirmar Password</label>
+			    	<div class="col-sm-10">
+							<%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+			    	</div>
+			    </div>
+			    <div class="form-group row">
+				    <div class="col-sm-4 col-sm-offset-2">
+							<%= f.submit 'Editar Usuario', :class => "btn btn-white btn-sm col-12" %>
+				    </div>
+				    <div class="col-sm-4 col-sm-offset-2">
+				    	<%= link_to 'Volver',admin_users_path	, {:class =>"btn btn-primary btn-sm col-12"} %>
+				    </div>
+			    </div>
+			<% end %>
+		</div>
+	</div>
+</div>
