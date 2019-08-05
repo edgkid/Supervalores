@@ -8,7 +8,7 @@
               <h5>Usuarios del Sistema</h5>
             </div>
             <div class="col-2">
-              <%= link_to 'Añadir Usuario',t_users_new_path, class: "btn btn-primary" %>
+              <%= link_to 'Añadir Usuario',new_user_path, class: "btn btn-primary" %>
             </div>
           </div>
         </div>
@@ -35,7 +35,7 @@
                     </td>
                     <td><%= user.estado ? 'Activo' : 'Inactivo'%></td>
                     <td><%= link_to 'Ver', user, class: "btn btn-white" %></td>
-                    <td><%= link_to 'Editar', edit_user_path(user), class: "btn btn-white" %></td>
+                    <td><%= link_to 'Editar', edit_user_path(user.id), class: "btn btn-white" %></td>
                     <td><%= link_to 'Eliminar', user, method: :delete, data: { confirm: 'Are you sure?'}, class: "btn btn-white" %></td>
                   </tr>
                 <% end %>
