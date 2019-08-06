@@ -22,8 +22,6 @@ class TCliente < ApplicationRecord
 
   has_many :t_estado_cuenta
   has_many :t_recibos, through: :t_estado_cuenta
-
-  has_many :t_estado_cuenta
   has_many :t_facturas, through: :t_estado_cuenta
 
 	has_and_belongs_to_many :t_tarifas
