@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_01_154150) do
+ActiveRecord::Schema.define(version: 2019_08_06_001702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -393,10 +393,6 @@ ActiveRecord::Schema.define(version: 2019_08_01_154150) do
     t.integer "estatus", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "t_tarifa_servicio_group_id", null: false
-    t.bigint "t_catalogo_cuenta_sub_id", null: false
-    t.index ["t_catalogo_cuenta_sub_id"], name: "index_t_tarifa_servicios_on_t_catalogo_cuenta_sub_id"
-    t.index ["t_tarifa_servicio_group_id"], name: "index_t_tarifa_servicios_on_t_tarifa_servicio_group_id"
   end
 
   create_table "t_tarifas", force: :cascade do |t|
@@ -527,8 +523,6 @@ ActiveRecord::Schema.define(version: 2019_08_01_154150) do
   add_foreign_key "t_resolucions", "t_tipo_clientes"
   add_foreign_key "t_rol_descs", "t_rols"
   add_foreign_key "t_tarifa_servicio_groups", "t_presupuestos"
-  add_foreign_key "t_tarifa_servicios", "t_catalogo_cuenta_subs"
-  add_foreign_key "t_tarifa_servicios", "t_tarifa_servicio_groups"
   add_foreign_key "t_tarifas_periodos", "t_periodos"
   add_foreign_key "t_tarifas_periodos", "t_tarifas"
   add_foreign_key "t_tipo_clientes", "t_tarifas"
