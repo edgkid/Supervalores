@@ -17,7 +17,7 @@
             <table class="table table-striped table-bordered table-hover registros">
               <thead>
                 <tr>
-                  <th>Descripcion</th>
+                  <th style="width: 100%;">Descripción</th>
                   <th>Estatus</th>
                   <th colspan="3">Acciones</th>
                 </tr>
@@ -28,10 +28,10 @@
                 <% @registros.each do |registro| %>
                 <tr>
                   <td><%= registro.descripcion %></td>
-                  <td><%= registro.estatus %></td>
-                  <td><%= link_to 'Show', registro %></td>
-                  <td><%= link_to 'Edit', edit_t_tipo_persona_path(registro) %></td>
-                  <td><%= link_to 'Destroy', registro, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  <td><%= estatus_text registro.estatus %></td>
+                  <td><%= link_to 'Ver', registro, class: "btn btn-white" %></td>                    
+                  <td><%= link_to 'Editar', edit_polymorphic_path(registro), class: "btn btn-white" %></td>
+                  <td><%= link_to 'Eliminar', registro, method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-white" %></td>
                 </tr>
                 <% end %>
                 <% else %>

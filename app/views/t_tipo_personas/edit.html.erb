@@ -1,6 +1,8 @@
-<h1>Editing T Tipo Persona</h1>
-
-<%= render 'form', t_tipo_persona: @t_tipo_persona %>
-
-<%= link_to 'Show', @t_tipo_persona %> |
-<%= link_to 'Back', t_tipo_personas_path %>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox-title">
+            <h5>Editar tipo de persona, <%= @registro.descripcion %></h5>
+        </div>
+    </div>
+</div>
+<%= render 'form', registro: @registro, editable: true, return_to: t_tipo_personas_path %>

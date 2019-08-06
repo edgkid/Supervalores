@@ -1,5 +1,8 @@
-<h1>New T Tipo Persona</h1>
-
-<%= render 'form', t_tipo_persona: @t_tipo_persona %>
-
-<%= link_to 'Back', t_tipo_personas_path %>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox-title">
+            <h5>Crear tipo de persona</h5>
+        </div>
+    </div>
+</div>
+<%= render 'form', registro: @registro, editable: true, return_to: t_tipo_personas_path %>

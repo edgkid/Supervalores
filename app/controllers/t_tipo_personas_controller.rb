@@ -1,7 +1,8 @@
 class TTipoPersonasController < ApplicationController
-  before_action :set_t_tipo_persona, only: [:show, :edit, :update, :destroy]
+  before_action :seleccionar_tipo_persona, only: [:show, :edit, :update, :destroy]
 
   def index
+    @usar_dataTables = true
     @registros = TTipoPersona.all
   end
 
@@ -16,11 +17,11 @@ class TTipoPersonasController < ApplicationController
   end
 
   def create
-    @registro = TTipoPersona.new(t_tipo_persona_params)
+    @registro = TTipoPersona.new(parametros_tipo_persona)
 
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to @registro, notice: 'T tipo persona was successfully created.' }
+        format.html { redirect_to @registro, notice: 'Tipo de persona creado correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
         format.html { render :new }
@@ -31,8 +32,8 @@ class TTipoPersonasController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(t_tipo_persona_params)
-        format.html { redirect_to @registro, notice: 'T tipo persona was successfully updated.' }
+      if @registro.update(parametros_tipo_persona)
+        format.html { redirect_to @registro, notice: 'Tipo de persona actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
         format.html { render :edit }
@@ -43,20 +44,22 @@ class TTipoPersonasController < ApplicationController
 
   def destroy
     @registro.estatus = 0
-    @registro.save
-
-    respond_to do |format|
-      format.html { redirect_to t_tipo_personas_url, notice: 'T tipo persona was successfully destroyed.' }
+    
+    if @registro.save
+      format.html { redirect_to t_tipo_personas_url, notice: 'Tipo de persona inhabilitado correctamente.' }
       format.json { head :no_content }
+    else
+      format.html { render :new }
+      format.json { render json: @registro.errors, status: :unprocessable_entity }
     end
   end
 
   private    
-    def set_t_tipo_persona
+    def seleccionar_tipo_persona
       @registro = TTipoPersona.find(params[:id])
     end
     
-    def t_tipo_persona_params
+    def parametros_tipo_persona
       params.require(:t_tipo_persona).permit(:descripcion, :estatus)
     end
 end

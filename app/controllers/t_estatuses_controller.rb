@@ -1,7 +1,8 @@
 class TEstatusesController < ApplicationController
-  before_action :set_t_estatus, only: [:show, :edit, :update, :destroy]
+  before_action :seleccionar_estatus, only: [:show, :edit, :update, :destroy]
 
   def index
+    @usar_dataTables = true
     @registros = TEstatus.all
   end
 
@@ -16,11 +17,11 @@ class TEstatusesController < ApplicationController
   end
 
   def create
-    @registro = TEstatus.new(t_estatus_params)
+    @registro = TEstatus.new(parametros_estatus)
 
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to @registro, notice: 'T estatus was successfully created.' }
+        format.html { redirect_to @registro, notice: 'Estatus creado correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
         format.html { render :new }
@@ -31,8 +32,8 @@ class TEstatusesController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(t_estatus_params)
-        format.html { redirect_to @registro, notice: 'T estatus was successfully updated.' }
+      if @registro.update(parametros_estatus)
+        format.html { redirect_to @registro, notice: 'Estatus actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
         format.html { render :edit }
@@ -42,19 +43,23 @@ class TEstatusesController < ApplicationController
   end
 
   def destroy
-    @registro.destroy
-    respond_to do |format|
-      format.html { redirect_to t_estatuses_url, notice: 'T estatus was successfully destroyed.' }
+    @registro.estatus = 0
+
+    if @registro.save
+      format.html { redirect_to t_tipo_clientes_url, notice: 'Estatus inhabilitado correctamente.' }
       format.json { head :no_content }
+    else
+      format.html { render :new }
+      format.json { render json: @registro.errors, status: :unprocessable_entity }
     end
   end
 
   private
-    def set_t_estatus
+    def seleccionar_estatus
       @registro = TEstatus.find(params[:id])
     end
 
-    def t_estatus_params
+    def parametros_estatus
       params.require(:t_estatus).permit(:estatus, :para, :descripcion, :color)
     end
 end

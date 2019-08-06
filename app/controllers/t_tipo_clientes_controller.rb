@@ -6,12 +6,6 @@ class TTipoClientesController < ApplicationController
     @registros = TTipoCliente.all
   end
 
-  def redirect  
-    @registro = TTipoCliente.take  
-    redirect_to @registro, notice: 'Tipo cliente creado correctamente.'
-    #redirect_to :t_tipo_clientes, notice: 'Tipo cliente creado correctamente.', type: :success
-  end
-
   def show
   end
 
@@ -23,11 +17,11 @@ class TTipoClientesController < ApplicationController
   end
 
   def create
-    @registro = TTipoCliente.new(t_tipo_cliente_params)
+    @registro = TTipoCliente.new(parametros_tipo_cliente)
 
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to @registro, notice: 'Tipo cliente creado correctamente.' }
+        format.html { redirect_to @registro, notice: 'Tipo de cliente creado correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
         format.html { render :new }
@@ -38,8 +32,8 @@ class TTipoClientesController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(t_tipo_cliente_params)
-        format.html { redirect_to @registro, notice: 'Tipo cliente actualizado correctamente.' }
+      if @registro.update(parametros_tipo_cliente)
+        format.html { redirect_to @registro, notice: 'Tipo de cliente actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
         format.html { render :edit }
@@ -48,19 +42,16 @@ class TTipoClientesController < ApplicationController
     end
   end
 
-  def destroy
-    #@registro.destroy
+  def destroy    
     @registro.estatus = 0
+
     if @registro.save
-      respond_to do |format|
-        format.html { redirect_to t_tipo_clientes_url, notice: 'Tipo de cliente inhabilitado correctamente.' }
-        format.json { head :no_content }
-      end
+      format.html { redirect_to t_tipo_clientes_url, notice: 'Tipo de cliente inhabilitado correctamente.' }
+      format.json { head :no_content }
     else
       format.html { render :new }
       format.json { render json: @registro.errors, status: :unprocessable_entity }
     end
-    
   end
 
   private
@@ -68,7 +59,7 @@ class TTipoClientesController < ApplicationController
       @registro = TTipoCliente.find(params[:id])
     end
 
-    def t_tipo_cliente_params
+    def parametros_tipo_cliente
       params.require(:t_tipo_cliente).permit(:codigo, :descripcion, :tipo, :estatus, :t_tarifa_id)
     end
 end

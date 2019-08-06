@@ -31,12 +31,12 @@
                   <% @registros.each do |registro| %>
                   <tr>
                     <td><%= registro.codigo %></td>
-                    <td><%= registro.descripcion %></td>
+                    <td style="width: 100%;"><%= registro.descripcion %></td>
                     <td><%= registro.tipo %></td>
-                    <td><%= registro.estatus_text %></td>
+                    <td><%= estatus_text registro.estatus %></td>
                     <td><%= registro.t_tarifa.nombre %></td>
-                    <td><%= link_to 'Ver', registro, class: "btn btn-white" %></td>
-                    <td><%= link_to 'Editar', edit_t_tipo_cliente_path(registro), class: "btn btn-white" %></td>
+                    <td><%= link_to 'Ver', registro, class: "btn btn-white" %></td>                    
+                    <td><%= link_to 'Editar', edit_polymorphic_path(registro), class: "btn btn-white" %></td>
                     <td><%= link_to 'Eliminar', registro, method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-white" %></td>
                   </tr>
                   <% end %>
