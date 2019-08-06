@@ -50,20 +50,6 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
     t.index ["t_presupuesto_id"], name: "index_t_catalogo_cuenta_subs_on_t_presupuesto_id"
   end
 
-  create_table "t_cliente_padres", force: :cascade do |t|
-    t.string "codigo", null: false
-    t.string "razon_social", null: false
-    t.string "tipo_valor", null: false
-    t.string "sector_economico", null: false
-    t.integer "estatus", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "t_tipo_persona_id", null: false
-    t.bigint "t_tipo_cliente_id", null: false
-    t.index ["t_tipo_cliente_id"], name: "index_t_cliente_padres_on_t_tipo_cliente_id"
-    t.index ["t_tipo_persona_id"], name: "index_t_cliente_padres_on_t_tipo_persona_id"
-  end
-
   create_table "t_cliente_tarifas", force: :cascade do |t|
     t.float "monto", null: false
     t.date "fecha", null: false
@@ -80,30 +66,19 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
 
   create_table "t_clientes", force: :cascade do |t|
     t.string "codigo", null: false
-    t.integer "prospecto", null: false
-    t.date "prospecto_date_int"
-    t.date "prospecto_date_out"
-    t.string "nombre"
-    t.string "apellido"
-    t.string "cedula"
-    t.string "empresa"
-    t.string "cargo"
-    t.string "direccion_empresa"
-    t.string "telefono"
-    t.string "fax"
-    t.string "email"
-    t.string "web"
-    t.bigint "num_licencia"
-    t.integer "estatus", null: false
+    t.integer "t_estatus_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "t_cliente_padre_id", null: false
-    t.bigint "t_catalogo_cuenta_sub_id", null: false
-    t.bigint "t_cuenta_ventum_id"
+    t.bigint "t_tipo_cliente_id", null: false
+    t.bigint "t_tipo_persona_id", null: false
     t.bigint "user_id", null: false
-    t.index ["t_catalogo_cuenta_sub_id"], name: "index_t_clientes_on_t_catalogo_cuenta_sub_id"
-    t.index ["t_cliente_padre_id"], name: "index_t_clientes_on_t_cliente_padre_id"
-    t.index ["t_cuenta_ventum_id"], name: "index_t_clientes_on_t_cuenta_ventum_id"
+    t.string "razon_social"
+    t.string "telefono"
+    t.string "email"
+    t.date "prospecto_at"
+    t.index ["t_estatus_id"], name: "index_t_clientes_on_t_estatus_id"
+    t.index ["t_tipo_cliente_id"], name: "index_t_clientes_on_t_tipo_cliente_id"
+    t.index ["t_tipo_persona_id"], name: "index_t_personas_on_t_tipo_persona_id"
     t.index ["user_id"], name: "index_t_clientes_on_user_id"
   end
 
@@ -157,6 +132,18 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
     t.index ["user_id"], name: "index_t_emisions_on_user_id"
   end
 
+  create_table "t_empresas", force: :cascade do |t|
+    t.string "rif", null: false
+    t.string "razon_social", null: false
+    t.string "tipo_valor", null: false
+    t.string "sector_economico", null: false
+    t.string "direccion_empresa"
+    t.string "fax"
+    t.string "web"
+    t.bigint "t_cliente_id"
+    t.index ["t_cliente_id"], name: "index_t_empresas_on_t_cliente_id"
+  end
+
   create_table "t_estado_cuenta", force: :cascade do |t|
     t.float "debito", null: false
     t.float "credito", null: false
@@ -195,10 +182,11 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
     t.index ["t_tarifa_servicio_id"], name: "index_t_estado_cuenta_conts_on_t_tarifa_servicio_id"
   end
 
-  create_table "t_estatus_facs", force: :cascade do |t|
-    t.string "descripcion"
-    t.integer "estatus"
-    t.string "color"
+  create_table "t_estatus", force: :cascade do |t|
+    t.integer "estatus", null: false
+    t.integer "para", default: 0, null: false
+    t.string "descripcion", null: false
+    t.string "color", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -235,10 +223,10 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
     t.datetime "updated_at", null: false
     t.bigint "t_resolucion_id", null: false
     t.bigint "t_periodo_id", null: false
-    t.bigint "t_estatus_fac_id", null: false
+    t.bigint "t_estatus_id", null: false
     t.bigint "t_leyenda_id"
     t.bigint "user_id", null: false
-    t.index ["t_estatus_fac_id"], name: "index_t_facturas_on_t_estatus_fac_id"
+    t.index ["t_estatus_id"], name: "index_t_facturas_on_t_estatus_id"
     t.index ["t_leyenda_id"], name: "index_t_facturas_on_t_leyenda_id"
     t.index ["t_periodo_id"], name: "index_t_facturas_on_t_periodo_id"
     t.index ["t_resolucion_id"], name: "index_t_facturas_on_t_resolucion_id"
@@ -285,6 +273,20 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
     t.integer "estatus", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "t_personas", force: :cascade do |t|
+    t.string "cedula", null: false
+    t.string "nombre", null: false
+    t.string "apellido", null: false
+    t.bigint "num_licencia", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "t_cliente_id", null: false
+    t.bigint "t_empresa_id"
+    t.string "cargo"
+    t.index ["t_cliente_id"], name: "index_t_personas_on_t_cliente_id"
+    t.index ["t_empresa_id"], name: "index_t_personas_on_t_empresa_id"
   end
 
   create_table "t_presupuestos", force: :cascade do |t|
@@ -346,6 +348,8 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
     t.datetime "updated_at", null: false
     t.bigint "t_cliente_id", null: false
     t.bigint "t_tipo_cliente_id", null: false
+    t.string "resolucion"
+    t.index ["resolucion"], name: "index_t_resolucions_on_resolucion", unique: true
     t.index ["t_cliente_id"], name: "index_t_resolucions_on_t_cliente_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_resolucions_on_t_tipo_cliente_id"
   end
@@ -477,14 +481,12 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
   add_foreign_key "t_catalogo_cuenta", "t_tipo_cuenta", column: "t_tipo_cuenta_id"
   add_foreign_key "t_catalogo_cuenta_subs", "t_catalogo_cuenta"
   add_foreign_key "t_catalogo_cuenta_subs", "t_presupuestos"
-  add_foreign_key "t_cliente_padres", "t_tipo_clientes"
-  add_foreign_key "t_cliente_padres", "t_tipo_personas"
   add_foreign_key "t_cliente_tarifas", "t_periodos"
   add_foreign_key "t_cliente_tarifas", "t_resolucions"
   add_foreign_key "t_cliente_tarifas", "t_tarifas"
-  add_foreign_key "t_clientes", "t_catalogo_cuenta_subs"
-  add_foreign_key "t_clientes", "t_cliente_padres"
-  add_foreign_key "t_clientes", "t_cuenta_venta"
+  add_foreign_key "t_clientes", "t_estatus"
+  add_foreign_key "t_clientes", "t_tipo_clientes"
+  add_foreign_key "t_clientes", "t_tipo_personas"
   add_foreign_key "t_clientes", "users"
   add_foreign_key "t_cuenta_financieras", "t_presupuestos"
   add_foreign_key "t_cuenta_financieras", "t_tarifa_servicio_groups"
@@ -494,6 +496,7 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
   add_foreign_key "t_emisions", "t_periodos"
   add_foreign_key "t_emisions", "t_tipo_emisions"
   add_foreign_key "t_emisions", "users"
+  add_foreign_key "t_empresas", "t_clientes"
   add_foreign_key "t_estado_cuenta", "t_clientes"
   add_foreign_key "t_estado_cuenta", "t_facturas"
   add_foreign_key "t_estado_cuenta", "t_recibos"
@@ -504,7 +507,7 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
   add_foreign_key "t_estado_cuenta_conts", "t_tarifa_servicios"
   add_foreign_key "t_factura_detalles", "t_facturas"
   add_foreign_key "t_factura_detalles", "t_tarifa_servicios"
-  add_foreign_key "t_facturas", "t_estatus_facs"
+  add_foreign_key "t_facturas", "t_estatus"
   add_foreign_key "t_facturas", "t_leyendas"
   add_foreign_key "t_facturas", "t_periodos"
   add_foreign_key "t_facturas", "t_resolucions"
@@ -513,6 +516,8 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
   add_foreign_key "t_nota_creditos", "t_facturas"
   add_foreign_key "t_nota_creditos", "t_recibos"
   add_foreign_key "t_nota_creditos", "users"
+  add_foreign_key "t_personas", "t_clientes"
+  add_foreign_key "t_personas", "t_empresas"
   add_foreign_key "t_recargo_x_clientes", "t_recargos"
   add_foreign_key "t_recargo_x_clientes", "t_resolucions"
   add_foreign_key "t_recibos", "t_clientes"
