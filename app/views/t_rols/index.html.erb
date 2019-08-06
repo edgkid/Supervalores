@@ -8,7 +8,7 @@
               <h5>Roles del Sistema</h5>
             </div>
             <div class="col-2">
-              <%= link_to("Añadir Rol", {:controller => 't_rols', :action => 'new'}, data: { turbolinks: false } , :class => "btn btn-primary col-12" ) %>
+              <%= link_to("Añadir Rol", {:controller => 't_rols', :action => 'new'}, data: { turbolinks: false } , :class => "btn btn-primary col-12 float-right" ) %>
             </div>
           </div>
         </div>
@@ -19,8 +19,8 @@
                 <tr>
                   <th>Nombre</th>
                   <th>Descripciòn</th>
-                  <th>Estatus</th>
-                  <th colspan="3">Acciones</th>
+                  <th><center>Estatus</center></th>
+                  <th colspan="3"><center>Acciones</center></th>
                 </tr>
               </thead>
 
@@ -29,10 +29,10 @@
                   <tr>
                     <td><%= rol.nombre %></td>
                     <td><%= rol.descripcion %></td>
-                    <td><%= rol.estatus == 1 ? 'Activo' : 'Inactivo'%></td>
-                    <td><%= link_to("Ver", {:action => 'show', :id => rol.id}, data: { turbolinks: false }) %></td>
-                    <td><%= link_to("Editar", {:action => 'edit', :id => rol.id}, data: { turbolinks: false }) %></td>
-                    <td><%= link_to("Eliminar", {:action => 'destroy', :id => rol.id}, data: { confirm: 'Are you sure?' }) %></td>
+                    <td><center><%= rol.estatus == 1 ? 'Activo' : 'Inactivo'%></center></td>
+                    <td><center><%= link_to("Ver", {:action => 'show', :id => rol.id}, data: { turbolinks: false }, class: "btn btn-white") %><center></td>
+                    <td><center><%= link_to("Editar", {:action => 'edit', :id => rol.id}, data: { turbolinks: false }, class: "btn btn-white") %><center></td>
+                    <td><center><%= link_to("Eliminar", {:action => 'destroy', :id => rol.id}, data: { confirm: 'Are you sure?' }, class: "btn btn-white") %><center></td>
                   </tr>
                 <% end %>
               </tbody>
