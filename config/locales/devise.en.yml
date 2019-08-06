@@ -7,14 +7,14 @@ en:
       send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
       send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
     failure:
-      already_authenticated: "You are already signed in."
-      inactive: "Your account is not activated yet."
+      already_authenticated: "Usted se encuentra logueado"
+      inactive: "Su cuenta no est'a activa"
       invalid: "Invalid %{authentication_keys} or password."
-      locked: "Your account is locked."
+      locked: "Su Cuenta Esta Bloqueada."
       last_attempt: "You have one more attempt before your account is locked."
       not_found_in_database: "Invalid %{authentication_keys} or password."
       timeout: "Your session expired. Please sign in again to continue."
-      unauthenticated: "You need to sign in or sign up before continuing."
+      unauthenticated: "Necesita ingresar cuenta y clave para acceder al sistema."
       unconfirmed: "You have to confirm your email address before continuing."
     mailer:
       confirmation_instructions:
@@ -45,7 +45,7 @@ en:
       update_needs_confirmation: "You updated your account successfully, but we need to verify your new email address. Please check your email and follow the confirm link to confirm your new email address."
       updated: "Your account has been updated successfully."
     sessions:
-      signed_in: "Signed in successfully."
+      signed_in: "Usted ingreso exitosamente."
       signed_out: "Signed out successfully."
       already_signed_out: "Signed out successfully."
     unlocks:
