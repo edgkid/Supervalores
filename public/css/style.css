@@ -9563,3 +9563,11 @@ body.md-skin {
   justify-content:center;
   align-items:center;
 }
+
+.indicador-color {
+    display: block;
+    border: solid 1px #3e3e3e;
+    width: 28px;
+    height: 28px;
+    border-radius: 5px;
+}

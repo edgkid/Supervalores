@@ -1,24 +1,8 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Estatus:</strong>
-  <%= @t_estatus.estatus %>
-</p>
-
-<p>
-  <strong>Para:</strong>
-  <%= @t_estatus.para %>
-</p>
-
-<p>
-  <strong>Descripcion:</strong>
-  <%= @t_estatus.descripcion %>
-</p>
-
-<p>
-  <strong>Color:</strong>
-  <%= @t_estatus.color %>
-</p>
-
-<%= link_to 'Edit', edit_t_estatus_path(@t_estatus) %> |
-<%= link_to 'Back', t_estatuses_path %>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox-title">
+            <h5>Estatus #<%= @registro.descripcion %></h5>
+        </div>
+    </div>
+</div>
+<%= render 'form', registro: @registro, editable: false, return_to: t_estatuses_path %>
