@@ -34,8 +34,20 @@
                       <center><%= user.last_sign_in_at.strftime("%F %H:%M") %></center>
                     </td>
                     <td><center><%= user.estado ? 'Activo' : 'Inactivo'%></center></td>
-                    <td><center><%= link_to 'Ver', [:admin, user], class: "btn btn-white" %></center></td>
-                    <td><center><%= link_to 'Editar', edit_admin_user_path(user), class: "btn btn-white" %></center></td>
+                    <td>
+                      <center>
+                        <%= link_to [:admin, user], class: "btn btn-success" do %>
+                          <i class="glyphicon glyphicon-search"></i>
+                        <% end %>
+                      </center>
+                    </td>
+                    <td>
+                      <center>
+                        <%= link_to  edit_admin_user_path(user), class: "btn btn-white" do %>
+                          <i class="glyphicon glyphicon-pencil"></i>
+                        <% end %>
+                      </center>
+                    </td>
                   </tr>
                 <% end %>
               </tbody>
