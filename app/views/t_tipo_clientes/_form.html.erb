@@ -44,7 +44,7 @@
         <%= form.label :estatus, 'Estatus', class: "col-sm-2 col-form-label" %>
         <div class="col-sm-10">
           <% if editable %>
-          <%= form.select :estatus, opciones_de_estatus, {}, { :class => 'form-control m-b' } %>
+          <%= form.select :estatus, opciones_de_estatus(false), {}, { :class => 'form-control m-b' } %>
           <% else %>
           <%= estatus_text registro.estatus %>
           <% end %>

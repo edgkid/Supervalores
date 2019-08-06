@@ -75,7 +75,7 @@ JOIN cxc_t_tipo_cliente cttc on ctt.idt_tarifa = cttc.idt_tarifa;
 
 INSERT INTO t_estatus (estatus, para, descripcion, color, created_at, updated_at)
 SELECT 1, 0, 'Inactivo', '#FF0000FF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-UNION ALL SELECT 1, 0, 'Activo', '#00FF00FF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+UNION ALL SELECT 1, 0, 'Disponible', '#00FF00FF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 UNION ALL SELECT 1, 1, descripcion, '#00000000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP FROM cxc_t_estatus_fac;
 
 INSERT INTO t_tipo_personas (descripcion, estatus, created_at, updated_at)

@@ -1,67 +1,113 @@
-<%= form_with(model: t_cliente, local: true) do |form| %>
-  <% if t_cliente.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(t_cliente.errors.count, "error") %> prohibited this t_cliente from being saved:</h2>
-
-      <ul>
-      <% t_cliente.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox-content">
+      <%= form_with(model: registro, local: true) do |form| %>
+      <% if registro.errors.any? %>
+      <div id="error_explanation">
+        <p><%= pluralize(registro.errors.count, "error") %> prohibited this registro from being saved:</p>
+        <ul>
+          <% registro.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
       <% end %>
-      </ul>
+      <div class="form-group row">
+        <%= form.label :codigo, 'Código', class: "col-sm-2 col-form-label" %>
+        <div class="col-sm-10">
+          <% if editable %>
+          <%= form.text_field :codigo, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+          <% else %>
+          <%= registro.codigo %>
+          <% end %>
+        </div>
+      </div>
+      <div class="form-group row">
+        <%= form.label :t_estatus_id, 'Estatus', class: "col-sm-2 col-form-label" %>
+        <div class="col-sm-10">
+          <% if editable %>
+          <%= form.select :estatus, opciones_de_estatus(true, 2, true) , {}, { :class => 'form-control m-b' } %>
+          <% else %>
+          <%= registro.t_estatus.descripcion %>
+          <% end %>
+        </div>
+      </div>
+      <div class="form-group row">
+        <%= form.label :t_tipo_cliente_id, 'Tipo de Cliente', class: "col-sm-2 col-form-label" %>
+        <div class="col-sm-10">
+          <% if editable %>
+          <%= form.select :t_tipo_cliente_id, opciones_de_tipos_de_clientes , {}, { :class => 'form-control m-b' } %>
+          <% else %>
+          <%= registro.t_tipo_cliente.descripcion %>
+          <% end %>
+        </div>
+      </div>
+      <div class="form-group row">
+        <%= form.label :t_tipo_persona_id, 'Tipo de Persona', class: "col-sm-2 col-form-label" %>
+        <div class="col-sm-10">
+          <% if editable %>
+          <%= form.select :t_tipo_persona_id, opciones_de_tipos_de_personas , {}, { :class => 'form-control m-b' } %>
+          <% else %>
+          <%= registro.t_tipo_persona_id %>
+          <% end %>
+        </div>
+      </div>
+      <div class="form-group row">
+        <%= form.label :razon_social, 'Razon Social', class: "col-sm-2 col-form-label" %>
+        <div class="col-sm-10">
+          <% if editable %>
+          <%= form.text_field :razon_social, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+          <% else %>
+          <%= registro.razon_social %>
+          <% end %>
+        </div>
+      </div>
+      <div class="form-group row">
+        <%= form.label :telefono, 'Telefono', class: "col-sm-2 col-form-label" %>
+        <div class="col-sm-10">
+          <% if editable %>
+          <%= form.text_field :telefono, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+          <% else %>
+          <%= registro.telefono %>
+          <% end %>
+        </div>
+      </div>
+      <div class="form-group row">
+        <%= form.label :email, 'Email', class: "col-sm-2 col-form-label" %>
+        <div class="col-sm-10">
+          <% if editable %>
+          <%= form.text_field :email, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+          <% else %>
+          <%= registro.email %>
+          <% end %>
+        </div>
+      </div>
+      <% if registro.id != nil %>
+      <div class="form-group row">
+        <%= form.label :prospecto_at, '¿Es Prospecto?', class: "col-sm-2 col-form-label" %>
+        <div class="col-sm-4">
+          <%= registro.prospecto_at == nil ? "No" : "Si" %>          
+        </div>
+        <% if registro.prospecto_at != nil %>
+        <%= form.label :prospecto_at, 'Desde: ', class: "col-sm-2 col-form-label" %>
+        <div class="col-sm-4">
+          <%= registro.prospecto_at %>          
+        </div>
+        <% end %>
+      </div>
+      <% end %>
+      <div class="form-group row center-content">
+        <div class="col-sm-4 col-offset-sm-2">
+          <%= link_to 'Volver', return_to	, {:class =>"btn btn-white btn-sm col-12"} %>
+        </div>
+        <% if editable %>
+        <div class="col-sm-4">
+          <%= form.submit 'Guardar', :class => "btn btn-primary btn-sm col-12" %>
+        </div>
+        <% end %>
+      </div>
+      <% end %>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :codigo %>
-    <%= form.text_field :codigo %>
   </div>
-
-  <div class="field">
-    <%= form.label :t_estatus_id %>
-    <%= form.number_field :t_estatus_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :cuenta_venta %>
-    <%= form.text_field :cuenta_venta %>
-  </div>
-
-  <div class="field">
-    <%= form.label :t_tipo_cliente_id %>
-    <%= form.text_field :t_tipo_cliente_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :t_tipo_persona_id %>
-    <%= form.text_field :t_tipo_persona_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :user_id %>
-    <%= form.text_field :user_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :razon_social %>
-    <%= form.text_field :razon_social %>
-  </div>
-
-  <div class="field">
-    <%= form.label :telefono %>
-    <%= form.text_field :telefono %>
-  </div>
-
-  <div class="field">
-    <%= form.label :email %>
-    <%= form.text_field :email %>
-  </div>
-
-  <div class="field">
-    <%= form.label :prospecto_at %>
-    <%= form.date_select :prospecto_at %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>
+      
