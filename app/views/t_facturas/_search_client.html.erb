@@ -1,0 +1,33 @@
+<%= form_tag('/clientes/search', method: 'get') do |f| %>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <%= label_tag :codigo, 'Código' %>
+        <%= text_field_tag :codigo, nil, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <%= label_tag :resolucion, 'Resolución' %>
+        <%= text_field_tag :resolucion, nil, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <%= label_tag :cedula, 'Cédula' %>
+        <%= text_field_tag :cedula, nil, class: 'form-control' %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <%= link_to 'Despejar Campos', '#', class: 'btn btn-danger', style: 'width: 100%;' %>
+    </div>
+    <div class="col">
+      <%= link_to 'Editar Cliente', '#', class: 'btn btn-info', style: 'width: 100%;' %>
+    </div>
+    <div class="col">
+      <%= submit_tag 'Buscar Cliente', class: 'btn btn-primary', style: 'width: 100%;' %>
+    </div>
+  </div>
+<% end %>

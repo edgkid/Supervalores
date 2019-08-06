@@ -1,0 +1,60 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox ">
+        <div class="ibox-title">
+          <div class="row">
+            <div class="col-10">
+              <h5>Servicios</h5>
+            </div>
+            <div class="col-2">
+              <%= link_to 'Añadir Servicio', new_t_tarifa_servicio_path, data: { turbolinks: false }, class: 'btn btn-primary' %>
+            </div>
+          </div>
+        </div>
+        <div class="ibox-content">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover dataTables">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Descripción</th>
+                  <th>Nombre</th>
+                  <th>Clase</th>
+                  <th>Precio</th>
+                  <th>Estatus</th>
+                  <th colspan="3">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @t_tarifa_servicios.each do |t_tarifa_servicio| %>
+                  <tr>
+                    <td><%= t_tarifa_servicio.codigo %></td>
+                    <td><%= t_tarifa_servicio.descripcion %></td>
+                    <td><%= t_tarifa_servicio.nombre %></td>
+                    <td><%= t_tarifa_servicio.clase %></td>
+                    <td><%= t_tarifa_servicio.precio %></td>
+                    <td><%= t_tarifa_servicio.estatus %></td>
+                    <td><%= link_to 'Ver', t_tarifa_servicio, class: 'btn btn-info btn-xs' %></td>
+                    <td><%= link_to 'Editar', edit_t_tarifa_servicio_path(t_tarifa_servicio), class: 'btn btn-warning btn-xs' %></td>
+                    <td><%= link_to 'Eliminar', t_tarifa_servicio, method: :delete, data: { confirm: '¿Estás seguro de querer eliminar este servicio?' }, class: 'btn btn-danger btn-xs' %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Page-Level Scripts -->
+<script>
+  $(document).ready(function(){
+    $('.dataTables').DataTable({
+      pageLength: 25,
+      responsive: true
+    });
+  });
+</script>

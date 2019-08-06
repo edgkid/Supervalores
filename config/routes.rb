@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :t_periodos
   resources :t_tarifas
   resources :t_facturas
+  resources :t_tarifa_servicios
 
   #routes tarifas
   get 't_tarifas/new'
