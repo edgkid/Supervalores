@@ -1,18 +1,18 @@
 <% if notice %>
-  <div class="alert alert-success fade-out">
-    <center><p class="notice "><%= notice %></p></center>
+  <div class="alert alert-success fade-out" style="border-radius: 15px;">
+    <%= notice %>
   </div>
 <% end %>
 <% if alert %>
-  <div class="alert alert-danger fade-out">
-    <center><p class="alert "><%= alert %></p></center>
+  <div class="alert alert-danger fade-out" style="border-radius: 15px;">
+    <%= alert %>
   </div>
 <% end %>
 
 <script type="text/javascript">
 $(document).ready(function(){
   setTimeout(function(){
-    $('.fade-out').fadeOut(5000);
+    $('.fade-out').fadeOut(10000);
   });
  })
 </script>
