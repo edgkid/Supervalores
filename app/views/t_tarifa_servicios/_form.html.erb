@@ -1,0 +1,49 @@
+<%= form_for @t_tarifa_servicio do |f| %>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="form-group">
+        <%= f.label :codigo %>
+        <%= f.text_field :codigo, class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <%= f.label :descripcion %>
+        <%= f.text_field :descripcion, class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <%= f.label :nombre %>
+        <%= f.text_field :nombre, class: "form-control" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="form-group">
+        <%= f.label :clase %>
+        <%= f.text_field :clase, class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <%= f.label :precio %>
+        <%= f.number_field :precio, class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <%= f.label :estatus %>
+        <%= f.number_field :estatus, class: "form-control" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" align="right">
+    <div class="col-sm-12">
+      <%= f.submit yield(:texto_boton), class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
