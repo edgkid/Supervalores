@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>T Empresas</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Rif</th>
+      <th>Razon social</th>
+      <th>Tipo valor</th>
+      <th>Sector economico</th>
+      <th>Direccion empresa</th>
+      <th>Fax</th>
+      <th>Web</th>
+      <th>T cliente</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @t_empresas.each do |t_empresa| %>
+      <tr>
+        <td><%= t_empresa.rif %></td>
+        <td><%= t_empresa.razon_social %></td>
+        <td><%= t_empresa.tipo_valor %></td>
+        <td><%= t_empresa.sector_economico %></td>
+        <td><%= t_empresa.direccion_empresa %></td>
+        <td><%= t_empresa.fax %></td>
+        <td><%= t_empresa.web %></td>
+        <td><%= t_empresa.t_cliente_id %></td>
+        <td><%= link_to 'Show', t_empresa %></td>
+        <td><%= link_to 'Edit', edit_t_empresa_path(t_empresa) %></td>
+        <td><%= link_to 'Destroy', t_empresa, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New T Empresa', new_t_empresa_path %>

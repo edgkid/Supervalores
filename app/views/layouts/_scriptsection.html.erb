@@ -17,7 +17,7 @@
 
     <!-- Peity -->
     <script src="/js/plugins/peity/jquery.peity.min.js"></script>
-    <script src="js/demo/peity-demo.js"></script>
+    <script src="/js/demo/peity-demo.js"></script>
 
     <!-- Custom and plugin javascript -->
     <script src="/js/inspinia.js"></script>
@@ -35,15 +35,47 @@
 
     <!-- Sparkline -->
     <script src="/js/plugins/sparkline/jquery.sparkline.min.js"></script>
-
+    
+    <% if @usar_dataTables != nil &&  @usar_dataTables %>
     <!-- DataTable -->
-    <!-- <script type="/js/plugins/dataTables/dataTables.min.js"></script> -->
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+    <% end %>
 
     <!-- Sparkline demo data  -->
     <script src="/js/demo/sparkline-demo.js"></script>
 
-    <script>
+    <!-- Toastr -->
+    <script src="/js/plugins/toastr/toastr.min.js"></script>
+
+    <script>            
         $(document).ready(function() {
+            notice = '<%= notice %>'
+            type = '' // ver como pasar este parametro junto a notice.
+            if (notice != "") {
+                console.log("toastr")
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown',
+                    timeOut: 4000
+                };
+                if (type == 'success'){
+                    toastr.success('CXC', notice);
+                }
+                else if (type == 'error') {
+                    toastr.error('CXC', notice);
+                }
+                else if (type == 'warning') {
+                    toastr.warning('CXC', notice);
+                }
+                else {
+                    toastr.info('CXC', notice);
+                }
+                
+            }
+            
+//-- Data demo --//
             $('.chart').easyPieChart({
                 barColor: '#f8ac59',
 //                scaleColor: false,

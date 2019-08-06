@@ -1,0 +1,27 @@
+<%= form_with(model: t_tipo_persona, local: true) do |form| %>
+  <% if t_tipo_persona.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(t_tipo_persona.errors.count, "error") %> prohibited this t_tipo_persona from being saved:</h2>
+
+      <ul>
+      <% t_tipo_persona.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :descripcion %>
+    <%= form.text_field :descripcion %>
+  </div>
+
+  <div class="field">
+    <%= form.label :estatus %>
+    <%= form.number_field :estatus %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

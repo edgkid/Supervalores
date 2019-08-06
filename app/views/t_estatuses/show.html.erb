@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Estatus:</strong>
+  <%= @t_estatus.estatus %>
+</p>
+
+<p>
+  <strong>Para:</strong>
+  <%= @t_estatus.para %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @t_estatus.descripcion %>
+</p>
+
+<p>
+  <strong>Color:</strong>
+  <%= @t_estatus.color %>
+</p>
+
+<%= link_to 'Edit', edit_t_estatus_path(@t_estatus) %> |
+<%= link_to 'Back', t_estatuses_path %>

@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>T Estatuses</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Estatus</th>
+      <th>Para</th>
+      <th>Descripcion</th>
+      <th>Color</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @t_estatuses.each do |t_estatus| %>
+      <tr>
+        <td><%= t_estatus.estatus %></td>
+        <td><%= t_estatus.para %></td>
+        <td><%= t_estatus.descripcion %></td>
+        <td><%= t_estatus.color %></td>
+        <td><%= link_to 'Show', t_estatus %></td>
+        <td><%= link_to 'Edit', edit_t_estatus_path(t_estatus) %></td>
+        <td><%= link_to 'Destroy', t_estatus, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New T Estatus', new_t_estatus_path %>

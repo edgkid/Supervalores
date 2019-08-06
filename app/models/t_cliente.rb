@@ -3,8 +3,8 @@ class TCliente < ApplicationRecord
     belongs_to :t_tipo_cliente
     belongs_to :t_tipo_persona
     belongs_to :t_estatu
-    belongs_to :t_catalogo_cuenta_sub
-    belongs_to :t_cuenta_ventum
+    #belongs_to :t_catalogo_cuenta_sub
+    #belongs_to :t_cuenta_ventum
     belongs_to :user
 
     has_many :t_resolucions
@@ -24,4 +24,7 @@ class TCliente < ApplicationRecord
 
 	has_and_belongs_to_many :t_tarifas
 
+    def es_prospecto?
+        return self.prospecto_at == nil
+    end
 end

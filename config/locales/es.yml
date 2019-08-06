@@ -1,0 +1,4 @@
+helpers:
+  label:
+    t_tipo_cliente:
+      codigo: "Código"

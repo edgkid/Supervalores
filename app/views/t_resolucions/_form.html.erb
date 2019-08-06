@@ -1,0 +1,32 @@
+<%= form_with(model: t_resolucion, local: true) do |form| %>
+  <% if t_resolucion.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(t_resolucion.errors.count, "error") %> prohibited this t_resolucion from being saved:</h2>
+
+      <ul>
+      <% t_resolucion.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :descripcion %>
+    <%= form.text_field :descripcion %>
+  </div>
+
+  <div class="field">
+    <%= form.label :fecha_resolucion %>
+    <%= form.date_select :fecha_resolucion %>
+  </div>
+
+  <div class="field">
+    <%= form.label :t_cliente_id %>
+    <%= form.text_field :t_cliente_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

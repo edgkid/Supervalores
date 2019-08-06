@@ -4,8 +4,7 @@ class AjusteClientes < ActiveRecord::Migration[5.2]
       change.up do        
         remove_foreign_key "t_email_masivos", "t_clientes"
         remove_foreign_key "t_estado_cuenta", "t_clientes"
-        remove_foreign_key "t_nota_creditos", "t_clientes"
-        remove_foreign_key "t_recargo_x_clientes", "t_clientes"
+        remove_foreign_key "t_nota_creditos", "t_clientes"        
         remove_foreign_key "t_recibos", "t_clientes"
         remove_foreign_key "t_resolucions", "t_clientes"
         remove_foreign_key "t_clientes", "t_cliente_padres"
@@ -19,9 +18,6 @@ class AjusteClientes < ActiveRecord::Migration[5.2]
         add_index "t_facturas", "t_estatus_id" , name: "index_t_facturas_on_t_estatus_id"
         drop_table "t_estatus_facs"
         
-        add_column "t_resolucions", "resolucion", :string
-        add_index "t_resolucions", "resolucion", unique: true
-
         create_table "t_estatus", force: :cascade do |t|
           t.integer "estatus", null: false
           t.integer "para", null: false, :default => 0
@@ -57,8 +53,7 @@ class AjusteClientes < ActiveRecord::Migration[5.2]
         
         add_foreign_key "t_email_masivos", "t_clientes"
         add_foreign_key "t_estado_cuenta", "t_clientes"
-        add_foreign_key "t_nota_creditos", "t_clientes"
-        add_foreign_key "t_recargo_x_clientes", "t_clientes"
+        add_foreign_key "t_nota_creditos", "t_clientes"        
         add_foreign_key "t_recibos", "t_clientes"
         add_foreign_key "t_resolucions", "t_clientes"
 

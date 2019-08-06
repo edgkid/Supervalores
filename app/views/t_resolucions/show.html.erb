@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @t_resolucion.descripcion %>
+</p>
+
+<p>
+  <strong>Fecha resolucion:</strong>
+  <%= @t_resolucion.fecha_resolucion %>
+</p>
+
+<p>
+  <strong>T cliente:</strong>
+  <%= @t_resolucion.t_cliente_id %>
+</p>
+
+<%= link_to 'Edit', edit_t_resolucion_path(@t_resolucion) %> |
+<%= link_to 'Back', t_resolucions_path %>

@@ -1,3 +1,7 @@
 class TTipoPersona < ApplicationRecord
-	has_many :t_cliente_padres, dependent: :destroy
+	
+	def estatus_text
+		return self.estatus == 0 ? "Inactivo" : "Disponible"
+	end
+	
 end

@@ -31,3 +31,6 @@
 
 en:
   hello: "Hello world"
+  codigo: "Código 1"
+  t_tipo_cliente:
+    codigo: "Código 1"

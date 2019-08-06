@@ -9557,3 +9557,9 @@ body.md-skin {
 .ibox-title .float-right {
   margin-right: -75px;
 }
+
+.center-content{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}

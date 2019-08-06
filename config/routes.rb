@@ -11,6 +11,16 @@ Rails.application.routes.draw do
   resources :t_tarifas
   resources :t_facturas
 
+  resources :t_resolucions, :path => "resoluciones"
+  resources :t_tipo_clientes, :path => "tipos_de_clientes"
+  resources :t_tipo_personas, :path => "tipos_de_personas"
+  resources :t_personas, :path => "personas"
+  resources :t_empresas, :path => "empresas"
+  resources :t_clientes, :path => "clientes"
+  resources :t_estatuses, :path => "estatus"
+
+  get "redirect" => "t_tipo_clientes#redirect"
+
   #routes tarifas
   get 't_tarifas/new'
   get 't_tarifas/edit'

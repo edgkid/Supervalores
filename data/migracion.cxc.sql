@@ -1,8 +1,9 @@
 CREATE EXTENSION dblink;
 CREATE FOREIGN DATA WRAPPER cxc_db VALIDATOR postgresql_fdw_validator;
 CREATE SERVER cxc_server FOREIGN DATA WRAPPER cxc_db OPTIONS (hostaddr '127.0.0.1', dbname 'cxc');
-CREATE USER MAPPING FOR supervalor SERVER cxc_server OPTIONS (user 'supervalor', password 'developer');
-GRANT USAGE ON FOREIGN SERVER cxc_server TO supervalor;
+/* Colocar usuario de base de datos con su contraseña */
+CREATE USER MAPPING FOR postgres SERVER cxc_server OPTIONS (user 'postgres', password 'postgres');
+GRANT USAGE ON FOREIGN SERVER cxc_server TO postgres;
 
 /* Verificar si dblink esta disponible. */
 SELECT pg_namespace.nspname, pg_proc.proname FROM pg_proc, pg_namespace WHERE pg_proc.pronamespace=pg_namespace.oid AND pg_proc.proname LIKE '%dblink%';

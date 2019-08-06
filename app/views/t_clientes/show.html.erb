@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @t_cliente.codigo %>
+</p>
+
+<p>
+  <strong>T estatus:</strong>
+  <%= @t_cliente.t_estatus_id %>
+</p>
+
+<p>
+  <strong>Cuenta venta:</strong>
+  <%= @t_cliente.cuenta_venta %>
+</p>
+
+<p>
+  <strong>T tipo cliente:</strong>
+  <%= @t_cliente.t_tipo_cliente_id %>
+</p>
+
+<p>
+  <strong>T tipo persona:</strong>
+  <%= @t_cliente.t_tipo_persona_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @t_cliente.user_id %>
+</p>
+
+<p>
+  <strong>Razon social:</strong>
+  <%= @t_cliente.razon_social %>
+</p>
+
+<p>
+  <strong>Telefono:</strong>
+  <%= @t_cliente.telefono %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @t_cliente.email %>
+</p>
+
+<p>
+  <strong>Prospecto at:</strong>
+  <%= @t_cliente.prospecto_at %>
+</p>
+
+<%= link_to 'Edit', edit_t_cliente_path(@t_cliente) %> |
+<%= link_to 'Back', t_clientes_path %>
