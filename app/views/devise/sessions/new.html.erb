@@ -6,7 +6,6 @@
     <h3>Bienvenido a CxC</h3>
     <p>Inicie sesión para acceder</p>
     <%= form_for(resource, as: resource_name, :class => "m-t" ,url: session_path(resource_name)) do |f| %>
-        <%= render "layouts/notify" %>
         <div class="form-group">
           <%= f.email_field :email, :class => "form-control" ,placeholder: 'email',autofocus: true, autocomplete: "email" %>
         </div>
