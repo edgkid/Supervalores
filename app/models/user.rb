@@ -24,11 +24,11 @@ class User < ApplicationRecord
 											  :on => :update
 
 	validates :nombre, :apellido,  :presence => true,
-											 format: { with: /\A[a-zA-Z]*\z/ },
+											 format: { with: /\A[a-zA-Z]*\z/},
 											 :on => :create
 
 	validates :nombre, :apellido,  :presence => true,
-										  format: { with: /\A[a-zA-Z]*\z/ },
+										  format: { with: /\A[a-zA-Z]*\z/},
 										 	:on => :update
 
    def get_user_rol(id)
