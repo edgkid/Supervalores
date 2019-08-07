@@ -19,34 +19,23 @@
                 <tr>
                   <th>Colaborador</th>
                   <th>Usuario</th>
-                  <th><center>Último Login</center></th>
-                  <th><center>Estatus</center></th>
-                  <th colspan="2"><center>Acciones</center></th>
+                  <th>Último inicio de sesión</th>
+                  <th>Estatus</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
 
               <tbody>
                 <% @users.each do |user| %>
                   <tr>
-                    <td><%= user.nombre %> &nbsp; <%= user.apellido %></td>
+                    <td><%= user.nombre %> <%= user.apellido %></td>
                     <td><%= user.email %></td>
                     <td>
                       <center><%= user.last_sign_in_at != nil ? user.last_sign_in_at.strftime("%F %H:%M") : "dd/mm/yyyy" %></center>
                     </td>
                     <td><center><%= user.estado ? 'Activo' : 'Inactivo'%></center></td>
                     <td>
-                      <center>
-                        <%= link_to [:admin, user], class: "btn btn-success" do %>
-                          <i class="glyphicon glyphicon-search"></i>
-                        <% end %>
-                      </center>
-                    </td>
-                    <td>
-                      <center>
-                        <%= link_to  edit_admin_user_path(user), class: "btn btn-white" do %>
-                          <i class="glyphicon glyphicon-pencil"></i>
-                        <% end %>
-                      </center>
+                      <%= render 'shared/action_buttons', show_route: [:admin, user], edit_route: edit_admin_user_path(user) %>
                     </td>
                   </tr>
                 <% end %>

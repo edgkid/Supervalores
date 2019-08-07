@@ -14,20 +14,9 @@
     </div>
     <div class="col">
       <div class="form-group">
-        <%= label_tag :cedula, 'Cédula' %>
+        <%= label_tag :cedula, 'Céd. / Pas. / RUC' %>
         <%= text_field_tag :cedula, nil, class: 'form-control' %>
       </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <%= link_to 'Despejar Campos', '#', class: 'btn btn-danger', style: 'width: 100%;' %>
-    </div>
-    <div class="col">
-      <%= link_to 'Editar Cliente', '#', class: 'btn btn-info', style: 'width: 100%;' %>
-    </div>
-    <div class="col">
-      <%= submit_tag 'Buscar Cliente', class: 'btn btn-primary', style: 'width: 100%;' %>
     </div>
   </div>
 <% end %>

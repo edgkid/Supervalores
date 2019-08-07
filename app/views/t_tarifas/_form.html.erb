@@ -1,43 +1,61 @@
-<%= form_for @t_tarifa do |f| %>
+<div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-    <div class="col-sm-4">
-      <div class="form-group">
-        <%= f.label :nombre %>
-        <%= f.text_field :nombre, class: "form-control" %>
-      </div>
-    </div>
-    <div class="col-sm-8">
-      <div class="form-group">
-        <%= f.label :descripcion %>
-        <%= f.text_field :descripcion, class: "form-control" %>
-      </div>
-    </div>
-  </div>
+    <div class="col-lg-12">
+      <div class="ibox ">
+        <div class="ibox-title">
+          <h5><%= yield(:texto_boton) %></h5>
+        </div>
+        <div class="ibox-content">
+          <%= form_for @t_tarifa do |f| %>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <%= f.label :nombre, class: "col-sm-3 col-form-label" %>
+                  <div class="col-sm-9">
+                    <%= f.text_field :nombre, class: "form-control" %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <%= f.label :descripcion, 'Descripción', class: "col-sm-3 col-form-label" %>
+                  <div class="col-sm-9">
+                    <%= f.text_field :descripcion, class: "form-control" %>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-  <div class="row">
-    <div class="col-sm-4">
-      <div class="form-group">
-        <%= f.label :rango_monto %>
-        <%= f.number_field :rango_monto, class: "form-control" %>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="form-group">
-        <%= f.label :recargo %>
-        <%= f.number_field :recargo, class: "form-control" %>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="form-group">
-        <%= f.label :estatus %>
-        <%= f.text_field :estatus, class: "form-control" %>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <%= f.label :rango_monto, 'Rango del monto', class: "col-sm-3 col-form-label" %>
+                  <div class="col-sm-9">
+                    <%= f.number_field :rango_monto, class: "form-control" %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <%= f.label :recargo, class: "col-sm-3 col-form-label" %>
+                  <div class="col-sm-9">
+                    <%= f.number_field :recargo, class: "form-control" %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <%= f.label :estatus, class: "col-sm-3 col-form-label" %>
+                  <div class="col-sm-9">
+                    <%= f.text_field :estatus, class: "form-control" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <%= render 'shared/form_buttons', f: f %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
-
-  <div class="row" align="right">
-    <div class="col-sm-12">
-      <%= f.submit yield(:texto_boton), class: "btn btn-primary" %>
-    </div>
-  </div>
-<% end %>
+</div>

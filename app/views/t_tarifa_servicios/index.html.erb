@@ -23,7 +23,7 @@
                   <th>Clase</th>
                   <th>Precio</th>
                   <th>Estatus</th>
-                  <th colspan="3">Acciones</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -35,9 +35,11 @@
                     <td><%= t_tarifa_servicio.clase %></td>
                     <td><%= t_tarifa_servicio.precio %></td>
                     <td><%= t_tarifa_servicio.estatus %></td>
-                    <td><%= link_to 'Ver', t_tarifa_servicio, class: 'btn btn-info btn-xs' %></td>
-                    <td><%= link_to 'Editar', edit_t_tarifa_servicio_path(t_tarifa_servicio), class: 'btn btn-warning btn-xs' %></td>
-                    <td><%= link_to 'Eliminar', t_tarifa_servicio, method: :delete, data: { confirm: '¿Estás seguro de querer eliminar este servicio?' }, class: 'btn btn-danger btn-xs' %></td>
+                    <td>
+                      <%= link_to 'Ver', t_tarifa_servicio, class: 'btn btn-info btn-xs' %>
+                      <%= link_to 'Editar', edit_t_tarifa_servicio_path(t_tarifa_servicio), class: 'btn btn-warning btn-xs' %>
+                      <%= link_to 'Eliminar', t_tarifa_servicio, method: :delete, data: { confirm: '¿Estás seguro de querer eliminar este servicio?' }, class: 'btn btn-danger btn-xs' %>
+                    </td>
                   </tr>
                 <% end %>
               </tbody>

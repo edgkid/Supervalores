@@ -19,7 +19,7 @@
                 <tr>
                   <th>No.</th>
                   <th>Cliente</th>
-                  <th>Res/CIP</th>
+                  <th>Res / CIP</th>
                   <th>Fecha</th>
                   <th>F. Venc</th>
                   <th>Recargo</th>
@@ -27,7 +27,7 @@
                   <th>Pendiente</th>
                   <th>Tp</th>
                   <th>Prosp.</th>
-                  <th colspan="3">Opciones</th>
+                  <th>Opciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -43,9 +43,11 @@
                     <td><%= t_factura.pendiente_fact %></td>
                     <td><%= t_factura.tipo %></td>
                     <td><%= '' %></td>
-                    <td><%= link_to 'Ver', t_factura, class: 'btn btn-info btn-xs' %></td>
-                    <td><%= link_to 'Editar', edit_t_factura_path(t_factura), class: 'btn btn-warning btn-xs' %></td>
-                    <td><%= link_to 'Eliminar', t_factura, method: :delete, data: { confirm: '¿Estás seguro de querer eliminar esta factura?' }, class: 'btn btn-danger btn-xs' %></td>
+                    <td>
+                      <%= render 'shared/action_buttons',
+                                  show_route: t_factura,
+                                  edit_route: edit_t_factura_path(t_factura) %>
+                    </td>
                   </tr>
                 <% end %>
               </tbody>
