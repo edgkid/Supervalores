@@ -16,8 +16,11 @@ class TRolsController < ApplicationController
 
   def create
     @rol = TRol.new(t_rols_params)
-    @rol.save
-    redirect_to(:action => 'index')
+    if @rol.save
+      redirect_to(:action => 'index')
+    else
+      redirect_to(:action => 'new')
+    end
   end
 
   def edit
