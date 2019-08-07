@@ -18,7 +18,7 @@ class Admin::UsersController < ApplicationController
       redirect_to admin_users_path
     else
       # flash.now[:danger] = "El usuario no se pudo crear, por favor revise los campos"
-      render 'new'
+      redirect_to new_admin_user_path
     end
   end
 
