@@ -32,6 +32,7 @@ class TPeriodosController < ApplicationController
 
   def index
     @t_periodos = TPeriodo.all
+    # @usar_dataTables = true
   end
 
   def show
