@@ -6,21 +6,40 @@
           <h5><%= yield(:texto_boton) %></h5>
         </div>
         <div class="ibox-content">
-          <%= form_for @t_periodo do |f| %>
+          <%= form_for @t_tarifa_servicio do |f| %>
             <div class="row">
               <div class="col-sm-6">
                 <div class="form-group row">
-                  <%= f.label :descripcion, 'Descripción', class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
+                  <%= f.label :codigo, 'Código', class: "col-sm-2 col-form-label" %>
+                  <div class="col-sm-10">
+                    <%= f.text_field :codigo, class: "form-control" %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <%= f.label :descripcion, 'Descripción', class: "col-sm-2 col-form-label" %>
+                  <div class="col-sm-10">
                     <%= f.text_field :descripcion, class: "form-control" %>
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div class="row">
               <div class="col-sm-6">
                 <div class="form-group row">
-                  <%= f.label :rango_dias, 'Rango de días', class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
-                    <%= f.number_field :rango_dias, class: "form-control" %>
+                  <%= f.label :nombre, class: "col-sm-2 col-form-label" %>
+                  <div class="col-sm-10">
+                    <%= f.text_field :nombre, class: "form-control" %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <%= f.label :clase, class: "col-sm-2 col-form-label" %>
+                  <div class="col-sm-10">
+                    <%= f.text_field :clase, class: "form-control" %>
                   </div>
                 </div>
               </div>
@@ -29,35 +48,16 @@
             <div class="row">
               <div class="col-sm-6">
                 <div class="form-group row">
-                  <%= f.label :dia_tope, 'Día tope', class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
-                    <%= f.number_field :dia_tope, class: "form-control" %>
+                  <%= f.label :precio, class: "col-sm-2 col-form-label" %>
+                  <div class="col-sm-10">
+                    <%= f.number_field :precio, class: "form-control" %>
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group row">
-                  <%= f.label :mes_tope, class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
-                    <%= f.number_field :mes_tope, class: "form-control" %>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :mes_tope_desc, 'Descripción del mes tope', class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
-                    <%= f.text_field :mes_tope_desc, class: "form-control" %>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :estatus, class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
+                  <%= f.label :estatus, class: "col-sm-2 col-form-label" %>
+                  <div class="col-sm-10">
                     <%= f.number_field :estatus, class: "form-control" %>
                   </div>
                 </div>

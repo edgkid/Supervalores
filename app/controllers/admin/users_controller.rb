@@ -2,6 +2,7 @@ class Admin::UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
+    @usar_dataTables = true
     @users = User.all
   end
 
@@ -14,11 +15,9 @@ class Admin::UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      # flash[:success] = "El usuario ha sido creado exitosamente"
       redirect_to admin_users_path
     else
-      # flash.now[:danger] = "El usuario no se pudo crear, por favor revise los campos"
-      render 'new'
+      redirect_to new_admin_user_path
     end
   end
 
@@ -31,7 +30,7 @@ class Admin::UsersController < ApplicationController
       redirect_to admin_users_path
     else
       # flash.now[:danger] = "El usuario no se pudo modificar, por favor revise los campos"
-      render 'edit'
+      redirect_to edit_admin_user_path
     end
   end
 

@@ -1,0 +1,22 @@
+<%= form_for @t_factura do |f| %>
+  <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <th>Fecha de la Factura:</th>
+        <td><%= f.date_field :fecha_notificacion %></td>
+      </tr>
+      <tr>
+        <th>Fecha de Vencimiento:</th>
+        <td><%= f.date_field :fecha_vencimiento %></td>
+      </tr>
+      <tr>
+        <th>Cuenta de Venta:</th>
+        <td></td>
+      </tr>
+      <tr>
+        <th>Periodo:</th>
+        <td><%= f.collection_select :t_periodo_id, TPeriodo.all, :id, :descripcion %></td>
+      </tr>
+    </tbody>
+  </table>
+<% end %>

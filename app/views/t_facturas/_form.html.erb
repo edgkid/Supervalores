@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Datos del Cliente</h3>
+        <%= render 'search_client' %>
+        <br>
+        <%= render 'cliente' %>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Facturación</h3>
+        <%= render 'factura' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <h3>Detalle de Factura</h3>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-primary">Nueva Fila</button>
+          <button type="button" class="btn btn-danger">Borrar Fila</button>
+        </div>
+        <br><br>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Servicio</th>
+              <th>Descripción</th>
+              <th>cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Monto Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>

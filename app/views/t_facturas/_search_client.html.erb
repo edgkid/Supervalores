@@ -1,0 +1,22 @@
+<%= form_tag('/clientes/search', method: 'get') do |f| %>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <%= label_tag :codigo, 'Código' %>
+        <%= text_field_tag :codigo, nil, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <%= label_tag :resolucion, 'Resolución' %>
+        <%= text_field_tag :resolucion, nil, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <%= label_tag :cedula, 'Céd. / Pas. / RUC' %>
+        <%= text_field_tag :cedula, nil, class: 'form-control' %>
+      </div>
+    </div>
+  </div>
+<% end %>

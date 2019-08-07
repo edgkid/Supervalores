@@ -34,7 +34,7 @@
                   <td><%= registro.t_cliente.razon_social %></td>
                   <td><%= registro.resolucion %></td>
                   <td><%= registro.descripcion %></td>
-                  <td><%= registro.fecha_resolucion %></td>
+                  <td><%= registro.created_at %></td>
                   <td class="acciones">
                     <%= link_to 'Ver', registro, class: "btn btn-white" %>
                     <%= link_to 'Editar', edit_polymorphic_path(registro), class: "btn btn-white" %>

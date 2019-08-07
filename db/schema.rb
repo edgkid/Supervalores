@@ -348,6 +348,8 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
     t.datetime "updated_at", null: false
     t.bigint "t_cliente_id", null: false
     t.bigint "t_tipo_cliente_id", null: false
+    t.string "resolucion"
+    t.index ["resolucion"], name: "index_t_resolucions_on_resolucion", unique: true
     t.index ["t_cliente_id"], name: "index_t_resolucions_on_t_cliente_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_resolucions_on_t_tipo_cliente_id"
   end

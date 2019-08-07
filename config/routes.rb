@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :t_periodos
   resources :t_tarifas
   resources :t_facturas
+  resources :t_tarifa_servicios
 
   resources :t_resolucions, :path => "resoluciones"
   resources :t_tipo_clientes, :path => "tipos_de_clientes"

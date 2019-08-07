@@ -7,11 +7,13 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 email = 'admin@cxc.com'
-pass = 'cxcadmin'
+pass = '2019AdminCxC!'
 
 user = User.find_by(email: email)
 if user == nil
   user = User.new
+  user.nombre = "CXC"
+  user.apellido = "Administrador"
   user.email = email
   user.password = pass
   user.password_confirmation = pass
