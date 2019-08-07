@@ -13,6 +13,24 @@ class User < ApplicationRecord
 	devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable, :timeoutable
 
+	validates :password, :presence => true,
+												:confirmation => true,
+												format: { with: /\A(?=.*[A-Z])(?=.*\d).{6,12}\z/ },
+												:on => :create
+
+	validates :password, :presence => true,
+												:confirmation => true,
+												format: { with: /\A(?=.*[A-Z])(?=.*\d).{6,12}\z/ },
+											  :on => :update
+
+	validates :nombre, :apellido,  :presence => true,
+											 format: { with: /\A[a-zA-Z]*\z/ },
+											 :on => :create
+
+	validates :nombre, :apellido,  :presence => true,
+										  format: { with: /\A[a-zA-Z]*\z/ },
+										 	:on => :update
+
    def get_user_rol(id)
 	 	select = " SELECT r.nombre, r.descripcion, r.peso, r.estatus"
 		from = " FROM users u, t_users_rols ur, t_rols r"
