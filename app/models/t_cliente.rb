@@ -2,10 +2,7 @@ class TCliente < ApplicationRecord
 
     belongs_to :t_tipo_cliente
     belongs_to :t_tipo_persona
-    belongs_to :t_estatu
-    #belongs_to :t_catalogo_cuenta_sub
-    #belongs_to :t_cuenta_ventum
-    belongs_to :user
+    belongs_to :t_estatus    
 
     has_many :t_resolucions
     has_many :t_recibos

@@ -1,5 +1,4 @@
-class TEstatus < ApplicationRecord
-	self.table_name = "t_estatus"
+class TEstatus < ApplicationRecord	
 
 	has_many :t_facturas
 	has_many :t_clientes

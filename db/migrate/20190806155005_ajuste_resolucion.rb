@@ -6,7 +6,7 @@ class AjusteResolucion < ActiveRecord::Migration[5.2]
     
     add_column "t_resolucions", "t_estatus_id", :bigint, null: false
     add_index "t_resolucions", "t_estatus_id"
-    add_foreign_key "t_resolucions", "t_estatus"
+    add_foreign_key "t_resolucions", "t_estatuses"
     
     add_column "t_resolucions", "resolucion", :string
     add_index "t_resolucions", "resolucion", unique: true

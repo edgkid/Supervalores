@@ -18,7 +18,7 @@ class AjusteClientes < ActiveRecord::Migration[5.2]
         add_index "t_facturas", "t_estatus_id" , name: "index_t_facturas_on_t_estatus_id"
         drop_table "t_estatus_facs"
         
-        create_table "t_estatus", force: :cascade do |t|
+        create_table "t_estatuses", force: :cascade do |t|
           t.integer "estatus", null: false
           t.integer "para", null: false, :default => 0
           t.string "descripcion", null: false
@@ -26,7 +26,7 @@ class AjusteClientes < ActiveRecord::Migration[5.2]
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
         end        
-        add_foreign_key :t_facturas, :t_estatus
+        add_foreign_key "t_facturas", "t_estatuses"
         
         create_table "t_clientes", force: :cascade do |t|
           t.string "codigo", null: false
@@ -49,7 +49,7 @@ class AjusteClientes < ActiveRecord::Migration[5.2]
         add_foreign_key "t_clientes", "t_tipo_clientes"
         add_foreign_key "t_clientes", "t_tipo_personas"
         add_foreign_key "t_clientes", "users"
-        add_foreign_key "t_clientes", "t_estatus"
+        add_foreign_key "t_clientes", "t_estatuses"
         
         add_foreign_key "t_email_masivos", "t_clientes"
         add_foreign_key "t_estado_cuenta", "t_clientes"
