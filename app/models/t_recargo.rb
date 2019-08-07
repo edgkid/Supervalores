@@ -1,4 +1,6 @@
 class TRecargo < ApplicationRecord
+  belongs_to :t_factura, optional: true
+  
 	#has_many :t_recargo_x_cliente
 	#has_many :t_cliente, through: :t_recargo_x_cliente
 	has_many :t_recargo_x_clientes, dependent: :destroy

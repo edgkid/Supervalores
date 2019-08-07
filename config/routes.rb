@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :t_tarifas
   resources :t_facturas
   resources :t_tarifa_servicios
+  resources :t_recargos
 
   resources :t_resolucions, :path => "resoluciones"
   resources :t_tipo_clientes, :path => "tipos_de_clientes"
@@ -21,18 +22,6 @@ Rails.application.routes.draw do
   resources :t_empresas, :path => "empresas"
 
   get "redirect" => "t_tipo_clientes#redirect"
-
-  #routes tarifas
-  get 't_tarifas/new'
-  get 't_tarifas/edit'
-  get 't_tarifas/index'
-  get 't_tarifas/show'
-
-  #routes periodos
-  get 't_periodos/new'
-  get 't_periodos/edit'
-  get 't_periodos/index'
-  get 't_periodos/show'
 
   #routes roles
   get 'rols/index' => 't_rols#index'

@@ -17,4 +17,6 @@
 //= require rails-ujs
 //= require popper
 //= require bootstrap
+//= require vendor/dataTables/datatables.min.js
+//= require vendor/dataTables/dataTables.bootstrap4.min.js
 //= require_tree .

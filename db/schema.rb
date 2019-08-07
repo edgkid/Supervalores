@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_06_001702) do
+ActiveRecord::Schema.define(version: 2019_08_07_211017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,7 +71,6 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
     t.datetime "updated_at", null: false
     t.bigint "t_tipo_cliente_id", null: false
     t.bigint "t_tipo_persona_id", null: false
-    t.bigint "user_id", null: false
     t.string "razon_social"
     t.string "telefono"
     t.string "email"
@@ -79,7 +78,6 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
     t.index ["t_estatus_id"], name: "index_t_clientes_on_t_estatus_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_clientes_on_t_tipo_cliente_id"
     t.index ["t_tipo_persona_id"], name: "index_t_personas_on_t_tipo_persona_id"
-    t.index ["user_id"], name: "index_t_clientes_on_user_id"
   end
 
   create_table "t_cuenta_financieras", force: :cascade do |t|
@@ -182,7 +180,7 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
     t.index ["t_tarifa_servicio_id"], name: "index_t_estado_cuenta_conts_on_t_tarifa_servicio_id"
   end
 
-  create_table "t_estatus", force: :cascade do |t|
+  create_table "t_estatuses", force: :cascade do |t|
     t.integer "estatus", null: false
     t.integer "para", default: 0, null: false
     t.string "descripcion", null: false
@@ -315,6 +313,8 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
     t.integer "estatus", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "t_factura_id"
+    t.index ["t_factura_id"], name: "index_t_recargos_on_t_factura_id"
   end
 
   create_table "t_recibos", force: :cascade do |t|
@@ -343,15 +343,14 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
 
   create_table "t_resolucions", force: :cascade do |t|
     t.string "descripcion", null: false
-    t.date "fecha_resolucion", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "t_cliente_id", null: false
-    t.bigint "t_tipo_cliente_id", null: false
+    t.bigint "t_estatus_id", null: false
     t.string "resolucion"
     t.index ["resolucion"], name: "index_t_resolucions_on_resolucion", unique: true
     t.index ["t_cliente_id"], name: "index_t_resolucions_on_t_cliente_id"
-    t.index ["t_tipo_cliente_id"], name: "index_t_resolucions_on_t_tipo_cliente_id"
+    t.index ["t_estatus_id"], name: "index_t_resolucions_on_t_estatus_id"
   end
 
   create_table "t_rol_descs", force: :cascade do |t|
@@ -484,10 +483,9 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
   add_foreign_key "t_cliente_tarifas", "t_periodos"
   add_foreign_key "t_cliente_tarifas", "t_resolucions"
   add_foreign_key "t_cliente_tarifas", "t_tarifas"
-  add_foreign_key "t_clientes", "t_estatus"
+  add_foreign_key "t_clientes", "t_estatuses"
   add_foreign_key "t_clientes", "t_tipo_clientes"
   add_foreign_key "t_clientes", "t_tipo_personas"
-  add_foreign_key "t_clientes", "users"
   add_foreign_key "t_cuenta_financieras", "t_presupuestos"
   add_foreign_key "t_cuenta_financieras", "t_tarifa_servicio_groups"
   add_foreign_key "t_email_masivos", "t_clientes"
@@ -507,7 +505,7 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
   add_foreign_key "t_estado_cuenta_conts", "t_tarifa_servicios"
   add_foreign_key "t_factura_detalles", "t_facturas"
   add_foreign_key "t_factura_detalles", "t_tarifa_servicios"
-  add_foreign_key "t_facturas", "t_estatus"
+  add_foreign_key "t_facturas", "t_estatuses"
   add_foreign_key "t_facturas", "t_leyendas"
   add_foreign_key "t_facturas", "t_periodos"
   add_foreign_key "t_facturas", "t_resolucions"
@@ -520,13 +518,14 @@ ActiveRecord::Schema.define(version: 2019_08_06_001702) do
   add_foreign_key "t_personas", "t_empresas"
   add_foreign_key "t_recargo_x_clientes", "t_recargos"
   add_foreign_key "t_recargo_x_clientes", "t_resolucions"
+  add_foreign_key "t_recargos", "t_facturas"
   add_foreign_key "t_recibos", "t_clientes"
   add_foreign_key "t_recibos", "t_facturas"
   add_foreign_key "t_recibos", "t_metodo_pagos"
   add_foreign_key "t_recibos", "t_periodos"
   add_foreign_key "t_recibos", "users"
   add_foreign_key "t_resolucions", "t_clientes"
-  add_foreign_key "t_resolucions", "t_tipo_clientes"
+  add_foreign_key "t_resolucions", "t_estatuses"
   add_foreign_key "t_rol_descs", "t_rols"
   add_foreign_key "t_tarifa_servicio_groups", "t_presupuestos"
   add_foreign_key "t_tarifas_periodos", "t_periodos"

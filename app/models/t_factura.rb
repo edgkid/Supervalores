@@ -12,4 +12,5 @@ class TFactura < ApplicationRecord
   has_many :t_nota_creditos, dependent: :destroy
   has_many :t_estado_cuentums, dependent: :destroy
   has_many :t_clientes, through: :t_estado_cuentum
+  has_many :t_recargos, dependent: :nullify
 end
