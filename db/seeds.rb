@@ -21,6 +21,9 @@ if user == nil
 end
 print "Usuario commun #{email} - #{pass}\n"
 
+# Requisitos de migracion
+#  sudo -u postgres psql -U postgres -c 'CREATE DATABASE cxc';
+#  sudo -u postgres psql -U postgres cxc < data/cxc_db_export.pgsql
 
 connection = ActiveRecord::Base.connection()
 continue = true
