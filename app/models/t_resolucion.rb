@@ -1,5 +1,6 @@
 class TResolucion < ApplicationRecord
 	belongs_to :t_cliente	
+	belongs_to :t_estatus	
 
 	has_many :t_facturas, dependent: :destroy
 	has_many :t_recargo_x_clientes, dependent: :destroy

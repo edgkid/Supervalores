@@ -14,10 +14,10 @@ Rails.application.routes.draw do
   resources :t_resolucions, :path => "resoluciones"
   resources :t_tipo_clientes, :path => "tipos_de_clientes"
   resources :t_tipo_personas, :path => "tipos_de_personas"
-  resources :t_personas, :path => "personas"
-  resources :t_empresas, :path => "empresas"
   resources :t_clientes, :path => "clientes"
   resources :t_estatuses, :path => "estatus"
+  resources :t_personas, :path => "personas"
+  resources :t_empresas, :path => "empresas"
 
   get "redirect" => "t_tipo_clientes#redirect"
 

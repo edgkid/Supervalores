@@ -6,6 +6,151 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+email = 'admin@cxc.com'
+pass = 'cxcadmin'
+
+user = User.find_by(email: email)
+if user == nil
+  user = User.new
+  user.email = email
+  user.password = pass
+  user.password_confirmation = pass
+  user.save!
+end
+
+# Problema de permisos
+#connection = ActiveRecord::Base.connection()
+#continue = true
+#
+#check_previous_migration = connection.execute("SELECT * FROM schema_migrations sm WHERE sm.version = '0'")
+#if check_previous_migration.count > 0
+#  print "La migracion solo se hace una vez ;).\n"
+#else
+#  begin
+#    if continue
+#      connection.execute("CREATE USER migracion WITH PASSWORD 'cxc_migracion'")
+#    end
+#  rescue Exception => error
+#    if !error.inspect.include? "already exists"
+#      print "Problema =(: #{error.inspect}\n"
+#      continue = false
+#    end
+#  end
+#
+#  begin
+#    if continue
+#      connection.execute("GRANT ALL PRIVILEGES ON DATABASE cxc to migracion")  
+#    end
+#  rescue Exception => error
+#    if error.inspect.include? 'database "cxc" does not exist'
+#      print "Problema =(: No se puede migrar sin la base de datos origen (cxc). Debes crear la base de datos cxc e importarle el archivo cxc_db_export.sql ubicado en la carpeta data dentro del proyecto.\n"
+#      continue = false
+#    elsif error.inspect.include? 'role "migracion" does not exist'
+#      print "Problema =(: Se intento crear el usuario(migracion) pero parece que no se tienen permisos.\n"
+#      continue = false
+#    end
+#  end
+#
+#  begin
+#    if continue
+#      connection.execute("GRANT ALL PRIVILEGES ON DATABASE cxc to postgres")  
+#    end
+#  rescue Exception => error
+#    if error.inspect.include? 'database "cxc" does not exist'
+#      print "Problema =(: No se puede migrar sin la base de datos origen (cxc). Debes crear la base de datos cxc e importarle el archivo cxc_db_export.sql ubicado en la carpeta data dentro del proyecto.\n"
+#      continue = false
+#    end
+#  end
+#
+#  begin
+#    if continue  
+#      connection.execute("GRANT ALL PRIVILEGES ON DATABASE supervalores_development to migracion")
+#    end
+#  rescue Exception => error  
+#    if error.inspect.include? 'database "supervalores_development" does not exist'
+#      print "Problema =(: No se puede migrar sin la base de datos destino (supervalores_development).\n"
+#      continue = false
+#    elsif error.inspect.include? 'role "migracion" does not exist'
+#      print "Problema =(: Se intento crear el usuario(migracion) pero parece que no se tienen permisos.\n"
+#      continue = false
+#    end
+#  end
+#
+#  begin
+#    if continue
+#      connection.execute("CREATE EXTENSION dblink")
+#    end
+#  rescue Exception => error    
+#    if !error.inspect.include?  'extension "dblink" already exists'
+#      print "Problema =(: #{error.inspect}\n"
+#      continue = false
+#    end
+#  end
+#
+#  begin
+#    if continue
+#      connection.execute("CREATE FOREIGN DATA WRAPPER cxc_db VALIDATOR postgresql_fdw_validator")
+#    end
+#  rescue Exception => error
+#    if !error.inspect.include?  'wrapper "cxc_db" already exists'
+#      print "Problema =(: #{error.inspect}\n"
+#      continue = false
+#    end
+#  end
+#
+#  begin
+#    if continue
+#      connection.execute("CREATE SERVER cxc_server FOREIGN DATA WRAPPER cxc_db OPTIONS (hostaddr '127.0.0.1', dbname 'cxc')")
+#    end
+#  rescue Exception => error
+#    if !error.inspect.include?  'server "cxc_server" already exists'
+#      print "Problema =(: #{error.inspect}\n"
+#      continue = false
+#    end
+#  end
+#
+#  #Colocar usuario de base de datos con su contraseña
+#  begin
+#    if continue
+#      connection.execute("CREATE USER MAPPING FOR postgres SERVER cxc_server OPTIONS (user 'migracion', password 'cxc_migracion')")
+#    end
+#  rescue Exception => error
+#    if !error.inspect.include?  'mapping for "postgres" already exists for server cxc_server'
+#      print "Problema =(: #{error.inspect}\n"
+#      continue = false
+#    end
+#  end
+#
+#  begin
+#    if continue
+#      connection.execute("GRANT USAGE ON FOREIGN SERVER cxc_server TO postgres")
+#    end
+#  rescue Exception => error  
+#    if error.inspect.include? 'database "supervalores_development" does not exist'
+#      print "Problema =(: No se puede migrar sin la base de datos destino (supervalores_development).\n"
+#      continue = false
+#    end
+#  end
+#
+#  if continue
+#    check_dblink = connection.execute("SELECT pg_namespace.nspname, pg_proc.proname FROM pg_proc, pg_namespace WHERE pg_proc.pronamespace=pg_namespace.oid AND pg_proc.proname LIKE '%dblink%'")
+#    if check_dblink.count == 0
+#      print "No se logro habilitar la extension dblink a la base de datos.\n"
+#    else
+#      result_connection = connection.execute("SELECT dblink_connect('cxc_server')")
+#      print "#{result_connection.first.inspect}\n"
+#      if (result_connection.first["dblink_connect"] != 'OK')
+#        print "No se logro conectar a la base de datos cxc.\n"
+#      else
+#        file = File.open(File.dirname(__FILE__) + "/../data/migracion.cxc.sql", "r")
+#        sql = file.read
+#        file.close
+#        connection.execute(sql)
+#      end
+#    end
+#  end
+#end
+
 #Datos de prueba tipo de cuentas
 #TTipoCuenta.create(descripcion: "Tipo A", estatus: 1)
 #TTipoCuenta.create(descripcion: "Tipo B", estatus: 1)

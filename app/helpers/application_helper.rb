@@ -27,5 +27,15 @@ module ApplicationHelper
     def opciones_de_tipos_de_clientes
         return TTipoCliente.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
     end
+
+    def no_existen_clientes_disponibles
+        disponible = TEstatus.find_by(descripcion: "Disponible")
+        return TCliente.where(t_estatus: disponible).count == 0
+    end
+
+    def opciones_de_clientes
+        disponible = TEstatus.find_by(descripcion: "Disponible")
+        return TCliente.where(t_estatus: disponible).order(:razon_social).pluck "codigo || ' - ' || razon_social", :id
+    end
         
 end

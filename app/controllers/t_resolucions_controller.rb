@@ -1,28 +1,27 @@
-class TClientesController < ApplicationController
-  before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy]
+class TResolucionsController < ApplicationController
+  before_action :seleccionar_resolucion, only: [:show, :edit, :update, :destroy]
 
   def index
     @usar_dataTables = true
-    @registros = TCliente.all
+    @registros = TResolucion.all
   end
 
   def show
   end
 
   def new
-    @registro = TCliente.new
+    @registro = TResolucion.new
   end
 
   def edit
   end
 
   def create
-    @registro = TCliente.new(parametros_cliente)
-    @registro.prospecto_at = Time.now
-    
+    @registro = TResolucion.new(parametros_resolucion)
+
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to @registro, notice: 'Cliente creado correctamente.' }
+        format.html { redirect_to @registro, notice: 'Resolución creado correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
         format.html { render :new }
@@ -33,8 +32,8 @@ class TClientesController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(parametros_cliente)
-        format.html { redirect_to @registro, notice: 'Cliente actualizado correctamente.' }
+      if @registro.update(parametros_resolucion)
+        format.html { redirect_to @registro, notice: 'Resolución actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
         format.html { render :edit }
@@ -43,11 +42,10 @@ class TClientesController < ApplicationController
     end
   end
 
-  def destroy 
-    @registro.estatus = 0
-
+  def destroy
+    @registro.save.t_estatus = TEstatus.find_by(description: "Inactivo")
     if @registro.save
-      format.html { redirect_to t_clientes_url, notice: 'Cliente inhabilitado correctamente.' }
+      format.html { redirect_to t_tipo_clientes_url, notice: 'Tipo de cliente inhabilitado correctamente.' }
       format.json { head :no_content }
     else
       format.html { render :new }
@@ -56,11 +54,11 @@ class TClientesController < ApplicationController
   end
 
   private
-    def seleccionar_cliente
-      @registro = TCliente.find(params[:id])
+    def seleccionar_resolucion
+      @registro = TResolucion.find(params[:id])
     end
 
-    def parametros_cliente
-      params.require(:t_cliente).permit(:codigo, :t_estatus_id, :cuenta_venta, :t_tipo_cliente_id, :t_tipo_persona_id, :razon_social, :telefono, :email)
+    def parametros_resolucion
+      params.require(:t_resolucion).permit(:descripcion, :t_cliente_id, :t_estatus_id, :resolucion)
     end
 end

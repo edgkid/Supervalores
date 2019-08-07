@@ -10,23 +10,19 @@
           <li><%= message %></li>
           <% end %>
         </ul>
-
-        <%= registro.inspect %>
       </div>
       <% end %>
       <div class="form-group row">
         <%= form.label :codigo, 'Código', class: "col-sm-2 col-form-label" %>
-        <div class="col-sm-10">
+        <div class="col-sm-4">
           <% if editable %>
           <%= form.text_field :codigo, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
           <% else %>
           <%= registro.codigo %>
           <% end %>
         </div>
-      </div>
-      <div class="form-group row">
         <%= form.label :t_estatus_id, 'Estatus', class: "col-sm-2 col-form-label" %>
-        <div class="col-sm-10">
+        <div class="col-sm-4">
           <% if editable %>
           <%= form.select :t_estatus_id, opciones_de_estatus(true, 2, true) , {}, { :class => 'form-control m-b' } %>
           <% else %>
@@ -65,22 +61,20 @@
         </div>
       </div>
       <div class="form-group row">
-        <%= form.label :telefono, 'Telefono', class: "col-sm-2 col-form-label" %>
-        <div class="col-sm-10">
-          <% if editable %>
-          <%= form.text_field :telefono, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
-          <% else %>
-          <%= registro.telefono %>
-          <% end %>
-        </div>
-      </div>
-      <div class="form-group row">
         <%= form.label :email, 'Email', class: "col-sm-2 col-form-label" %>
-        <div class="col-sm-10">
+        <div class="col-sm-4">
           <% if editable %>
           <%= form.text_field :email, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
           <% else %>
           <%= registro.email %>
+          <% end %>
+        </div>
+        <%= form.label :telefono, 'Telefono', class: "col-sm-2 col-form-label" %>
+        <div class="col-sm-4">
+          <% if editable %>
+          <%= form.text_field :telefono, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+          <% else %>
+          <%= registro.telefono %>
           <% end %>
         </div>
       </div>
