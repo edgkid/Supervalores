@@ -30,7 +30,7 @@
         <a href="/">
           <i class="glyphicon glyphicon-th"></i>
           <span class="nav-label">
-            <b style="color : #FFFFFF;">Dashboard</b>
+            Dashboard
           </span>
         </a>
       </li>
@@ -42,11 +42,29 @@
           </span>
         </a>
       </li> -->
-      <li class="">
-        <a href="#"><i class="fa fa-th-large">
-          </i>
+      <li>
+        <a href="#">
+          <i class="fa fa-file-text-o"></i>
           <span class="nav-label">
-            <b style="color : #FFFFFF;">Administrador</b>
+            Facturación
+          </span>
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level">
+          <li><%= link_to 'Leyendas de Facturas', t_leyendas_path %></li>
+          <li><%= link_to 'Facturas', t_facturas_path %></li>
+          <li><%= link_to 'Recargos', t_recargos_path %></li>
+          <li><%= link_to 'Periodos', t_periodos_path %></li>
+          <li><%= link_to 'Tarifas', t_tarifas_path %></li>
+          <li><%= link_to 'Servicios', t_tarifa_servicios_path %></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">
+          <!-- <i class="fa fa-th-large"></i> -->
+          <i class="fa fa-edit"></i>
+          <span class="nav-label">
+            Gestión
           </span>
           <span class="fa arrow"></span>
         </a>
@@ -55,96 +73,74 @@
           <a href="#">
             Catalogo de Cuentas
           </a>
-        </li>-->
-        <li>
-            <%= link_to 'Clientes', t_clientes_path %>
-        </li>
-        <li>
-            <%= link_to 'Tipos de Clientes', t_tipo_clientes_path %>
-        </li>
-        <li>
-            <%= link_to 'Tipos de Personas', t_tipo_personas_path %>
-        </li>
-        <li>
-            <%= link_to 'Estatus', t_estatuses_path %>
-        </li>
-        <li>
-            <%= link_to 'Resoluciones', t_resolucions_path %>
-        </li>
-        <!--<li>
-          <a href="#">
-            Emisiones
-          </a>
-        </li>-->
-        <li>
-          <%= link_to 'Leyendas de Facturas', t_leyendas_path %>
-        </li>
-        <li>
-          <%= link_to 'Facturas', t_facturas_path %>
-        </li>
-        <!--<li>
-          <a href="#">
-            Partidas Presupuestarias
-          </a>
-        </li>-->
-        <li>
-          <a href="/t_periodos">
-            Periodos
-          </a>
-        </li>
-        <li>
-          <%= link_to 'Recargos', t_recargos_path %>
-        </li>
-        <li>
-          <%= link_to 'Servicios', t_tarifa_servicios_path %>
-        </li>
-        <li>
-          <a href="/t_tarifas">
-            Tarifas
-          </a>
-        </li>
-        <!--<li>
-          <a href="#">
-            Tipos de Clientes
-          </a>
-        </li>-->
-        <!--<li>
-          <a href="#">
-            Tipo de Cuentas
-          </a>
-        </li>-->
-        <!--<li>
-          <a href="#">
-            Tipos de Emisiones
-          </a>
-        </li>-->
-        <li>
-          <a href="/admin/users">
-            Usuarios
-          </a>
-        </li>
-        <!--<li>
-          <a href="/rols/index">
-            <b style="color : #FFFFFF;">Roles de Usuario</b>
-          </a>
-        </li>-->
-      </ul>
-    </li>
-    <!--<li>
-      <a href="#">
-        <i class="fa fa-diamond"></i>
-        <span class="nav-label">Administrador App
-        </span>
-      </a>
-    </li>-->
-    <!--<li>
-      <a href="#">
-        <i class="fa fa-pie-chart"></i>
-        <span class="nav-label">
-          Informes
-        </span>
-      </a>
-    </li>-->
+          </li>-->
+          <li>
+              <%= link_to 'Clientes', t_clientes_path %>
+          </li>
+          <li>
+              <%= link_to 'Tipos de Clientes', t_tipo_clientes_path %>
+          </li>
+          <li>
+              <%= link_to 'Tipos de Personas', t_tipo_personas_path %>
+          </li>
+          <li>
+              <%= link_to 'Estatus', t_estatuses_path %>
+          </li>
+          <li>
+              <%= link_to 'Resoluciones', t_resolucions_path %>
+          </li>
+          <!--<li>
+            <a href="#">
+              Emisiones
+            </a>
+          </li>-->
+          <!--<li>
+            <a href="#">
+              Partidas Presupuestarias
+            </a>
+          </li>-->
+          <!--<li>
+            <a href="#">
+              Tipos de Clientes
+            </a>
+          </li>-->
+          <!--<li>
+            <a href="#">
+              Tipo de Cuentas
+            </a>
+          </li>-->
+          <!--<li>
+            <a href="#">
+              Tipos de Emisiones
+            </a>
+          </li>-->
+          <li>
+            <a href="/admin/users">
+              Usuarios
+            </a>
+          </li>
+          <!--<li>
+            <a href="/rols/index">
+              <b style="color : #FFFFFF;">Roles de Usuario</b>
+            </a>
+          </li>-->
+        </ul>
+      </li>
+      <!--<li>
+        <a href="#">
+          <i class="fa fa-diamond"></i>
+          <span class="nav-label">Administrador App
+          </span>
+        </a>
+      </li>-->
+      <!--<li>
+        <a href="#">
+          <i class="fa fa-pie-chart"></i>
+          <span class="nav-label">
+            Informes
+          </span>
+        </a>
+      </li>-->
     </ul>
   </div>
 </nav>
