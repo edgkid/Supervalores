@@ -4,11 +4,9 @@
       <div class="ibox ">
         <div class="ibox-title">
           <div class="row">
-            <div class="col-10">
+            <div class="col-6">
               <h1>Tipos de Clientes</h1>
-            </div>
-            <div class="col-2">
-              <%= link_to 'Añadir tipo de cliente', new_t_tipo_cliente_path, class: "btn btn-primary" %>
+              <%= link_to 'Añadir tipo de cliente', new_t_tipo_cliente_path, class: "btn btn-primary float-right" %>
             </div>
           </div>
         </div>
@@ -35,10 +33,8 @@
                     <td><%= registro.tipo %></td>
                     <td><%= estatus_text registro.estatus %></td>
                     <td><%= registro.t_tarifa.nombre %></td>
-                    <td class="acciones">
-                      <%= link_to 'Ver', registro, class: "btn btn-white" %>
-                      <%= link_to 'Editar', edit_polymorphic_path(registro), class: "btn btn-white" %>
-                      <%= link_to 'Eliminar', registro, method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-white" %>
+                    <td>
+                        <%= render 'shared/action_buttons', show_route: [registro], edit_route: edit_polymorphic_path(registro) %>
                     </td>
                   </tr>
                   <% end %>

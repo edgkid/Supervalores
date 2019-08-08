@@ -49,7 +49,6 @@ else
       connection.execute("GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO migracion")
       connection.execute("GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO migracion")
       connection.execute("GRANT ALL PRIVILEGES ON DATABASE cxc to migracion")
-      #connection.execute("ALTER USER migracion CREATEDB")
       connection.execute("ALTER USER migracion WITH SUPERUSER")
     end
   rescue Exception => error

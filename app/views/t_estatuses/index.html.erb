@@ -4,11 +4,9 @@
       <div class="ibox ">
         <div class="ibox-title">
           <div class="row">
-            <div class="col-10">
+            <div class="col-12">
               <h1>Estatus</h1>
-            </div>
-            <div class="col-2">
-              <%= link_to 'Añadir estatus', new_t_estatus_path, class: "btn btn-primary" %>
+              <%= link_to 'Añadir estatus', new_t_estatus_path, class: "btn btn-primary float-right" %>
             </div>
           </div>
         </div>
@@ -21,7 +19,7 @@
                   <th>Disponible para</th>
                   <th>Color</th>
                   <th>Estatus</th>
-                  <th></th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -32,10 +30,8 @@
                   <td><%= para_text registro.para %></td>
                   <td><span class="indicador-color" style="background-color:<%= registro.color %>;"></span></td>
                   <td><%= estatus_text registro.estatus %></td>
-                  <td class="acciones">
-                    <%= link_to 'Ver', registro, class: "btn btn-white" %>
-                    <%= link_to 'Editar', edit_polymorphic_path(registro), class: "btn btn-white" %>
-                    <%= link_to 'Eliminar', registro, method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-white" %>
+                  <td>
+                      <%= render 'shared/action_buttons', show_route: [registro], edit_route: edit_polymorphic_path(registro) %>
                   </td>
                 </tr>
                 <% end %>
