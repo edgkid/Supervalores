@@ -21,7 +21,7 @@ class TCliente < ApplicationRecord
 
   validates :codigo,
     presence: { 
-      message: "|El código no puede estar vacio."
+      message: "|El código no puede estar vacío."
     },
     format: { 
       message: "|El código solo puede tener Letras, Números, Guiones(-) y entre 6 y 18 caracteres.",
