@@ -1,12 +1,14 @@
 <center>
   <div class="btn-group" role="group">
-    <%= link_to show_route, class: "btn btn-success btn-xs" do %>
+    <%= link_to show_route, class: "btn btn-success btn-xs", title: 'Consultar Registro', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
       <i class="glyphicon glyphicon-search"></i>
     <% end if defined?(show_route) %>
-    <%= link_to edit_route, class: "btn btn-warning btn-xs" do %>
+    <%= link_to edit_route, class: "btn btn-warning btn-xs", title: 'Editar Registro', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
       <i class="glyphicon glyphicon-pencil"></i>
     <% end if defined?(edit_route) %>
-    <%= link_to delete_route, method: :delete, data: { confirm: defined?(delete_message) ? delete_message : '¿Está seguro de querer eliminarlo?' }, class: "btn btn-danger btn-xs" do %>
+    <%= link_to delete_route, method: :delete,
+    data: { confirm: defined?(delete_message) ? delete_message : '¿Está seguro de querer eliminarlo?' },
+    class: "btn btn-danger btn-xs", title: 'Consultar Registro', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
       <i class="glyphicon glyphicon-trash"></i>
     <% end if defined?(delete_route) %>
   </div>

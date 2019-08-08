@@ -30,7 +30,7 @@
                     <td><%= user.nombre %> <%= user.apellido %></td>
                     <td><%= user.email %></td>
                     <td>
-                      <center><%= user.last_sign_in_at != nil ? user.last_sign_in_at.strftime("%F %H:%M") : "dd/mm/yyyy" %></center>
+                      <center><%= user.last_sign_in_at != nil ? user.last_sign_in_at.strftime("%F %H:%M") : "No ha iniciado sesión" %></center>
                     </td>
                     <td><center><%= user.estado ? 'Activo' : 'Inactivo'%></center></td>
                     <td>
@@ -52,7 +52,29 @@
   $(document).ready(function(){
     $('.dataTables').DataTable({
       pageLength: 25,
-      responsive: true
+      responsive: true,
+      language: {
+                  processing:     "Procesando",
+                  search:         "Buscar&nbsp;:",
+                  lengthMenu:    "Mostrar _MENU_ registros",
+                  info:           "Mostrando registros del Start al END de un tolal de _TOTAL_ registros",
+                  infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                  infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                  infoPostFix:    "",
+                  loadingRecords: "Chargement en cours...",
+                  zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                  emptyTable:     "Aucune donnée disponible dans le tableau",
+                  paginate: {
+                      first:      "Primero",
+                      previous:   "Anterior",
+                      next:       "Sguiente",
+                      last:       "Ultimo"
+                  },
+                  aria: {
+                      sortAscending:  ": Activar para ordenar la columna de manera ascendente",
+                      sortDescending: ": Activar para ordenar la columna de manera ascendente"
+                  }
+              }
     });
   });
 </script>
