@@ -2,27 +2,27 @@
   <tbody>
     <tr>
       <th>Estatus:</th>
-      <td></td>
+      <td><%= @t_cliente.t_estatus.estatus if @t_cliente %></td>
     </tr>
     <tr>
       <th>Cliente:</th>
-      <td></td>
+      <td><%= '' %></td>
     </tr>
     <tr>
       <th>Empresa:</th>
-      <td></td>
+      <td><%= '' %></td>
     </tr>
     <tr>
       <th>Dirección:</th>
-      <td></td>
+      <td><%= '' %></td>
     </tr>
     <tr>
       <th>Telf.:</th>
-      <td></td>
+      <td><%= @t_cliente.telefono if @t_cliente %></td>
     </tr>
     <tr>
       <th>E-mail:</th>
-      <td></td>
+      <td><%= @t_cliente.email if @t_cliente %></td>
     </tr>
   </tbody>
 </table>

@@ -59,11 +59,11 @@ class TClientesController < ApplicationController
   def buscar
     case parametros_de_busqueda[:attribute]
     when 'codigo'
-      #TCliente.
+      @t_cliente = TCliente.where('codigo LIKE ?', "%#{parametros_de_busqueda[:value]}%").take
     when 'resolucion'
-      
+      @t_resolucion = TResolucion.where('resolucion LIKE ?', "%#{parametros_de_busqueda[:value]}%").take
     when 'razon_social'
-      
+      @t_cliente = TCliente.where('razon_social LIKE ?', "%#{parametros_de_busqueda[:value]}%").take
     end
   end
 
