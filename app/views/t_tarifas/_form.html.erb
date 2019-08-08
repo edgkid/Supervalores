@@ -31,7 +31,7 @@
                 <div class="form-group row">
                   <%= f.label :rango_monto, 'Rango del monto', class: "col-sm-3 col-form-label" %>
                   <div class="col-sm-9">
-                    <%= f.number_field :rango_monto, class: "form-control" %>
+                    <%= f.number_field :rango_monto, step: 0.01, class: "form-control" %>
                   </div>
                 </div>
               </div>
@@ -39,7 +39,7 @@
                 <div class="form-group row">
                   <%= f.label :recargo, class: "col-sm-3 col-form-label" %>
                   <div class="col-sm-9">
-                    <%= f.number_field :recargo, class: "form-control" %>
+                    <%= f.number_field :recargo, step: 0.01, class: "form-control" %>
                   </div>
                 </div>
               </div>
