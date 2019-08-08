@@ -17,7 +17,7 @@ class Admin::UsersController < ApplicationController
     if @user.save
       redirect_to admin_users_path, notice: 'Usuario creado correctamente.'
     else
-      redirect_to new_admin_user_path
+      redirect_to :action => 'new'
     end
   end
 
