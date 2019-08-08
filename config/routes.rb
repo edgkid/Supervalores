@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :t_tipo_clientes, :path => "tipos_de_clientes"
   resources :t_tipo_personas, :path => "tipos_de_personas"
   resources :t_clientes, :path => "clientes"
+  get 't_clientes/buscar', as: :buscar_t_cliente
   resources :t_estatuses, :path => "estatus"
   resources :t_personas, :path => "personas"
   resources :t_empresas, :path => "empresas"

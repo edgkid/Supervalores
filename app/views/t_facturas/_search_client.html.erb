@@ -1,22 +1,40 @@
-<%= form_tag('/clientes/search', method: 'get') do |f| %>
+<%= form_tag(buscar_t_cliente_path, method: 'get', remote: true, id: 'search-client-form') do %>
   <div class="row">
     <div class="col">
       <div class="form-group">
         <%= label_tag :codigo, 'Código' %>
-        <%= text_field_tag :codigo, nil, class: 'form-control' %>
+        <%= text_field_tag :codigo, nil, id: 'codigo', class: 'form-control search-client' %>
       </div>
     </div>
     <div class="col">
       <div class="form-group">
         <%= label_tag :resolucion, 'Resolución' %>
-        <%= text_field_tag :resolucion, nil, class: 'form-control' %>
+        <%= text_field_tag :resolucion, nil, id: 'resolucion', class: 'form-control search-client' %>
       </div>
     </div>
     <div class="col">
       <div class="form-group">
-        <%= label_tag :cedula, 'Céd. / Pas. / RUC' %>
-        <%= text_field_tag :cedula, nil, class: 'form-control' %>
+        <%= label_tag :razon_social, 'Céd. / Pas. / RUC' %>
+        <%= text_field_tag :razon_social, nil, id: 'razon_social', class: 'form-control search-client' %>
       </div>
     </div>
   </div>
+  <%= submit_tag "Ajá" %>
 <% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.search-client').keyup(function() {
+      // alert($(this).attr('id'));
+      // $('#search-client-form').submit();
+      $.ajax({
+        url: '<%= "#{buscar_t_cliente_path}" %>',
+        type: 'get',
+        data: {
+          attribute: $(this).attr('id'),
+          value: $(this).val()
+        }
+      });
+    });
+  });
+</script>

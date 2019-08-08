@@ -1,4 +1,5 @@
 class TClientesController < ApplicationController
+  respond_to :js, only: :buscar
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -55,6 +56,17 @@ class TClientesController < ApplicationController
     end
   end
 
+  def buscar
+    case parametros_de_busqueda[:attribute]
+    when 'codigo'
+      #TCliente.
+    when 'resolucion'
+      
+    when 'razon_social'
+      
+    end
+  end
+
   private
     def seleccionar_cliente
       @registro = TCliente.find(params[:id])
@@ -62,5 +74,9 @@ class TClientesController < ApplicationController
 
     def parametros_cliente
       params.require(:t_cliente).permit(:codigo, :t_estatus_id, :cuenta_venta, :t_tipo_cliente_id, :t_tipo_persona_id, :razon_social, :telefono, :email)
+    end
+
+    def parametros_de_busqueda
+      params.permit(:attribute, :value)
     end
 end

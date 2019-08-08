@@ -19,4 +19,5 @@
 //= require bootstrap
 //= require vendor/dataTables/datatables.min.js
 //= require vendor/dataTables/dataTables.bootstrap4.min.js
+//= require vendor/typehead/bootstrap3-typeahead.min.js
 //= require_tree .
