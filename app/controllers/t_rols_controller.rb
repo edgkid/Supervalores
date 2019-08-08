@@ -3,6 +3,7 @@ class TRolsController < ApplicationController
   before_action :set_t_rol, only: [:edit, :update, :destroy]
 
   def index
+    @usar_dataTables = true
     @rols = TRol.all
   end
 
@@ -17,9 +18,9 @@ class TRolsController < ApplicationController
   def create
     @rol = TRol.new(t_rols_params)
     if @rol.save
-      redirect_to(:action => 'index')
+      redirect_to rols_index_path, notice: 'Rol de usuario creado correctamente.'
     else
-      redirect_to(:action => 'new')
+      redirect_to rols_new_path
     end
   end
 
@@ -29,9 +30,12 @@ class TRolsController < ApplicationController
 
   def update
     @rol = TRol.find(params[:id])
-    @rol.update_attributes(t_rols_params)
 
-    redirect_to(:action => 'index')
+    if @rol.update_attributes(t_rols_params)
+      redirect_to rols_index_path , notice: 'Usuario actualizado correctamente.'
+    else
+      redirect_to :action => 'update'
+    end
   end
 
   def destroy
