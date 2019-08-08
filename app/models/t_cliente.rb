@@ -18,7 +18,15 @@ class TCliente < ApplicationRecord
   has_many :t_facturas, through: :t_estado_cuenta
 
 	has_and_belongs_to_many :t_tarifas
-    def es_prospecto?
-        return self.prospecto_at == nil
-    end
+
+  validates :codigo,
+    presence: { 
+      message: "|El código no puede estar vacio."
+    },
+    format: { 
+      message: "|El código solo puede tener Letras, Números, Guiones(-) y entre 6 y 18 caracteres.",
+      with: /([A-Z0-9\-]){6,18}/ 
+    },
+    :on => [:create, :update]
+
 end

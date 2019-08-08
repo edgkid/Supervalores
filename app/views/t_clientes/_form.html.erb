@@ -1,15 +1,6 @@
 <div class="ibox-content">
-  <%= form_with(model: registro, local: true) do |form| %>
-  <% if registro.errors.any? %>
-  <div id="error_explanation">
-    <p><%= pluralize(registro.errors.count, "error") %> prohibited this registro from being saved:</p>
-    <ul>
-      <% registro.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-  <% end %>
+  <%= form_with(model: registro, local: true) do |form| %>  
+  <%= render "shared/errors", model: @registro %>
   <div class="form-group row">
     <%= form.label :codigo, 'Código', class: "col-sm-2 col-form-label text-right" %>
     <div class="col-sm-4 input-value">
