@@ -2,7 +2,7 @@
     <div class="col-md-9 col-lg-7">
         <div class="ibox">
             <div class="ibox-title">
-                <h5>Tipo de cliente #<%= @registro.descripcion %></h5>
+                <h5>Tipo de cliente, <%= @registro.descripcion %></h5>
             </div>
             <%= render 'form', registro: @registro, editable: false, return_to: t_tipo_clientes_path %>
         </div>
