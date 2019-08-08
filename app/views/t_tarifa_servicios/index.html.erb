@@ -52,11 +52,4 @@
 </div>
 
 <!-- Page-Level Scripts -->
-<script>
-  $(document).ready(function(){
-    $('.dataTables').DataTable({
-      pageLength: 25,
-      responsive: true
-    });
-  });
-</script>
+<%= render "shared/dataTable" %>

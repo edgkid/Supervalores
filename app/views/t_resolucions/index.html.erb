@@ -14,7 +14,7 @@
         </div>
         <div class="ibox-content">
           <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover registros">
+            <table class="table table-striped table-bordered table-hover dataTables">
               <thead>
                 <tr>
                   <th>Cliente</th>
@@ -57,12 +57,4 @@
 </div>
 
 <!-- Page-Level Scripts -->
-<script>
-  $(document).ready(function () {
-    $('.registros').DataTable({
-      pageLength: 25,
-      responsive: true
-    });
-
-  });
-</script>
+<%= render "shared/dataTable" %>

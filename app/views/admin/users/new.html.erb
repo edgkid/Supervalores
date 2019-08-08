@@ -10,7 +10,7 @@
 				</div>
         <div class="ibox-content">
         	<%= form_for [:admin, @user] do |f| %>
-							<% if :admin.errors.any? %>
+							<% if @user.errors.any? %>
 								<div id="error_explanation">
 									<p><%= pluralize(registro.errors.count, "error") %> prohibited this registro from being saved:</p>
 									<ul>

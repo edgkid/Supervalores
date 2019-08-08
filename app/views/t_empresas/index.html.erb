@@ -3,7 +3,7 @@
 <h1>T Empresas</h1>
 
 <table>
-  <thead>
+  <thead class="table table-striped table-bordered table-hover dataTables>
     <tr>
       <th>Rif</th>
       <th>Razon social</th>
@@ -39,3 +39,4 @@
 <br>
 
 <%= link_to 'New T Empresa', new_t_empresa_path %>
+<%= render "shared/dataTable" %>

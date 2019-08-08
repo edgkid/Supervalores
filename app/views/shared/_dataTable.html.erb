@@ -1,0 +1,30 @@
+<script>
+  $(document).ready(function(){
+    $('.dataTables').DataTable({
+      pageLength: 25,
+      responsive: true,
+      language: {
+                  processing:     "Procesando",
+                  search:         "Buscar&nbsp;:",
+                  lengthMenu:    "Mostrar _MENU_ registros",
+                  info:           "Mostrando registros del 1 al _END_ de un tolal de _TOTAL_ registros",
+                  infoEmpty:      "No existen registros por mostrar",
+                  infoFiltered:   "No existen registros por mostrar",
+                  infoPostFix:    "",
+                  loadingRecords: "Cargando registros....",
+                  zeroRecords:    "",
+                  emptyTable:     "",
+                  paginate: {
+                      first:      "Primero",
+                      previous:   "Anterior",
+                      next:       "Sguiente",
+                      last:       "Último"
+                  },
+                  aria: {
+                      sortAscending:  ": Activar para ordenar la columna de manera ascendente",
+                      sortDescending: ": Activar para ordenar la columna de manera ascendente"
+                  }
+              }
+    });
+  });
+</script>
