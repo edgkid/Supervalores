@@ -1,8 +1,10 @@
-<div class="row">
-    <div class="col-lg-12">
-        <div class="ibox-title">
-            <h5>Editar tipo de cliente #<%= @registro.codigo %></h5>
+<div class="row justify-content-md-center">
+    <div class="col-md-9 col-lg-7">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>Editar <%= @registro.descripcion %></h5>
+            </div>
+            <%= render 'form', registro: @registro, editable: true, return_to: t_tipo_clientes_path %>
         </div>
     </div>
 </div>
-<%= render 'form', registro: @registro, editable: true, return_to: t_tipo_clientes_path %>

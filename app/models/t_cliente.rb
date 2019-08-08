@@ -6,11 +6,6 @@ class TCliente < ApplicationRecord
 
   has_many :t_resolucions
   has_many :t_recibos
-  #has_many :t_emision
-  has_many :t_email_masivos
-  has_many :t_nota_creditos
-  has_many :t_resolucions
-  has_many :t_recibos
   #has_many :t_emisions
   has_many :t_email_masivos
   has_many :t_nota_creditos
