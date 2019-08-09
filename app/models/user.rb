@@ -23,8 +23,11 @@ class User < ApplicationRecord
 												format: { with: /\A(?=.*[A-Z])(?=.*\d).{6,12}\z/ },
 											  :on => :update
 
-	validates :nombre, :apellido,  presence: true,
-											 format: { with: /\A[a-zA-Z]*\z/},
+	validates :nombre, :apellido, presence: {message: "|El nombre y apellido no pueden estar vacío."},
+											 					format: {
+											 					message: "|El nombre y apellido solo acepta caracteres alfabeticos.",
+												 				with: /\A[a-zA-Z]*\z/
+											 },
 											 :on => :create
 
 	validates :nombre, :apellido,  presence: true,
