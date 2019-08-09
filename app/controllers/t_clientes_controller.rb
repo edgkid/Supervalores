@@ -1,31 +1,35 @@
 class TClientesController < ApplicationController
   respond_to :js, only: :buscar
-  before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy]
+  before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy]  
 
-  def index
+  def index    
+    @notice = "Estos son los clientes reistrados en el sistema" 
     @usar_dataTables = true
     @registros = TCliente.all
   end
 
   def show
+    @notice = Notice.new("Perfil de "+@registro.razon_social, "Genial! no?", :info)
   end
 
   def new
-    @registro = TCliente.new
+    @registro = TCliente.new    
   end
 
   def edit
+    @notice = Notice.new("Perfil de "+@registro.razon_social, "Cuidado con lo que cambias!", :warning)
   end
 
   def create
     @registro = TCliente.new(parametros_cliente)
-    @registro.prospecto_at = Time.now
+    @registro.prospecto_at = Time.now   
     
     respond_to do |format|
-      if @registro.save
+      if @registro.save        
         format.html { redirect_to @registro, notice: 'Cliente creado correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
+        @notice = @registro.errors
         format.html { render :new }
         format.json { render json: @registro.errors, status: :unprocessable_entity }
       end
@@ -38,6 +42,7 @@ class TClientesController < ApplicationController
         format.html { redirect_to @registro, notice: 'Cliente actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
+        @notice = @registro.errors
         format.html { render :edit }
         format.json { render json: @registro.errors, status: :unprocessable_entity }
       end
@@ -51,6 +56,7 @@ class TClientesController < ApplicationController
       format.html { redirect_to t_clientes_url, notice: 'Cliente inhabilitado correctamente.' }
       format.json { head :no_content }
     else
+      @notice = @registro.errors
       format.html { render :new }
       format.json { render json: @registro.errors, status: :unprocessable_entity }
     end
@@ -82,4 +88,5 @@ class TClientesController < ApplicationController
     def parametros_de_busqueda
       params.permit(:attribute, :value)
     end
+
 end

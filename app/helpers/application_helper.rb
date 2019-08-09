@@ -1,5 +1,5 @@
 module ApplicationHelper
-    
+
     def opciones_de_estatus usar_db=false, para=0, incluir_globales=true
         if usar_db
             if incluir_globales

@@ -21,3 +21,7 @@
   align-items: center;
   border-left:solid 1px #eaeaea
 }
+
+.field_with_errors input{
+  border-bottom: solid 2px #ed5565;
+}
