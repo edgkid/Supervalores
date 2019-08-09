@@ -19,22 +19,20 @@ class Admin::UsersController < ApplicationController
       redirect_to admin_users_path, notice: 'Usuario creado correctamente.'
     else
       @notice = @user.errors
-      redirect_to :action => 'new'
+      render :action => "new"
     end
   end
 
   def edit
-    @notice = Notice.new("Cuidado", "Estas modificando la informacion de #{@user.nombre}, #{@user.apellido}", "warning")
+    @notice = Notice.new("Cuidado", "Estas modificando la informacion de #{@user.nombre}, #{@user.apellido}. Cuidado!", "warning")
   end
 
-  def update    
+  def update
     if @user.update(user_params)
       redirect_to admin_users_path, notice: 'Usuario actualizado correctamente.'
     else
       @notice = @user.errors
-      # flash.now[:danger] = "El usuario no se pudo modificar, por favor revise los campos"
-      #redirect_to edit_admin_user_path, notice: {title: "Cuarentena", message: @user.errors.inspect, type: "warning"}
-      redirect_to edit_admin_user_path
+      render :action => "edit"
     end
   end
 

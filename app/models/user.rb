@@ -13,26 +13,20 @@ class User < ApplicationRecord
 	devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable, :timeoutable
 
-	validates :password,  presence: true,
-												:confirmation => true,
-												format: { with: /\A(?=.*[A-Z])(?=.*\d).{6,12}\z/ },
-												:on => :create
-
-	validates :password,  presence: true,
-												:confirmation => true,
-												format: { with: /\A(?=.*[A-Z])(?=.*\d).{6,12}\z/ },
-											  :on => :update
+	validates :password,  presence: {message: "|El pasword no debe estar vacío."},
+												confirmation: {message: "|La confirmación de pasword debe coincidir."},
+												format: { message: "|El password solo debe contener Mayusculas, Minusculas y Números (Minimo 6 caracateres).",
+																with: /\A(?=.*[A-Z])(?=.*\d).{6,12}\z/ },
+												:on => [:create, :update]
 
 	validates :nombre, :apellido, presence: {message: "|El nombre y apellido no pueden estar vacío."},
 											 					format: {
 											 					message: "|El nombre y apellido solo acepta caracteres alfabeticos.",
 												 				with: /\A[a-zA-Z]*\z/
 											 },
-											 :on => :create
+											 :on => [:create, :update ]
 
-	validates :nombre, :apellido,  presence: true,
-										  format: { with: /\A[a-zA-Z]*\z/},
-										 	:on => :update
+	 validates :email , presence: {message: "|El email no debe estar vacío y debe contener un formato valido"}
 
    def get_user_rol(id)
 	 	select = " SELECT r.nombre, r.descripcion, r.peso, r.estatus"
