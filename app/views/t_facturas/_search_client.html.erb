@@ -4,7 +4,8 @@
       <div class="form-group">
         <%= label_tag :codigo, 'Código' %>
         <%#= text_field_tag :codigo, nil, id: 'codigo', class: 'form-control search-client' %>
-        <select data-placeholder="Seleccione un cliente..." class="chosen-select"  tabindex="2">
+        <select class="select2"  tabindex="2" style="width: 100%;">
+          <option value="">Seleccione Cliente</option>
           <%= @t_clientes.each do |t_cliente| %>
             <option value="<%= t_cliente.codigo %>"><%= t_cliente.codigo %></option>
           <% end if @t_clientes %>
@@ -29,8 +30,6 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $('.chosen-select').chosen({width: "100%"});
-
     $('.search-client').keyup(function() {
     // $('.chosen-select').keyup(function() {
       // alert($(this).attr('id'));

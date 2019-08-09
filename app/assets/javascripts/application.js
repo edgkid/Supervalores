@@ -20,5 +20,5 @@
 //= require vendor/dataTables/datatables.min.js
 //= require vendor/dataTables/dataTables.bootstrap4.min.js
 //= require vendor/typehead/bootstrap3-typeahead.min.js
-//= require vendor/chosen/chosen.jquery.js
+//= require vendor/select2/select2.full.min.js
 //= require_tree .

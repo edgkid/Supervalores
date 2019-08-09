@@ -52,17 +52,17 @@
               <div class="recargos-list">
                 <tr>
                   <td>
-                    <%= select_tag :t_recargo1, options_from_collection_for_select(@t_recargos, :id, :descripcion) %>
+                    <%= select_tag :t_recargo1, options_from_collection_for_select(@t_recargos, :id, :descripcion), include_blank: 'Seleccione Recargo', class: 'select2' %>
                   </td>
+                  <td class="descripcion-cell"></td>
                   <td></td>
-                  <td></td>
-                  <td></td>
+                  <td class="precio-unitario-cell"></td>
                   <td></td>
                 </tr>
               </div>
               <tr style="display: none;">
                 <td>
-                  <%= link_to_add_fields("Nuevo Servicio", f, :t_factura_detalles, true, style: 'display: none;', id: 'add-service-link') %>
+                  <%= link_to_add_fields("Nuevo Servicio", f, :t_factura_detalles, true, style: 'display: none;', id: 'add-service-link', class: 'select2') %>
                 </td>
               </tr>
               <tr align="center">
@@ -80,3 +80,14 @@
   </div>
 <% end %>
 <br>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.select2').select2();
+    // function addFields() {
+    //   var new_id = new Date().getTime();
+    //   var regexp = new RegExp("new_" + "#{association}", "g");
+    //   $(this).parent().parent().before("#{escape_javascript(fields)}".replace(regexp, new_id));
+    // }
+  });
+</script>

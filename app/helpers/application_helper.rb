@@ -8,7 +8,8 @@ module ApplicationHelper
 
     #link_to name, "#", onclick: h("add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")")
     if is_table
-      link_to name, '#', class: args[:class], id: args[:id], style: args[:style], onclick: "var new_id = new Date().getTime();var regexp = new RegExp(\"new_\" + \"#{association}\", \"g\");$(this).parent().parent().before(\"#{escape_javascript(fields)}\".replace(regexp, new_id));", remote: true
+      link_to name, '#', class: args[:class], id: args[:id], style: args[:style], onclick: "var new_id = new Date().getTime();var regexp = new RegExp(\"new_\" + \"#{association}\", \"g\");$(this).parent().parent().before(\"#{escape_javascript(fields)}\".replace(regexp, new_id));$('.select2').select2();", remote: true
+      # link_to name, '#', class: args[:class], id: args[:id], style: args[:style], onclick: "addFields();", remote: true
     else
       link_to name, '#', class: args[:class], id: args[:id], style: args[:style], onclick: "var new_id = new Date().getTime();var regexp = new RegExp(\"new_\" + \"#{association}\", \"g\");$(this).parent().before(\"#{escape_javascript(fields)}\".replace(regexp, new_id));", remote: true
     end
@@ -18,12 +19,12 @@ module ApplicationHelper
     # f.hidden_field(:_destroy) + link_to(name, '#', onclick: "remove_fields(this)", remote: true)
     if is_table
       f.hidden_field(:_destroy) +
-      link_to(name, '#', class: args[:class],
+      link_to(name, '#', class: args[:class], style: args[:style],
         onclick: "$(this).prev(\"input[type=hidden]\").val(\"1\");$(this).closest(\".fields\").hide();
                   $(this).closest(\".destroy-service-link\").removeClass('destroy-service-link');
                  ", remote: true)
     else
-      f.hidden_field(:_destroy) + link_to(name, '#', class: args[:class], onclick: "$(this).prev(\"input[type=hidden]\").val(\"1\");$(this).closest(\".fields\").hide();", remote: true)
+      f.hidden_field(:_destroy) + link_to(name, '#', class: args[:class], style: args[:style], onclick: "$(this).prev(\"input[type=hidden]\").val(\"1\");$(this).closest(\".fields\").hide();", remote: true)
     end
   end
     
