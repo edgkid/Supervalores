@@ -1,58 +1,82 @@
-<div class="row">
-  <div class="col">
-    <div class="card">
-      <div class="card-body">
-        <h3 class="card-title">Datos del Cliente</h3>
-        <%= render 'search_client' %>
-        <br>
-        <div id="client-container">
-          <%= render 'cliente' %>
+<%= form_for @t_factura do |f| %>
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Datos del Cliente</h3>
+          <%= render 'search_client' %>
+          <br>
+          <div id="client-container">
+            <%= render 'cliente' %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Facturación</h3>
+          <%= render 'factura', f: f %>
         </div>
       </div>
     </div>
   </div>
-  <div class="col">
-    <div class="card">
-      <div class="card-body">
-        <h3 class="card-title">Facturación</h3>
-        <%= render 'factura' %>
-      </div>
-    </div>
-  </div>
-</div>
 
-<br>
+  <br>
 
-<div class="row">
-  <div class="col">
-    <div class="card">
-      <div class="card-body">
-        <h3>Detalle de Factura</h3>
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-primary">Nuevo Servicio</button>
-          <button type="button" class="btn btn-success">Nuevo Recargo</button>
-          <button type="button" class="btn btn-danger">Eliminar Última Fila</button>
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h3>Detalle de Factura</h3>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-primary" onclick="$('#add-service-link').click();">Nuevo Servicio</button>
+            <button type="button" class="btn btn-success">Nuevo Recargo</button>
+            <button type="button" class="btn btn-danger" onclick="$('.destroy-service-link').last().click();">Eliminar Última Fila</button>
+          </div>
+          <br><br>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Servicio / Recargo</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Monto Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= f.fields_for :t_factura_detalles do |fd_form| %>
+                <%= render 't_factura_detalle_fields', f: fd_form %>
+              <% end %>
+              <div class="recargos-list">
+                <tr>
+                  <td>
+                    <%= select_tag :t_recargo1, options_from_collection_for_select(@t_recargos, :id, :descripcion) %>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </div>
+              <tr style="display: none;">
+                <td>
+                  <%= link_to_add_fields("Nuevo Servicio", f, :t_factura_detalles, true, style: 'display: none;', id: 'add-service-link') %>
+                </td>
+              </tr>
+              <tr align="center">
+                <td></td>
+                <td></td>
+                <td>Cantidad Total</td>
+                <td></td>
+                <td>Total</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <br><br>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Servicio / Recargo</th>
-              <th>Descripción</th>
-              <th>Cantidad</th>
-              <th>Precio Unitario</th>
-              <th>Monto Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              
-            </tr>
-          </tbody>
-        </table>
       </div>
     </div>
   </div>
-</div>
-
+<% end %>
 <br>

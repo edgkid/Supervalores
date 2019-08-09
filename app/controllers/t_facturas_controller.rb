@@ -3,16 +3,17 @@ class TFacturasController < ApplicationController
 
   def new
     @t_factura = TFactura.new
+    @t_factura.t_factura_detalles.build
+    @t_recargos = TRecargo.all
+    @t_clientes = TCliente.first(20)
   end
 
   def create
     @t_factura = TFactura.new(t_factura_params)
 
     if @t_factura.save!
-      # flash[:success] = "Factura creado exitosamente."
       redirect_to t_facturas_path
     else
-      # flash.now[:danger] = "No se pudo crear el factura."
       render 'new'
     end
   end
@@ -49,7 +50,11 @@ class TFacturasController < ApplicationController
     def t_factura_params
       params.require(:t_factura).permit(
         :codigo, :descripcion, :nombre,
-        :clase, :precio, :estatus
+        :clase, :precio, :estatus,
+        t_factura_detalles_attributes: [
+          :id, :cantidad, :cuenta_desc, :_destroy,
+          :precio_unitario, :t_tarifa_servicio_id
+        ]
       )
     end
 

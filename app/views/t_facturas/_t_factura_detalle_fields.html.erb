@@ -1,0 +1,18 @@
+<tr class="fields">
+  <td>
+    <%= f.collection_select(:t_tarifa_servicio_id, TTarifaServicio.all, :id, :nombre) %>
+  </td>
+  <td>
+    <%= f.text_field :cuenta_desc %>
+  </td>
+  <td>
+    <%= f.number_field :cantidad, step: 0.01 %>
+  </td>
+  <td>
+    <%= f.text_field :precio_unitario %>
+  </td>
+  <td>
+    <%= f.hidden_field :_destroy %>
+    <%= link_to_remove_fields 'Eliminar', f, true, class: 'destroy-service-link' %>
+  </td>
+</tr>
