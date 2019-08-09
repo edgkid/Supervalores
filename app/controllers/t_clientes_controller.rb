@@ -62,11 +62,11 @@ class TClientesController < ApplicationController
 
     case attribute
     when 'codigo'
-      @t_clientes = TCliente.where('codigo LIKE ?', "%#{value}%")
+      @t_cliente = TCliente.where('codigo LIKE ?', "%#{value}%").take
     when 'resolucion'
-      @t_resolucions = TResolucion.where('resolucion LIKE ?', "%#{value}%")
+      @t_resolucion = TResolucion.where('resolucion LIKE ?', "%#{value}%").take
     when 'razon_social'
-      @t_clientes = TCliente.where('razon_social LIKE ?', "%#{value}%")
+      @t_cliente = TCliente.where('razon_social LIKE ?', "%#{value}%").take
     end if value != ''
   end
 
