@@ -1,0 +1,18 @@
+<tr class="fields">
+  <td>
+    <%= f.collection_select(:t_tarifa_servicio_id, TTarifaServicio.all, :id, :nombre, {include_blank: 'Seleccione Servicio'}, {class: 'select2', style: 'width: 100%'}) %>
+  </td>
+  <td>
+    <%= f.text_field :cuenta_desc, style: 'width: 100%;' %>
+  </td>
+  <td>
+    <%= f.number_field :cantidad, step: 0.01, style: 'height: 28px; width: 100%;' %>
+  </td>
+  <td>
+    <%= f.number_field :precio_unitario, step: 0.01, style: 'height: 28px; width: 100%;' %>
+  </td>
+  <td class="subtotal">
+    <%= f.hidden_field :_destroy %>
+    <%= link_to_remove_fields 'Eliminar', f, true, class: 'destroy-service-link', style: 'display: none;' %>
+  </td>
+</tr>

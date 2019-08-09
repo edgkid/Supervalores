@@ -50,8 +50,19 @@
           </span>
           <span class="fa arrow"></span>
         </a>
-        <ul class="nav nav-second-level">
-          <li><%= link_to 'Factura Manual', t_facturas_path %></li>
+        <ul class="nav nav-second-level collapse">
+          <li>
+            <%= link_to 'Factura Manual', t_facturas_path %>
+            <!-- <a href="#">Facturas <span class="fa arrow"></span></a>
+            <ul class="nav nav-third-level">
+              <li>
+                <%#= link_to 'Manual', t_facturas_path %>
+              </li>
+              <li>
+                <a href="#">Automática</a>
+              </li>
+            </ul> -->
+          </li>
           <li><%= link_to 'Recargos', t_recargos_path %></li>
           <li><%= link_to 'Periodos', t_periodos_path %></li>
           <li><%= link_to 'Tarifas', t_tarifas_path %></li>

@@ -1,8 +1,9 @@
 <div class="ibox-content">
-  <%= form_with(model: registro, local: true) do |form| %>  
-  <%= render "shared/errors", model: @registro %>
+  <%= form_with(model: registro, local: true) do |form| %>
   <div class="form-group row">
-    <%= form.label :codigo, 'Código', class: "col-sm-2 col-form-label text-right" %>
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :codigo, 'Código', class: "text-right" %>
+    </div>
     <div class="col-sm-4 input-value">
       <% if editable %>
       <%= form.text_field :codigo, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
@@ -10,7 +11,9 @@
       <%= registro.codigo %>
       <% end %>
     </div>
-    <%= form.label :t_estatus_id, 'Estatus', class: "col-sm-2 col-form-label text-right" %>
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :t_estatus_id, 'Estatus', class: "text-right" %>
+    </div>
     <div class="col-sm-4 input-value">
       <% if editable %>
       <%= form.select :t_estatus_id, opciones_de_estatus(true, 2, true) , {}, { :class => 'form-control m-b' } %>
@@ -20,7 +23,9 @@
     </div>
   </div>
   <div class="form-group row">
-    <%= form.label :t_tipo_cliente_id, 'Tipo de Cliente', class: "col-sm-2 col-form-label text-right" %>
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :t_tipo_cliente_id, 'Tipo de Cliente', class: "text-right" %>
+    </div>
     <div class="col-sm-10 input-value">
       <% if editable %>
       <%= form.select :t_tipo_cliente_id, opciones_de_tipos_de_clientes , {}, { :class => 'form-control m-b' } %>
@@ -30,7 +35,9 @@
     </div>
   </div>
   <div class="form-group row">
-    <%= form.label :t_tipo_persona_id, 'Tipo de Persona', class: "col-sm-2 col-form-label text-right" %>
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :t_tipo_persona_id, 'Tipo de Persona', class: "text-right" %>
+    </div>
     <div class="col-sm-10 input-value">
       <% if editable %>
       <%= form.select :t_tipo_persona_id, opciones_de_tipos_de_personas , {}, { :class => 'form-control m-b' } %>
@@ -40,7 +47,9 @@
     </div>
   </div>
   <div class="form-group row">
-    <%= form.label :razon_social, 'Razón Social', class: "col-sm-2 col-form-label text-right" %>
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :razon_social, 'Razón Social', class: "text-right" %>
+    </div>
     <div class="col-sm-10 input-value">
       <% if editable %>
       <%= form.text_field :razon_social, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
@@ -50,7 +59,9 @@
     </div>
   </div>
   <div class="form-group row">
-    <%= form.label :email, 'Email', class: "col-sm-2 col-form-label text-right" %>
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :email, 'Email', class: "text-right" %>
+    </div>
     <div class="col-sm-10 input-value">
       <% if editable %>
       <%= form.text_field :email, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
@@ -60,7 +71,9 @@
     </div>    
   </div>  
   <div class="form-group row">
-    <%= form.label :telefono, 'Teléfono', class: "col-sm-2 col-form-label text-right" %>
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :telefono, 'Teléfono', class: "text-right" %>
+    </div>
     <div class="col-sm-4 input-value">
       <% if editable %>
       <%= form.text_field :telefono, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
@@ -68,7 +81,9 @@
       <%= registro.telefono %>
       <% end %>
     </div>
-    <%= form.label :prospecto_at, '¿Es Prospecto?', class: "col-sm-4 col-form-label text-right" %>
+    <div class="col-sm-4 col-form-label">
+      <%= form.label :prospecto_at, '¿Es Prospecto?', class: "text-right" %>
+    </div>
     <div class="col-sm-2 input-value">
         <%= form.check_box :temp_prospecto, {checked: true} %>
     </div>

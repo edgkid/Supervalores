@@ -4,6 +4,7 @@ class Admin::UsersController < ApplicationController
   def index
     @usar_dataTables = true
     @users = User.all
+    @notice = "Lista de usuarios registrados"
   end
 
   def new
@@ -17,17 +18,22 @@ class Admin::UsersController < ApplicationController
     if @user.save
       redirect_to admin_users_path, notice: 'Usuario creado correctamente.'
     else
-      redirect_to new_admin_user_path,  @user
+      @notice = @user.errors
+      redirect_to :action => 'new'
     end
   end
 
   def edit
+    @notice = Notice.new("Cuidado", "Estas modificando la informacion de #{@user.nombre}, #{@user.apellido}", "warning")
   end
 
-  def update
+  def update    
     if @user.update(user_params)
       redirect_to admin_users_path, notice: 'Usuario actualizado correctamente.'
     else
+      @notice = @user.errors
+      # flash.now[:danger] = "El usuario no se pudo modificar, por favor revise los campos"
+      #redirect_to edit_admin_user_path, notice: {title: "Cuarentena", message: @user.errors.inspect, type: "warning"}
       redirect_to edit_admin_user_path
     end
   end

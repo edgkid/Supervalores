@@ -29,4 +29,34 @@ class TCliente < ApplicationRecord
     },
     :on => [:create, :update]
 
+  validates :razon_social,
+    presence: {
+      message: "|El razón social no puede estar vacío."
+    },
+    format: {
+      message: "|El razón social solo puede tener Letras, Números, Guiones(-), Puntos(.) y entre 6 y 20 caracteres.",
+      with: /([A-Za-z0-9\s\-]+){6,20}/ 
+    },
+    :on => [:create, :update]
+
+  validates :telefono,
+    presence: {
+      message: "|El telefono no puede estar vacío."
+    },
+    format: {
+      message: "|El telefono no tiene el formato esperado, +58 414 123 4949.",
+      with: /(\+[0-9]{2}\s[0-9]{3}\s[0-9]{3}\s[0-9]{4})/ 
+    },
+    :on => [:create, :update]
+
+  validates :email,
+    presence: {
+      message: "|El email no puede estar vacío."
+    },
+    format: {
+      message: "|El email no tiene el formato esperado, ejemplo@dominio.com.",
+      with: /.+@.+/ 
+    },
+    :on => [:create, :update]
+
 end
