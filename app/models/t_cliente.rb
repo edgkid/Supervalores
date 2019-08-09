@@ -24,9 +24,14 @@ class TCliente < ApplicationRecord
       message: "|El código no puede estar vacío."
     },
     format: { 
-      message: "|El código solo puede tener Letras, Números, Guiones(-) y entre 6 y 18 caracteres.",
-      with: /([A-Z0-9\-]){6,18}/ 
+      message: "|El código solo puede tener Letras, Números y Guiones(-).",
+      with: /([A-Za-z0-9\-]+)/ 
     },
+		length: {
+			message: "|El código debe tener entre 6 y 18 caracteres",
+			minimum: 2,
+			maximum: 18
+		},
     :on => [:create, :update]
 
   validates :razon_social,
@@ -34,9 +39,14 @@ class TCliente < ApplicationRecord
       message: "|El razón social no puede estar vacío."
     },
     format: {
-      message: "|El razón social solo puede tener Letras, Números, Guiones(-), Puntos(.) y entre 6 y 20 caracteres.",
-      with: /([A-Za-z0-9\s\-]+){6,20}/ 
+      message: "|El razón social solo puede tener Letras, Números, Guiones(-) y Puntos(.).",
+      with: /([A-Za-z0-9\s\-]+)/ 
     },
+		length: {
+			message: "|El código debe tener entre 6 y 18 caracteres",
+			minimum: 6,
+			maximum: 20
+		},
     :on => [:create, :update]
 
   validates :telefono,
@@ -58,5 +68,11 @@ class TCliente < ApplicationRecord
       with: /.+@.+/ 
     },
     :on => [:create, :update]
+
+  before_save :before_save_record
+
+  def before_save_record
+    codigo.upcase!
+  end
 
 end
