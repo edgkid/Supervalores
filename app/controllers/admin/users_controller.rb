@@ -7,6 +7,10 @@ class Admin::UsersController < ApplicationController
     @notice = "Lista de usuarios registrados"
   end
 
+  def show
+    @notice = Notice.new("Datos del usuario "+@user.nombre << " " << @user.apellido, "Genial! no?", :info)
+  end
+
   def new
     @user = User.new
     @rols = TRol.all

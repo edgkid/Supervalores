@@ -39,13 +39,13 @@
 						    <div class="form-group row">
 						    	<label class="col-sm-2 col-form-label">Creado</label>
 						    	<div class="col-sm-10">
-						    		<%= text_field_tag 'created_at', @user.created_at != nil ?  @user.created_at.strftime("%F %H:%M") : "dd/mm/yyyy",  class:"form-control", disabled: true %>
+						    		<%= text_field_tag 'created_at', @user.created_at != nil ?  @user.created_at.strftime("%F %H:%M") : "",  class:"form-control", disabled: true %>
 						    	</div>
 						    </div>
 						    <div class="form-group row">
 						    	<label class="col-sm-2 col-form-label">Última Sesión</label>
 						    	<div class="col-sm-10">
-										<%= text_field_tag 'last_sign_in_at', @user.last_sign_in_at != nil ?  @user.last_sign_in_at.strftime("%F %H:%M") : "dd/mm/yyyy",  class:"form-control", disabled: true %>
+										<%= text_field_tag 'last_sign_in_at', @user.last_sign_in_at != nil ?  @user.last_sign_in_at.strftime("%F %H:%M") : "No ha iniciado sesión",  class:"form-control", disabled: true %>
 						    	</div>
 						    </div>
 						    <div class="form-group row">
