@@ -24,6 +24,7 @@ class TEstatusesController < ApplicationController
         format.html { redirect_to @registro, notice: 'Estatus creado correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
+        @notice = @registro.errors
         format.html { render :new }
         format.json { render json: @registro.errors, status: :unprocessable_entity }
       end
@@ -36,6 +37,7 @@ class TEstatusesController < ApplicationController
         format.html { redirect_to @registro, notice: 'Estatus actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
+        @notice = @registro.errors
         format.html { render :edit }
         format.json { render json: @registro.errors, status: :unprocessable_entity }
       end
@@ -49,6 +51,7 @@ class TEstatusesController < ApplicationController
       format.html { redirect_to t_tipo_clientes_url, notice: 'Estatus inhabilitado correctamente.' }
       format.json { head :no_content }
     else
+      @notice = @registro.errors
       format.html { render :new }
       format.json { render json: @registro.errors, status: :unprocessable_entity }
     end

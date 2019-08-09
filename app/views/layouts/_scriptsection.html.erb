@@ -48,29 +48,7 @@
 <!-- Toastr -->
 <script src="/js/plugins/toastr/toastr.min.js"></script>
 <script>            
-$(document).ready(function() {
-    notice = '<%= notice %>'
-    type = '' // ver como pasar este parametro junto a notice.
-    if (notice != "") {        
-        toastr.options = {
-            closeButton: true,
-            progressBar: true,
-            showMethod: 'slideDown',
-            timeOut: 4000
-        };
-        if (type == 'success'){
-            toastr.success('CXC', notice);
-        }
-        else if (type == 'error') {
-            toastr.error('CXC', notice);
-        }
-        else if (type == 'warning') {
-            toastr.warning('CXC', notice);
-        }
-        else {
-            toastr.info('CXC', notice);
-        }
-        
-    }
+$(document).ready(function() {    
+    <%= render partial: "shared/notices.js" %>    
 });
 </script>

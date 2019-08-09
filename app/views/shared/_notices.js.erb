@@ -1,0 +1,70 @@
+<% if @notice != nil || notice != nil %>
+  <% if (notice != nil && @notice == nil) || (notice != nil && !@notice.force) %>
+    title = 'CXC'
+    notice = '<%= notice %>'
+    type = 'info'
+  <% elsif @notice != nil && @notice.is_a?(Hash) %>
+    title = '<%= @notice["title"] || "CXC" %>'
+    notice = '<%= @notice["message"] %>'
+    type = '<%= @notice["type"] %>'
+  <% elsif @notice != nil && @notice.is_a?(Notice) %>
+    title = '<%= @notice.title || "CXC" %>'
+    notice = '<%= @notice.message %>'
+    type = '<%= @notice.type %>'
+  <% elsif @notice != nil && @notice.is_a?(ActiveModel::Errors) && @notice.any? %>
+    errors = [<% @notice.full_messages.each do |message| %>
+    "<%= message %>",
+    <% end %>
+    ]
+    title = 'Upss, <%= "#{@notice.count} #{@notice.count == 1 ? "error": "errores"}" %>'
+    notice = ""
+    errors.forEach(function(message) {
+        notice += message.substring(message.indexOf("|")+1) + "<br/>"
+    });
+    type = 'error'
+  <% elsif @notice != nil && @notice.is_a?(String) %>
+    title = 'CXC'
+    notice = '<%= @notice %>'
+    type = 'info'
+  <% end %>
+  
+  if (notice != "") {
+    toastr.options = {
+      closeButton: true,
+      progressBar: true,
+      showMethod: 'slideDown',
+      timeOut: 4000
+    };
+    if (type == 'success'){
+      toastr.success(notice, title).css({
+        "width": "auto",
+        "max-width": "initial"
+      })
+    }
+    else if (type == 'error') {
+      toastr.options = {
+        closeButton: true,
+        escapeHtml: true,
+        showMethod: 'slideDown',
+        timeOut: 0,
+        extendedTimeOut: 0
+      };
+      toastr.error(notice, title).css({
+        "width": "auto",
+        "max-width": "initial"
+      })
+    }
+    else if (type == 'warning') {
+      toastr.warning(notice, title).css({
+        "width": "auto",
+        "max-width": "initial"
+      })
+    }
+    else {
+      toastr.info(notice, title).css({
+        "width": "auto",
+        "max-width": "initial"
+      })
+    }
+  }
+<% end %>
