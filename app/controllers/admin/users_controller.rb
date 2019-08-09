@@ -17,7 +17,7 @@ class Admin::UsersController < ApplicationController
     if @user.save
       redirect_to admin_users_path, notice: 'Usuario creado correctamente.'
     else
-      redirect_to :action => 'new'
+      redirect_to new_admin_user_path,  @user
     end
   end
 
@@ -26,10 +26,8 @@ class Admin::UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      # flash[:success] = "El usuario ha sido modificado exitosamente"
       redirect_to admin_users_path, notice: 'Usuario actualizado correctamente.'
     else
-      # flash.now[:danger] = "El usuario no se pudo modificar, por favor revise los campos"
       redirect_to edit_admin_user_path
     end
   end
