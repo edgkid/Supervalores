@@ -2,8 +2,7 @@
   <% if no_existen_clientes_disponibles %>
   <p>No se encontraron registros de clientes disponibles.</p>
   <% else %>
-  <%= form_with(model: registro, local: true) do |form| %>
-  <% end %>
+  <%= form_with(model: registro, local: true) do |form| %>  
   <div class="form-group row">
     <div class="col-sm-2 col-form-label">
       <%= form.label :resolucion, 'Resolución', class: "text-right" %>
