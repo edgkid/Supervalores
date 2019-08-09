@@ -3,7 +3,7 @@ class TFacturasController < ApplicationController
 
   def new
     @t_factura = TFactura.new
-    @t_factura.t_factura_detalles.build
+    # @t_factura.t_factura_detalles.build
     @t_recargos = TRecargo.all
     @t_clientes = TCliente.first(20)
   end

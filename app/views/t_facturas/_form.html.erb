@@ -30,9 +30,13 @@
         <div class="card-body">
           <h3>Detalle de Factura</h3>
           <div class="btn-group" role="group">
-            <button type="button" class="btn btn-primary" onclick="$('#add-service-link').click();">Nuevo Servicio</button>
+            <button type="button" class="btn btn-primary" onclick="$('#add-service-link').click();">
+              Nuevo Servicio
+            </button>
             <button type="button" class="btn btn-success">Nuevo Recargo</button>
-            <button type="button" class="btn btn-danger" onclick="$('.destroy-service-link').last().click();">Eliminar Última Fila</button>
+            <button type="button" class="btn btn-danger" onclick="$('.destroy-service-link').last().click();">
+              Eliminar Última Fila
+            </button>
           </div>
           <br><br>
           <table class="table table-bordered">
@@ -50,9 +54,9 @@
                 <%= render 't_factura_detalle_fields', f: fd_form %>
               <% end %>
               <div class="recargos-list">
-                <tr>
+                <tr style="display: none;">
                   <td>
-                    <%= select_tag :t_recargo1, options_from_collection_for_select(@t_recargos, :id, :descripcion), include_blank: 'Seleccione Recargo', class: 'select2', style: 'width: 100%' %>
+                    <%#= select_tag :t_recargo1, options_from_collection_for_select(@t_recargos, :id, :descripcion), include_blank: 'Seleccione Recargo', class: 'select2', style: 'width: 100%' %>
                   </td>
                   <td class="descripcion-cell"></td>
                   <td></td>
@@ -66,21 +70,23 @@
                 </td>
               </tr>
               <tr align="center">
+                <td width="25%"></td>
+                <td width="25%"></td>
+                <td width="20%">Cantidad Total</td>
                 <td></td>
-                <td></td>
-                <td>Cantidad Total</td>
-                <td></td>
-                <td>Total</td>
+                <td width="10%">Total</td>
               </tr>
             </tbody>
           </table>
-
-          <%= render 'shared/form_buttons', f: f %>
-          <%#= f.submit yield(:texto_boton), class: 'btn btn-primary float-right' %>
         </div>
       </div>
     </div>
   </div>
+
+  <br>
+
+  <%= render 'shared/form_buttons', f: f %>
+  <%#= f.submit yield(:texto_boton), class: 'btn btn-primary float-right' %>
 <% end %>
 <br>
 
