@@ -12,13 +12,15 @@
 //
 //= require activestorage
 //= require turbolinks
-//  require jquery
-//= require jquery3
+//= require jquery-2.1.1.js
+//= require jquery-3.1.1.min.js
 //= require rails-ujs
 //= require popper
-//= require bootstrap
+//= require bootstrap.js
+//= require vendor/jquery-ui/jquery-ui.min.js
 //= require vendor/dataTables/datatables.min.js
 //= require vendor/dataTables/dataTables.bootstrap4.min.js
 //= require vendor/typehead/bootstrap3-typeahead.min.js
 //= require vendor/select2/select2.full.min.js
+//= require vendor/datapicker/bootstrap-datepicker.js
 //= require_tree .

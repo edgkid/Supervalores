@@ -33,15 +33,18 @@
             <button type="button" class="btn btn-primary" onclick="$('#add-service-link').click();">
               Nuevo Servicio
             </button>
-            <button type="button" class="btn btn-success">Nuevo Recargo</button>
-            <button type="button" class="btn btn-danger" onclick="$('.destroy-service-link').last().click();">
-              Eliminar Última Fila
+            <button type="button" class="btn btn-success" onclick="addRecargoField();">
+              Nuevo Recargo
+            </button>
+            <button type="button" class="btn btn-danger" onclick="deleteCheckedRows();">
+              Eliminar Filas Seleccionadas
             </button>
           </div>
           <br><br>
           <table class="table table-bordered">
             <thead>
               <tr style="text-align: center;">
+                <th></th>
                 <th>Servicio / Recargo</th>
                 <th>Descripción</th>
                 <th>Cantidad</th>
@@ -49,11 +52,11 @@
                 <th>Monto Total</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="factura-detalle-table">
               <%= f.fields_for :t_factura_detalles do |fd_form| %>
                 <%= render 't_factura_detalle_fields', f: fd_form %>
               <% end %>
-              <div class="recargos-list">
+              <!-- <div class="recargos-list">
                 <tr style="display: none;">
                   <td>
                     <%#= select_tag :t_recargo1, options_from_collection_for_select(@t_recargos, :id, :descripcion), include_blank: 'Seleccione Recargo', class: 'select2', style: 'width: 100%' %>
@@ -61,15 +64,18 @@
                   <td class="descripcion-cell"></td>
                   <td></td>
                   <td class="precio-unitario-cell"></td>
-                  <td></td>
+                  <td>
+                    
+                  </td>
                 </tr>
-              </div>
+              </div> -->
               <tr style="display: none;">
                 <td>
                   <%= link_to_add_fields("Nuevo Servicio", f, :t_factura_detalles, true, style: 'display: none;', id: 'add-service-link', class: 'select2') %>
                 </td>
               </tr>
-              <tr align="center">
+              <tr id="total-row" align="center">
+                <td></td>
                 <td width="25%"></td>
                 <td width="25%"></td>
                 <td width="20%">Cantidad Total</td>
@@ -86,17 +92,12 @@
   <br>
 
   <%= render 'shared/form_buttons', f: f %>
-  <%#= f.submit yield(:texto_boton), class: 'btn btn-primary float-right' %>
 <% end %>
 <br>
 
 <script type="text/javascript">
   $(document).ready(function(){
     $('.select2').select2();
-    // function addFields() {
-    //   var new_id = new Date().getTime();
-    //   var regexp = new RegExp("new_" + "#{association}", "g");
-    //   $(this).parent().parent().before("#{escape_javascript(fields)}".replace(regexp, new_id));
-    // }
+    $('.datepicker').datepicker();
   });
 </script>

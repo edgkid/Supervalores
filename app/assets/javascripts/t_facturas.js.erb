@@ -1,0 +1,46 @@
+var i = 1;
+
+function addRecargoField () {
+  $('#total-row').before(`
+    <tr id="recargo${i}">
+      <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
+      <td>
+        <select id="t_recargo${i}" name="t_recargo${i}" style="width: 100%;">
+          <option value="">Seleccione</option>
+          <% TRecargo.all.each do |tr| %>
+            <option value="<%= tr.id %>"><%= tr.descripcion %></option>
+          <% end %>
+        </select>
+      </td>
+      <td class="descripcion-cell"></td>
+      <td></td>
+      <td class="precio-unitario-cell"></td>
+      <td></td>
+    </tr>
+  `);
+  $(`#t_recargo${i}`).select2();
+  i++;
+}
+
+function deleteCheckedRows() {
+  $('.deletable:checked').each(function() {
+    // alert($(this).hasClass('deletable-servicio'));
+    if ($(this).hasClass('deletable-servicio')) {
+      $(this).parent().siblings().last().children().last().click();//.attr('class'));
+      //alert($(this).parent().attr());
+    } else {
+      // alert($(this).attr('class'));
+      // $('.deletable-recargo:checked').parent().parent().remove();
+      $(this).parent().parent().remove();
+    }
+  });
+
+
+  // if ($('.deletable:checked').hasClass('servicio')) {
+  //   alert('Ajá!');
+  // } else {
+  //   $('.deletable:checked').parent().parent().remove();
+  // }
+  
+  // $('.destroy-service-link').last().click();
+}

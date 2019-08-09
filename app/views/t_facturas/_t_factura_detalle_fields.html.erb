@@ -1,4 +1,5 @@
 <tr class="fields">
+  <td><input class="deletable deletable-servicio" type="checkbox" name="deletable"></td>
   <td>
     <%= f.collection_select(:t_tarifa_servicio_id, TTarifaServicio.all, :id, :nombre, {include_blank: 'Seleccione Servicio'}, {class: 'select2', style: 'width: 100%'}) %>
   </td>
