@@ -14,7 +14,7 @@
     </tr>
     <tr>
       <th>Periodo:</th>
-      <td><%= f.collection_select :t_periodo_id, TPeriodo.all, :id, :descripcion %></td>
+      <td><%= f.collection_select :t_periodo_id, TPeriodo.all, :id, :descripcion, {include_blank: 'Seleccione'}, {style: 'width: 100%'} %></td>
     </tr>
   </tbody>
 </table>

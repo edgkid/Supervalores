@@ -37,7 +37,7 @@
           <br><br>
           <table class="table table-bordered">
             <thead>
-              <tr>
+              <tr style="text-align: center;">
                 <th>Servicio / Recargo</th>
                 <th>Descripción</th>
                 <th>Cantidad</th>
@@ -52,7 +52,7 @@
               <div class="recargos-list">
                 <tr>
                   <td>
-                    <%= select_tag :t_recargo1, options_from_collection_for_select(@t_recargos, :id, :descripcion), include_blank: 'Seleccione Recargo', class: 'select2' %>
+                    <%= select_tag :t_recargo1, options_from_collection_for_select(@t_recargos, :id, :descripcion), include_blank: 'Seleccione Recargo', class: 'select2', style: 'width: 100%' %>
                   </td>
                   <td class="descripcion-cell"></td>
                   <td></td>
