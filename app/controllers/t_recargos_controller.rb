@@ -31,6 +31,7 @@ class TRecargosController < ApplicationController
   end
 
   def index
+    @usar_dataTables = true
     @t_recargos = TRecargo.all
   end
 

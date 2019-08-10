@@ -31,6 +31,7 @@ class TTarifaServiciosController < ApplicationController
   end
 
   def index
+    @usar_dataTables = true
     @t_tarifa_servicios = TTarifaServicio.all
   end
 
