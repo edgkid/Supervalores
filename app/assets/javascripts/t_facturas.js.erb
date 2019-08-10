@@ -1,5 +1,6 @@
 var i = 1;
 
+// Añade una fila a la tabla con un select que contiene una lista de los recargos
 function addRecargoField () {
   $('#total-row').before(`
     <tr id="recargo${i}">
@@ -15,34 +16,48 @@ function addRecargoField () {
       <td class="descripcion-cell"></td>
       <td class="quantity"></td>
       <td class="price"></td>
-      <td style="text-align: center;"></td>
+      <td class="subtotal-cell" style="text-align: center;"></td>
     </tr>
   `);
   $(`#t_recargo${i}`).select2();
   i++;
 }
 
+// Toda fila con una casilla marcada, será eliminada al presionar el botón de eliminación.
+// Tal eliminación dependerá según si es servicio o recargo.
 function deleteCheckedRows() {
   $('.deletable:checked').each(function() {
     if ($(this).hasClass('deletable-servicio')) {
+      // Si es servicio, simulará un click al botón (link) correspondiente generado por el
+      // helper de rails: link_to_remove_fields (está en _t_factura_detalle_fields.html.erb).
       $(this).parent().siblings().last().children().last().click();
     } else {
+      // Si es un recargo, simplemente removerá el elemento HTML que es la fila de la tabla.
       $(this).parent().parent().remove();
     }
   });
 }
 
+// Obtiene el total de una columna seleccionada según su clase.
 function getTotal(target, total = 0) {
   $(target).each(function() {
-    total += Number($(this).val());
+    if ($(this).val() === '') {
+      total += Number($(this).text());
+    } else {
+      total += Number($(this).val());
+    }
   });
   return total;
 }
 
+// Asigna el total al elemento HTML objetivo.
 function setTotal(target, total = 0) {
   $(target).text(total);
 }
 
+// Asigna el subtotal. Hay que indicar si el campo actual donde se dispara el
+// evento es quantity o price, con `isQuantity`. `thys` es la sustitución de la
+// palabra reservada `this`, para hacer entender que se utiliza el elemento actual.
 function setSubTotal(thys, isQuantity = true) {
   if (isQuantity) {
     var quantity = Number($(thys).val());
@@ -53,7 +68,6 @@ function setSubTotal(thys, isQuantity = true) {
     var quantity = 0;
     var selfClass = 'quantity-cell';
   }
-  // alert('quantity: ' + quantity + '\nprice: ' + price);
   $(thys).parent().siblings().each(function () {
     if ($(this).hasClass(selfClass)) {
       if (isQuantity) {

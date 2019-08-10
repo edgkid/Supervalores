@@ -56,19 +56,6 @@
               <%= f.fields_for :t_factura_detalles do |fd_form| %>
                 <%= render 't_factura_detalle_fields', f: fd_form %>
               <% end %>
-              <!-- <div class="recargos-list">
-                <tr style="display: none;">
-                  <td>
-                    <%#= select_tag :t_recargo1, options_from_collection_for_select(@t_recargos, :id, :descripcion), include_blank: 'Seleccione Recargo', class: 'select2', style: 'width: 100%' %>
-                  </td>
-                  <td class="descripcion-cell"></td>
-                  <td></td>
-                  <td class="precio-unitario-cell"></td>
-                  <td>
-                    
-                  </td>
-                </tr>
-              </div> -->
               <tr style="display: none;">
                 <td>
                   <%= link_to_add_fields("Nuevo Servicio", f, :t_factura_detalles, true, style: 'display: none;', id: 'add-service-link', class: 'select2') %>
@@ -100,16 +87,22 @@
     $('.select2').select2();
     $('.datepicker').datepicker();
 
+    // Al asignar la cantidad, se actualiza la cantidad total, el subtotal y el total
     $(document).on('keyup', '.quantity', function() {
       let totalQuantity = getTotal('.quantity');
       setTotal('#total-quantity', totalQuantity);
       setSubTotal(this);
+      let total = getTotal('.subtotal-cell');
+      setTotal('#total', total);
     });
 
+    // Al asignar el precio, se actualiza la cantidad total, el subtotal y el total
     $(document).on('keyup', '.price', function() {
       let subTotal = getTotal('.price');
       setTotal('#total', subTotal);
       setSubTotal(this, false);
+      let total = getTotal('.subtotal-cell');
+      setTotal('#total', total);
     });
   });
 </script>
