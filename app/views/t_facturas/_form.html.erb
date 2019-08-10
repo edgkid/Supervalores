@@ -44,7 +44,7 @@
           <table class="table table-bordered">
             <thead>
               <tr style="text-align: center;">
-                <th></th>
+                <th><i class="fa fa-window-close"></i></th>
                 <th>Servicio / Recargo</th>
                 <th>Descripción</th>
                 <th>Cantidad</th>
@@ -78,9 +78,9 @@
                 <td></td>
                 <td width="25%"></td>
                 <td width="25%"></td>
-                <td width="20%">Cantidad Total</td>
+                <td id="total-quantity" width="20%"></td>
                 <td></td>
-                <td width="10%">Total</td>
+                <td id="total" width="10%"></td>
               </tr>
             </tbody>
           </table>
@@ -99,5 +99,17 @@
   $(document).ready(function(){
     $('.select2').select2();
     $('.datepicker').datepicker();
+
+    $(document).on('keyup', '.quantity', function() {
+      let totalQuantity = getTotal('.quantity');
+      setTotal('#total-quantity', totalQuantity);
+      setSubTotal(this);
+    });
+
+    $(document).on('keyup', '.price', function() {
+      let subTotal = getTotal('.price');
+      setTotal('#total', subTotal);
+      setSubTotal(this, false);
+    });
   });
 </script>

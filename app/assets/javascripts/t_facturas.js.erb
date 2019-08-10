@@ -13,9 +13,9 @@ function addRecargoField () {
         </select>
       </td>
       <td class="descripcion-cell"></td>
-      <td></td>
-      <td class="precio-unitario-cell"></td>
-      <td></td>
+      <td class="quantity"></td>
+      <td class="price"></td>
+      <td style="text-align: center;"></td>
     </tr>
   `);
   $(`#t_recargo${i}`).select2();
@@ -24,23 +24,46 @@ function addRecargoField () {
 
 function deleteCheckedRows() {
   $('.deletable:checked').each(function() {
-    // alert($(this).hasClass('deletable-servicio'));
     if ($(this).hasClass('deletable-servicio')) {
-      $(this).parent().siblings().last().children().last().click();//.attr('class'));
-      //alert($(this).parent().attr());
+      $(this).parent().siblings().last().children().last().click();
     } else {
-      // alert($(this).attr('class'));
-      // $('.deletable-recargo:checked').parent().parent().remove();
       $(this).parent().parent().remove();
     }
   });
+}
 
+function getTotal(target, total = 0) {
+  $(target).each(function() {
+    total += Number($(this).val());
+  });
+  return total;
+}
 
-  // if ($('.deletable:checked').hasClass('servicio')) {
-  //   alert('Ajá!');
-  // } else {
-  //   $('.deletable:checked').parent().parent().remove();
-  // }
-  
-  // $('.destroy-service-link').last().click();
+function setTotal(target, total = 0) {
+  $(target).text(total);
+}
+
+function setSubTotal(thys, isQuantity = true) {
+  if (isQuantity) {
+    var quantity = Number($(thys).val());
+    var price = 0;
+    var selfClass = 'price-cell';
+  } else {
+    var price = Number($(thys).val());
+    var quantity = 0;
+    var selfClass = 'quantity-cell';
+  }
+  // alert('quantity: ' + quantity + '\nprice: ' + price);
+  $(thys).parent().siblings().each(function () {
+    if ($(this).hasClass(selfClass)) {
+      if (isQuantity) {
+        price = Number($(this).children().first().val());
+      } else {
+        quantity = Number($(this).children().first().val());
+      }
+    }
+    if ($(this).hasClass('subtotal-cell')) {
+      $(this).text(quantity * price);
+    }
+  });
 }
