@@ -2,14 +2,12 @@ class TClientesController < ApplicationController
   respond_to :js, only: :buscar
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy]  
 
-  def index    
-    @notice = "Estos son los clientes reistrados en el sistema" 
+  def index
     @usar_dataTables = true
     @registros = TCliente.all
   end
 
-  def show
-    @notice = Notice.new("Perfil de "+@registro.razon_social, "Genial! no?", :info)
+  def show    
   end
 
   def new
@@ -17,7 +15,6 @@ class TClientesController < ApplicationController
   end
 
   def edit
-    @notice = Notice.new("Perfil de "+@registro.razon_social, "Cuidado con lo que cambias!", :warning)
   end
 
   def create

@@ -7,7 +7,7 @@
                   processing:     "Procesando",
                   search:         "Buscar&nbsp;:",
                   lengthMenu:    "Mostrar _MENU_ registros",
-                  info:           "Mostrando registros del 1 al _END_ de un tolal de _TOTAL_ registros",
+                  info:           "De _TOTAL_ registro(s) <br/> Se muestran del _START_ al _END_.",
                   infoEmpty:      "No existen registros por mostrar",
                   infoFiltered:   "No existen registros por mostrar",
                   infoPostFix:    "",
@@ -25,6 +25,16 @@
                       sortDescending: ": Activar para ordenar la columna de manera descendente"
                   }
               }
+    });
+
+    $('.dataTables.clickable').on('click', 'tbody tr', function () {
+      link = $(this).data('link')
+      if (link){
+        window.location.href = link
+      }
+      else{
+        console.log("no se encuentra el atributo data-link")
+      }
     });
   });
 </script>

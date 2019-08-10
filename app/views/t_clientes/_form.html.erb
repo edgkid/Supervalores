@@ -88,14 +88,21 @@
         <%= form.check_box :temp_prospecto, {checked: true} %>
     </div>
   </div>  
-  <div class="form-group row justify-content-md-center">
-    <div class="col-sm-4 col-offset-sm-2">
-      <%= link_to 'Volver', return_to	, {:class =>"btn btn-white btn-sm col-12"} %>
-    </div>
+  <div class="form-group row">    
     <% if editable %>
-    <div class="col-sm-4">
-      <%= form.submit 'Guardar', :class => "btn btn-primary btn-sm col-12" %>
-    </div>
+      <%= render "shared/action_buttons",
+        list_route: return_to, list_text: "Clientes",
+        back_route: polymorphic_path(registro), back_text: "Cancelar",
+        save_form_submit: form, save_text: "Guardar",
+        button_size: "md"
+      %>
+    <% else %>
+      <%= render "shared/action_buttons",
+        list_route: return_to, list_text: "Clientes",
+        edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
+        delete_route: polymorphic_path(registro), delete_text: "Borrar",
+        button_size: "md"
+      %>
     <% end %>
   </div>
   <% end %>

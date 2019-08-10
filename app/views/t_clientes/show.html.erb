@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-12 col-lg-6">
+  <div class="col-md-12 col-lg-5">
 		<div class="ibox">
 			<div class="ibox-title">
 				<h5>Cliente #<%= @registro.codigo %>, <%= @registro.razon_social %></h5>
@@ -7,12 +7,12 @@
 			<%= render 'form', registro: @registro, editable: false, return_to: t_clientes_path %>
 		</div>
 	</div>
-	<div class="col-md-12 col-lg-6">
+	<div class="col-md-12 col-lg-7">
 		<div class="ibox">
 			<div class="ibox-title">
 				<h5>Resoluciones</h5>
 			</div>
-			<%= render 't_resolucions/records', registros: @registro.t_resolucions %>
+			<%= render 't_resolucions/records', del_cliente: @registro %>
 		</div>
 	</div>
 </div>
