@@ -32,6 +32,7 @@ class TFacturasController < ApplicationController
   end
 
   def index
+    @usar_dataTables = true
     @t_facturas = TFactura.all
   end
 
