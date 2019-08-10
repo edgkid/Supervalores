@@ -18,6 +18,9 @@ class TFacturasController < ApplicationController
     end
   end
 
+  def preview
+  end
+
   def edit
   end
 

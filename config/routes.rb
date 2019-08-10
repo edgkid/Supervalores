@@ -9,7 +9,10 @@ Rails.application.routes.draw do
   resources :t_leyendas
   resources :t_periodos
   resources :t_tarifas
-  resources :t_facturas
+  resources :t_facturas do
+    get 'preview', on: :collection
+  end
+  # get 't_facturas/previsualizacion' => 't_facturas#preview', as: :previsualizar_factura
   resources :t_tarifa_servicios
   resources :t_recargos
 
