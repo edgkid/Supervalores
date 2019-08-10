@@ -48,7 +48,8 @@
 <!-- Toastr -->
 <script src="/js/plugins/toastr/toastr.min.js"></script>
 <script>            
-$(document).ready(function() {    
+$(document).ready(function() {
+    <%= render partial: "shared/spiner_loading.js" %>    
     <%= render partial: "shared/notices.js" %>    
 });
 </script>

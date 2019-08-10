@@ -1,5 +1,5 @@
 <% if @notice != nil || notice != nil %>
-  <% if (notice != nil && @notice == nil) || (notice != nil && @notice.is_a?(Notice) && !@notice.force) %>
+  <% if notice != nil && (@notice == nil || (@notice.is_a?(Notice) && !@notice.force)) %>
     title = 'CXC'
     notice = '<%= notice %>'
     type = 'info'

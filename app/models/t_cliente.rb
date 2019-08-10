@@ -27,11 +27,6 @@ class TCliente < ApplicationRecord
       message: "|El código solo puede tener Letras, Números y Guiones(-).",
       with: /([A-Za-z0-9\-]+)/ 
     },
-		length: {
-			message: "|El código debe tener entre 6 y 18 caracteres",
-			minimum: 2,
-			maximum: 18
-		},
     :on => [:create, :update]
 
   validates :razon_social,
@@ -51,11 +46,7 @@ class TCliente < ApplicationRecord
 
   validates :telefono,
     presence: {
-      message: "|El telefono no puede estar vacío."
-    },
-    format: {
-      message: "|El telefono no tiene el formato esperado, +58 414 123 4949.",
-      with: /(\+[0-9]{2}\s[0-9]{3}\s[0-9]{3}\s[0-9]{4})/ 
+      message: "|El teléfono no puede estar vacío."
     },
     :on => [:create, :update]
 

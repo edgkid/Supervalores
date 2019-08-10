@@ -1,15 +1,32 @@
-<center>
+<%
+btn_size = defined?(button_size) ? "btn-#{button_size}" : "btn-xs"
+%>
+<div class="text-center justify-content-md-center">
   <div class="btn-group" role="group">
-    <%= link_to show_route, class: "btn btn-success btn-xs", title: 'Consultar Registro', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
-      <i class="glyphicon glyphicon-search"></i>
+    <%= link_to list_route, class: "btn btn-default #{btn_size}", title: 'Ver registros', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
+      <i class="glyphicon glyphicon-list-alt"></i> <%= list_text if defined?(list_text) %>
+    <% end if defined?(list_route) %>
+    
+    <%= link_to back_route, class: "btn btn-default #{btn_size}", title: 'Regresar', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
+      <i class="glyphicon glyphicon-arrow-left"></i> <%= back_text if defined?(back_text) %>
+    <% end if defined?(back_route) %>
+    
+    <%= link_to show_route, class: "btn btn-success #{btn_size}", title: 'Consultar registro', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
+      <i class="glyphicon glyphicon-search"></i> <%= show_text if defined?(show_text) %>
     <% end if defined?(show_route) %>
-    <%= link_to edit_route, class: "btn btn-warning btn-xs", title: 'Editar Registro', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
-      <i class="glyphicon glyphicon-pencil"></i>
+    
+    <%= link_to edit_route, class: "btn btn-warning #{btn_size}", title: 'Editar registro', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
+      <i class="glyphicon glyphicon-pencil"></i> <%= edit_text if defined?(edit_text) %>
     <% end if defined?(edit_route) %>
+    
+    <%= save_form_submit.button type: :submit, class: "btn btn-primary #{btn_size}", title: 'Guardar cambios', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
+      <i class="glyphicon glyphicon-floppy-saved"></i> <%= save_text if defined?(save_text) %>
+    <% end if defined?(save_form_submit) %>
+    
     <%= link_to delete_route, method: :delete,
     data: { confirm: defined?(delete_message) ? delete_message : '¿Está seguro de querer eliminarlo?' },
-    class: "btn btn-danger btn-xs", title: 'Consultar Registro', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
-      <i class="glyphicon glyphicon-trash"></i>
+    class: "btn btn-danger #{btn_size}", title: 'Eliminar registro', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
+      <i class="glyphicon glyphicon-trash"></i> <%= delete_text if defined?(delete_text) %>
     <% end if defined?(delete_route) %>
   </div>
-</center>
+</div>

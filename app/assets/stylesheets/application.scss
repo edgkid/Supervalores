@@ -25,6 +25,10 @@
   border-left:solid 1px #eaeaea
 }
 
+[class*=text-] {
+  width: 100%;
+}
+
 .field_with_errors {
   width: 100%;
 }
@@ -32,4 +36,29 @@
 .field_with_errors input,
 .field_with_errors textarea{
   border-bottom: solid 2px #ed5565;
+}
+
+.dataTables.clickable > tbody > tr {
+  cursor: pointer
+}
+
+.waiting-content {
+  max-height: 200px;
+  opacity: 0;
+  transition: all 500ms;
+}
+.waiting-content.ready{
+  max-height: inherit;
+  opacity: 1;
+}
+
+.spiner-waiting-load-page {
+  position:absolute;
+  left:50%;
+  transform: translate(-50%);
+  transition: opacity 500ms;
+}
+
+.spiner-waiting-load-page.stop{
+  opacity:0;
 }
