@@ -8,7 +8,7 @@
               <h5>Roles del Sistema</h5>
             </div>
             <div class="col-2">
-              <%= link_to("Añadir Rol", {:controller => 't_rols', :action => 'new'}, data: { turbolinks: false } , :class => "btn btn-primary col-12 float-right" ) %>
+              <%= link_to 'Añadir Usuario',new_admin_user_path, class: "btn btn-primary float-right" %>
             </div>
           </div>
         </div>
@@ -19,11 +19,10 @@
                 <tr>
                   <th>Nombre</th>
                   <th>Descripción</th>
-                  <th><center>Estatus</center></th>
-                  <th colspan="2"><center>Acciones</center></th>
+                  <th>Estatus</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
-
               <tbody>
                 <% @rols.each do |rol| %>
                   <tr>
@@ -32,17 +31,15 @@
                     <td><center><%= rol.estatus == 1 ? 'Activo' : 'Inactivo'%></center></td>
                     <td>
                       <center>
-                        <%= link_to({:action => 'show', :id => rol.id}, data: { turbolinks: false }, class: "btn btn-success") do %>
+                      <div class="btn-group">
+                        <%= link_to({:action => 'show', :id => rol.id}, data: { turbolinks: false }, class: "btn btn-success btn-xs", title: "Consultar Rol de Usuario") do %>
                             <i class="glyphicon glyphicon-search"></i>
                         <% end %>
-                      <center>
-                    </td>
-                    <td>
-                      <center>
-                        <%= link_to({:action => 'edit', :id => rol.id}, data: { turbolinks: false }, class: "btn btn-white") do %>
+                        <%= link_to({:action => 'edit', :id => rol.id}, data: { turbolinks: false }, class: "btn btn-warning btn-xs", title: "Editar Rol de Usuario") do %>
                           <i class="glyphicon glyphicon-pencil"></i>
                         <% end %>
-                      <center>
+                      </div>
+                      </center>
                     </td>
                   </tr>
                 <% end %>
@@ -56,13 +53,4 @@
 </div>
 
 <!-- Page-Level Scripts -->
-    <script>
-        $(document).ready(function(){
-            $('.dataTables').DataTable({
-                pageLength: 25,
-                responsive: true
-            });
-
-        });
-
-    </script>
+<%= render "shared/dataTable" %>
