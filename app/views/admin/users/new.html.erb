@@ -6,7 +6,19 @@
         	<h5>Nuevo Usuario</h5>
         </div>
 				<div class="ibox-title">
-				    <img src="/img/user_icon.png" alt="Smiley face" height="25%" width="25%">
+						<div class="row">
+							<div class="col-4">
+								<img src="/img/user_icon.png" alt="Smiley face" height="100%" width="100%">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-4">
+								<button type="button" class="btn btn-white btn-xs" title="Agregar imagen">
+									Agregar Imagen
+							    <span class="glyphicon glyphicon-picture"></span>
+							  </button>
+							</div>
+						</div>
 				</div>
         <div class="ibox-content">
         	<%= form_for [:admin, @user] do |f| %>
