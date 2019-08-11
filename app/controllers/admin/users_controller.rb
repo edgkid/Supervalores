@@ -8,19 +8,19 @@ class Admin::UsersController < ApplicationController
   end
 
   def show
-    @notice = Notice.new("Datos del usuario "+@user.nombre << " " << @user.apellido, "Genial! no?", :info)
+
   end
 
   def new
     @user = User.new
-    @rols = TRol.all
+    #@rols = TRol.all
   end
 
   def create
     @user = User.new(user_params)
 
     if @user.save
-      redirect_to admin_users_path, notice: 'Usuario creado correctamente.'
+        redirect_to admin_users_path, notice: 'Usuario creado correctamente.'
     else
       @notice = @user.errors
       render :action => "new"
@@ -28,12 +28,18 @@ class Admin::UsersController < ApplicationController
   end
 
   def edit
-    @notice = Notice.new("Cuidado", "Estas modificando la informacion de #{@user.nombre}, #{@user.apellido}. Cuidado!", "warning")
+    @rols = TRol.all
   end
 
   def update
+
     if @user.update(user_params)
-      redirect_to admin_users_path, notice: 'Usuario actualizado correctamente.'
+
+      if @user.associate_rol_and_user(params[:id_rol], params[:id])
+        redirect_to admin_users_path, notice: 'Usuario actualizado correctamente.'
+      else
+        render :action => "edit"
+      end
     else
       @notice = @user.errors
       render :action => "edit"
