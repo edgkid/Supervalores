@@ -17,10 +17,14 @@ class TRolsController < ApplicationController
 
   def create
     @rol = TRol.new(t_rols_params)
+
+    @rol.estatus = params[:is_active] == "Activo"? true : false
+
     if @rol.save
       redirect_to rols_index_path, notice: 'Rol de usuario creado correctamente.'
     else
-      redirect_to rols_new_path
+      @notice = @rol.errors
+      render :action => "new"
     end
   end
 
@@ -31,10 +35,15 @@ class TRolsController < ApplicationController
   def update
     @rol = TRol.find(params[:id])
 
+    if params[:is_active] == "Activo" or params[:is_active] == "Inactivo"
+      @rol.estatus = params[:is_active] == "Activo"? true : false
+    end
+
     if @rol.update_attributes(t_rols_params)
-      redirect_to rols_index_path , notice: 'Usuario actualizado correctamente.'
+      redirect_to rols_index_path , notice: 'Rol de usuario actualizado correctamente.'
     else
-      redirect_to :action => 'update'
+      @notice = @rol.errors
+      render :action => "edit"
     end
   end
 

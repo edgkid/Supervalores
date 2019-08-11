@@ -17,7 +17,7 @@ class User < ApplicationRecord
 												confirmation: {message: "|La confirmación de pasword debe coincidir."},
 												format: { message: "|El password solo debe contener Mayusculas, Minusculas y Números (Minimo 6 caracateres).",
 																with: /\A(?=.*[A-Z])(?=.*\d).{6,12}\z/ },
-												:on => [:create, :update]
+												:on => [:create]
 
 	validates :nombre, :apellido, presence: {message: "|El nombre y apellido no pueden estar vacío."},
 											 					format: {
@@ -29,23 +29,57 @@ class User < ApplicationRecord
 	 validates :email , presence: {message: "|El email no debe estar vacío y debe contener un formato valido"}
 
    def get_user_rol(id)
+
 	 	select = " SELECT r.nombre, r.descripcion, r.peso, r.estatus"
 		from = " FROM users u, t_users_rols ur, t_rols r"
 		where = " WHERE u.id = ur.user_id AND ur.t_rol_id = r.id AND r.estatus = 1 AND u.id = " << id
 		sql = select << from << where
 
-		results = ActiveRecord::Base.connection.execute(sql)
+		#results = ActiveRecord::Base.connection.execute(sql)
+		results = ActiveRecord::Base.connection.exec_query(sql)
 
 		if results.present?
-			puts results
 			return results
 		else
 			return nil
 		end
 	end
 
-	def get_all_rols
-		return TRol.all
+	def associate_rol_and_user (id_rol, id_user)
+
+		if user_have_rol (id_user)
+			delete_associate(id_user)
+		end
+
+		sql = "INSERT INTO t_users_rols VALUES (" << id_rol << "," << id_user << "); commit;"
+
+		results = ActiveRecord::Base.connection.execute(sql)
+
+		if results.present?
+			return true
+		else
+			return false
+		end
+	end
+
+	private
+	def user_have_rol (id_user)
+		#sql = "DELETE FROM t_users_rols WHERE user_id ="<< id_user<< "commit;"
+		sql = "SELECT * FROM t_users_rols WHERE user_id = " << id_user
+		results = ActiveRecord::Base.connection.execute(sql)
+
+		if results.present?
+			return true
+		else
+			return false
+		end
+	end
+
+	def delete_associate (id_user)
+		sql = "DELETE FROM t_users_rols WHERE user_id = "<< id_user<< "; commit;"
+
+		results = ActiveRecord::Base.connection.execute(sql)
+
 	end
 
 end
