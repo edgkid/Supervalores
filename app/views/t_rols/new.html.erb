@@ -21,12 +21,12 @@
 						    </div>
 						    <div class="form-group  row"><label class="col-sm-2 col-form-label">Peso</label>
 						    	<div class="col-sm-10">
-						    		<%= f.text_field(:peso, :class => "form-control") %>
+						    		<%= f.number_field :peso, class: "form-control" %>
 						    	</div>
 						    </div>
 						    <div class="form-group  row"><label class="col-sm-2 col-form-label">Estatus</label>
 						    	<div class="col-sm-10">
-						    		<%= f.select(:estatus, ["Seleccione un Estatus","Activo","Inactivo"], {}, { :class => 'form-control' }) %>
+						    		<%= select_tag :is_active, options_for_select([ "Seleccione un estatus", "Activo", "Inactivo" ], ["0","1", "2"]), class: "form-control" %>
 						    	</div>
 					    	</div>
               </div>

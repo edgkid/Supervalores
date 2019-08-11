@@ -39,7 +39,7 @@ class Admin::UsersController < ApplicationController
 
   def update
     @rols = TRol.all
-
+    
     if params[:is_active] == "Activo" or params[:is_active] == "Inactivo"
       @user.estado = params[:is_active] == "Activo"? true : false
     end
