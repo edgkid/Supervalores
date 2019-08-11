@@ -19,6 +19,8 @@ class Admin::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
+    @user.estado = params[:is_active] == "Activo"? true : false
+
     if @user.save
         redirect_to admin_users_path, notice: 'Usuario creado correctamente.'
     else
@@ -33,6 +35,11 @@ class Admin::UsersController < ApplicationController
 
   def update
     @rols = TRol.all
+
+    if params[:is_active] == "Activo" or params[:is_active] == "Inactivo"
+      @user.estado = params[:is_active] == "Activo"? true : false
+    end
+
     if @user.update(user_params)
 
       if @user.associate_rol_and_user(params[:id_rol], params[:id])
