@@ -32,7 +32,7 @@ class Admin::UsersController < ApplicationController
   end
 
   def update
-
+    @rols = TRol.all
     if @user.update(user_params)
 
       if @user.associate_rol_and_user(params[:id_rol], params[:id])
