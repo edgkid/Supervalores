@@ -36,7 +36,7 @@ class TRolsController < ApplicationController
       redirect_to rols_index_path , notice: 'Rol de usuario actualizado correctamente.'
     else
       @notice = @rol.errors
-      redirect_to :action => 'update'
+      render :action => "edit"
     end
   end
 
