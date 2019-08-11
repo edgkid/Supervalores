@@ -51,16 +51,15 @@
 								</div>
 							</div>
 						</div>
-            <div class="row">
-							<div class="col-6">
-								<%= f.submit 'Crear Usuario', class: "btn btn-primary col-12" %>
-							</div>
-							<div class="col-6">
-	               <%= link_to 'Atrás', admin_users_path, class: 'btn btn-white col-12' %>
-	             </div>
+						<div class="form-group row">
+            	<div class="col-sm-6 col-sm-offset-2">
+              	<%= f.submit 'Crear Usuario', class: "btn btn-primary col-12" %>
+              </div><br><br>
+              <div class="col-sm-6 col-sm-offset-2">
+								<%= link_to 'Atrás', admin_users_path, class: 'btn btn-white col-12' %>
+              </div>
             </div>
 					<% end %>
-        </div>
       </div>
     </div>
 	</div>

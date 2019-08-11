@@ -20,7 +20,8 @@ class TRolsController < ApplicationController
     if @rol.save
       redirect_to rols_index_path, notice: 'Rol de usuario creado correctamente.'
     else
-      redirect_to rols_new_path
+      @notice = @rol.errors
+      render :action => "new"
     end
   end
 
@@ -32,8 +33,9 @@ class TRolsController < ApplicationController
     @rol = TRol.find(params[:id])
 
     if @rol.update_attributes(t_rols_params)
-      redirect_to rols_index_path , notice: 'Usuario actualizado correctamente.'
+      redirect_to rols_index_path , notice: 'Rol de usuario actualizado correctamente.'
     else
+      @notice = @rol.errors
       redirect_to :action => 'update'
     end
   end
