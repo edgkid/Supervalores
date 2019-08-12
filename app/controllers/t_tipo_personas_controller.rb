@@ -46,14 +46,15 @@ class TTipoPersonasController < ApplicationController
 
   def destroy
     @registro.estatus = 0
-    
-    if @registro.save
-      format.html { redirect_to t_tipo_personas_url, notice: 'Tipo de persona inhabilitado correctamente.' }
-      format.json { head :no_content }
-    else
-      @notice = @registro.errors
-      format.html { render :new }
-      format.json { render json: @registro.errors, status: :unprocessable_entity }
+    respond_to do |format|
+      if @registro.save
+        format.html { redirect_to t_tipo_personas_url, notice: 'Tipo de persona inhabilitado correctamente.' }
+        format.json { head :no_content }
+      else
+        @notice = @registro.errors
+        format.html { render :new }
+        format.json { render json: @registro.errors, status: :unprocessable_entity }
+      end
     end
   end
 

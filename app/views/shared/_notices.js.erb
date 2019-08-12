@@ -37,7 +37,6 @@
     };
     if (type == 'success'){
       toastr.success(notice, title).css({
-        "width": "auto",
         "max-width": "initial"
       })
     }
@@ -50,19 +49,16 @@
         extendedTimeOut: 0
       };
       toastr.error(notice, title).css({
-        "width": "auto",
         "max-width": "initial"
       })
     }
     else if (type == 'warning') {
       toastr.warning(notice, title).css({
-        "width": "auto",
         "max-width": "initial"
       })
     }
     else {
       toastr.info(notice, title).css({
-        "width": "auto",
         "max-width": "initial"
       })
     }

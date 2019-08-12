@@ -8,7 +8,6 @@ class TResolucion < ApplicationRecord
 	has_many :t_cliente_tarifas, dependent: :destroy
 	has_many :t_tarifas, through: :t_cliente_tarifa
 
-
 	validates :descripcion,
 		presence: {
 			message: "|La descripción no puede estar vacía."
@@ -37,7 +36,7 @@ class TResolucion < ApplicationRecord
 		},
     format: { 
       message: "|La resolución solo puede tener Letras, Números, Guiones(-).",
-      with: /([A-Z0-9\-]){6,18}/ 
+      with: /([A-Za-z0-9\-]){6,18}/ 
 		},
 		length: {
 			message: "|La resolución debe tener solo entre 6 y 18 caracteres",
@@ -51,4 +50,5 @@ class TResolucion < ApplicationRecord
 		def before_save_record
 			resolucion.upcase!
 		end
+
 end

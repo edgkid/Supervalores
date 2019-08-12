@@ -18,7 +18,6 @@ class TResolucionsController < ApplicationController
 
   def create
     @registro = TResolucion.new(parametros_resolucion)
-
     respond_to do |format|
       if @registro.save
         format.html { redirect_to @registro, notice: 'Resolución creado correctamente.' }
@@ -45,14 +44,16 @@ class TResolucionsController < ApplicationController
   end
 
   def destroy
-    @registro.save.t_estatus = TEstatus.find_by(description: "Inactivo")
-    if @registro.save
-      format.html { redirect_to t_tipo_clientes_url, notice: 'Tipo de cliente inhabilitado correctamente.' }
-      format.json { head :no_content }
-    else
-      @notice = @registro.errors
-      format.html { render :new }
-      format.json { render json: @registro.errors, status: :unprocessable_entity }
+    @registro.t_estatus = TEstatus.find_by(description: "Inactivo")
+    respond_to do |format|    
+      if @registro.save
+        format.html { redirect_to t_tipo_clientes_url, notice: 'Tipo de cliente inhabilitado correctamente.' }
+        format.json { head :no_content }
+      else
+        @notice = @registro.errors
+        format.html { render :new }
+        format.json { render json: @registro.errors, status: :unprocessable_entity }
+      end
     end
   end
 

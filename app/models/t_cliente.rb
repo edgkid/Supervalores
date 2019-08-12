@@ -66,4 +66,5 @@ class TCliente < ApplicationRecord
     codigo.upcase!
   end
 
+  attr_accessor :es_prospecto
 end

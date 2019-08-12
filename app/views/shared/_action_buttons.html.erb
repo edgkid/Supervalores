@@ -19,9 +19,9 @@ btn_size = defined?(button_size) ? "btn-#{button_size}" : "btn-xs"
       <i class="glyphicon glyphicon-pencil"></i> <%= edit_text if defined?(edit_text) %>
     <% end if defined?(edit_route) %>
     
-    <%= save_form_submit.button type: :submit, class: "btn btn-primary #{btn_size}", title: 'Guardar cambios', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
+    <%= button_tag type: :summit, class: "btn btn-primary #{btn_size}", title: 'Guardar cambios', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
       <i class="glyphicon glyphicon-floppy-saved"></i> <%= save_text if defined?(save_text) %>
-    <% end if defined?(save_form_submit) %>
+    <% end if defined?(save_form) %>
     
     <%= link_to delete_route, method: :delete,
     data: { confirm: defined?(delete_message) ? delete_message : '¿Está seguro de querer eliminarlo?' },
