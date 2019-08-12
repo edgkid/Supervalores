@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_07_211017) do
+ActiveRecord::Schema.define(version: 2019_08_12_120033) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "dblink"
   enable_extension "plpgsql"
 
   create_table "t_cajas", force: :cascade do |t|
@@ -75,6 +76,7 @@ ActiveRecord::Schema.define(version: 2019_08_07_211017) do
     t.string "telefono"
     t.string "email"
     t.date "prospecto_at"
+    t.index ["codigo"], name: "index_t_clientes_on_codigo", unique: true
     t.index ["t_estatus_id"], name: "index_t_clientes_on_t_estatus_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_clientes_on_t_tipo_cliente_id"
     t.index ["t_tipo_persona_id"], name: "index_t_personas_on_t_tipo_persona_id"
@@ -423,6 +425,7 @@ ActiveRecord::Schema.define(version: 2019_08_07_211017) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "t_tarifa_id", null: false
+    t.index ["codigo"], name: "index_t_tipo_clientes_on_codigo", unique: true
     t.index ["t_tarifa_id"], name: "index_t_tipo_clientes_on_t_tarifa_id"
   end
 
