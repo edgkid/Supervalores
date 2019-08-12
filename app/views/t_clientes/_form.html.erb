@@ -1,109 +1,105 @@
-<div class="ibox-content">
-  <%= form_with(model: registro, local: true) do |form| %>
-  <div class="form-group row">
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :codigo, 'Código', class: "text-right" %>
+<%
+  tiene_resoluciones = defined?(registro) && registro.t_resolucions != nil && registro.t_resolucions.count > 0
+  asociar_resolucion = editable && !tiene_resoluciones
+  if asociar_resolucion
+    resolucion = TResolucion.new 
+    if @resolucion != nil
+      resolucion = @resolucion
+    end
+  else
+    nueva_resolucion = TResolucion.new
+    if @nueva_resolucion != nil
+      nueva_resolucion = @nueva_resolucion
+    end
+    nueva_resolucion.t_cliente = registro
+  end
+  
+  resolucion.t_cliente = registro if asociar_resolucion && registro.id != nil
+%>
+<%= form_tag registro.id == nil ? url_for(:controller => 't_clientes', :action => 'create'): url_for(:controller => 't_clientes', :action => 'update', :id => registro.id), method: registro.id == nil ? :post : :put do %>
+<div class="row justify-content-md-center">
+  <div class="col-md-5">
+    <div class="ibox">
+      <%= yield %>
+      <div class="ibox-content">
+        <%= render 'form_fields', editable: editable, registro: registro %>
+
+        <div class="form-group row">
+          <% if editable %>
+          <%= render "shared/action_buttons",
+            list_route: return_to, list_text: "Clientes",
+            back_route: polymorphic_path(registro), back_text: "Cancelar",
+            save_form: true, save_text: "Guardar",
+            button_size: "xs"
+          %>
+          <% else %>
+          <%= render "shared/action_buttons",
+            list_route: return_to, list_text: "Clientes",
+            edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
+            delete_route: polymorphic_path(registro), delete_text: "Borrar",
+            button_size: "xs"
+          %>
+          <% end %>
+        </div>
+      </div>
     </div>
-    <div class="col-sm-4 input-value">
-      <% if editable %>
-      <%= form.text_field :codigo, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+  </div>
+  <div id="ibox_resoluciones" class="col-md-7<%= registro.es_prospecto ? " hide" : "" %>">
+    <div class="ibox">
+      <% if asociar_resolucion %>
+      <div class="ibox-title">
+        <h5>Resolución Asociada</h5>
+      </div>
+      <div class="ibox-content">
+        <%= render 't_resolucions/form_fields', 
+              editable: true,
+              registro: resolucion,
+              ignorar_cliente: resolucion.t_cliente == nil
+        %>
+      </div>
       <% else %>
-      <%= registro.codigo %>
-      <% end %>
-    </div>
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :t_estatus_id, 'Estatus', class: "text-right" %>
-    </div>
-    <div class="col-sm-4 input-value">
-      <% if editable %>
-      <%= form.select :t_estatus_id, opciones_de_estatus(true, 2, true) , {}, { :class => 'form-control m-b' } %>
-      <% else %>
-      <%= registro.t_estatus.descripcion %>
+      <div class="ibox-title">
+        <h5>Resoluciones</h5>
+        <% if editable %>
+        <%= button_tag 'Añadir resolución', type: :button, class: "btn btn-primary float-right btn-xs", "data-toggle" => "modal", "data-target" =>"#agregar_resolucion" %>
+
+        <% end %>
+      </div>
+      <%= render 't_resolucions/records', del_cliente: registro %>
       <% end %>
     </div>
   </div>
-  <div class="form-group row">
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :t_tipo_cliente_id, 'Tipo de Cliente', class: "text-right" %>
-    </div>
-    <div class="col-sm-10 input-value">
-      <% if editable %>
-      <%= form.select :t_tipo_cliente_id, opciones_de_tipos_de_clientes , {}, { :class => 'form-control m-b' } %>
-      <% else %>
-      <%= registro.t_tipo_cliente.descripcion %>
-      <% end %>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :t_tipo_persona_id, 'Tipo de Persona', class: "text-right" %>
-    </div>
-    <div class="col-sm-10 input-value">
-      <% if editable %>
-      <%= form.select :t_tipo_persona_id, opciones_de_tipos_de_personas , {}, { :class => 'form-control m-b' } %>
-      <% else %>
-      <%= registro.t_tipo_persona.descripcion %>
-      <% end %>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :razon_social, 'Razón Social', class: "text-right" %>
-    </div>
-    <div class="col-sm-10 input-value">
-      <% if editable %>
-      <%= form.text_field :razon_social, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
-      <% else %>
-      <%= registro.razon_social %>
-      <% end %>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :email, 'Email', class: "text-right" %>
-    </div>
-    <div class="col-sm-10 input-value">
-      <% if editable %>
-      <%= form.text_field :email, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
-      <% else %>
-      <%= registro.email %>
-      <% end %>
-    </div>    
-  </div>  
-  <div class="form-group row">
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :telefono, 'Teléfono', class: "text-right" %>
-    </div>
-    <div class="col-sm-4 input-value">
-      <% if editable %>
-      <%= form.text_field :telefono, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
-      <% else %>
-      <%= registro.telefono %>
-      <% end %>
-    </div>
-    <div class="col-sm-4 col-form-label">
-      <%= form.label :prospecto_at, '¿Es Prospecto?', class: "text-right" %>
-    </div>
-    <div class="col-sm-2 input-value">
-        <%= form.check_box :temp_prospecto, {checked: true} %>
-    </div>
-  </div>  
-  <div class="form-group row">    
-    <% if editable %>
-      <%= render "shared/action_buttons",
-        list_route: return_to, list_text: "Clientes",
-        back_route: polymorphic_path(registro), back_text: "Cancelar",
-        save_form_submit: form, save_text: "Guardar",
-        button_size: "md"
-      %>
-    <% else %>
-      <%= render "shared/action_buttons",
-        list_route: return_to, list_text: "Clientes",
-        edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
-        delete_route: polymorphic_path(registro), delete_text: "Borrar",
-        button_size: "md"
-      %>
-    <% end %>
-  </div>
-  <% end %>
 </div>
+<% end %>
+<% if editable && nueva_resolucion != nil %>
+  <%= form_tag url_for(:controller => 't_clientes', :action => 'nueva_resolucion', id: registro.id), method: :post do %>
+  <div class="modal inmodal" id="agregar_resolucion" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content animated bounceInRight">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+              class="sr-only">Close</span></button>
+          <i class="fa fa-laptop modal-icon"></i>
+          <h4 class="modal-title">Agregar resolución</h4>
+          <small class="font-bold">Esta resolución se asociará a <span
+              class="text-success text-uppercase font-bold"><%= registro.razon_social %></span>.</small>
+        </div>
+
+        <div class="modal-body">
+          <%= fields_for registro do |form| %>
+          <%= form.hidden_field :id %>
+          <% end %>
+          <%= render 't_resolucions/form_fields', registro: nueva_resolucion, editable: editable %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-dismiss="modal">Cancelar</button>
+          <button type="summit" class="btn btn-primary">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% end%>
+<% end%>
+<script>
+  <%= render partial: "t_clientes/script.js" %>
+</script>

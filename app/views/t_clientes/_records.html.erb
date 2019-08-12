@@ -2,6 +2,9 @@
   <%= render "shared/spiner_loading" %>
   <div class="waiting-content table-responsive">
     <% if clientes != nil && clientes.count > 0 %>
+    <div class="col-12">
+        <p class="text-info">Puedes hacer "click" en cualquier fila para ver el detalle del registro.</p>
+      </div>
     <table class="table table-striped table-bordered table-hover dataTables clickable">
       <thead>
         <tr>
@@ -24,7 +27,7 @@
           <td><%= registro.email %></td>
           <td><%= registro.t_tipo_cliente.descripcion %></td>
           <td><%= registro.t_tipo_persona.descripcion %></td>
-          <td><%= registro.prospecto_at %></td>
+          <td><%= registro.prospecto_at == nil ? "Si" : "No" %></td>
           <td><%= registro.t_estatus.descripcion %></td>
         </tr>
         <% end %>

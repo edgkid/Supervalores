@@ -1,19 +1,7 @@
-<div class="row">
-	<div class="col-md-12 col-lg-6">
-		<div class="ibox">
-			<div class="ibox-title">
-				<h5>Editar cliente #<%= @registro.codigo %>, <%= @registro.razon_social %></h5>
-			</div>
-			<%= render 'form', registro: @registro, editable: true, return_to: t_clientes_path %>
-		</div>
-	</div>
-	<div class="col-md-12 col-lg-6">
-		<div class="ibox">
-			<div class="ibox-title">
-				<h5>Resoluciones</h5>
-			</div>
-			<%= render 't_resolucions/records', del_cliente: @registro %>
-		</div>
-	</div>
-</div>
+<%= render 'form', registro: @registro, editable: true, return_to: t_clientes_path  do %>	
+	<div class="ibox-title">
+			<h5>Editar cliente, <%= @registro.razon_social %></h5>
+	</div>			
+<% end %>
+
 

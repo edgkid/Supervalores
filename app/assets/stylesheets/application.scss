@@ -5,6 +5,10 @@
 @import 'vendor/jQueryUI/jquery-ui-1.10.4.custom.min.css';
 @import 'vendor/datapicker/datepicker3.css';
 
+.hide {
+  display:none;  
+}
+
 .center-content{
   display:flex;
   justify-content:center;
@@ -22,7 +26,8 @@
 .input-value {
   display: flex;  
   align-items: center;
-  border-left:solid 1px #eaeaea
+  border-left:solid 1px #eaeaea;
+  margin-bottom: .5rem;
 }
 
 [class*=text-] {

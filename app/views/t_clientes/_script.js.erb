@@ -1,0 +1,11 @@
+$(document).ready(function(){
+  console.log("t_cliente_es_prospecto")
+
+  $("#t_cliente_es_prospecto").click(function(){
+    $("#ibox_resoluciones").toggleClass("hide")
+  })
+
+  <% if @nueva_resolucion != nil && @nueva_resolucion.errors.any? %>
+    $('#agregar_resolucion').modal('show');
+  <% end %>
+})
