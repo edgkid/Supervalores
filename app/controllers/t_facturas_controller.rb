@@ -6,6 +6,7 @@ class TFacturasController < ApplicationController
     # @t_factura.t_factura_detalles.build
     @t_recargos = TRecargo.all
     @t_clientes = TCliente.first(10)
+    @no_cache = true
   end
 
   def create
