@@ -5,8 +5,6 @@
       <li class="nav-header">
         <div class="dropdown profile-element">
           <%= image_tag current_user.picture.small.url, class: "rounded-circle", width:"40%", heigth: "40%" %>
-          <%= puts "Mondongo" %>
-          <%= puts current_user.picture.thumb.url %>
           <a data-toggle="dropdown" class="dropdown-toggle" href="#">
             <span class="block m-t-xs font-bold">
               <%= current_user.nombre != nil ?  current_user.nombre: " " %>

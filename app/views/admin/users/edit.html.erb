@@ -6,7 +6,16 @@
         	<h5>Edición de Usuario</h5>
         </div>
 				<div class="ibox-title">
-				    <img src="/img/user_icon.png" alt="Smiley face" height="25%" width="25%">
+					<div class="row">
+						<div class="col-4">
+							<%= image_tag @user.picture.small.url, width:"100%", heigth: "100%" %>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-4">
+							<%= file_field :user, :picture%>
+						</div>
+					</div>
 				</div>
         <div class="ibox-content">
 					<%= form_for [:admin, @user] do |f| %>
@@ -44,10 +53,10 @@
 					</div>
 					<div class="form-group row">
 						<div class="col-sm-6 col-sm-offset-2">
-							<%= f.submit 'Guardar Cambios', :class => "btn btn-white btn-sm col-12" %>
+							<%= f.submit 'Guardar Cambios', :class => "btn btn-primary btn-sm col-12" %>
 						</div><br><br>
 						<div class="col-sm-6 col-sm-offset-2">
-							<%= link_to 'Atrás',admin_users_path	, {:class =>"btn btn-primary btn-sm col-12"} %>
+							<%= link_to 'Atrás',admin_users_path	, {:class =>"btn btn-white btn-sm col-12"} %>
 						</div>
 					</div>
 					<% end %>
