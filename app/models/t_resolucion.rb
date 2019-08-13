@@ -38,11 +38,9 @@ class TResolucion < ApplicationRecord
       message: "|La resolución solo puede tener Letras, Números, Guiones(-).",
       with: /([A-Za-z0-9\-]){6,18}/ 
 		},
-		length: {
-			message: "|La resolución debe tener solo entre 6 y 18 caracteres",
-			minimum: 6,
-			maximum: 18
-		},
+    uniqueness: {
+      message: "|Ya se registro esta resolución a un cliente, use otra por favor.",
+    },
 		on: [:create, :update]
 
 		before_save :before_save_record

@@ -85,7 +85,7 @@
     </div>
     <div class="col-sm-2 input-value">
       <% if editable && registro.prospecto_at == nil %>
-        <%= form.check_box :es_prospecto, {checked: registro.es_prospecto} %>
+        <%= form.check_box :es_prospecto %>
       <% else %>
       <%= registro.es_prospecto ? "Si": "No" %>
       <% end %>
