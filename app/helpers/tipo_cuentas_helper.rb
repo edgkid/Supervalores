@@ -1,0 +1,2 @@
+module TipoCuentasHelper
+end

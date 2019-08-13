@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+
+  get 'tipo_cuentas/index' => 'tipo_cuentas#index'
+
+  get 'tipo_cuentas/new' => 'tipo_cuentas#new'
+  post 'tipo_cuentas/create' => "tipo_cuentas#create"
+
+  get 'tipo_cuentas/update'
+
   root to: 'dashboard#index'
 
   devise_for :users
