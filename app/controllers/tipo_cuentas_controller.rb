@@ -12,9 +12,6 @@ class TipoCuentasController < ApplicationController
   def create
     @cuenta = TTipoCuenta.new(cuenta_params)
 
-    puts("Mondongo")
-    puts(params[:nombre])
-    puts(params[:is_active])
     @cuenta.estatus = params[:is_active] == "Activo"? true : false
 
     if @cuenta.save
