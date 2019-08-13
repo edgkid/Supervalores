@@ -14,4 +14,13 @@ class TFactura < ApplicationRecord
   has_many :t_estado_cuentums, dependent: :destroy
   has_many :t_clientes, through: :t_estado_cuentum
   has_many :t_recargos, dependent: :nullify
+
+  validates :fecha_notificacion,
+    presence: {
+      message: "|La fecha de notificación no puede estar vacía."
+    }
+  validates :fecha_vencimiento,
+    presence: {
+      message: "|La fecha de vencimiento no puede estar vacía."
+    }
 end
