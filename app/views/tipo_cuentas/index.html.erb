@@ -5,10 +5,10 @@
         <div class="ibox-title">
           <div class="row">
             <div class="col-10">
-              <h5>Roles del Sistema</h5>
+              <h5>Tipos de Cuentas</h5>
             </div>
             <div class="col-2">
-              <%= link_to 'Añadir Rol',rols_new_path, class: "btn btn-primary float-right" %>
+              <%= link_to 'Añadir Cuenta',tipo_cuentas_new_path, class: "btn btn-primary float-right" %>
             </div>
           </div>
         </div>
@@ -30,7 +30,9 @@
                     <td>
                       <center>
                       <div class="btn-group">
-                    
+                        <%= link_to({:action => 'edit', :id => cuenta.id}, data: { turbolinks: false }, class: "btn btn-warning btn-xs", title: "Editar Tipo de Cuenta") do %>
+                          <i class="glyphicon glyphicon-pencil"></i>
+                        <% end %>
                       </div>
                       </center>
                     </td>

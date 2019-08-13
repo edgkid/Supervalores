@@ -1,12 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'tipo_cuentas/index' => 'tipo_cuentas#index'
-
-  get 'tipo_cuentas/new' => 'tipo_cuentas#new'
-  post 'tipo_cuentas/create' => "tipo_cuentas#create"
-
-  get 'tipo_cuentas/update'
-
   root to: 'dashboard#index'
 
   devise_for :users
@@ -47,6 +40,15 @@ Rails.application.routes.draw do
   post 'rols/create' => "t_rols#create"
 
   get 'rols/destroy/:id' => 't_rols#destroy'
+
+  #tipo de cuenta
+  get 'tipo_cuentas/index' => 'tipo_cuentas#index'
+
+  get 'tipo_cuentas/new' => 'tipo_cuentas#new'
+  post 'tipo_cuentas/create' => "tipo_cuentas#create"
+
+  get 'tipo_cuentas/edit/:id' => 'tipo_cuentas#edit'
+  post 'tipo_cuentas/update/:id' => 'tipo_cuentas#update'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   #root to: 'users#index'

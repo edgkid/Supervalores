@@ -1,6 +1,6 @@
 class TipoCuentasController < ApplicationController
 
-    before_action :set_uenta, only: [:show, :edit, :update, :destroy]
+    before_action :set_cuenta, only: [:show, :edit, :update, :destroy]
 
   def index
     @cuentas = TTipoCuenta.all
@@ -13,7 +13,7 @@ class TipoCuentasController < ApplicationController
   def create
     @cuenta = TTipoCuenta.new(cuenta_params)
 
-    @cuenta.estatus = params[:is_active] == "Activo"? true : false
+    @cuenta.estatus = params[:is_active] == "Activo"? 1 : 0
 
     if @cuenta.save
         redirect_to tipo_cuentas_index_path, notice: 'Tipo de cuenta creada correctamente.'
@@ -23,11 +23,25 @@ class TipoCuentasController < ApplicationController
     end
   end
 
+  def edit
+    @cuenta = TTipoCuenta.find(params[:id])
+  end
+
   def update
+    if params[:is_active] == "Activo" or params[:is_active] == "Inactivo"
+      @cuenta.estatus = params[:is_active] == "Activo"? 1 : 0
+    end
+
+    if @cuenta.update(cuenta_params)
+      redirect_to tipo_cuentas_index_path, notice: 'Tipo de cuenta actualizada correctamente.'
+    else
+      @notice = @cuenta.errors
+      render :action => "edit"
+    end
   end
 
   private
-    def set_user
+    def set_cuenta
       @cuenta = TTipoCuenta.find(params[:id])
     end
 
