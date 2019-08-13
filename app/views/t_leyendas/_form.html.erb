@@ -7,37 +7,39 @@
         </div>
         <div class="ibox-content">
           <%= form_for @t_leyenda do |f| %>
-            <div class="row justify-content-sm-center">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :anio, 'Año', class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.number_field :anio, class: "form-control" %>
+            <fieldset <%= @is_show ? 'disabled="disabled"' : '' %>>
+              <div class="row justify-content-sm-center">
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :anio, 'Año', class: "col-sm-2 col-form-label" %>
+                    <div class="col-sm-10">
+                      <%= f.number_field :anio, class: "form-control" %>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row justify-content-sm-center">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :descripcion, "Descripción", class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.text_field :descripcion, class: "form-control" %>
+              <div class="row justify-content-sm-center">
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :descripcion, "Descripción", class: "col-sm-2 col-form-label" %>
+                    <div class="col-sm-10">
+                      <%= f.text_field :descripcion, class: "form-control" %>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row justify-content-sm-center">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :estatus, class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.number_field :estatus, class: "form-control" %>
+              <div class="row justify-content-sm-center">
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :estatus, class: "col-sm-2 col-form-label" %>
+                    <div class="col-sm-10">
+                      <%= f.number_field :estatus, class: "form-control" %>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <%= render 'shared/form_buttons', f: f %>
+            </fieldset>
+            <%= render 'shared/form_buttons', f: f, object: @t_leyenda %>
           <% end %>
         </div>
       </div>

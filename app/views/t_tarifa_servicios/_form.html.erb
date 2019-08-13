@@ -7,63 +7,65 @@
         </div>
         <div class="ibox-content">
           <%= form_for @t_tarifa_servicio do |f| %>
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :codigo, 'Código', class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.text_field :codigo, class: "form-control" %>
+            <fieldset <%= @is_show ? 'disabled="disabled"' : '' %>>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :codigo, 'Código', class: "col-sm-2 col-form-label" %>
+                    <div class="col-sm-10">
+                      <%= f.text_field :codigo, class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :descripcion, 'Descripción', class: "col-sm-2 col-form-label" %>
+                    <div class="col-sm-10">
+                      <%= f.text_field :descripcion, class: "form-control" %>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :descripcion, 'Descripción', class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.text_field :descripcion, class: "form-control" %>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :nombre, class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.text_field :nombre, class: "form-control" %>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :nombre, class: "col-sm-2 col-form-label" %>
+                    <div class="col-sm-10">
+                      <%= f.text_field :nombre, class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :clase, class: "col-sm-2 col-form-label" %>
+                    <div class="col-sm-10">
+                      <%= f.text_field :clase, class: "form-control" %>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :clase, class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.text_field :clase, class: "form-control" %>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :precio, class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.number_field :precio, step: 0.01, class: "form-control" %>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :precio, class: "col-sm-2 col-form-label" %>
+                    <div class="col-sm-10">
+                      <%= f.number_field :precio, step: 0.01, class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :estatus, class: "col-sm-2 col-form-label" %>
+                    <div class="col-sm-10">
+                      <%= f.number_field :estatus, class: "form-control" %>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :estatus, class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.number_field :estatus, class: "form-control" %>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <%= render 'shared/form_buttons', f: f %>
+            </fieldset>
+            <%= render 'shared/form_buttons', f: f, object: @t_tarifa_servicio %>
           <% end %>
         </div>
       </div>

@@ -7,63 +7,65 @@
         </div>
         <div class="ibox-content">
           <%= form_for @t_periodo do |f| %>
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :descripcion, 'Descripción', class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
-                    <%= f.text_field :descripcion, class: "form-control" %>
+            <fieldset <%= @is_show ? 'disabled="disabled"' : '' %>>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :descripcion, 'Descripción', class: "col-sm-3 col-form-label" %>
+                    <div class="col-sm-9">
+                      <%= f.text_field :descripcion, class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :rango_dias, 'Rango de días', class: "col-sm-3 col-form-label" %>
+                    <div class="col-sm-9">
+                      <%= f.number_field :rango_dias, class: "form-control" %>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :rango_dias, 'Rango de días', class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
-                    <%= f.number_field :rango_dias, class: "form-control" %>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :dia_tope, 'Día tope', class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
-                    <%= f.number_field :dia_tope, class: "form-control" %>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :dia_tope, 'Día tope', class: "col-sm-3 col-form-label" %>
+                    <div class="col-sm-9">
+                      <%= f.number_field :dia_tope, class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :mes_tope, class: "col-sm-3 col-form-label" %>
+                    <div class="col-sm-9">
+                      <%= f.number_field :mes_tope, class: "form-control" %>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :mes_tope, class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
-                    <%= f.number_field :mes_tope, class: "form-control" %>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :mes_tope_desc, 'Descripción del mes tope', class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
-                    <%= f.text_field :mes_tope_desc, class: "form-control" %>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :mes_tope_desc, 'Descripción del mes tope', class: "col-sm-3 col-form-label" %>
+                    <div class="col-sm-9">
+                      <%= f.text_field :mes_tope_desc, class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <%= f.label :estatus, class: "col-sm-3 col-form-label" %>
+                    <div class="col-sm-9">
+                      <%= f.number_field :estatus, class: "form-control" %>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :estatus, class: "col-sm-3 col-form-label" %>
-                  <div class="col-sm-9">
-                    <%= f.number_field :estatus, class: "form-control" %>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <%= render 'shared/form_buttons', f: f %>
+            </fieldset>
+            <%= render 'shared/form_buttons', f: f, object: @t_periodo %>
           <% end %>
         </div>
       </div>

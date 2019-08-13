@@ -61,9 +61,13 @@
       <%= link_to 'Volver', return_to	, {:class =>"btn btn-white btn-sm col-12"} %>
     </div>
     <% if editable %>
-    <div class="col-sm-4">
-      <%= form.submit 'Guardar', :class => "btn btn-primary btn-sm col-12" %>
-    </div>
+      <div class="col-sm-4">
+        <%= form.submit 'Guardar', :class => "btn btn-primary btn-sm col-12" %>
+      </div>
+    <% else %>
+      <div class="col-sm-4">
+        <%= link_to 'Editar', edit_t_tipo_cliente_path(registro), class: 'btn btn-primary btn-sm col-12' %>
+      </div>
     <% end %>
   </div>
   <% end %>

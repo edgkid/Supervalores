@@ -1,6 +1,10 @@
 <div class="row">
   <div align="center" class="col-sm-12">
     <%= link_to 'Atrás', :back, class: 'btn btn-white col-2' %>
-    <%= f.submit yield(:texto_boton), class: "btn btn-primary col-2" %>
+    <% if @is_show %>
+      <%= link_to 'Editar', edit_polymorphic_url(object), class: 'btn btn-primary col-2' %>
+    <% else %>
+      <%= f.submit yield(:texto_boton), class: "btn btn-primary col-2" %>
+    <% end %>
   </div>
 </div>
