@@ -51,7 +51,7 @@ class TClientesController < ApplicationController
     respond_to do |format|      
       if @registro.update(parametros_cliente)
         @registro.es_prospecto = es_prospecto
-        if (!@registro.es_prospecto)
+        if (!@registro.es_prospecto && @registro.prospecto_at == nil)
           @resolucion = TResolucion.new(parametros_resolucion)
           @resolucion.t_cliente = @registro
           if @resolucion.save
