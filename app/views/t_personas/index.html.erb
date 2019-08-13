@@ -2,7 +2,7 @@
 
 <h1>T Personas</h1>
 
-<table class="table table-striped table-bordered table-hover dataTables>
+<table class="table table-striped table-bordered table-hover dataTables clickable">
   <thead>
     <tr>
       <th>Cedula</th>
@@ -18,7 +18,7 @@
 
   <tbody>
     <% @t_personas.each do |t_persona| %>
-      <tr>
+      <tr data-link="<%= polymorphic_url(t_persona) %>">
         <td><%= t_persona.cedula %></td>
         <td><%= t_persona.nombre %></td>
         <td><%= t_persona.apellido %></td>

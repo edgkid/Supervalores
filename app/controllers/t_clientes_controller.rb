@@ -107,14 +107,14 @@ class TClientesController < ApplicationController
     attribute = parametros_de_busqueda[:attribute]
     value = parametros_de_busqueda[:value]
 
-    case attribute
-    when 'codigo'
-      @t_cliente = TCliente.where('codigo LIKE ?', "%#{value}%").take
-    when 'resolucion'
-      @t_resolucion = TResolucion.where('resolucion LIKE ?', "%#{value}%").take
-    when 'razon_social'
-      @t_cliente = TCliente.where('razon_social LIKE ?', "%#{value}%").take
-    end if value != ''
+    @t_cliente =  case attribute
+                  when 'codigo'
+                    TCliente.where('codigo LIKE ?', "%#{value}%").take
+                  when 'resolucion'
+                    TResolucion.where('resolucion LIKE ?', "%#{value}%").take.t_cliente
+                  when 'razon_social'
+                    TCliente.where('razon_social LIKE ?', "%#{value}%").take
+                  end if value != ''
   end
 
   private

@@ -13,7 +13,6 @@
 ActiveRecord::Schema.define(version: 2019_08_12_160132) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "dblink"
   enable_extension "plpgsql"
 
   create_table "t_cajas", force: :cascade do |t|

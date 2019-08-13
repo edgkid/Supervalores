@@ -1,0 +1,89 @@
+@import url(bootstrap.min.css);
+@import url(vendor/datatables.min.css);
+@import url(vendor/select2/select2.min.css);
+@import url(vendor/jQueryUI/jquery-ui.css);
+@import url(vendor/jQueryUI/jquery-ui-1.10.4.custom.min.css);
+@import url(vendor/datapicker/datepicker3.css);
+/* line 8, app/assets/stylesheets/application.scss */
+.hide {
+  display: none;
+}
+
+/* line 12, app/assets/stylesheets/application.scss */
+.center-content {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
+}
+
+/* line 18, app/assets/stylesheets/application.scss */
+.indicador-color {
+  display: block;
+  border: solid 1px #3e3e3e;
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+}
+
+/* line 26, app/assets/stylesheets/application.scss */
+.input-value {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+          align-items: center;
+  border-left: solid 1px #eaeaea;
+  margin-bottom: .5rem;
+}
+
+/* line 33, app/assets/stylesheets/application.scss */
+[class*=text-] {
+  width: 100%;
+}
+
+/* line 37, app/assets/stylesheets/application.scss */
+.field_with_errors {
+  width: 100%;
+}
+
+/* line 41, app/assets/stylesheets/application.scss */
+.field_with_errors input,
+.field_with_errors textarea {
+  border-bottom: solid 2px #ed5565;
+}
+
+/* line 46, app/assets/stylesheets/application.scss */
+.dataTables.clickable > tbody > tr {
+  cursor: pointer;
+}
+
+/* line 50, app/assets/stylesheets/application.scss */
+.waiting-content {
+  max-height: 200px;
+  opacity: 0;
+  -webkit-transition: all 500ms;
+  transition: all 500ms;
+}
+
+/* line 55, app/assets/stylesheets/application.scss */
+.waiting-content.ready {
+  max-height: inherit;
+  opacity: 1;
+}
+
+/* line 60, app/assets/stylesheets/application.scss */
+.spiner-waiting-load-page {
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translate(-50%);
+          transform: translate(-50%);
+  -webkit-transition: opacity 500ms;
+  transition: opacity 500ms;
+}
+
+/* line 67, app/assets/stylesheets/application.scss */
+.spiner-waiting-load-page.stop {
+  opacity: 0;
+}
