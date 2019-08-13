@@ -101,9 +101,8 @@
       setTotal('#total', getTotal('.subtotal-cell'));
     });
 
-    // Al asignar el precio, se actualiza la cantidad total, el subtotal y el total.
+    // Al asignar el precio, se actualiza el subtotal y el total.
     $(document).on('keyup', '.price', function() {
-      setTotal('#total', getTotal('.price'));
       setSubTotal(this, false);
       setTotal('#total', getTotal('.subtotal-cell'));
     });

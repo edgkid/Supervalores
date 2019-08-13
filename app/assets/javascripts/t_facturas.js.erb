@@ -30,11 +30,15 @@ function deleteCheckedRows() {
     if ($(this).hasClass('deletable-servicio')) {
       // Si es servicio, simulará un click al botón (link) correspondiente generado por el
       // helper de rails: link_to_remove_fields (está en _t_factura_detalle_fields.html.erb).
-      $(this).parent().siblings().last().children().last().click();
+      // $(this).parent().siblings().last().children().last().click();
+      $(this).parent().parent().remove();
     } else {
       // Si es un recargo, simplemente removerá el elemento HTML que es la fila de la tabla.
       $(this).parent().parent().remove();
     }
+
+    setTotal('#total-quantity', getTotal('.quantity'));
+    setTotal('#total', getTotal('.subtotal-cell'));
   });
 }
 
