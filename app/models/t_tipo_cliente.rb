@@ -12,11 +12,9 @@ class TTipoCliente < ApplicationRecord
       message: "|El código solo puede tener Letras, Números y Guiones(-).",
       with: /([A-Za-z0-9\-]+)/ 
     },
-		length: {
-			message: "|El código debe tener entre 6 y 18 caracteres",
-			minimum: 2,
-			maximum: 18
-		},
+    uniqueness: {
+      message: "|Ya exista un tipo de cliente con este código, use otro por favor.",
+    },
 		:on => [:create, :update]
 
 	validates :descripcion, 

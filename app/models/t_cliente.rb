@@ -27,6 +27,9 @@ class TCliente < ApplicationRecord
       message: "|El código solo puede tener Letras, Números y Guiones(-).",
       with: /([A-Za-z0-9\-]+)/ 
     },
+    uniqueness: {
+      message: "|Ya exista un cliente con este código, use otro por favor.",
+    },
     :on => [:create, :update]
 
   validates :razon_social,
@@ -37,11 +40,6 @@ class TCliente < ApplicationRecord
       message: "|El razón social solo puede tener Letras, Números, Guiones(-) y Puntos(.).",
       with: /([A-Za-z0-9\s\-]+)/ 
     },
-		length: {
-			message: "|El código debe tener entre 6 y 18 caracteres",
-			minimum: 6,
-			maximum: 20
-		},
     :on => [:create, :update]
 
   validates :telefono,
