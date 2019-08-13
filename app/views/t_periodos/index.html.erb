@@ -14,37 +14,10 @@
         </div>
         <div class="ibox-content">
           <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover dataTables">
-              <thead>
-                <tr>
-                  <th>Descripción</th>
-                  <th>Rango de días</th>
-                  <th>Día tope</th>
-                  <th>Mes tope</th>
-                  <th>Descripción del mes tope</th>
-                  <th>Estatus</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @t_periodos.each do |t_periodo| %>
-                  <!-- <tr onclick="window.location='<%=t_periodo_path(t_periodo)%>';" onmouseover="document.body.style.cursor = 'pointer'" onmouseout="document.body.style.cursor = 'default'"> -->
-                  <tr>
-                    <td><%= t_periodo.descripcion %></td>
-                    <td><%= t_periodo.rango_dias %></td>
-                    <td><%= t_periodo.dia_tope %></td>
-                    <td><%= t_periodo.mes_tope %></td>
-                    <td><%= t_periodo.mes_tope_desc %></td>
-                    <td><%= t_periodo.estatus %></td>
-                    <td>
-                      <%= render 'shared/action_buttons',
-                                  show_route: t_periodo,
-                                  edit_route: edit_t_periodo_path(t_periodo) %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
+            <%= render 'shared/table', object_list: @t_periodos, object_attributes: {
+                        descripcion: 'Descripción', rango_dias: 'Rango de días',
+                        dia_tope: 'Día tope', mes_tope: 'Mes tope',
+                        mes_tope_desc: 'Descripción del mes tope', estatus: 'Estatus' } %>
           </div>
         </div>
       </div>

@@ -16,9 +16,9 @@
           <div class="table-responsive">
             <%= render 'shared/table',
                         object_list: @t_tarifa_servicios,
-                        object_attributes: [
-                          'codigo', 'descripcion', 'nombre', 'clase', 'precio', 'estatus'
-                        ] %>
+                        object_attributes: {
+                          codigo: 'Código', descripcion: 'Descripción', nombre: 'Nombre',
+                          clase: 'Clase', precio: 'Precio', estatus: 'Estatus' } %>
           </div>
         </div>
       </div>

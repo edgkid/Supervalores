@@ -25,7 +25,7 @@
               </thead>
               <tbody>
                 <% @rols.each do |rol| %>
-                  <tr>
+                  <tr data-link="<%#= polymorphic_url(rol) %>">
                     <td><%= rol.nombre %></td>
                     <td><%= rol.descripcion %></td>
                     <td><center><%= rol.estatus == 1 ? 'Activo' : 'Inactivo'%></center></td>

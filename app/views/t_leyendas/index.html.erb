@@ -14,7 +14,8 @@
         </div>
         <div class="ibox-content">
           <div class="table-responsive">
-            <%= render 'shared/table', object_list: @t_leyendas, object_attributes: ['anio', 'descripcion', 'estatus'] %>
+            <%= render 'shared/table', object_list: @t_leyendas, object_attributes: {
+                        anio: 'Año', descripcion: 'Descripción', estatus: 'Estatus' } %>
           </div>
         </div>
       </div>
