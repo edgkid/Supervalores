@@ -83,5 +83,5 @@ test:
 production:
   <<: *default
   database: supervalores_production
-  username: supervalores
+  username: postgres
   password: <%= ENV['SUPERVALORES_DATABASE_PASSWORD'] %>
