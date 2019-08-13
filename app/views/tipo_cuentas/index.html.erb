@@ -1,2 +1,46 @@
-<h1>TipoCuentas#index</h1>
-<p>Find me in app/views/tipo_cuentas/index.html.erb</p>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox ">
+        <div class="ibox-title">
+          <div class="row">
+            <div class="col-10">
+              <h5>Roles del Sistema</h5>
+            </div>
+            <div class="col-2">
+              <%= link_to 'Añadir Rol',rols_new_path, class: "btn btn-primary float-right" %>
+            </div>
+          </div>
+        </div>
+        <div class="ibox-content">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover dataTables">
+              <thead>
+                <tr>
+                  <th>Descripción de Cuenta</th>
+                  <th>Estatus</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @cuentas.each do |cuenta| %>
+                  <tr data-link="<%#= polymorphic_url(rol) %>">
+                    <td><%= cuenta.descripcion %></td>
+                    <td><center><%= cuenta.estatus == 1 ? 'Activo' : 'Inactivo'%></center></td>
+                    <td>
+                      <center>
+                      <div class="btn-group">
+                    
+                      </div>
+                      </center>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

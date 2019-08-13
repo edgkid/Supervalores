@@ -3,6 +3,7 @@ class TipoCuentasController < ApplicationController
     before_action :set_uenta, only: [:show, :edit, :update, :destroy]
 
   def index
+    @cuentas = TTipoCuenta.all
   end
 
   def new
