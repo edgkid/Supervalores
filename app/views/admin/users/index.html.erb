@@ -14,28 +14,24 @@
         </div>
         <div class="ibox-content">
           <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover dataTables">
+            <table class="table table-striped table-bordered table-hover dataTables clickable">
               <thead>
                 <tr>
                   <th>Colaborador</th>
                   <th>Usuario</th>
                   <th>Último inicio de sesión</th>
                   <th>Estatus</th>
-                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 <% @users.each do |user| %>
-                  <tr>
+                  <tr data-link="<%= admin_user_path(user) %>">
                     <td><%= user.nombre %> <%= user.apellido %></td>
                     <td><%= user.email %></td>
                     <td>
                       <center><%= user.last_sign_in_at != nil ? user.last_sign_in_at.strftime("%F %H:%M") : "No ha iniciado sesión" %></center>
                     </td>
                     <td><center><%= user.estado ? 'Activo' : 'Inactivo'%></center></td>
-                    <td>
-                      <%= render 'shared/action_buttons', show_route: [:admin, user], edit_route: edit_admin_user_path(user) %>
-                    </td>
                   </tr>
                 <% end %>
               </tbody>

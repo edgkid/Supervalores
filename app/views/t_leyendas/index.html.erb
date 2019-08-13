@@ -14,35 +14,10 @@
         </div>
         <div class="ibox-content">
           <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover dataTables" >
-              <thead>
-                <tr>
-                  <th>Año</th>
-                  <th>Descripción</th>
-                  <th>Estatus</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @t_leyendas.each do |t_leyenda| %>
-                  <tr>
-                    <td><%= t_leyenda.anio %></td>
-                    <td><%= t_leyenda.descripcion %></td>
-                    <td><%= t_leyenda.estatus %></td>
-                    <td>
-                      <%= render 'shared/action_buttons',
-                                  show_route: t_leyenda,
-                                  edit_route: edit_t_leyenda_path(t_leyenda) %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
+            <%= render 'shared/table', object_list: @t_leyendas, object_attributes: ['anio', 'descripcion', 'estatus'] %>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-
