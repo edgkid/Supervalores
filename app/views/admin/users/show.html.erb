@@ -6,7 +6,7 @@
         	<h5>Datos de Usuario</h5>
         </div>
 				<div class="ibox-title">
-				    <img src="/img/user_icon.png" alt="Smiley face" height="25%" width="25%">
+				    <%= image_tag @user.picture.small.url, width:"25%", heigth: "25%" %>
 				</div>
         <div class="ibox-content">
         	<%= form_for [:admin, @user] do |f| %>

@@ -39,7 +39,7 @@ class Admin::UsersController < ApplicationController
 
   def update
     @rols = TRol.all
-    
+
     if params[:is_active] == "Activo" or params[:is_active] == "Inactivo"
       @user.estado = params[:is_active] == "Activo"? true : false
     end
@@ -69,6 +69,6 @@ class Admin::UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:nombre, :apellido, :estado, :email, :password, :password_confirmation)
+      params.require(:user).permit(:nombre, :apellido, :estado, :email, :password, :password_confirmation, :picture)
     end
 end

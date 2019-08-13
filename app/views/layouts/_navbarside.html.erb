@@ -4,7 +4,7 @@
     <ul class="nav metismenu" id="side-menu">
       <li class="nav-header">
         <div class="dropdown profile-element">
-          <img alt="image" class="rounded-circle" src="/img/profile_small.jpg"/>
+          <%= image_tag current_user.picture.small.url, class: "rounded-circle", width:"40%", heigth: "40%" %>
           <a data-toggle="dropdown" class="dropdown-toggle" href="#">
             <span class="block m-t-xs font-bold">
               <%= current_user.nombre != nil ?  current_user.nombre: " " %>

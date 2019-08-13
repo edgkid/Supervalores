@@ -8,15 +8,12 @@
 				<div class="ibox-title">
 						<div class="row">
 							<div class="col-4">
-								<img src="/img/user_icon.png" alt="Smiley face" height="100%" width="100%">
+								<%= image_tag @user.picture.small.url, width:"100%", heigth: "100%" %>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-4">
-								<button type="button" class="btn btn-white btn-xs" title="Agregar imagen">
-									Agregar Imagen
-							    <span class="glyphicon glyphicon-picture"></span>
-							  </button>
+								<%= file_field :picture, class: "btn btn-primary btn-xs" %>
 							</div>
 						</div>
 				</div>
