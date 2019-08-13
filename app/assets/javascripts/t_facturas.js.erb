@@ -7,15 +7,15 @@ function addRecargoRow () {
       <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
       <td>
         <select id="t_recargo${i}" name="t_recargo${i}" style="width: 100%;">
-          <option value="">Seleccione</option>
+          <option value="">Seleccione Recargo</option>
           <% TRecargo.all.each do |tr| %>
-            <option value="<%= tr.id %>"><%= tr.descripcion %></option>
+            <option value="<%= tr.id %>"><%= tr.tasa * 100 %> %</option>
           <% end %>
         </select>
       </td>
-      <td class="descripcion-cell"></td>
-      <td class="quantity"></td>
-      <td class="price"></td>
+      <td class="descripcion-cell"><input name="t_factura[recargo_desc]" style="width: 100%;"></td>
+      <td class="quantity-cell"><input class="quantity" min="0" step="0.01" style="height: 28px; width: 100%;" type="number" value="1"></td>
+      <td class="price-cell"><input class="price" min="0" step="0.01" style="height: 28px; width: 100%;" type="number"></td>
       <td class="subtotal-cell" style="text-align: center;"></td>
     </tr>
   `);

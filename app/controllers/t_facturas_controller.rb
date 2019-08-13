@@ -12,6 +12,7 @@ class TFacturasController < ApplicationController
 
   def create
     @t_factura = TFactura.new(t_factura_params)
+    @t_factura.user = current_user
 
     if @t_factura.save!
       redirect_to t_facturas_path
@@ -55,8 +56,8 @@ class TFacturasController < ApplicationController
 
     def t_factura_params
       params.require(:t_factura).permit(
-        :codigo, :descripcion, :nombre,
-        :clase, :precio, :estatus,
+        :fecha_notificacion, :fecha_vencimiento,
+        :t_resolucion_id, :t_periodo_id,
         t_factura_detalles_attributes: [
           :id, :cantidad, :cuenta_desc, :_destroy,
           :precio_unitario, :t_tarifa_servicio_id

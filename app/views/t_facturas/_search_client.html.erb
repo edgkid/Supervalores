@@ -13,10 +13,10 @@
   <div class="col-md-4">
     <div class="form-group">
       <label for="resolucion">Resolución</label>
-      <select class="select2 search-client" id="resolucion" tabindex="2" style="width: 100%;">
+      <select class="select2 search-client" name="t_factura[t_resolucion_id]" id="resolucion" tabindex="2" style="width: 100%;">
         <option value="">Seleccione</option>
         <%= @t_resolucions.each do |t_resolucion| %>
-          <option value="<%= t_resolucion.resolucion %>"><%= t_resolucion.resolucion %></option>
+          <option value="<%= t_resolucion.id %>"><%= t_resolucion.resolucion %></option>
         <% end if @t_resolucions %>
       </select>
     </div>

@@ -2,9 +2,9 @@ class TFactura < ApplicationRecord
 	#belongs_to :t_cliente
   belongs_to :t_resolucion
   belongs_to :t_periodo
-  belongs_to :t_estatus_fac
-  belongs_to :t_leyenda 
-  belongs_to :t_usuario
+  # belongs_to :t_estatus_fac
+  belongs_to :t_leyenda, optional: true
+  belongs_to :user
 
   has_many :t_factura_detalles, dependent: :destroy
   accepts_nested_attributes_for :t_factura_detalles, allow_destroy: true
