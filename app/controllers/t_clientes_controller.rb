@@ -80,7 +80,7 @@ class TClientesController < ApplicationController
     @nueva_resolucion = TResolucion.new(parametros_resolucion)
     respond_to do |format|      
       if @nueva_resolucion.save
-        format.html { redirect_to @registro, notice: 'Resolución asociada correctamente.' }
+        format.html { redirect_to edit_t_cliente_path(@registro), notice: 'Resolución asociada correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
         @notice = @nueva_resolucion.errors
