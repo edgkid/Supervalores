@@ -4,7 +4,7 @@ class TCliente < ApplicationRecord
   belongs_to :t_tipo_persona
   belongs_to :t_estatus    
 
-  has_one :t_resolucion
+  has_many :t_resolucions
   has_many :t_recibos
   #has_many :t_emisions
   has_many :t_email_masivos
