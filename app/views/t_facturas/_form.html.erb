@@ -71,6 +71,7 @@
               </tr>
             </tbody>
           </table>
+          <%= f.hidden_field :total_factura, id: 'input-total-factura', value: 0 %>
         </div>
       </div>
     </div>
@@ -180,7 +181,6 @@
     });
 
     $('.search-client').change(function() {
-      // alert($(this).val());
       $.ajax({
         url: '<%= "#{t_clientes_find_path}" %>',
         type: 'get',
@@ -190,6 +190,36 @@
         }
       });
     });
+
+    $(document).on('change', '.select-recargo', function(e) {
+      // alert($(".select-recargo option:selected").data('value'));
+      var surcharge = Number($(this).find("option:selected").data('value'));
+      $(this).find("option:selected").parent().parent().siblings().each(function () {
+        if ($(this).hasClass('price-cell')) {
+          // alert($(this).children().first().val());
+          let priceInput = $(this).children().first();
+          priceInput.val(Number($('#total').text()) * surcharge);
+          setSubTotal(priceInput, false);
+          setTotal('#total', getTotal('.subtotal-cell'));
+        }
+      });
+    });
+
+    $('form').submit(function(event) {
+      event.preventDefault(); //this will prevent the default submit
+      //alert($('#total').text());
+      $('#input-total-factura').val(Number($('#total').text()));
+      $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+    })
+      // $.ajax({
+      //   url: '<%#= "#{t_clientes_find_path}" %>',
+      //   type: 'get',
+      //   data: {
+      //     attribute: $(this).attr('id'),
+      //     search: $(this).val()
+      //   }
+      // });
+    //});
 
     // $(document).on('keyup', '.select2-search__field', function (e) {
     //   //alert($(this).parent().attr('class'));

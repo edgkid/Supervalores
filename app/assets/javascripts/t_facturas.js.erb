@@ -6,22 +6,24 @@ function addRecargoRow () {
     <tr id="recargo${i}">
       <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
       <td>
-        <select id="t_recargo${i}" name="t_recargo${i}" style="width: 100%;">
+        <select class="select-recargo" id="t_recargo${i}" name="t_recargo${i}" style="width: 100%;">
           <option value="">Seleccione Recargo</option>
           <% TRecargo.all.each do |tr| %>
-            <option value="<%= tr.id %>"><%= tr.tasa * 100 %> %</option>
+            <option data-value="<%= tr.tasa %>" value="<%= tr.id %>"><%= tr.tasa * 100 %> %</option>
           <% end %>
         </select>
       </td>
-      <td class="descripcion-cell"><input name="t_factura[recargo_desc]" style="width: 100%;"></td>
+      <td class="descripcion-cell"></td>
       <td class="quantity-cell"><input class="quantity" min="0" step="0.01" style="height: 28px; width: 100%;" type="number" value="1"></td>
-      <td class="price-cell"><input class="price" min="0" step="0.01" style="height: 28px; width: 100%;" type="number"></td>
+      <td class="price-cell"><input class="price" min="0" readonly="readonly" step="0.01" style="height: 28px; width: 100%;" type="number"></td>
       <td class="subtotal-cell" style="text-align: center;"></td>
     </tr>
   `);
   $(`#t_recargo${i}`).select2();
   i++;
 }
+
+// <input name="t_factura[recargo_desc]" style="width: 100%;">
 
 // Toda fila con una casilla marcada, será eliminada al presionar el botón de eliminación.
 // Tal eliminación dependerá según si es servicio o recargo.

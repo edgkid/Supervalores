@@ -14,7 +14,15 @@ class TFacturasController < ApplicationController
     @t_factura = TFactura.new(t_factura_params)
     @t_factura.user = current_user
     @t_factura.recargo = 0
+    @t_factura.recargo_desc = '-'
     @t_factura.itbms = 0
+    @t_factura.importe_total = 0
+    @t_factura.pendiente_fact = 0
+    @t_factura.pendiente_ts = 0
+    @t_factura.tipo = '-'
+    @t_factura.next_fecha_recargo = Date.today
+    @t_factura.monto_emision = 0
+    @t_factura.t_estatus_id = TEstatus.first.id
 
     if @t_factura.save!
       redirect_to t_facturas_path
@@ -59,7 +67,7 @@ class TFacturasController < ApplicationController
     def t_factura_params
       params.require(:t_factura).permit(
         :fecha_notificacion, :fecha_vencimiento, :recargo_desc,
-        :t_resolucion_id, :t_periodo_id,
+        :t_resolucion_id, :t_periodo_id, :total_factura,
         t_factura_detalles_attributes: [
           :id, :cantidad, :cuenta_desc, :_destroy,
           :precio_unitario, :t_tarifa_servicio_id

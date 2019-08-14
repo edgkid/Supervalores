@@ -34,8 +34,8 @@
                 <% @t_facturas.each do |t_factura| %>
                   <tr>
                     <td><%= t_factura.id %></td>
-                    <td><%= t_factura.cliente || 'Sin cliente' %></td>
-                    <td><%= t_factura.resolucion || 'Sin resolución' %></td>
+                    <td><%= (t_factura.t_resolucion && t_factura.t_resolucion.t_cliente) ? t_factura.t_resolucion.t_cliente.codigo : 'Sin cliente' %></td>
+                    <td><%= t_factura.t_resolucion ? t_factura.t_resolucion.resolucion : 'Sin resolución' %></td>
                     <td><%= t_factura.fecha_notificacion %></td>
                     <td><%= t_factura.fecha_vencimiento %></td>
                     <td><%= t_factura.recargo %></td>
