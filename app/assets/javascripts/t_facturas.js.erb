@@ -3,7 +3,7 @@ var i = 1;
 // Añade una fila a la tabla con un select que contiene una lista de los recargos
 function addRecargoRow () {
   $('#total-row').before(`
-    <tr id="recargo${i}">
+    <tr id="recargo${i}" style="background-color: #1C84C6;">
       <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
       <td>
         <select class="select-recargo" id="t_recargo${i}" name="t_recargo${i}" style="width: 100%;">
@@ -16,7 +16,7 @@ function addRecargoRow () {
       <td class="descripcion-cell"></td>
       <td class="quantity-cell"><input class="quantity" min="0" step="0.01" style="height: 28px; width: 100%;" type="number" value="1"></td>
       <td class="price-cell"><input class="price" min="0" readonly="readonly" step="0.01" style="height: 28px; width: 100%;" type="number"></td>
-      <td class="subtotal-cell" style="text-align: center;"></td>
+      <td class="subtotal-cell" style="color: aqua; text-align: center;"></td>
     </tr>
   `);
   $(`#t_recargo${i}`).select2();
