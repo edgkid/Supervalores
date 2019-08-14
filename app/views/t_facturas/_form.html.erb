@@ -93,7 +93,10 @@
 <script type="text/javascript">
   $(document).ready(function(){
     $('.select2').select2();
-    $('.datepicker').datepicker();
+    $('.datepicker').datepicker({
+      autoclose: true,
+      format: "dd/mm/yyyy"
+    });
 
     // Al asignar la cantidad, se actualiza la cantidad total, el subtotal y el total.
     $(document).on('keyup', '.quantity', function() {
