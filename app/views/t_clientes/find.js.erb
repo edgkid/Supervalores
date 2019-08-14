@@ -1,1 +1,44 @@
 $("#client-container").html("<%= escape_javascript(render('t_facturas/cliente')) %>");
+var attribute = '<%= @attribute %>',
+    codigo = '<%= @t_cliente.codigo %>',
+    razon_social = '<%= @t_cliente.razon_social %>',
+    resolucion = '<%= @t_cliente.t_resolucion ? @t_cliente.t_resolucion.resolucion : "" %>',
+    resolucion_id = '<%= @t_cliente.t_resolucion ? @t_cliente.t_resolucion.id : "" %>';
+
+switch(attribute) {
+  case 'select-codigo':
+    <% if @t_cliente.t_resolucion %>
+      $('#select2-select-resolucion-container').text(resolucion);
+      $('#select2-select-resolucion-container').attr('title', resolucion);
+      $('#input-resolucion').val(resolucion_id);
+    <% else %>
+      $('#select2-select-resolucion-container').text('');
+      $('#select2-select-resolucion-container').attr('title', '');
+    <% end %>
+
+    $('#select2-select-razon_social-container').text(razon_social);
+    $('#select2-select-razon_social-container').attr('title', razon_social);
+    break;
+  case 'select-resolucion':
+    $('#select2-select-codigo-container').text(codigo);
+    $('#select2-select-codigo-container').attr('title', codigo);
+
+    $('#select2-select-razon_social-container').text(razon_social);
+    $('#select2-select-razon_social-container').attr('title', razon_social);
+
+    $('#input-resolucion').val(resolucion_id);
+    break;
+  case 'select-razon_social':
+    <% if @t_cliente.t_resolucion %>
+      $('#select2-select-resolucion-container').text(resolucion);
+      $('#select2-select-resolucion-container').attr('title', resolucion);
+      $('#input-resolucion').val(resolucion_id);
+    <% else %>
+      $('#select2-select-resolucion-container').text('');
+      $('#select2-select-resolucion-container').attr('title', '');
+    <% end %>
+
+    $('#select2-select-codigo-container').text(codigo);
+    $('#select2-select-codigo-container').attr('title', codigo);
+    break;
+}

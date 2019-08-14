@@ -106,24 +106,24 @@ class TClientesController < ApplicationController
 
   def find_by_codigo
     search = parametros_de_busqueda[:search]
-    respond_with TCliente.where('codigo LIKE ?', "%#{search}%")
+    respond_with TCliente.where('codigo LIKE ?', "%#{search}%").first(10)
   end
 
   def find_by_resolucion
     search = parametros_de_busqueda[:search]
-    respond_with TResolucion.where('resolucion LIKE ?', "%#{search}%")
+    respond_with TResolucion.where('resolucion LIKE ?', "%#{search}%").first(10)
   end
 
   def find_by_razon_social
     search = parametros_de_busqueda[:search]
-    respond_with TCliente.where('razon_social LIKE ?', "%#{search}%")
+    respond_with TCliente.where('razon_social LIKE ?', "%#{search}%").first(10)
   end
 
   def find
-    attribute = parametros_de_busqueda[:attribute]
+    @attribute = parametros_de_busqueda[:attribute]
     search = parametros_de_busqueda[:search]
 
-    @t_cliente =  case attribute
+    @t_cliente =  case @attribute
                   when 'select-codigo'
                     TCliente.find_by(codigo: search)
                   when 'select-resolucion'

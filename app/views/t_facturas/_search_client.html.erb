@@ -19,6 +19,7 @@
           <option value="<%#= t_resolucion.id %>"><%#= t_resolucion.resolucion %></option>
         <%# end if @t_resolucions %> -->
       </select>
+      <%= f.hidden_field :t_resolucion_id, id: 'input-resolucion', value: '' %>
     </div>
   </div>
   <div class="col-md-4">
