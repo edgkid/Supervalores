@@ -205,6 +205,25 @@
       });
     });
 
+    $(document).on('change', '.select-servicio', function(e) {
+      var price = Number($(this).find("option:selected").data('value')),
+          descripcion = $(this).find("option:selected").data('descripcion');
+      $(this).find("option:selected").parent().parent().siblings().each(function () {
+        if ($(this).hasClass('price-cell')) {
+          // alert($(this).children().first().val());
+          let priceInput = $(this).children().first();
+          priceInput.val(price);
+          setSubTotal(priceInput, false);
+          setTotal('#total', getTotal('.subtotal-cell'));
+        }
+
+        if ($(this).hasClass('descripcion-cell')) {
+          let descripcionInput = $(this).children().first();
+          descripcionInput.val(descripcion)
+        }
+      });
+    });
+
     $('form').submit(function(event) {
       event.preventDefault(); //this will prevent the default submit
       //alert($('#total').text());
