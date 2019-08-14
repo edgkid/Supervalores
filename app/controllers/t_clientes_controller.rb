@@ -1,5 +1,6 @@
 class TClientesController < ApplicationController
-  respond_to :js, only: :buscar
+  respond_to :js, only: [:find]
+  respond_to :json, only: [:find_by_codigo, :find_by_resolucion, :find_by_razon_social]
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion]  
   before_action :usar_dataTables_en, only: [:index, :show, :edit]
 
@@ -103,18 +104,33 @@ class TClientesController < ApplicationController
     end
   end
 
-  def buscar
+  def find_by_codigo
+    search = parametros_de_busqueda[:search]
+    respond_with TCliente.where('codigo LIKE ?', "%#{search}%")
+  end
+
+  def find_by_resolucion
+    search = parametros_de_busqueda[:search]
+    respond_with TResolucion.where('resolucion LIKE ?', "%#{search}%")
+  end
+
+  def find_by_razon_social
+    search = parametros_de_busqueda[:search]
+    respond_with TCliente.where('razon_social LIKE ?', "%#{search}%")
+  end
+
+  def find
     attribute = parametros_de_busqueda[:attribute]
-    value = parametros_de_busqueda[:value]
+    search = parametros_de_busqueda[:search]
 
     @t_cliente =  case attribute
-                  when 'codigo'
-                    TCliente.where('codigo LIKE ?', "%#{value}%").take
-                  when 'resolucion'
-                    TResolucion.where('resolucion LIKE ?', "%#{value}%").take.t_cliente
-                  when 'razon_social'
-                    TCliente.where('razon_social LIKE ?', "%#{value}%").take
-                  end if value != ''
+                  when 'select-codigo'
+                    TCliente.find_by(codigo: search)
+                  when 'select-resolucion'
+                    TResolucion.find_by(resolucion: search).t_cliente
+                  when 'select-razon_social'
+                    TCliente.find_by(razon_social: search)
+                  end if search != ''
   end
 
   private
@@ -136,7 +152,7 @@ class TClientesController < ApplicationController
     end
 
     def parametros_de_busqueda
-      params.permit(:attribute, :value)
+      params.permit(:attribute, :search)
     end
 
     def usar_dataTables_en

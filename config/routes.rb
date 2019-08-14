@@ -20,8 +20,13 @@ Rails.application.routes.draw do
   resources :t_tipo_clientes, :path => "tipos_de_clientes"
   resources :t_tipo_personas, :path => "tipos_de_personas"
   resources :t_clientes, :path => "clientes"
+  namespace :t_clientes do
+    get 'find_by_codigo', as: :find_by_codigo
+    get 'find_by_resolucion', as: :find_by_resolucion
+    get 'find_by_razon_social', as: :find_by_razon_social
+    get 'find', as: :find
+  end
   post 'clientes/:id/nueva_resolucion' => 't_clientes#nueva_resolucion'
-  get 't_clientes/buscar', as: :buscar_t_cliente
   resources :t_estatuses, :path => "estatus"
   resources :t_personas, :path => "personas"
   resources :t_empresas, :path => "empresas"

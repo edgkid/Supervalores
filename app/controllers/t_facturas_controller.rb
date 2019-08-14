@@ -13,6 +13,7 @@ class TFacturasController < ApplicationController
   def create
     @t_factura = TFactura.new(t_factura_params)
     @t_factura.user = current_user
+    @t_factura.recargo = 0
 
     if @t_factura.save!
       redirect_to t_facturas_path

@@ -2,52 +2,34 @@
   <div class="col-md-4">
     <div class="form-group">
       <label for="select-codigo">Código</label>
-      <select class="select2 search-client" id="codigo" tabindex="2" style="width: 100%;">
-        <option value="">Seleccione</option>
-        <%= @t_clientes.each do |t_cliente| %>
-          <option value="<%= t_cliente.codigo %>"><%= t_cliente.codigo %></option>
-        <% end if @t_clientes %>
+      <select class="search-client" id="select-codigo" tabindex="2" style="width: 100%;">
+        <!-- <option value="">Seleccione</option>
+        <%#= @t_clientes.each do |t_cliente| %>
+          <option value="<%#= t_cliente.codigo %>"><%#= t_cliente.codigo %></option>
+        <%# end if @t_clientes %> -->
       </select>
     </div>
   </div>
   <div class="col-md-4">
     <div class="form-group">
-      <label for="resolucion">Resolución</label>
-      <select class="select2 search-client" name="t_factura[t_resolucion_id]" id="resolucion" tabindex="2" style="width: 100%;">
-        <option value="">Seleccione</option>
-        <%= @t_resolucions.each do |t_resolucion| %>
-          <option value="<%= t_resolucion.id %>"><%= t_resolucion.resolucion %></option>
-        <% end if @t_resolucions %>
+      <label for="select-resolucion">Resolución</label>
+      <select class="search-client" name="t_factura[t_resolucion_id]" id="select-resolucion" tabindex="2" style="width: 100%;">
+        <!-- <option value="">Seleccione</option>
+        <%#= @t_resolucions.each do |t_resolucion| %>
+          <option value="<%#= t_resolucion.id %>"><%#= t_resolucion.resolucion %></option>
+        <%# end if @t_resolucions %> -->
       </select>
     </div>
   </div>
   <div class="col-md-4">
     <div class="form-group">
-      <label for="razon_social">Céd. / Pas. / RUC</label>
-      <select class="select2 search-client" id="razon_social" tabindex="2" style="width: 100%;">
-        <option value="">Seleccione</option>
-        <%= @t_clientes.each do |t_cliente| %>
-          <option value="<%= t_cliente.razon_social %>"><%= t_cliente.razon_social %></option>
-        <% end if @t_clientes %>
+      <label for="select-razon_social">Céd. / Pas. / RUC</label>
+      <select class="search-client" id="select-razon_social" tabindex="2" style="width: 100%;">
+        <!-- <option value="">Seleccione</option>
+        <%#= @t_clientes.each do |t_cliente| %>
+          <option value="<%#= t_cliente.razon_social %>"><%#= t_cliente.razon_social %></option>
+        <%# end if @t_clientes %> -->
       </select>
     </div>
   </div>
 </div>
-
-<script type="text/javascript">
-  $(document).ready(function(){
-    $(document).on('keyup', '.select2-search__field', function (e) {
-      //alert($(this).parent().attr('class'));
-    })
-    $('.search-client').change(function() {
-      $.ajax({
-        url: '<%= "#{buscar_t_cliente_path}" %>',
-        type: 'get',
-        data: {
-          attribute: $(this).attr('id'),
-          value: $(this).val()
-        }
-      });
-    });
-  });
-</script>

@@ -106,5 +106,93 @@
       setSubTotal(this, false);
       setTotal('#total', getTotal('.subtotal-cell'));
     });
+
+    $("#select-codigo").select2({
+      ajax: {
+        url: '<%= "#{t_clientes_find_by_codigo_path}" %>',
+        //url: '/t_clientes/find_by_codigo.json',
+        dataType: 'json',
+        data: function (params) {
+          var query = {
+            search: params.term
+          }
+
+          return query;
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function(t_cliente, i) {
+              return { id: t_cliente.codigo, text: t_cliente.codigo } 
+            })
+          };
+        },
+        delay: 250
+      },
+      placeholder: 'Seleccione',
+      // minimumInputLength: 1
+    });
+
+    $("#select-resolucion").select2({
+      ajax: {
+        url: '<%= "#{t_clientes_find_by_resolucion_path}" %>',
+        dataType: 'json',
+        data: function (params) {
+          var query = {
+            search: params.term
+          }
+
+          return query;
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function(t_resolucion, i) {
+              return { id: t_resolucion.resolucion, text: t_resolucion.resolucion } 
+            })
+          };
+        },
+        delay: 250
+      },
+      placeholder: 'Seleccione',
+      // minimumInputLength: 1
+    });
+
+    $("#select-razon_social").select2({
+      ajax: {
+        url: '<%= "#{t_clientes_find_by_razon_social_path}" %>',
+        dataType: 'json',
+        data: function (params) {
+          var query = {
+            search: params.term
+          }
+
+          return query;
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function(t_cliente, i) {
+              return { id: t_cliente.razon_social, text: t_cliente.razon_social } 
+            })
+          };
+        },
+        delay: 250
+      },
+      placeholder: 'Seleccione'
+    });
+
+    $('.search-client').change(function() {
+      // alert($(this).val());
+      $.ajax({
+        url: '<%= "#{t_clientes_find_path}" %>',
+        type: 'get',
+        data: {
+          attribute: $(this).attr('id'),
+          search: $(this).val()
+        }
+      });
+    });
+
+    // $(document).on('keyup', '.select2-search__field', function (e) {
+    //   //alert($(this).parent().attr('class'));
+    // })
   });
 </script>
