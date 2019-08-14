@@ -1,92 +1,96 @@
 <%= form_for @t_factura do |f| %>
-  <div class="row">
-    <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title">Datos del Cliente</h3>
-          <%= render 'search_client', f: f %>
-          <br>
-          <div id="client-container">
-            <%= render 'cliente' %>
+  <fieldset <%= @is_show ? 'disabled="disabled"' : '' %>>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Datos del Cliente</h3>
+            <%= render 'search_client', f: f %>
+            <br>
+            <div id="client-container">
+              <%= render 'cliente' %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Facturación</h3>
+            <%= render 'factura', f: f %>
           </div>
         </div>
       </div>
     </div>
-    <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title">Facturación</h3>
-          <%= render 'factura', f: f %>
+
+    <br>
+
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h3>Detalle de Factura</h3>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-primary" onclick="$('#add-service-link').click();">
+                Nuevo Servicio
+              </button>
+              <button type="button" class="btn btn-success" onclick="addRecargoRow();">
+                Nuevo Recargo
+              </button>
+              <button type="button" class="btn btn-danger" onclick="deleteCheckedRows();">
+                Eliminar Filas Seleccionadas
+              </button>
+            </div>
+            <br><br>
+            <table class="table table-bordered">
+              <thead>
+                <tr style="text-align: center;">
+                  <th><i class="fa fa-window-close"></i></th>
+                  <th>Servicio / Recargo</th>
+                  <th>Descripción</th>
+                  <th>Cantidad</th>
+                  <th>Precio Unitario</th>
+                  <th>Monto Total</th>
+                </tr>
+              </thead>
+              <tbody id="factura-detalle-table">
+                <%= f.fields_for :t_factura_detalles do |fd_form| %>
+                  <%= render 't_factura_detalle_fields', f: fd_form %>
+                <% end %>
+                <tr style="display: none;">
+                  <td>
+                    <%= link_to_add_fields("Nuevo Servicio", f, :t_factura_detalles, true, style: 'display: none;', id: 'add-service-link', class: 'select2') %>
+                  </td>
+                </tr>
+                <tr id="total-row" align="center">
+                  <td></td>
+                  <td width="25%"></td>
+                  <td width="25%"></td>
+                  <td id="total-quantity" width="20%"></td>
+                  <td></td>
+                  <td id="total" width="10%"></td>
+                </tr>
+              </tbody>
+            </table>
+            <%= f.hidden_field :total_factura, id: 'input-total-factura', value: 0 %>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </fieldset>
 
   <br>
+
+  <%#= render 'shared/form_buttons', f: f, object: @t_factura %>
 
   <div class="row">
-    <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <h3>Detalle de Factura</h3>
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-primary" onclick="$('#add-service-link').click();">
-              Nuevo Servicio
-            </button>
-            <button type="button" class="btn btn-success" onclick="addRecargoRow();">
-              Nuevo Recargo
-            </button>
-            <button type="button" class="btn btn-danger" onclick="deleteCheckedRows();">
-              Eliminar Filas Seleccionadas
-            </button>
-          </div>
-          <br><br>
-          <table class="table table-bordered">
-            <thead>
-              <tr style="text-align: center;">
-                <th><i class="fa fa-window-close"></i></th>
-                <th>Servicio / Recargo</th>
-                <th>Descripción</th>
-                <th>Cantidad</th>
-                <th>Precio Unitario</th>
-                <th>Monto Total</th>
-              </tr>
-            </thead>
-            <tbody id="factura-detalle-table">
-              <%= f.fields_for :t_factura_detalles do |fd_form| %>
-                <%= render 't_factura_detalle_fields', f: fd_form %>
-              <% end %>
-              <tr style="display: none;">
-                <td>
-                  <%= link_to_add_fields("Nuevo Servicio", f, :t_factura_detalles, true, style: 'display: none;', id: 'add-service-link', class: 'select2') %>
-                </td>
-              </tr>
-              <tr id="total-row" align="center">
-                <td></td>
-                <td width="25%"></td>
-                <td width="25%"></td>
-                <td id="total-quantity" width="20%"></td>
-                <td></td>
-                <td id="total" width="10%"></td>
-              </tr>
-            </tbody>
-          </table>
-          <%= f.hidden_field :total_factura, id: 'input-total-factura', value: 0 %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <br>
-
-  <%= render 'shared/form_buttons', f: f %>
-
-  <!-- <div class="row">
     <div align="center" class="col-sm-12">
-      <%#= link_to 'Atrás', :back, class: 'btn btn-white col-2' %>
-      <%#= link_to 'Crear Factura', preview_t_facturas_path, class: "btn btn-primary col-2" %>
+      <%= link_to 'Atrás', :back, class: 'btn btn-white col-2' %>
+      <% unless @is_show %>
+        <%= link_to 'Crear Factura', preview_t_facturas_path, class: "btn btn-primary col-2" %>
+      <% end %>
     </div>
-  </div> -->
+  </div>
 <% end %>
 <br>
 

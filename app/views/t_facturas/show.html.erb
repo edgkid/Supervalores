@@ -1,2 +1,3 @@
-<h1>TFacturas#show</h1>
-<p>Find me in app/views/t_facturas/show.html.erb</p>
+<% provide(:texto_boton, 'Factura') %>
+<% @is_show = (controller.action_name == 'show') ? true : false %>
+<%= render 'form' %>

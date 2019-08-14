@@ -14,7 +14,7 @@
         </div>
         <div class="ibox-content">
           <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover dataTables">
+            <table class="table table-striped table-bordered table-hover dataTables clickable">
               <thead>
                 <tr>
                   <th>No.</th>
@@ -27,12 +27,11 @@
                   <th>Pendiente</th>
                   <th>Tp</th>
                   <th>Prosp.</th>
-                  <th>Opciones</th>
                 </tr>
               </thead>
               <tbody>
                 <% @t_facturas.each do |t_factura| %>
-                  <tr>
+                  <tr data-link="<%= polymorphic_url(t_factura) %>">
                     <td><%= t_factura.id %></td>
                     <td><%= (t_factura.t_resolucion && t_factura.t_resolucion.t_cliente) ? t_factura.t_resolucion.t_cliente.codigo : 'Sin cliente' %></td>
                     <td><%= t_factura.t_resolucion ? t_factura.t_resolucion.resolucion : 'Sin resolución' %></td>
@@ -43,11 +42,6 @@
                     <td><%= t_factura.pendiente_fact %></td>
                     <td><%= t_factura.tipo %></td>
                     <td><%= '' %></td>
-                    <td>
-                      <%= render 'shared/action_buttons',
-                                  show_route: t_factura,
-                                  edit_route: edit_t_factura_path(t_factura) %>
-                    </td>
                   </tr>
                 <% end %>
               </tbody>
