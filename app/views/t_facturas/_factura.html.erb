@@ -2,11 +2,11 @@
   <tbody>
     <tr>
       <th>Fecha de la Factura:</th>
-      <td><%= f.text_field :fecha_notificacion, class: 'datepicker', style: 'width: 100%' %></td>
+      <td><%= f.text_field :fecha_notificacion, class: 'datepicker', style: 'width: 100%', value: Date.today.strftime('%d/%m/%Y') %></td>
     </tr>
     <tr>
       <th>Fecha de Vencimiento:</th>
-      <td><%= f.text_field :fecha_vencimiento, class: 'datepicker', style: 'width: 100%' %></td>
+      <td><%= f.text_field :fecha_vencimiento, class: 'datepicker', style: 'width: 100%', value: (Date.today + 30.days).strftime('%d/%m/%Y') %></td>
     </tr>
     <tr>
       <th>Cuenta de Venta:</th>
