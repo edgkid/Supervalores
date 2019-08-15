@@ -14,8 +14,10 @@ Rails.application.routes.draw do
   end
   # get 't_facturas/previsualizacion' => 't_facturas#preview', as: :previsualizar_factura
   resources :t_tarifa_servicios
+  namespace :t_recargos do
+    get 'find_by_descripcion', as: :find_by_descripcion 
+  end
   resources :t_recargos
-
   resources :t_resolucions, :path => "resoluciones"
   resources :t_tipo_clientes, :path => "tipos_de_clientes"
   resources :t_tipo_personas, :path => "tipos_de_personas"

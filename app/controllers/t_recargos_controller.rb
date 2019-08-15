@@ -1,4 +1,5 @@
 class TRecargosController < ApplicationController
+  respond_to :json, only: :find_by_descripcion
   before_action :set_t_recargo, only: [:edit, :update, :show, :destroy]
 
   def new
@@ -45,10 +46,19 @@ class TRecargosController < ApplicationController
     redirect_to t_recargos_path
   end
 
+  def find_by_descripcion
+    search = search_params[:search]
+    respond_with TRecargo.where('descripcion LIKE ?', "%#{search}%").first(10)
+  end
+
   private
 
     def t_recargo_params
       params.require(:t_recargo).permit(:descripcion, :tasa, :estatus, :factura_id)
+    end
+
+    def search_params
+      params.permit(:search)
     end
 
     def set_t_recargo

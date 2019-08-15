@@ -19,7 +19,29 @@ function addRecargoRow () {
       <td class="subtotal-cell" style="color: aqua; text-align: center;"></td>
     </tr>
   `);
-  $(`#t_recargo${i}`).select2();
+  $(`#t_recargo${i}`).select2({
+    ajax: {
+      url: '/t_recargos/find_by_descripcion',
+      //url: '/t_clientes/find_by_codigo.json',
+      dataType: 'json',
+      data: function (params) {
+        var query = {
+          search: params.term
+        }
+
+        return query;
+      },
+      processResults: function (data) {
+        return {
+          results: $.map(data, function(t_recargo, i) {
+            return { id: t_recargo.id, text: t_recargo.descripcion } 
+          })
+        };
+      },
+      delay: 250
+    },
+    placeholder: 'Seleccione'
+  });
   i++;
 }
 
