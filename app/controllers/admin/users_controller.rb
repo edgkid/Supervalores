@@ -1,6 +1,12 @@
 class Admin::UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
+  load_and_authorize_resource
+
+  rescue_from CanCan::AccessDenied do |exception|
+		redirect_to admin_users_path, :alert => exception.message
+	end
+
   def index
     @usar_dataTables = true
     @users = User.all

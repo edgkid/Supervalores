@@ -36,17 +36,17 @@ class Ability
         can :manage, :all if user.role == "SuperAdmin"
 
         #Action to AdminCxC
-        can :crud, :t_cliente if user.role == "AdminCxC"
-        can :crud, :t_empresa if user.role == "AdminCxC"
-        can :crud, :t_estatus if user.role == "AdminCxC"
-        can :crud, :t_factura if user.role == "AdminCxC"
-        can :crud, :t_leyenda if user.role == "AdminCxC"
-        can :crud, :t_periodo if user.role == "AdminCxC"
-        can :crud, :t_persona if user.role == "AdminCxC"
-        can :crud, :t_recargo if user.role == "AdminCxC"
-        can :crud, :t_resolucion if user.role == "AdminCxC"
-        can :crud, :t_tarifa_servicio if user.role == "AdminCxC"
-        can :crud, :t_tipo_persona if user.role == "AdminCxC"
+        can :crud, :TCliente if user.role == "AdminCxC"
+        can :crud, :TEmpresa if user.role == "AdminCxC"
+        can :crud, :TEstatus if user.role == "AdminCxC"
+        can :crud, :TFactura if user.role == "AdminCxC"
+        can :crud, :TLeyenda if user.role == "AdminCxC"
+        can :crud, :TPeriodo if user.role == "AdminCxC"
+        can :crud, :TPersona if user.role == "AdminCxC"
+        can :crud, :TRecargo if user.role == "AdminCxC"
+        can :crud, :TResolucion if user.role == "AdminCxC"
+        can :crud, :TTarifaServicio if user.role == "AdminCxC"
+        can :crud, :TTipoPersona if user.role == "AdminCxC"
 
     end
   end
