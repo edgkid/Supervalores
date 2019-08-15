@@ -30,5 +30,24 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
+    alias_action :create, :read, :update, :destroy, to: :crud
+    if user.present?
+        #Action to Super Admin
+        can :manage, :all if user.role == "SuperAdmin"
+
+        #Action to AdminCxC
+        can :crud, :t_cliente if user.role == "AdminCxC"
+        can :crud, :t_empresa if user.role == "AdminCxC"
+        can :crud, :t_estatus if user.role == "AdminCxC"
+        can :crud, :t_factura if user.role == "AdminCxC"
+        can :crud, :t_leyenda if user.role == "AdminCxC"
+        can :crud, :t_periodo if user.role == "AdminCxC"
+        can :crud, :t_persona if user.role == "AdminCxC"
+        can :crud, :t_recargo if user.role == "AdminCxC"
+        can :crud, :t_resolucion if user.role == "AdminCxC"
+        can :crud, :t_tarifa_servicio if user.role == "AdminCxC"
+        can :crud, :t_tipo_persona if user.role == "AdminCxC"
+
+    end
   end
 end
