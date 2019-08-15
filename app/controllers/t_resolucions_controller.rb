@@ -1,6 +1,12 @@
 class TResolucionsController < ApplicationController
   before_action :seleccionar_resolucion, only: [:show, :edit, :update, :destroy]
 
+  load_and_authorize_resource
+
+  rescue_from CanCan::AccessDenied do |exception|
+		redirect_to t_facturas_path, :alert => exception.message
+	end
+  
   def index
     @usar_dataTables = true
     @registros = TResolucion.all
@@ -45,7 +51,7 @@ class TResolucionsController < ApplicationController
 
   def destroy
     @registro.t_estatus = TEstatus.find_by(description: "Inactivo")
-    respond_to do |format|    
+    respond_to do |format|
       if @registro.save
         format.html { redirect_to t_tipo_clientes_url, notice: 'Tipo de cliente inhabilitado correctamente.' }
         format.json { head :no_content }

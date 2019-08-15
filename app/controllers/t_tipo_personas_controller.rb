@@ -1,6 +1,12 @@
 class TTipoPersonasController < ApplicationController
   before_action :seleccionar_tipo_persona, only: [:show, :edit, :update, :destroy]
 
+  load_and_authorize_resource
+
+  rescue_from CanCan::AccessDenied do |exception|
+		redirect_to t_facturas_path, :alert => exception.message
+	end
+  
   def index
     @usar_dataTables = true
     @registros = TTipoPersona.all
@@ -58,11 +64,11 @@ class TTipoPersonasController < ApplicationController
     end
   end
 
-  private    
+  private
     def seleccionar_tipo_persona
       @registro = TTipoPersona.find(params[:id])
     end
-    
+
     def parametros_tipo_persona
       params.require(:t_tipo_persona).permit(:descripcion, :estatus)
     end

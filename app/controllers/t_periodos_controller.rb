@@ -1,6 +1,12 @@
 class TPeriodosController < ApplicationController
   before_action :set_t_periodo, only: [:edit, :update, :show, :destroy]
 
+  load_and_authorize_resource
+
+  rescue_from CanCan::AccessDenied do |exception|
+		redirect_to t_facturas_path, :alert => exception.message
+	end
+  
   def new
     @t_periodo = TPeriodo.new
   end
