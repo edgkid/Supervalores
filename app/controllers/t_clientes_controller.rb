@@ -7,9 +7,9 @@ class TClientesController < ApplicationController
   load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
-		redirect_to t_facturas_path, :alert => exception.message
+		redirect_to dashboard_access_denied_path	, :alert => exception.message
 	end
-  
+
   def index
     @registros = TCliente.all
   end
