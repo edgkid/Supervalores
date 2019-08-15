@@ -3,7 +3,7 @@ class CreateTRolDescs < ActiveRecord::Migration[5.2]
     create_table :t_rol_descs do |t|
       t.string :id_objeto
       t.string :nombre, null: false
-      t.string :pagina
+      t.text :pagina
       t.integer :estatus, null: false
 
       t.timestamps
