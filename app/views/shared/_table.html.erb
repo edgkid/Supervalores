@@ -10,7 +10,19 @@
     <% object_list.each do |object| %>
       <tr data-link="<%= polymorphic_url(object) %>">
         <% object_attributes.each do |attribute, _| %>
-          <td><%= object.send attribute %></td>
+          <td>
+            <% if attribute.to_s == 'estatus' %>
+              <% status = case object.send(attribute)
+                          when 1, '1'
+                            'Activo'
+                          else
+                            'Inactivo'
+                          end %>
+              <%= status %>
+            <% else %>
+              <%= object.send attribute %>
+            <% end %>
+          </td>
         <% end %>
       </tr>
     <% end %>
