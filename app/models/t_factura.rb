@@ -17,10 +17,18 @@ class TFactura < ApplicationRecord
 
   validates :fecha_notificacion,
     presence: {
-      message: "|La fecha de notificación no puede estar vacía."
+      message: "|La fecha de notificación no puede estar vacía"
     }
   validates :fecha_vencimiento,
     presence: {
-      message: "|La fecha de vencimiento no puede estar vacía."
+      message: "|La fecha de vencimiento no puede estar vacía"
+    }
+  validates :t_resolucion,
+    presence: {
+      message: "|La resolución debe existir"
+    }
+  validates :t_periodo,
+    presence: {
+      message: "|Debe seleccionar un periodo"
     }
 end

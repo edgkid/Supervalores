@@ -127,7 +127,8 @@ class TClientesController < ApplicationController
                   when 'select-codigo'
                     TCliente.find_by(codigo: search)
                   when 'select-resolucion'
-                    TResolucion.find_by(resolucion: search).t_cliente
+                    @t_resolucion = TResolucion.find_by(resolucion: search)
+                    @t_resolucion.t_cliente
                   when 'select-razon_social'
                     TCliente.find_by(razon_social: search)
                   end if search != ''

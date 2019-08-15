@@ -24,9 +24,12 @@ class TFacturasController < ApplicationController
     @t_factura.monto_emision = 0
     @t_factura.t_estatus_id = TEstatus.first.id
 
-    if @t_factura.save!
-      redirect_to preview_t_facturas_path
+    if @t_factura.save
+      redirect_to preview_t_facturas_path, notice: 'Factura creada exitosamente.'
     else
+      @notice = @t_factura.errors
+      @notice.messages[:t_resolucion] -= [@notice.messages[:t_resolucion].first]
+      @notice.messages[:t_periodo] -= [@notice.messages[:t_periodo].first]
       render 'new'
     end
   end

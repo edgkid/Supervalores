@@ -34,4 +34,8 @@ switch(attribute) {
     break;
 }
 
-$('#input-resolucion').val($('#select-resolucion').val());
+<% if @t_resolucion %>
+  $('#input-resolucion').val(<%= @t_resolucion.id %>);
+<% else %>
+  $('#input-resolucion').val($('#select-resolucion').val());
+<% end %>
