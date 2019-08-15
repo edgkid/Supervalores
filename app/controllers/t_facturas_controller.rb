@@ -24,7 +24,7 @@ class TFacturasController < ApplicationController
     @t_factura.monto_emision = 0
     @t_factura.t_estatus_id = TEstatus.first.id
 
-    if @t_factura.save
+    if @t_factura.save!
       redirect_to preview_t_facturas_path
     else
       render 'new'

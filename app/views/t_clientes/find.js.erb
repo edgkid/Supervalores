@@ -1,20 +1,20 @@
 $("#client-container").html("<%= escape_javascript(render('t_facturas/cliente')) %>");
 var attribute = '<%= @attribute %>',
     codigo = '<%= @t_cliente.codigo %>',
-    razon_social = '<%= @t_cliente.razon_social %>',
-    resolucion = '<%= @t_cliente.t_resolucion ? @t_cliente.t_resolucion.resolucion : "" %>',
-    resolucion_id = '<%= @t_cliente.t_resolucion ? @t_cliente.t_resolucion.id : "" %>';
+    razon_social = '<%= @t_cliente.razon_social %>';
+
+var data = [
+  <% @t_cliente.t_resolucions.each do |t_resolucion| %>
+    {
+      id: <%= t_resolucion.id %>,
+      text: '<%= t_resolucion.resolucion %>'
+    },
+  <% end %>
+]
 
 switch(attribute) {
   case 'select-codigo':
-    <% if @t_cliente.t_resolucion %>
-      $('#select2-select-resolucion-container').text(resolucion);
-      $('#select2-select-resolucion-container').attr('title', resolucion);
-      $('#input-resolucion').val(resolucion_id);
-    <% else %>
-      $('#select2-select-resolucion-container').text('');
-      $('#select2-select-resolucion-container').attr('title', '');
-    <% end %>
+    $('#select-resolucion').select2({ data: data })
 
     $('#select2-select-razon_social-container').text(razon_social);
     $('#select2-select-razon_social-container').attr('title', razon_social);
@@ -25,20 +25,13 @@ switch(attribute) {
 
     $('#select2-select-razon_social-container').text(razon_social);
     $('#select2-select-razon_social-container').attr('title', razon_social);
-
-    $('#input-resolucion').val(resolucion_id);
     break;
   case 'select-razon_social':
-    <% if @t_cliente.t_resolucion %>
-      $('#select2-select-resolucion-container').text(resolucion);
-      $('#select2-select-resolucion-container').attr('title', resolucion);
-      $('#input-resolucion').val(resolucion_id);
-    <% else %>
-      $('#select2-select-resolucion-container').text('');
-      $('#select2-select-resolucion-container').attr('title', '');
-    <% end %>
+    $('#select-resolucion').select2({ data: data })
 
     $('#select2-select-codigo-container').text(codigo);
     $('#select2-select-codigo-container').attr('title', codigo);
     break;
 }
+
+$('#input-resolucion').val($('#select-resolucion').val());

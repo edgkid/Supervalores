@@ -87,7 +87,8 @@
     <div align="center" class="col-sm-12">
       <%= link_to 'Atrás', :back, class: 'btn btn-white col-2' %>
       <% unless @is_show %>
-        <%= link_to 'Crear Factura', preview_t_facturas_path, class: "btn btn-primary col-2" %>
+        <%#= link_to 'Crear Factura', preview_t_facturas_path, class: "btn btn-primary col-2" %>
+        <%= f.submit yield(:texto_boton), class: "btn btn-primary col-2" %>
       <% end %>
     </div>
   </div>
@@ -136,8 +137,7 @@
         },
         delay: 250
       },
-      placeholder: 'Seleccione',
-      // minimumInputLength: 1
+      placeholder: 'Seleccione'
     });
 
     $("#select-resolucion").select2({
@@ -161,7 +161,7 @@
         delay: 250
       },
       placeholder: 'Seleccione',
-      // minimumInputLength: 1
+      minimumInputLength: 1
     });
 
     $("#select-razon_social").select2({

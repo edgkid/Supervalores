@@ -2,35 +2,20 @@
   <div class="col-md-4">
     <div class="form-group">
       <label for="select-codigo">Código</label>
-      <select class="search-client" id="select-codigo" tabindex="2" style="width: 100%;">
-        <!-- <option value="">Seleccione</option>
-        <%#= @t_clientes.each do |t_cliente| %>
-          <option value="<%#= t_cliente.codigo %>"><%#= t_cliente.codigo %></option>
-        <%# end if @t_clientes %> -->
-      </select>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="form-group">
-      <label for="select-resolucion">Resolución</label>
-      <select class="search-client" name="t_factura[t_resolucion_id]" id="select-resolucion" tabindex="2" style="width: 100%;">
-        <!-- <option value="">Seleccione</option>
-        <%#= @t_resolucions.each do |t_resolucion| %>
-          <option value="<%#= t_resolucion.id %>"><%#= t_resolucion.resolucion %></option>
-        <%# end if @t_resolucions %> -->
-      </select>
-      <%= f.hidden_field :t_resolucion_id, id: 'input-resolucion', value: '' %>
+      <select class="search-client" id="select-codigo" tabindex="2" style="width: 100%;"></select>
     </div>
   </div>
   <div class="col-md-4">
     <div class="form-group">
       <label for="select-razon_social">Céd. / Pas. / RUC</label>
-      <select class="search-client" id="select-razon_social" tabindex="2" style="width: 100%;">
-        <!-- <option value="">Seleccione</option>
-        <%#= @t_clientes.each do |t_cliente| %>
-          <option value="<%#= t_cliente.razon_social %>"><%#= t_cliente.razon_social %></option>
-        <%# end if @t_clientes %> -->
-      </select>
+      <select class="search-client" id="select-razon_social" tabindex="2" style="width: 100%;"></select>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="form-group">
+      <label for="select-resolucion">Resolución</label>
+      <select class="search-client" name="t_factura[t_resolucion_id]" id="select-resolucion" tabindex="2" style="width: 100%;"></select>
+      <%= f.hidden_field :t_resolucion_id, id: 'input-resolucion', value: '' %>
     </div>
   </div>
 </div>
