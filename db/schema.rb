@@ -70,15 +70,13 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "t_tipo_cliente_id", null: false
-    t.bigint "t_tipo_persona_id", null: false
-    t.string "razon_social"
-    t.string "telefono"
-    t.string "email"
     t.date "prospecto_at"
+    t.bigint "persona_id"
+    t.string "persona_type"
     t.index ["codigo"], name: "index_t_clientes_on_codigo", unique: true
+    t.index ["persona_type", "persona_id"], name: "index_persona_as_cliente"
     t.index ["t_estatus_id"], name: "index_t_clientes_on_t_estatus_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_clientes_on_t_tipo_cliente_id"
-    t.index ["t_tipo_persona_id"], name: "index_t_personas_on_t_tipo_persona_id"
   end
 
   create_table "t_cuenta_financieras", force: :cascade do |t|
@@ -139,8 +137,9 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
     t.string "direccion_empresa"
     t.string "fax"
     t.string "web"
-    t.bigint "t_cliente_id"
-    t.index ["t_cliente_id"], name: "index_t_empresas_on_t_cliente_id"
+    t.string "telefono"
+    t.string "email"
+    t.index ["rif"], name: "index_t_empresas_on_rif", unique: true
   end
 
   create_table "t_estado_cuenta", force: :cascade do |t|
@@ -263,6 +262,17 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
     t.index ["user_id"], name: "index_t_nota_creditos_on_user_id"
   end
 
+  create_table "t_otros", force: :cascade do |t|
+    t.string "identificacion"
+    t.string "razon_social"
+    t.string "telefono"
+    t.string "email"
+    t.bigint "t_tipo_persona_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["t_tipo_persona_id"], name: "index_t_otros_on_t_tipo_persona_id"
+  end
+
   create_table "t_periodos", force: :cascade do |t|
     t.string "descripcion", null: false
     t.integer "rango_dias", null: false
@@ -281,10 +291,11 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
     t.bigint "num_licencia", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "t_cliente_id", null: false
     t.bigint "t_empresa_id"
     t.string "cargo"
-    t.index ["t_cliente_id"], name: "index_t_personas_on_t_cliente_id"
+    t.string "telefono"
+    t.string "email"
+    t.index ["cedula"], name: "index_t_personas_on_cedula", unique: true
     t.index ["t_empresa_id"], name: "index_t_personas_on_t_empresa_id"
   end
 
@@ -490,7 +501,6 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
   add_foreign_key "t_cliente_tarifas", "t_tarifas"
   add_foreign_key "t_clientes", "t_estatuses"
   add_foreign_key "t_clientes", "t_tipo_clientes"
-  add_foreign_key "t_clientes", "t_tipo_personas"
   add_foreign_key "t_cuenta_financieras", "t_presupuestos"
   add_foreign_key "t_cuenta_financieras", "t_tarifa_servicio_groups"
   add_foreign_key "t_email_masivos", "t_clientes"
@@ -499,7 +509,6 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
   add_foreign_key "t_emisions", "t_periodos"
   add_foreign_key "t_emisions", "t_tipo_emisions"
   add_foreign_key "t_emisions", "users"
-  add_foreign_key "t_empresas", "t_clientes"
   add_foreign_key "t_estado_cuenta", "t_clientes"
   add_foreign_key "t_estado_cuenta", "t_facturas"
   add_foreign_key "t_estado_cuenta", "t_recibos"
@@ -519,7 +528,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
   add_foreign_key "t_nota_creditos", "t_facturas"
   add_foreign_key "t_nota_creditos", "t_recibos"
   add_foreign_key "t_nota_creditos", "users"
-  add_foreign_key "t_personas", "t_clientes"
+  add_foreign_key "t_otros", "t_tipo_personas"
   add_foreign_key "t_personas", "t_empresas"
   add_foreign_key "t_recargo_x_clientes", "t_recargos"
   add_foreign_key "t_recargo_x_clientes", "t_resolucions"
