@@ -48,7 +48,7 @@
           <% if can? :crud, TFactura %>
             <li><%= link_to 'Factura Manual', t_facturas_path %></li>
           <% end %>
-          <% if can? :crud, TRecargo %>
+          <% if can? :manage, TRecargo %>
             <li><%= link_to 'Recargos', t_recargos_path %></li>
           <% end %>
           <% if can? :crud, TPeriodo %>

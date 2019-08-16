@@ -49,6 +49,11 @@ class Ability
           can :crud, TTarifaServicio if user.role == "AdminCxC"
           can :crud, TTipoPersona if user.role == "AdminCxC"
 
+          #Other actions and other roles
+          user.permissions.each do |permission|
+            can permission.action.to_sym, permission.subject_class.constantize if user.role == user.role
+          end
+
       end
     end
   end

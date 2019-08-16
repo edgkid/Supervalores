@@ -12,6 +12,7 @@ class User < ApplicationRecord
 	has_many :t_email_masivos, dependent: :destroy
 	has_many :t_emisions, dependent: :destroy
 	has_many :t_nota_creditos, dependent: :destroy
+	has_many :permissions
 
 	devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable, :timeoutable
