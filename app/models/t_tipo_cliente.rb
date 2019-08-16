@@ -13,7 +13,7 @@ class TTipoCliente < ApplicationRecord
       with: /([A-Za-z0-9\-]+)/ 
     },
     uniqueness: {
-      message: "|Ya exista un tipo de cliente con este código, use otro por favor.",
+      message: "|Ya existe un tipo de cliente con este código, use otro por favor.",
     },
 		:on => [:create, :update]
 
@@ -22,8 +22,8 @@ class TTipoCliente < ApplicationRecord
 			message: "|El descripción no puede estar vacío."
 		},
 		length: {
-			message: "|La descripción debe tener minimo 4 caracteres.",
-			minimum: 4
+			message: "|La descripción debe tener minimo 2 caracteres.",
+			minimum: 2
 		},
 		:on => [:create, :update]
 

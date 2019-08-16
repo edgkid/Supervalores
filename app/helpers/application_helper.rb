@@ -62,7 +62,22 @@ module ApplicationHelper
   end
 
   def opciones_de_clientes
-    disponible = TEstatus.find_by(descripcion: "Disponible")
-    return TCliente.where(t_estatus: disponible).order(:razon_social).pluck "codigo || ' - ' || razon_social", :id
+    connection = ActiveRecord::Base.connection()
+    results = connection.execute("SELECT tcl.id, (CASE WHEN tem.id IS NOT NULL THEN tem.rif || ' - ' || tem.razon_social WHEN tpe.id IS NOT NULL THEN tpe.cedula || ' - ' || tpe.nombre || ', ' || tpe.apellido ELSE COALESCE(tot.identificacion, '') || ' - ' || tot.razon_social END) as razon_social FROM t_clientes tcl LEFT JOIN t_empresas tem ON tcl.persona_type = 'TEmpresa' AND tcl.persona_id = tem.id LEFT JOIN t_personas tpe ON tcl.persona_type = 'TPersona' AND tcl.persona_id = tpe.id LEFT JOIN t_otros tot ON tcl.persona_type = 'TOtro' AND tcl.persona_id = tot.id")
+    opciones = []
+    for result in results
+      opciones.push [result["razon_social"], result["id"]]
+    end
+    return opciones
+  end
+  
+  def opciones_de_empresas
+    connection = ActiveRecord::Base.connection()
+    results = connection.execute("SELECT null as id, 'Ninguna' as razon_social UNION ALL (SELECT id, rif ||' - '|| razon_social FROM t_empresas ORDER BY razon_social)")
+    opciones = []
+    for result in results
+      opciones.push [result["razon_social"], result["id"]]
+    end
+    return opciones
   end
 end
