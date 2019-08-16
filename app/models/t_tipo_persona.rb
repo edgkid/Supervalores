@@ -14,10 +14,6 @@ class TTipoPersona < ApplicationRecord
 		presence: {
 			message: "|El estatus no puede estar vacío."
 		},
-    format: { 
-      message: "|El código solo puede tener Letras, Números y Guiones(-).",
-      with: /([0|1])/ 
-    },
     :on => [:create, :update]
     
 end
