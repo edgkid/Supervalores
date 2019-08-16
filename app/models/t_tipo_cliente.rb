@@ -13,7 +13,7 @@ class TTipoCliente < ApplicationRecord
       with: /([A-Za-z0-9\-]+)/ 
     },
     uniqueness: {
-      message: "|Ya exista un tipo de cliente con este código, use otro por favor.",
+      message: "|Ya existe un tipo de cliente con este código, use otro por favor.",
     },
 		:on => [:create, :update]
 

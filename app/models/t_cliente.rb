@@ -1,7 +1,6 @@
 class TCliente < ApplicationRecord
-
-  belongs_to :t_tipo_cliente
-  belongs_to :t_tipo_persona
+  belongs_to :persona, polymorphic: true
+  belongs_to :t_tipo_cliente  
   belongs_to :t_estatus    
 
   has_many :t_resolucions
@@ -28,33 +27,7 @@ class TCliente < ApplicationRecord
       with: /([A-Za-z0-9\-]+)/ 
     },
     uniqueness: {
-      message: "|Ya exista un cliente con este código, use otro por favor.",
-    },
-    :on => [:create, :update]
-
-  validates :razon_social,
-    presence: {
-      message: "|El razón social no puede estar vacío."
-    },
-    format: {
-      message: "|El razón social solo puede tener Letras, Números, Guiones(-) y Puntos(.).",
-      with: /([A-Za-z0-9\s\-]+)/ 
-    },
-    :on => [:create, :update]
-
-  validates :telefono,
-    presence: {
-      message: "|El teléfono no puede estar vacío."
-    },
-    :on => [:create, :update]
-
-  validates :email,
-    presence: {
-      message: "|El email no puede estar vacío."
-    },
-    format: {
-      message: "|El email no tiene el formato esperado, ejemplo@dominio.com.",
-      with: /.+@.+/ 
+      message: "|Ya existe un cliente con este código, use otro por favor.",
     },
     :on => [:create, :update]
 
@@ -65,4 +38,42 @@ class TCliente < ApplicationRecord
   end
 
   attr_accessor :es_prospecto
+
+  def razon_social
+    if persona.is_a?(TPersona)
+      return "#{persona.nombre}, #{persona.apellido}"
+    elsif persona.is_a?(TEmpresa) || persona.is_a?(TOtro)
+      return persona.razon_social
+    else
+      return "Indeterminado"
+    end
+  end
+
+  def telefono
+    if persona.is_a?(TPersona) || persona.is_a?(TEmpresa) || persona.is_a?(TOtro)
+      return persona.telefono
+    else
+      return "Indeterminado"
+    end
+  end
+
+  def email
+    if persona.is_a?(TPersona) || persona.is_a?(TEmpresa) || persona.is_a?(TOtro)
+      return persona.email
+    else
+      return "Indeterminado"
+    end
+  end
+
+  def tipo_persona
+    if persona.is_a?(TPersona)
+      return 2
+    elsif persona.is_a?(TEmpresa)
+      return 1
+    elsif persona.is_a?(TOtro)
+      return persona.t_tipo_persona_id
+    else
+      return "Indeterminado"
+    end
+  end
 end

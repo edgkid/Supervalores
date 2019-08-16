@@ -9,26 +9,28 @@
       <thead>
         <tr>
           <th>Código</th>
+          <th>Céd. / Pas. / RUC</th>
           <th>Razón social</th>
           <th>Teléfono</th>
           <th>Email</th>
-          <th>Tipo cliente</th>
-          <th>Tipo persona</th>
           <th>¿Es Prospecto?</th>
           <th>Estatus</th>
+          <th>Tipo cliente</th>
+          <th>Tipo persona</th>
         </tr>
       </thead>
       <tbody>
         <% clientes.each do |registro| %>
-        <tr data-link="<%= polymorphic_url(registro) %>">
-          <td><%= registro.codigo %></td>
-          <td><%= registro.razon_social %></td>
-          <td><%= registro.telefono %></td>
-          <td><%= registro.email %></td>
-          <td><%= registro.t_tipo_cliente.descripcion %></td>
-          <td><%= registro.t_tipo_persona.descripcion %></td>
-          <td><%= registro.prospecto_at == nil ? "Si" : "No" %></td>
-          <td><%= registro.t_estatus.descripcion %></td>
+        <tr data-link="<%= t_cliente_url(id: registro["id"]) %>">
+          <td><%= registro["codigo"] %></td>
+          <td><%= registro["identificacion"] %></td>
+          <td><%= registro["razon_social"] %></td>
+          <td><%= registro["telefono"] %></td>
+          <td><%= registro["email"] %></td>
+          <td><%= registro["es_prospecto"] %></td>
+          <td><%= registro["estatus"] %></td>
+          <td><%= registro["tipo_cliente"] %></td>
+          <td><%= registro["tipo_persona"] %></td>
         </tr>
         <% end %>
       </tbody>
