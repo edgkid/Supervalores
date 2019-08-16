@@ -13,8 +13,8 @@ class TResolucion < ApplicationRecord
 			message: "|La descripción no puede estar vacía."
 		},
 		length: {
-			message: "|La descripción debe tener minimo 10 caracteres.",
-			minimum: 10
+			message: "|La descripción debe tener minimo 2 caracteres.",
+			minimum: 2
 		},
 		on: [:create, :update]
 

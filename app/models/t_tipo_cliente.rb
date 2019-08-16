@@ -22,8 +22,8 @@ class TTipoCliente < ApplicationRecord
 			message: "|El descripción no puede estar vacío."
 		},
 		length: {
-			message: "|La descripción debe tener minimo 4 caracteres.",
-			minimum: 4
+			message: "|La descripción debe tener minimo 2 caracteres.",
+			minimum: 2
 		},
 		:on => [:create, :update]
 

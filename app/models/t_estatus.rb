@@ -20,8 +20,8 @@ class TEstatus < ApplicationRecord
 			message: "|La descripción no puede estar vacía."
 		},
 		length: {
-			message: "|La descripción debe tener minimo 4 caracteres.",
-			minimum: 4
+			message: "|La descripción debe tener minimo 2 caracteres.",
+			minimum: 2
 		},
 		on: [:create, :update]
 		
