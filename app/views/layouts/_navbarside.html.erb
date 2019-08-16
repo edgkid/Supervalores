@@ -34,14 +34,7 @@
           </span>
         </a>
       </li>
-      <!--<li>
-        <a href="#">
-          <i class="fa fa-pie-chart"></i>
-          <span class="nav-label">
-            Formularios
-          </span>
-        </a>
-      </li> -->
+
       <li>
         <a href="#">
           <!-- <i class="fa fa-th-large"></i> -->
@@ -52,28 +45,29 @@
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level collapse">
-          <li>
-            <%= link_to 'Factura Manual', t_facturas_path %>
-            <!-- <a href="#">Facturas <span class="fa arrow"></span></a>
-            <ul class="nav nav-third-level">
-              <li>
-                <%#= link_to 'Manual', t_facturas_path %>
-              </li>
-              <li>
-                <a href="#">Automática</a>
-              </li>
-            </ul> -->
-          </li>
-          <li><%= link_to 'Recargos', t_recargos_path %></li>
-          <li><%= link_to 'Periodos', t_periodos_path %></li>
-          <li><%= link_to 'Tarifas', t_tarifas_path %></li>
-          <li><%= link_to 'Servicios', t_tarifa_servicios_path %></li>
-          <li><%= link_to 'Leyendas de Facturas', t_leyendas_path %></li>
+          <% if can? :crud, TFactura %>
+            <li><%= link_to 'Factura Manual', t_facturas_path %></li>
+          <% end %>
+          <% if can? :crud, TRecargo %>
+            <li><%= link_to 'Recargos', t_recargos_path %></li>
+          <% end %>
+          <% if can? :crud, TPeriodo %>
+            <li><%= link_to 'Periodos', t_periodos_path %></li>
+          <% end %>
+          <% if can? :crud, TTarifa %>
+            <li><%= link_to 'Tarifas', t_tarifas_path %></li>
+          <% end %>
+          <% if can? :crud, TTarifaServicio %>
+            <li><%= link_to 'Servicios', t_tarifa_servicios_path %></li>
+          <% end %>
+          <% if can? :crud, TLeyenda %>
+            <li><%= link_to 'Leyendas de Facturas', t_leyendas_path %></li>
+          <% end %>
         </ul>
       </li>
+
       <li>
         <a href="#">
-          <!-- <i class="fa fa-th-large"></i> -->
           <i class="fa fa-edit"></i>
           <span class="nav-label">
             Gestión
@@ -81,78 +75,53 @@
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
-          <!--li>
-          <a href="#">
-            Catalogo de Cuentas
-          </a>
-          </li>-->
-          <li>
-              <%= link_to 'Clientes', t_clientes_path %>
-          </li>
-          <li>
-              <%= link_to 'Tipos de Clientes', t_tipo_clientes_path %>
-          </li>
-          <li>
-              <%= link_to 'Tipos de Personas', t_tipo_personas_path %>
-          </li>
-          <li>
-              <%= link_to 'Estatus', t_estatuses_path %>
-          </li>
-          <li>
-              <%= link_to 'Resoluciones', t_resolucions_path %>
-          </li>
-          <!--<li>
-            <a href="#">
-              Emisiones
-            </a>
-          </li>-->
-          <!--<li>
-            <a href="#">
-              Partidas Presupuestarias
-            </a>
-          </li>-->
-          <!--<li>
-            <a href="#">
-              Tipos de Clientes
-            </a>
-          </li>-->
-          <!--<li>
-            <a href="#">
-              Tipo de Cuentas
-            </a>
-          </li>-->
-          <!--<li>
-            <a href="#">
-              Tipos de Emisiones
-            </a>
-          </li>-->
+          <% if can? :crud, TCliente %>
+            <li><%= link_to 'Clientes', t_clientes_path %></li>
+          <% end %>
+          <% if can? :crud, TTipoCliente %>
+            <li><%= link_to 'Tipos de Clientes', t_tipo_clientes_path %></li>
+          <% end %>
+          <% if can? :crud, TTipoPersona %>
+            <li><%= link_to 'Tipos de Personas', t_tipo_personas_path %></li>
+          <% end %>
+          <% if can? :crud, TEstatus %>
+            <li><%= link_to 'Estatus', t_estatuses_path %></li>
+          <% end %>
+          <% if can? :crud, TResolucion %>
+            <li><%= link_to 'Resoluciones', t_resolucions_path %></li>
+          <% end %>
+        </ul>
+      </li>
+      <!-- -->
+      <% if (can? :crud, @user ) || (can? :crud, @rol) %>
+      <li>
+        <a href="#">
+          <!-- <i class="fa fa-th-large"></i> -->
+          <i class="glyphicon glyphicon-lock"></i>
+          <span class="nav-label">
+            Gestión de Accesos
+          </span>
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level">
+          <% if can? :crud, @user %>
           <li>
             <a href="/admin/users">
               Usuarios
             </a>
           </li>
+          <% end %>
+          <% if can? :crud, @rol %>
           <li>
             <a href="/rols/index">
               Roles de Usuario
             </a>
           </li>
+          <% end %>
         </ul>
       </li>
-      <!--<li>
-        <a href="#">
-          <i class="fa fa-diamond"></i>
-          <span class="nav-label">Administrador App
-          </span>
-        </a>
-      </li>-->
-      <!--<li>
-        <a href="#">
-          <i class="fa fa-pie-chart"></i>
-          <span class="nav-label">
-            Informes
-          </span>
-        </a>
-      </li>-->
+      <% end %>
+      <!-- -->
     </ul>
   </div>
 </nav>

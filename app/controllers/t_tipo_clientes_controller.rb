@@ -1,6 +1,12 @@
 class TTipoClientesController < ApplicationController
   before_action :seleccionar_tipo_cliente, only: [:show, :edit, :update, :destroy]
 
+  load_and_authorize_resource
+
+  rescue_from CanCan::AccessDenied do |exception|
+		redirect_to dashboard_access_denied_path, :alert => exception.message
+	end
+
   def index
     @usar_dataTables = true
     @registros = TTipoCliente.all
@@ -44,7 +50,7 @@ class TTipoClientesController < ApplicationController
     end
   end
 
-  def destroy    
+  def destroy
     @registro.estatus = 0
     respond_to do |format|
       if @registro.save

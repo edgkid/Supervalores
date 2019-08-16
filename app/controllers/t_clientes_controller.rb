@@ -1,8 +1,14 @@
 class TClientesController < ApplicationController
   respond_to :js, only: [:find]
   respond_to :json, only: [:find_by_codigo, :find_by_resolucion, :find_by_razon_social]
-  before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion]  
+  before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion]
   before_action :usar_dataTables_en, only: [:index, :show, :edit]
+
+  load_and_authorize_resource
+
+  rescue_from CanCan::AccessDenied do |exception|
+		redirect_to dashboard_access_denied_path	, :alert => exception.message
+	end
 
   def index
     @registros = TCliente.all
@@ -49,7 +55,7 @@ class TClientesController < ApplicationController
   end
 
   def update
-    respond_to do |format|      
+    respond_to do |format|
       if @registro.update(parametros_cliente)
         @registro.es_prospecto = es_prospecto
         if (!@registro.es_prospecto && @registro.prospecto_at == nil)
@@ -78,7 +84,7 @@ class TClientesController < ApplicationController
 
   def nueva_resolucion
     @nueva_resolucion = TResolucion.new(parametros_resolucion)
-    respond_to do |format|      
+    respond_to do |format|
       if @nueva_resolucion.save
         format.html { redirect_to edit_t_cliente_path(@registro), notice: 'Resolución asociada correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
@@ -90,9 +96,9 @@ class TClientesController < ApplicationController
     end
   end
 
-  def destroy 
+  def destroy
     @registro.t_estatus = TEstatus.find_by(descripcion: "Inactivo")
-    respond_to do |format|    
+    respond_to do |format|
       if @registro.save
         format.html { redirect_to t_clientes_url, notice: 'Cliente inhabilitado correctamente.' }
         format.json { head :no_content }

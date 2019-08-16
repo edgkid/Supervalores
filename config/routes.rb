@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root to: 'dashboard#index'
+  get 'dashboard/access_denied' => 'dashboard#access_denied'
 
   devise_for :users
 
@@ -15,7 +16,7 @@ Rails.application.routes.draw do
   # get 't_facturas/previsualizacion' => 't_facturas#preview', as: :previsualizar_factura
   resources :t_tarifa_servicios
   namespace :t_recargos do
-    get 'find_by_descripcion', as: :find_by_descripcion 
+    get 'find_by_descripcion', as: :find_by_descripcion
   end
   resources :t_recargos
   resources :t_resolucions, :path => "resoluciones"
