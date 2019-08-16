@@ -106,7 +106,7 @@ function setSubTotal(thys, isQuantity = true) {
         price = Number($(this).children().first().data('price'));
         // alert('price: ' + price);
       } else {
-        quantity = Number($(this).children().first().data('quantity'));
+        quantity = Number($(this).children().first().val());
         // console.log($(this).children().first());
         // alert('quantity: ' + quantity);
         // alert($(this).children().first().data('quantity'));
@@ -115,7 +115,7 @@ function setSubTotal(thys, isQuantity = true) {
     if ($(this).hasClass('subtotal-cell')) {
       if (isSurcharge) {
         // alert(price);
-        $(this).text(quantity * price * Number($('#total').data('previous_total')) / 100);// Number($('#total').text()) / 100);
+        $(this).text(quantity * price * Number($('#total').text()) / 100);// Number($('#total').text()) / 100);
       } else {
         $(this).text(quantity * price);
       }
@@ -123,19 +123,13 @@ function setSubTotal(thys, isQuantity = true) {
   });
 }
 
-function cleanSurcharge() {
+function cleanAllSurcharges() {
   $('.subtotal-cell-surcharge').each(function () {
     $(this).text(0);
-  })
-  // $('.recargo-input').each(function () {
-  //   $(this).data('previous_price', $(this).data('price'));
-  //   $(this).val(0);
-  //   $(this).data('price', 0);
-  //   setSubTotal(this, false);
-  // });
+  });
 }
 
-function updateSurcharge() {
+function updateAllSurcharges() {
   $('.recargo-input').each(function () {
     let rate = $(this).val();
     $(this).data('price', rate * Number($('#total').text()));
