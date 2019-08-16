@@ -12,8 +12,12 @@
         <% if current_user.estado %>
           <%= yield %>
         <% else %>
-          <h1>Usuario Inactivo</h1>
-          <p>No podra realizar ningun tipo de actividad en el sistema</p>
+          <div class="alert alert-danger">
+            <center>
+              <h1>Usuario Inactivo</h1>
+              <p>No podra realizar ningun tipo de actividad en el sistema</p>
+            </center>
+          </div>
         <% end %>
       </div>
 
