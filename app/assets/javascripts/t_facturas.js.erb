@@ -6,14 +6,12 @@ function addRecargoRow () {
     <tr id="recargo${i}" style="background-color: #1C84C6;">
       <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
       <td>
-        <select class="select-recargo" id="t_recargo${i}" name="t_recargo${i}" style="width: 100%;">
-          
-        </select>
+        <select class="select-recargo" data-first_time="true" id="t_recargo${i}" name="t_recargo${i}" style="width: 100%;"></select>
       </td>
       <td class="descripcion-cell"></td>
-      <td class="quantity-cell"><input class="quantity" min="0" step="0.01" style="height: 28px; width: 100%;" type="number" value="1"></td>
-      <td class="price-cell"><input class="price" min="0" readonly="readonly" step="0.01" style="height: 28px; width: 100%;" type="number"></td>
-      <td class="subtotal-cell" style="color: aqua; text-align: center;"></td>
+      <td class="quantity-cell"><input class="quantity" data-quantity="1" min="0" step="0.01" style="height: 28px; width: 100%;" type="number" value="1"></td>
+      <td class="price-cell"><input class="price recargo-input" min="0" readonly="readonly" step="0.01" style="height: 28px; width: 100%;" type="number"></td>
+      <td class="subtotal-cell subtotal-cell-surcharge" style="color: aqua; text-align: center;"></td>
     </tr>
   `);
   $(`#t_recargo${i}`).select2({
@@ -64,12 +62,16 @@ function deleteCheckedRows() {
 }
 
 // Obtiene el total de una columna seleccionada según su clase.
-function getTotal(target, total = 0) {
+function getTotal(target, data = '', total = 0) {
   $(target).each(function() {
-    if ($(this).val() === '') {
-      total += Number($(this).text());
+    if (data === '') {
+      if ($(this).val() === '') {
+        total += Number($(this).text());
+      } else {
+        total += Number($(this).val());
+      }
     } else {
-      total += Number($(this).val());
+      total += Number($(this).data(data));
     }
   });
   return total;
@@ -84,25 +86,69 @@ function setTotal(target, total = 0) {
 // evento es quantity o price, con `isQuantity`. `thys` es la sustitución de la
 // palabra reservada `this`, para hacer entender que se utiliza el elemento actual.
 function setSubTotal(thys, isQuantity = true) {
+  isSurcharge = $(thys).hasClass('recargo-input');
   if (isQuantity) {
     var quantity = Number($(thys).val());
     var price = 0;
     var selfClass = 'price-cell';
   } else {
-    var price = Number($(thys).val());
+    if (isSurcharge) {
+      var price = Number($(thys).val()) * 100;
+    } else {
+      var price = Number($(thys).val());
+    }
     var quantity = 0;
     var selfClass = 'quantity-cell';
   }
   $(thys).parent().siblings().each(function () {
     if ($(this).hasClass(selfClass)) {
       if (isQuantity) {
-        price = Number($(this).children().first().val());
+        price = Number($(this).children().first().data('price'));
+        // alert('price: ' + price);
       } else {
-        quantity = Number($(this).children().first().val());
+        quantity = Number($(this).children().first().data('quantity'));
+        // console.log($(this).children().first());
+        // alert('quantity: ' + quantity);
+        // alert($(this).children().first().data('quantity'));
       }
     }
     if ($(this).hasClass('subtotal-cell')) {
-      $(this).text(quantity * price);
+      if (isSurcharge) {
+        // alert(price);
+        $(this).text(quantity * price * Number($('#total').data('previous_total')) / 100);// Number($('#total').text()) / 100);
+      } else {
+        $(this).text(quantity * price);
+      }
     }
   });
+}
+
+function cleanSurcharge() {
+  $('.subtotal-cell-surcharge').each(function () {
+    $(this).text(0);
+  })
+  // $('.recargo-input').each(function () {
+  //   $(this).data('previous_price', $(this).data('price'));
+  //   $(this).val(0);
+  //   $(this).data('price', 0);
+  //   setSubTotal(this, false);
+  // });
+}
+
+function updateSurcharge() {
+  $('.recargo-input').each(function () {
+    let rate = $(this).val();
+    $(this).data('price', rate * Number($('#total').text()));
+    // alert(rate * Number($('#total').text()));
+    setSubTotal(this, false);
+    setTotal('#total', getTotal('.subtotal-cell'));
+  });
+
+  // $('.recargo-input').each(function () {
+  //   let previousPrice = Number($(this).data('previous_price'));
+  //   $(this).val(previousPrice / 100);
+  //   $(this).data('price', previousPrice);
+    // setSubTotal(this, false);
+    // setTotal('#total', getTotal('.subtotal-cell'));
+  // });
 }
