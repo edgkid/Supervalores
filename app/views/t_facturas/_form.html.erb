@@ -113,7 +113,9 @@
     // Al asignar el precio, se actualiza el subtotal y el total.
     $(document).on('keyup', '.price', function() {
       setSubTotal(this, false);
+      cleanSurcharge();
       setTotal('#total', getTotal('.subtotal-cell'));
+      updateSurcharge();
     });
 
     $("#select-codigo").select2({
@@ -201,19 +203,42 @@
     $(document).on('change', '.select-recargo', function(e) {
       // alert($(".select-recargo option:selected").data('value'));
       // var surcharge = Number($(this).find("option:selected").data('value'));
+      var selectRecargo = $(this);
 
       data = $(this).select2('data')[0];
-      surcharge = data.rate
-      console.log(data.rate);
+      surcharge = Number(data.rate);
+      // console.log(data.rate);
 
       // var surcharge = Number($(this).find("option:selected").val());
       $(this).find("option:selected").parent().parent().siblings().each(function () {
         if ($(this).hasClass('price-cell')) {
           // alert($(this).children().first().val());
           let priceInput = $(this).children().first();
-          priceInput.val(Number($('#total').text()) * surcharge);
+
+          priceInput.val(surcharge);
+          if (selectRecargo.data('first_time') == true) {
+            selectRecargo.data('first_time', 'false');
+            $('#total').data('previous_total', Number($('#total').text()));
+            priceInput.data('previous_total', Number($('#total').text()));
+            // $('.recargo-input').each(function () {
+            //   $(this).data('previous_total', Number($('#total').text()));
+            // });
+            priceInput.data('price', surcharge * Number($('#total').text()));
+          } else {
+            priceInput.data('price', surcharge * Number($('#total').data('previous_total')));
+            $('#total').text(priceInput.data('previous_total'));
+            // priceInput.data('previous_total', Number($('#total').text()));
+          }
+          alert(priceInput.data('price'));
+          // priceInput.val(Number($('#total').text()) * surcharge);
+
+          //cleanSurcharge();
           setSubTotal(priceInput, false);
           setTotal('#total', getTotal('.subtotal-cell'));
+          //updateSurcharge();
+
+          // setSubTotal(priceInput, false);
+          // setTotal('#total', getTotal('.subtotal-cell'));
         }
       });
     });
@@ -226,6 +251,7 @@
           // alert($(this).children().first().val());
           let priceInput = $(this).children().first();
           priceInput.val(price);
+          priceInput.data('price', price);
           setSubTotal(priceInput, false);
           setTotal('#total', getTotal('.subtotal-cell'));
         }
@@ -235,6 +261,10 @@
           descripcionInput.val(descripcion)
         }
       });
+
+      cleanSurcharge();
+      setTotal('#total', getTotal('.subtotal-cell'));
+      updateSurcharge();
     });
 
     $('form').submit(function(event) {

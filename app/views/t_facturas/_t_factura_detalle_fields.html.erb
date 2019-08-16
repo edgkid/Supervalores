@@ -7,7 +7,7 @@
     <%= f.text_field :cuenta_desc, style: 'width: 100%;' %>
   </td>
   <td class="quantity-cell">
-    <%= f.number_field :cantidad, min: 0, step: 0.01, class: 'quantity', style: 'height: 28px; width: 100%;', value: 1 %>
+    <%= f.number_field :cantidad, 'data-quantity': 1, min: 0, step: 0.01, class: 'quantity', style: 'height: 28px; width: 100%;', value: 1 %>
   </td>
   <td class="price-cell">
     <%= f.number_field :precio_unitario, min: 0, step: 0.01, class: 'price', style: 'height: 28px; width: 100%;' %>
