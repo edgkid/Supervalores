@@ -7,10 +7,7 @@ function addRecargoRow () {
       <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
       <td>
         <select class="select-recargo" id="t_recargo${i}" name="t_recargo${i}" style="width: 100%;">
-          <option value="">Seleccione Recargo</option>
-          <% TRecargo.all.each do |tr| %>
-            <option data-value="<%= tr.tasa %>" value="<%= tr.id %>"><%= tr.tasa * 100 %> %</option>
-          <% end %>
+          
         </select>
       </td>
       <td class="descripcion-cell"></td>
@@ -34,7 +31,7 @@ function addRecargoRow () {
       processResults: function (data) {
         return {
           results: $.map(data, function(t_recargo, i) {
-            return { id: t_recargo.id, text: t_recargo.descripcion } 
+            return { id: t_recargo.id, text: t_recargo.descripcion, rate: t_recargo.tasa } 
           })
         };
       },

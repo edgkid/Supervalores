@@ -200,7 +200,13 @@
 
     $(document).on('change', '.select-recargo', function(e) {
       // alert($(".select-recargo option:selected").data('value'));
-      var surcharge = Number($(this).find("option:selected").data('value'));
+      // var surcharge = Number($(this).find("option:selected").data('value'));
+
+      data = $(this).select2('data')[0];
+      surcharge = data.rate
+      console.log(data.rate);
+
+      // var surcharge = Number($(this).find("option:selected").val());
       $(this).find("option:selected").parent().parent().siblings().each(function () {
         if ($(this).hasClass('price-cell')) {
           // alert($(this).children().first().val());
