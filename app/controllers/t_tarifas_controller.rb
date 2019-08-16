@@ -1,6 +1,12 @@
 class TTarifasController < ApplicationController
   before_action :set_t_tarifa, only: [:edit, :update, :show, :destroy]
 
+  load_and_authorize_resource
+
+  rescue_from CanCan::AccessDenied do |exception|
+		redirect_to dashboard_access_denied_path, :alert => exception.message
+	end
+
   def new
     @t_tarifa = TTarifa.new
   end

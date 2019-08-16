@@ -54,7 +54,9 @@ class User < ApplicationRecord
 			delete_associate(id_user)
 		end
 
-		sql = "INSERT INTO t_users_rols VALUES (" << id_rol << "," << id_user << "); commit;"
+		update = " UPDATE users  SET role = (SELECT nombre FROM t_rols WHERE id = " <<  id_rol << ") WHERE id = " << id_user << ";"
+		sql = " INSERT INTO t_users_rols VALUES (" << id_rol << "," << id_user << "); "
+		sql = sql << update << " commit; "
 
 		results = ActiveRecord::Base.connection.execute(sql)
 
