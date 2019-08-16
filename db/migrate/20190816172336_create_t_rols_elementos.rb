@@ -8,7 +8,7 @@ class CreateTRolsElementos < ActiveRecord::Migration[5.2]
       t.boolean :elimina, null: false
 
       t.belongs_to :t_rol, foreign_key: true, null: false
-      t.belongs_to :t_elemento, foreign_key: true, null: false
+      t.belongs_to :elemento, foreign_key: true, null: false
     end
   end
 end

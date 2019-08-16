@@ -10,13 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_16_043909) do
+ActiveRecord::Schema.define(version: 2019_08_16_172336) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "dblink"
   enable_extension "plpgsql"
 
+  create_table "elementos", force: :cascade do |t|
+    t.string "nombre"
+    t.string "modelo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "permissions", force: :cascade do |t|
+    t.string "role"
     t.string "subject_class"
     t.string "action"
     t.datetime "created_at", null: false
@@ -367,7 +374,7 @@ ActiveRecord::Schema.define(version: 2019_08_16_043909) do
   create_table "t_rol_descs", force: :cascade do |t|
     t.string "id_objeto"
     t.string "nombre", null: false
-    t.string "pagina"
+    t.text "pagina"
     t.integer "estatus", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -388,6 +395,17 @@ ActiveRecord::Schema.define(version: 2019_08_16_043909) do
     t.string "icon_class"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "t_rols_elementos", force: :cascade do |t|
+    t.boolean "lee", null: false
+    t.boolean "crea", null: false
+    t.boolean "edita", null: false
+    t.boolean "elimina", null: false
+    t.bigint "t_rol_id", null: false
+    t.bigint "elemento_id", null: false
+    t.index ["elemento_id"], name: "index_t_rols_elementos_on_elemento_id"
+    t.index ["t_rol_id"], name: "index_t_rols_elementos_on_t_rol_id"
   end
 
   create_table "t_tarifa_servicio_groups", force: :cascade do |t|
@@ -543,6 +561,8 @@ ActiveRecord::Schema.define(version: 2019_08_16_043909) do
   add_foreign_key "t_resolucions", "t_clientes"
   add_foreign_key "t_resolucions", "t_estatuses"
   add_foreign_key "t_rol_descs", "t_rols"
+  add_foreign_key "t_rols_elementos", "elementos"
+  add_foreign_key "t_rols_elementos", "t_rols"
   add_foreign_key "t_tarifa_servicio_groups", "t_presupuestos"
   add_foreign_key "t_tarifas_periodos", "t_periodos"
   add_foreign_key "t_tarifas_periodos", "t_tarifas"
