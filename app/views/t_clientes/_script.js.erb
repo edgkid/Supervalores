@@ -1,8 +1,28 @@
 $(document).ready(function(){
-  console.log("t_cliente_es_prospecto")
+  mostrar_form_tipo_persona = function(value){
+    if (value == "2"){
+      $(".tipo_persona").addClass("hide")
+      $(".tipo_persona_form_fields").removeClass("hide")
+    }
+    else if (value == "1"){
+      $(".tipo_persona").addClass("hide")
+      $(".tipo_empresa_form_fields").removeClass("hide")
+    }
+    else{
+      $(".tipo_persona").addClass("hide")
+      $(".tipo_otro_form_fields").removeClass("hide")
+    }
+  }
 
   $("#t_cliente_es_prospecto").click(function(){
     $("#ibox_resoluciones").toggleClass("hide")
+  })
+  
+  mostrar_form_tipo_persona("<%= @registro.tipo_persona %>")
+  $("#select-tipo-persona").change(function(evt){
+    select = $(evt.target)
+    value = select.val()
+    mostrar_form_tipo_persona(value)
   })
 
   <% if @nueva_resolucion != nil && @nueva_resolucion.errors.any? %>

@@ -5,7 +5,7 @@
         <div class="ibox-title">
           <div class="row">
             <div class="col-8">
-              <h1>Tipos de Personas</h1>
+              <h5>Tipos de Personas</h5>
             </div>
             <div class="col-4">
               <%= link_to 'Añadir tipo de persona', new_t_tipo_persona_path, class: "btn btn-primary float-right" %>
@@ -21,7 +21,6 @@
                   <th>Estatus</th>
                 </tr>
               </thead>
-
               <tbody>
                 <% if @registros != nil && @registros.count > 0 %>
                 <% @registros.each do |registro| %>

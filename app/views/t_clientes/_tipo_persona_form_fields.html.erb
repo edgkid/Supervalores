@@ -1,0 +1,98 @@
+<%
+  persona = TPersona.new
+  if registro != nil && registro.is_a?(TPersona)
+    persona = registro
+  end
+%>
+<%= fields_for persona do |form| %>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :cedula, "Cédula", class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.text_field :cedula, autofocus: true, autocomplete: "cedula", class: "form-control" %>
+    <% else %>
+    <%= persona.cedula %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :num_licencia, "N° Licencia", class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.text_field :num_licencia, autofocus: true, autocomplete: "num_licencia", class: "form-control" %>
+    <% else %>
+    <%= persona.num_licencia %>
+    <% end %>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :nombre, "Nombres", class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.text_field :nombre, autofocus: true, autocomplete: "nombre", class: "form-control" %>
+    <% else %>
+    <%= persona.nombre %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :apellido, "Apellido", class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.text_field :apellido, autofocus: true, autocomplete: "apellido", class: "form-control" %>
+    <% else %>
+    <%= persona.apellido %>
+    <% end %>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :telefono, "Teléfono", class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.text_field :telefono, autofocus: true, autocomplete: "telefono", class: "form-control" %>
+    <% else %>
+    <%= persona.telefono %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :email, "Email", class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.text_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+    <% else %>
+    <%= persona.email %>
+    <% end %>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :t_empresa_id, "Empresa", class: "text-right" %>
+  </div>
+  <div class="col-sm-10 input-value">
+    <% if editable %>
+    <%= form.select :t_empresa_id, opciones_de_empresas , {}, { :class => 'form-control m-b' } %>
+    <% else %>
+    <%= persona.t_empresa != nil ? persona.t_empresa.razon_social : "Ninguna" %>
+    <% end %>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :cargo, "Cargo", class: "text-right" %>
+  </div>
+  <div class="col-sm-10 input-value">
+    <% if editable %>
+    <%= form.text_field :cargo, autofocus: true, autocomplete: "cargo", class: "form-control" %>
+    <% else %>
+    <%= persona.cargo == nil ? persona.cargo :  "Ninguno" %>
+    <% end %>
+  </div>
+</div>
+<% end %>
