@@ -5,6 +5,10 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+connection = ActiveRecord::Base.connection()
+connection.execute(" DELETE FROM t_users_rols; commit;")
+connection.execute(" DELETE FROM users; commit;")
+connection.execute(" DELETE FROM t_rols; commit;")
 
 email = 'admin@cxc.com'
 pass = '2019AdminCxC'
@@ -24,5 +28,6 @@ end
 
 TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "SuperAdmin", descripcion:"Rol de usuario con acceso a todos los módulos del sistema", peso:1, estatus: 1, icon_class:nil)
 TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "AdminCxC", descripcion:"Rol de usuario con acceso a todos los módulos del sistema. No gestiona usuarios", peso:1, estatus: 1, icon_class:nil)
-#Ejecutar SQL
-#INSERT INTO t_users_rols VALUES (1,1);
+
+#Rol por usuario
+connection.execute(" INSERT INTO t_users_rols VALUES (1,1); commit;")
