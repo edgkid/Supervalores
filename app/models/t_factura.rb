@@ -2,6 +2,7 @@ class TFactura < ApplicationRecord
 	#belongs_to :t_cliente
   belongs_to :t_resolucion
   belongs_to :t_periodo
+  belongs_to :t_estatus
   # belongs_to :t_estatus_fac
   belongs_to :t_leyenda, optional: true
   belongs_to :user

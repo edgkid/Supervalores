@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   resources :t_periodos
   resources :t_tarifas
   resources :t_facturas do
-    get 'preview', on: :collection
+    get 'preview', on: :member
   end
   # get 't_facturas/previsualizacion' => 't_facturas#preview', as: :previsualizar_factura
   resources :t_tarifa_servicios

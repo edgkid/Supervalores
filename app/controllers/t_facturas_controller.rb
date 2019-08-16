@@ -1,5 +1,5 @@
 class TFacturasController < ApplicationController
-  before_action :set_t_factura, only: [:edit, :update, :show, :destroy]
+  before_action :set_t_factura, only: [:edit, :update, :preview, :show, :destroy]
 
   load_and_authorize_resource
 
@@ -31,7 +31,7 @@ class TFacturasController < ApplicationController
     @t_factura.t_estatus_id = TEstatus.first.id
 
     if @t_factura.save
-      redirect_to preview_t_facturas_path, notice: 'Factura creada exitosamente.'
+      redirect_to preview_t_factura_path(@t_factura), notice: 'Factura creada exitosamente.'
     else
       @notice = @t_factura.errors
       @notice.messages[:t_resolucion] -= [@notice.messages[:t_resolucion].first]
@@ -41,6 +41,10 @@ class TFacturasController < ApplicationController
   end
 
   def preview
+    @t_resolucion = @t_factura.t_resolucion
+    @t_cliente = @t_resolucion.t_cliente
+    @t_periodo = @t_factura.t_periodo
+    @t_estatus = @t_factura.t_estatus
   end
 
   def edit
@@ -76,7 +80,7 @@ class TFacturasController < ApplicationController
     def t_factura_params
       params.require(:t_factura).permit(
         :fecha_notificacion, :fecha_vencimiento, :recargo_desc,
-        :t_resolucion_id, :t_periodo_id, :total_factura,
+        :t_resolucion_id, :t_periodo_id, :total_factura, {t_recargo_ids: []},
         t_factura_detalles_attributes: [
           :id, :cantidad, :cuenta_desc, :_destroy,
           :precio_unitario, :t_tarifa_servicio_id

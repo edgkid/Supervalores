@@ -6,7 +6,7 @@ function addRecargoRow () {
     <tr id="recargo${i}" style="background-color: #1C84C6;">
       <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
       <td>
-        <select class="select-recargo" data-first_time="true" id="t_recargo${i}" name="t_recargo${i}" style="width: 100%;"></select>
+        <select class="select-recargo" data-first_time="true" id="t_recargo${i}" name="t_factura[t_recargo_ids][]" style="width: 100%;"></select>
       </td>
       <td class="descripcion-cell"></td>
       <td class="quantity-cell"><input class="quantity" data-quantity="1" min="0" step="0.01" style="height: 28px; width: 100%;" type="number" value="1"></td>
