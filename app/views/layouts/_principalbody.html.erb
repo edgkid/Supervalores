@@ -9,7 +9,12 @@
       </div>
 
       <div class="wrapper wrapper-content">
-        <%= yield %>
+        <% if current_user.estado %>
+          <%= yield %>
+        <% else %>
+          <h1>Usuario Inactivo</h1>
+          <p>No podra realizar ningun tipo de actividad en el sistema</p>
+        <% end %>
       </div>
 
       <%= render "layouts/footer" %>
