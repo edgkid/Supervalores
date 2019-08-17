@@ -5,109 +5,89 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+connection = ActiveRecord::Base.connection()
 
-#Permission.create(subject_class: "TRecargo", action:"read", user_id: 15 )
-#Permission.create(subject_class: "TRecargo", action:"create", user_id: 15 )
-#Permission.create(subject_class: "TRecargo", action:"update", user_id: 15 )
-#Permission.create(subject_class: "TRecargo", action:"destroy", user_id: 15 )
-Permission.create(subject_class: "TRecargo", action:"crud", user_id: 15 )
+connection.execute(" DELETE FROM t_users_rols; commit;")
+connection.execute(" DELETE FROM permisions; commit;")
+connection.execute(" DELETE FROM users; commit;")
 
-#Datos de prueba tipo de cuentas
-#TTipoCuenta.create(descripcion: "Tipo A", estatus: 1)
-#TTipoCuenta.create(descripcion: "Tipo B", estatus: 1)
-#TTipoCuenta.create(descripcion: "Tipo C", estatus: 2)
+connection.execute(" DELETE FROM t_rols_elementos; commit;")
+connection.execute(" DELETE FROM elementos; commit;")
+connection.execute(" DELETE FROM t_rols; commit;")
 
-#Datos Prueba Catalogo de cuentas
-#TCatalogoCuentum.create(codigo:"001PA", descripcion: "Catalogo Cuenta A", estatus: 1, t_tipo_cuenta_id: 1)
-#TCatalogoCuentum.create(codigo:"002PA", descripcion: "Catalogo Cuenta B", estatus: 1, t_tipo_cuenta_id: 1)
-#TCatalogoCuentum.create(codigo:"003PB", descripcion: "Catalogo Cuenta C", estatus: 1, t_tipo_cuenta_id: 2)
-#TCatalogoCuentum.create(codigo:"004PA", descripcion: "Catalogo Cuenta D", estatus: 1, t_tipo_cuenta_id: 3)
+email = 'admin@cxc.com'
+pass = '2019AdminCxC'
 
-#Datos Prueba Presupuesto
-#TPresupuesto.create( codigo:"P001", descripcion:"Presupuesto de prueba 1", estatus: 1)
-#TPresupuesto.create( codigo:"P002", descripcion:"Presupuesto de prueba 2", estatus: 2)
-#TPresupuesto.create( codigo:"P003", descripcion:"Presupuesto de prueba 3", estatus: 1)
+user = User.find_by(email: email)
+if user == nil
+  user = User.new
+  user.nombre = "CXC"
+  user.apellido = "Administrador"
+  user.email = email
+  user.password = pass
+  user.password_confirmation = pass
+  user.role = "AdminCxC"
+  user.estado = true
+  user.save!
+end
 
-#Datos Prueba Catalogo Cuenta Sub
-#TCatalogoCuentaSub.create(codigo:"CTG001", descripcion:"SubCatalogo 001", estatus: 1, t_catalogo_cuentum_id: 1, t_presupuesto_id: 1)
-#TCatalogoCuentaSub.create(codigo:"CTG002", descripcion:"SubCatalogo 002", estatus: 1, t_catalogo_cuentum_id: 1, t_presupuesto_id: 1)
-#TCatalogoCuentaSub.create(codigo:"CTG003", descripcion:"SubCatalogo 004", estatus: 1, t_catalogo_cuentum_id: 2, t_presupuesto_id: 2)
-#TCatalogoCuentaSub.create(codigo:"CTG004", descripcion:"SubCatalogo 005", estatus: 1, t_catalogo_cuentum_id: 3, t_presupuesto_id: 3)
-#TCatalogoCuentaSub.create(codigo:"CTG005", descripcion:"SubCatalogo 006", estatus: 1, t_catalogo_cuentum_id: 4, t_presupuesto_id: 2)
+email = 'SuperAdmin@cxc.com'
+pass = 'Sudo123'
 
-#Datos de prueba Usuario
-#--> corregir
-#User.create(nombre: "Edgar", email: "edglandaeta.15@gmail.com", encrypted_password: "gdjagdgwh13dac", sign_in_count: 1)
+user = User.find_by(email: email)
+if user == nil
+  user = User.new
+  user.nombre = "SuperCXC"
+  user.apellido = "Administrador"
+  user.email = email
+  user.password = pass
+  user.password_confirmation = pass
+  user.role = "SuperAdmin"
+  user.estado = true
+  user.save!
+end
 
-#Datos de prueba Rol
-#TRol.create(nombre: "pruebas", descripcion:"Rol para probar y desarrollar", estatus: 1)
+TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "SuperAdmin", descripcion:"Rol de usuario con acceso a todos los módulos del sistema", peso:1, estatus: 1, icon_class:nil)
+TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "AdminCxC", descripcion:"Rol de usuario con acceso a todos los módulos del sistema. No gestiona usuarios", peso:1, estatus: 1, icon_class:nil)
 
-#Datos de prueba para descripcion de rol
-#--> corregir
-#TRolDesc.create(nombre:"prueba a", estatus: 1)
+Elemento.create(nombre: "Consultar Módulos del Sistema", modelo:"Elemento")
+Elemento.create(nombre: "Gestionar Permisos del Sistema", modelo:"Permission")
+Elemento.create(nombre: "Gestionar Caja", modelo:"TCaja")
+Elemento.create(nombre: "Gestionar Sub-Catálogos de Cuentas", modelo:"TCatalogoCuentaSub")
+Elemento.create(nombre: "Gestionar Catálogos de Cuenta", modelo:"TCatalogoCuentum")
+Elemento.create(nombre: "Gestionar Tarifas de Clientes ", modelo:"TClienteTarifa")
+Elemento.create(nombre: "Gestionar Clientes", modelo:"TCliente")
+Elemento.create(nombre: "Gestionar Tarifas", modelo:"TClienteTarifa")
+Elemento.create(nombre: "Gestionar Cuentas Financieras", modelo:"TCuentaFinanciera")
+Elemento.create(nombre: "Gestionar Cuentas de Venta ", modelo:"TCuentaVentum")
+Elemento.create(nombre: "Administración de Correos Masivos ", modelo:"TEmailMasivo")
+Elemento.create(nombre: "Gestion de Emisiones ", modelo:"TEmision")
+Elemento.create(nombre: "Gestion de Empresas", modelo:"TEmpresa")
+Elemento.create(nombre: "Gestionar Estados de Cuenta (Contabilidad)", modelo:"TEstadoCuentaCont")
+Elemento.create(nombre: "Gestionar Estados de Cuenta", modelo:"TEstadoCuentum")
+Elemento.create(nombre: "Gestionar Estatus", modelo:"TEstatus")
+Elemento.create(nombre: "Gestionar Detalles de Factura ", modelo:"TFacturaDetalle")
+Elemento.create(nombre: "Gestionar Facturas", modelo:"TFactura")
+Elemento.create(nombre: "Gestionar Leyendas de Facturas", modelo:"TLeyenda")
+Elemento.create(nombre: "Gestionar Métodos de Pago", modelo:"TMetodoPago")
+Elemento.create(nombre: "Gestionar Notas de Crédito", modelo:"TNotaCredito")
+Elemento.create(nombre: "Gestionar Periodos", modelo:"TPeriodo")
+Elemento.create(nombre: "Gestionar Personas", modelo:"TPersona ")
+Elemento.create(nombre: "Gestionar Presupuestos", modelo:"TPresupuesto")
+Elemento.create(nombre: "Gestionar Recargos a Clientes", modelo:"TRecargoXCliente")
+Elemento.create(nombre: "Gestionar Recargos", modelo:"TRecargo")
+Elemento.create(nombre: "Gestionar Recibos", modelo:"TRecibo")
+Elemento.create(nombre: "Gestionar Información de Resolución de Clientes", modelo:"TResolucion")
+Elemento.create(nombre: "Gestionar Roles de Usuarios", modelo:"TRol")
+Elemento.create(nombre: "Gestionar Conjuntos de Tarifas de Servicios", modelo:"TTarifaServicioGroup")
+Elemento.create(nombre: "Gestionar tarifas de Servicios", modelo:"TTarifaServicio")
+Elemento.create(nombre: "Gestionar Tarifas", modelo:"TTarifa")
+Elemento.create(nombre: "Gestionar Tipo de Clientes", modelo:"TTipoCliente")
+Elemento.create(nombre: "Gestionar Tipo de Cuentas", modelo:"TTipoCuenta")
+Elemento.create(nombre: "Gestionar Tipo de Emisiones", modelo:"TTipoEmision")
+Elemento.create(nombre: "Gestionar Tipo de Personas", modelo:"TTipoPersona")
+Elemento.create(nombre: "Gestionar Usuarios", modelo:"User")
 
-#Datos prueba users y rols. ----> Ejucutar por SQL
-
-#Datos prueba Tarifa
-#TTarifa.create(nombre: "Tarifa A", descripcion: "descripcion Tarifa A", rango_monto: "rango prueba", recargo: 12.5, estatus: 1)
-#Datos prueba tipo persona
-#TTipoPersona.create(descripcion: "descripcio A", estatus: 1)
-
-# datos prueba tipo cliente
-#TTipoCliente.create(codigo:"cdgTipo001A", descripcion: "descripcion tipo A", tipo: "Tipoa A", estatus: 1, t_tarifa_id: 1)
-
-#Datos prueba cliente padre
-#TClientePadre.create(codigo: "001Padre", razon_social: "empresa Prueba", tipo_valor: "Tipoa A", sector_economico: "sector A", estatus: 1, t_tipo_persona_id: 1, t_tipo_cliente_id: 1)
-
-#Datos de Prueba ipo de emision
-#TTipoEmision.create(descripcion: "DEscripcion de Emision A", estatus: 1)
-
-#Datos Prueba Cuenta Venta
-
-#Datos Prueba Cliente
-
-#Datos prueba Resolucion
-
-#Datos prueba t_recarga
-
-#Datos prueba recarga x cliente
-
-#Datos prueba leyenda
-
-#Datos prueba Periodo
-
-#Datos prueba Metodo pago
-
-#Datos prueba estatus factura
-
-#Datos prueba grupos de tarifas
-
-#Datos de pruebas tipos de clientes por tarifas ---> ejecutar SQL
-
-#Datos de Prueba Cuenta financiera
-
-#Datos de prueba tasa
-
-#Datos de prueba tarifas periodo
-
-#Datos de prueba Factua
-
-# Datos prueba Tarifa Servicio
-
-# Dats Prueba Factura Detalle
-
-#Datos prueba Recibo
-
-#Datos prueba Detalle de Recibo
-
-#Datos prueba Caja
-
-#Datos prueba Estado Cuenta
-
-#Datos prueba Estado cuenta Con
-
-#Datos de prueba emisiones
-
-#Datos de prueba email masivos
-
-#Datos de prueba nota credito
+#Rol por usuario
+connection.execute(" INSERT INTO t_users_rols VALUES (2,1); commit;")
+connection.execute(" INSERT INTO t_users_rols VALUES (1,2); commit;")
