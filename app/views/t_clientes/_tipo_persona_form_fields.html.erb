@@ -72,10 +72,10 @@
   </div>
 </div>
 <div class="form-group row">
-  <div class="col-sm-2 col-form-label">
+  <div class="col-sm-3 col-form-label">
     <%= form.label :t_empresa_id, "Empresa", class: "text-right" %>
   </div>
-  <div class="col-sm-10 input-value">
+  <div class="col-sm-9 input-value">
     <% if editable %>
     <%= form.select :t_empresa_id, opciones_de_empresas , {}, { :class => 'form-control m-b' } %>
     <% else %>
@@ -84,10 +84,10 @@
   </div>
 </div>
 <div class="form-group row">
-  <div class="col-sm-2 col-form-label">
+  <div class="col-sm-3 col-form-label">
     <%= form.label :cargo, "Cargo", class: "text-right" %>
   </div>
-  <div class="col-sm-10 input-value">
+  <div class="col-sm-9 input-value">
     <% if editable %>
     <%= form.text_field :cargo, autofocus: true, autocomplete: "cargo", class: "form-control" %>
     <% else %>

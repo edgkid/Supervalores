@@ -51,10 +51,10 @@
         <%= render 'form_fields', editable: editable, registro: registro %>
         <%= fields_for otro do |form| %>
         <div class="form-group row">
-          <div class="col-sm-2 col-form-label">
+          <div class="col-sm-3 col-form-label">
             <%= form.label :t_tipo_persona_id, 'Tipo de Persona', class: "text-right" %>
           </div>
-          <div class="col-sm-10 input-value">
+          <div class="col-sm-9 input-value">
             <% if editable %>
             <%= form.select :t_tipo_persona_id, opciones_de_tipos_de_personas , {}, { id: "select-tipo-persona", :class => 'form-control m-b' } %>
             <% else %>

@@ -6,10 +6,10 @@
 %>
 <%= fields_for persona do |form| %>
 <div class="form-group row">
-  <div class="col-sm-2 col-form-label">
+  <div class="col-sm-3 col-form-label">
     <%= form.label :identificacion, "Identificación", class: "text-right" %>
   </div>
-  <div class="col-sm-10 input-value">
+  <div class="col-sm-9 input-value">
     <% if editable %>
     <%= form.text_field :identificacion, autofocus: true, autocomplete: "identificacion", class: "form-control" %>
     <% else %>
@@ -18,10 +18,10 @@
   </div>
 </div>
 <div class="form-group row">
-  <div class="col-sm-2 col-form-label">
+  <div class="col-sm-3 col-form-label">
     <%= form.label :razon_social, "Razón Social", class: "text-right" %>
   </div>
-  <div class="col-sm-10 input-value">
+  <div class="col-sm-9 input-value">
     <% if editable %>
     <%= form.text_field :razon_social, autofocus: true, autocomplete: "razon_social", class: "form-control" %>
     <% else %>

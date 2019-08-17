@@ -26,7 +26,7 @@ class TResolucionsController < ApplicationController
     @registro = TResolucion.new(parametros_resolucion)
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to @registro, notice: 'Resolución creado correctamente.' }
+        format.html { redirect_to @registro, notice: 'Resolución creada correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
         @notice = @registro.errors
@@ -39,7 +39,7 @@ class TResolucionsController < ApplicationController
   def update
     respond_to do |format|
       if @registro.update(parametros_resolucion)
-        format.html { redirect_to @registro, notice: 'Resolución actualizado correctamente.' }
+        format.html { redirect_to @registro, notice: 'Resolución actualizada correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
         @notice = @registro.errors
@@ -53,7 +53,7 @@ class TResolucionsController < ApplicationController
     @registro.t_estatus = TEstatus.find_by(description: "Inactivo")
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to t_tipo_clientes_url, notice: 'Tipo de cliente inhabilitado correctamente.' }
+        format.html { redirect_to t_tipo_clientes_url, notice: 'Resolución inhabilitada correctamente.' }
         format.json { head :no_content }
       else
         @notice = @registro.errors

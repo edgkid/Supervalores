@@ -1,5 +1,5 @@
 class TEmpresasController < ApplicationController
-  before_action :set_t_empresa, only: [:show, :edit, :update, :destroy]
+  before_action :seleccionar_empresa, only: [:show, :edit, :update, :destroy]
 
   # load_and_authorize_resource
 
@@ -8,6 +8,7 @@ class TEmpresasController < ApplicationController
 	end
 
   def index
+    @usar_dataTables = true
     @registros = TEmpresa.all
   end
 
@@ -22,13 +23,14 @@ class TEmpresasController < ApplicationController
   end
 
   def create
-    @registro = TEmpresa.new(t_empresa_params)
+    @registro = TEmpresa.new(parametros_empresa)
 
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to @registro, notice: 'T empresa was successfully created.' }
+        format.html { redirect_to @registro, notice: 'Empresa creada correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
+        @notice = @registro.errors
         format.html { render :new }
         format.json { render json: @registro.errors, status: :unprocessable_entity }
       end
@@ -37,10 +39,11 @@ class TEmpresasController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(t_empresa_params)
-        format.html { redirect_to @registro, notice: 'T empresa was successfully updated.' }
+      if @registro.update(parametros_empresa)
+        format.html { redirect_to @registro, notice: 'Empresa actualizada correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
+        @notice = @registro.errors
         format.html { render :edit }
         format.json { render json: @registro.errors, status: :unprocessable_entity }
       end
@@ -48,19 +51,25 @@ class TEmpresasController < ApplicationController
   end
 
   def destroy
-    @registro.destroy
+    @registro.estatus = 0
     respond_to do |format|
-      format.html { redirect_to t_empresas_url, notice: 'T empresa was successfully destroyed.' }
-      format.json { head :no_content }
+      if @registro.save
+        format.html { redirect_to t_empresas_url, notice: 'Empresa inhabilitada correctamente.' }
+        format.json { head :no_content }
+      else
+        @notice = @registro.errors
+        format.html { render :new }
+        format.json { render json: @registro.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   private
-    def set_t_empresa
+    def seleccionar_empresa
       @registro = TEmpresa.find(params[:id])
     end
 
-    def t_empresa_params
-      params.require(:t_empresa).permit(:rif, :razon_social, :tipo_valor, :sector_economico, :direccion_empresa, :fax, :web, :t_cliente_id)
+    def parametros_empresa
+      params.require(:t_empresa).permit(:rif, :razon_social, :tipo_valor, :sector_economico, :direccion_empresa, :fax, :web, :telefono, :email)
     end
 end
