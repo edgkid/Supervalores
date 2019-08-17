@@ -1,6 +1,8 @@
 class TEmpresa < ApplicationRecord
     has_one :t_cliente, as: :persona
-    
+    belongs_to :t_empresa_tipo_valor
+    belongs_to :t_empresa_sector_economico
+
     validates :rif,
         presence: {
             message: "|El RIF|RUC no puede estar vacía."
@@ -13,17 +15,7 @@ class TEmpresa < ApplicationRecord
           message: "|Ya existe una empresa con este RIF|RUC, use otro por favor.",
         },
         :on => [:create, :update]
-
-    validates :tipo_valor,
-        presence: {
-            message: "|el tipo de valor no puede estar vacía."
-        },
-        format: {
-            message: "|el tipo de valor solo puede tener Letras y espacios.",
-            with: /([A-Za-z\s]+)/ 
-        },
-        :on => [:create, :update]
-
+    
     validates :razon_social,
         presence: {
             message: "|La razón social no puede estar vacío."
@@ -31,16 +23,6 @@ class TEmpresa < ApplicationRecord
         format: {
             message: "|La razón social solo puede tener Letras, Números, Guiones(-), Puntos(.), Comas(,) y espacios.",
             with: /([A-Za-z0-9\s\-\.,]+)/ 
-        },
-        :on => [:create, :update]
-
-    validates :sector_economico,
-        presence: {
-            message: "|El sector económico no puede estar vacía."
-        },
-        format: {
-            message: "|El sector económico solo puede tener Letras y espacios.",
-            with: /([A-Za-z\s]+)/ 
         },
         :on => [:create, :update]
 

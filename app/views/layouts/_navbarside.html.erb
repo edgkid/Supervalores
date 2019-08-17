@@ -75,14 +75,14 @@
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
-          <% if can? :crud, TEmpresa %>
-          <li><%= link_to 'Empresas', t_empresas_path %></li>
-          <% end %>
           <% if can? :crud, TCliente %>
           <li><%= link_to 'Clientes', t_clientes_path %></li>
           <% end %>
           <% if can? :crud, TTipoCliente %>
           <li><%= link_to 'Tipos de Clientes', t_tipo_clientes_path %></li>
+          <% end %>
+          <% if can? :crud, TTipoClienteTipo %>
+          <li><%= link_to 'Tipos de Clientes - Tipos', t_tipo_cliente_tipos_path %></li>
           <% end %>
           <% if can? :crud, TTipoPersona %>
           <li><%= link_to 'Tipos de Personas', t_tipo_personas_path %></li>
@@ -93,6 +93,16 @@
           <% if can? :crud, TResolucion %>
           <li><%= link_to 'Resoluciones', t_resolucions_path %></li>
           <% end %>
+          <% if can? :crud, TEmpresa %>
+          <li><%= link_to 'Empresas', t_empresas_path %></li>
+          <% end %>
+          <% if can? :crud, TEmpresaTipoValor %>
+          <li><%= link_to 'Empresas - Tipo de valores', t_empresa_tipo_valors_path %></li>
+          <% end %>
+          <% if can? :crud, TEmpresaSectorEconomico %>
+          <li><%= link_to 'Empresas - Sectores económicos', t_empresa_sector_economicos_path %></li>
+          <% end %>
+          
         </ul>
       </li>
       <!-- -->

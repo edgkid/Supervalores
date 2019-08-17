@@ -70,6 +70,6 @@ class TEmpresasController < ApplicationController
     end
 
     def parametros_empresa
-      params.require(:t_empresa).permit(:rif, :razon_social, :tipo_valor, :sector_economico, :direccion_empresa, :fax, :web, :telefono, :email)
+      params.require(:t_empresa).permit(:rif, :razon_social, :t_empresa_tipo_valor_id, :t_empresa_sector_economico_id, :direccion_empresa, :fax, :web, :telefono, :email)
     end
 end

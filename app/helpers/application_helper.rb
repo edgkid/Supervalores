@@ -80,4 +80,13 @@ module ApplicationHelper
     end
     return opciones
   end
+
+  def opciones_de_tipos_de_valor_para_empresas
+    return TEmpresaTipoValor.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
+  end
+
+  def opciones_de_sectores_economicos_para_empresas
+    return TEmpresaSectorEconomico.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
+  end
+
 end

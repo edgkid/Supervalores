@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   resources :t_estatuses, :path => "estatus"
   resources :t_personas, :path => "personas"
   resources :t_empresas, :path => "empresas"
+  resources :t_empresa_tipo_valors, path: "tipo_valor_para_empresas"
+  resources :t_empresa_sector_economicos, path: "sector_economico_para_empresas"
+  resources :t_tipo_cliente_tipos, path: "tipo_para_tipo_cliente"
 
   get "redirect" => "t_tipo_clientes#redirect"
 
