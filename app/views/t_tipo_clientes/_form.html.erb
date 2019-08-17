@@ -12,13 +12,13 @@
       <% end %>
     </div>
     <div class="col-sm-2 col-form-label">
-      <%= form.label :tipo, 'Tipo', class: "text-right" %>
+      <%= form.label :t_tipo_cliente_tipo_id, 'Tipo', class: "text-right" %>
     </div>
-    <div class="col-sm-4 input-value">
+    <div class="col-sm-4 input-value">      
       <% if editable %>
-      <%= form.text_field :tipo, autofocus: true, autocomplete: "tipo", class: "form-control" %>
+      <%= form.select :t_tipo_cliente_tipo_id, opciones_de_tipos_para_tipos_de_clientes , {}, { :class => 'form-control m-b' } %>
       <% else %>
-      <%= registro.tipo %>
+      <%= registro.t_tipo_cliente_tipo.descripcion %>
       <% end %>
     </div>
   </div>

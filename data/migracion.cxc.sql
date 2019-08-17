@@ -60,18 +60,44 @@ INSERT INTO t_tarifas (nombre, descripcion, rango_monto, recargo, estatus, creat
 SELECT nombre, descripcion, rango_monto, recargo, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 FROM cxc_t_tarifa;
 
-INSERT INTO t_tipo_clientes (codigo, descripcion, tipo, estatus, created_at, updated_at, t_tarifa_id)
-SELECT cttc.codigo, cttc.descripcion, cttc.tipo, cttc.estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, tt."id"
+INSERT INTO t_tipo_cliente_tipos (descripcion, estatus, created_at, updated_at)
+SELECT DISTINCT TRIM(UPPER(cttc.tipo)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+FROM cxc_t_tipo_cliente cttc
+ORDER BY 1;
+
+INSERT INTO t_tipo_clientes (codigo, descripcion, t_tipo_cliente_tipo_id, estatus, created_at, updated_at, t_tarifa_id)
+SELECT cttc.codigo, cttc.descripcion, tttc.id, cttc.estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, tt."id"
 FROM t_tarifas tt
 JOIN cxc_t_tarifa ctt on tt.nombre = ctt.nombre
-JOIN cxc_t_tipo_cliente cttc on ctt.idt_tarifa = cttc.idt_tarifa;
+JOIN cxc_t_tipo_cliente cttc on ctt.idt_tarifa = cttc.idt_tarifa
+JOIN t_tipo_cliente_tipos tttc on TRIM(UPPER(cttc.tipo)) = tttc.descripcion
+ORDER BY 2;
 
 INSERT INTO t_estatuses (estatus, para, descripcion, color, created_at, updated_at)
 SELECT 1, 0, 'Inactivo', '#FF0000FF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 UNION ALL SELECT 1, 0, 'Disponible', '#00FF00FF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+UNION ALL SELECT 1, 2, 'Con Factura', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+UNION ALL SELECT 1, 2, 'Con Recibo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+UNION ALL SELECT 1, 2, 'Pago Pendiente', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+UNION ALL SELECT 1, 2, 'Paz y Salvo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 UNION ALL SELECT 1, 1, descripcion, '#00000000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP FROM cxc_t_estatus_fac;
 
 INSERT INTO t_tipo_personas (descripcion, estatus, created_at, updated_at)
 SELECT descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP FROM cxc_t_tipo_persona;
 
+INSERT INTO t_empresa_tipo_valors(descripcion, estatus, created_at, updated_at)
+SELECT DISTINCT TRIM(UPPER(tipo_valor)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+FROM cxc_t_clientes_padre
+WHERE TRIM(UPPER(tipo_valor)) != '' AND TRIM(UPPER(tipo_valor)) != '0'
+ORDER BY 1;
+
+INSERT INTO t_empresa_sector_economicos(descripcion, estatus, created_at, updated_at)
+SELECT DISTINCT TRIM(UPPER(sector_economico)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+FROM cxc_t_clientes_padre
+WHERE sector_economico != '' AND sector_economico != '0' AND sector_economico != '11' AND sector_economico != '123'
+ORDER BY 1;
+
+
+
+-- Ultimo registro
 INSERT INTO schema_migrations VALUES('0');

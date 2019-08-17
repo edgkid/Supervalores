@@ -1,5 +1,6 @@
 class TTipoCliente < ApplicationRecord
 	belongs_to :t_tarifa
+	belongs_to :t_tipo_cliente_tipo
 	
 	has_many :t_cliente	
 	#has_and_belongs_to_many :t_tarifa
@@ -26,13 +27,7 @@ class TTipoCliente < ApplicationRecord
 			minimum: 2
 		},
 		:on => [:create, :update]
-
-	validates :tipo, 
-		presence: {
-			message: "|El tipo no puede estar vacío."
-		},
-		:on => [:create, :update]
-
+	
 	validates :estatus, 
 		presence: {
 			message: "|El estatus no puede estar vacío."

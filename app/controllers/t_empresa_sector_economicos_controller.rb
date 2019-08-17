@@ -1,7 +1,7 @@
-class TTipoClientesController < ApplicationController
-  before_action :seleccionar_tipo_cliente, only: [:show, :edit, :update, :destroy]
+class TEmpresaSectorEconomicosController < ApplicationController
+  before_action :seleccionar_sector_economico, only: [:show, :edit, :update, :destroy]
 
-  # load_and_authorize_resource
+  ##load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path, :alert => exception.message
@@ -9,25 +9,25 @@ class TTipoClientesController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @registros = TTipoCliente.all
+    @registros = TEmpresaSectorEconomico.all
   end
 
   def show
   end
 
   def new
-    @registro = TTipoCliente.new
+    @registro = TEmpresaSectorEconomico.new
   end
 
   def edit
   end
 
   def create
-    @registro = TTipoCliente.new(parametros_tipo_cliente)
+    @registro = TEmpresaSectorEconomico.new(parametros_sector_economico)
 
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to @registro, notice: 'Tipo de cliente creado correctamente.' }
+        format.html { redirect_to @registro, notice: 'Sector económico creado correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
         @notice = @registro.errors
@@ -39,8 +39,8 @@ class TTipoClientesController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(parametros_tipo_cliente)
-        format.html { redirect_to @registro, notice: 'Tipo de cliente actualizado correctamente.' }
+      if @registro.update(parametros_sector_economico)
+        format.html { redirect_to @registro, notice: 'Sector económico actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
         @notice = @registro.errors
@@ -54,7 +54,7 @@ class TTipoClientesController < ApplicationController
     @registro.estatus = 0
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to t_tipo_clientes_url, notice: 'Tipo de cliente inhabilitado correctamente.' }
+        format.html { redirect_to t_empresa_sector_economicos_url, notice: 'Sector económico inhabilitado correctamente.' }
         format.json { head :no_content }
       else
         @notice = @registro.errors
@@ -65,11 +65,11 @@ class TTipoClientesController < ApplicationController
   end
 
   private
-    def seleccionar_tipo_cliente
-      @registro = TTipoCliente.find(params[:id])
+    def seleccionar_sector_economico
+      @registro = TEmpresaSectorEconomico.find(params[:id])
     end
 
-    def parametros_tipo_cliente
-      params.require(:t_tipo_cliente).permit(:codigo, :descripcion, :t_tipo_cliente_tipo_id, :estatus, :t_tarifa_id)
+    def parametros_sector_economico
+      params.require(:t_empresa_sector_economico).permit(:descripcion, :estatus)
     end
 end
