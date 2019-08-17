@@ -73,7 +73,7 @@ class TCliente < ApplicationRecord
     elsif persona.is_a?(TOtro)
       return persona.t_tipo_persona_id
     else
-      return "Indeterminado"
+      return "null"
     end
   end
 end
