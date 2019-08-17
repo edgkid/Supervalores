@@ -6,7 +6,7 @@ class TClientesController < ApplicationController
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion]
   before_action :usar_dataTables_en, only: [:index, :show, :edit]
 
-  load_and_authorize_resource
+  # load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path	, :alert => exception.message

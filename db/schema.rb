@@ -368,7 +368,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
   create_table "t_rol_descs", force: :cascade do |t|
     t.string "id_objeto"
     t.string "nombre", null: false
-    t.string "pagina"
+    t.text "pagina"
     t.integer "estatus", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
