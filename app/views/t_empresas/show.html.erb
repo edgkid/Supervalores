@@ -1,44 +1,10 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Rif:</strong>
-  <%= @t_empresa.rif %>
-</p>
-
-<p>
-  <strong>Razón social:</strong>
-  <%= @t_empresa.razon_social %>
-</p>
-
-<p>
-  <strong>Tipo valor:</strong>
-  <%= @t_empresa.tipo_valor %>
-</p>
-
-<p>
-  <strong>Sector economico:</strong>
-  <%= @t_empresa.sector_economico %>
-</p>
-
-<p>
-  <strong>Direccion empresa:</strong>
-  <%= @t_empresa.direccion_empresa %>
-</p>
-
-<p>
-  <strong>Fax:</strong>
-  <%= @t_empresa.fax %>
-</p>
-
-<p>
-  <strong>Web:</strong>
-  <%= @t_empresa.web %>
-</p>
-
-<p>
-  <strong>T cliente:</strong>
-  <%= @t_empresa.t_cliente_id %>
-</p>
-
-<%= link_to 'Edit', edit_t_empresa_path(@t_empresa) %> |
-<%= link_to 'Back', t_empresas_path %>
+<div class="row justify-content-md-center">
+  <div class="col-md-9 col-lg-7">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>Editar <%= @registro.razon_social %></h5>
+      </div>
+      <%= render 'form', registro: @registro, editable: false, return_to: t_empresas_path %>
+    </div>
+  </div>
+</div>

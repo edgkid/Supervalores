@@ -1,57 +1,22 @@
-<%= form_with(model: t_empresa, local: true) do |form| %>
-  <% if t_empresa.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(t_empresa.errors.count, "error") %> prohibited this t_empresa from being saved:</h2>
-
-      <ul>
-      <% t_empresa.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+<div class="ibox-content">
+  <%= form_with(model: registro, local: true) do |form| %>  
+  <%= render 'form_fields', registro: registro, editable: editable %>
+  <div class="form-group row">
+      <% if editable %>
+      <%= render "shared/action_buttons",
+        list_route: return_to, list_text: "Empresas",
+        back_route: polymorphic_path(registro), back_text: "Cancelar",
+        save_form: true, save_text: "Guardar",
+        button_size: "xs"
+      %>
+      <% else %>
+      <%= render "shared/action_buttons",
+        list_route: return_to, list_text: "Empresas",
+        edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
+        delete_route: polymorphic_path(registro), delete_text: "Borrar",
+        button_size: "xs"
+      %>
       <% end %>
-      </ul>
-    </div>
+  </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :rif %>
-    <%= form.text_field :rif %>
-  </div>
-
-  <div class="field">
-    <%= form.label :razon_social %>
-    <%= form.text_field :razon_social %>
-  </div>
-
-  <div class="field">
-    <%= form.label :tipo_valor %>
-    <%= form.text_field :tipo_valor %>
-  </div>
-
-  <div class="field">
-    <%= form.label :sector_economico %>
-    <%= form.text_field :sector_economico %>
-  </div>
-
-  <div class="field">
-    <%= form.label :direccion_empresa %>
-    <%= form.text_field :direccion_empresa %>
-  </div>
-
-  <div class="field">
-    <%= form.label :fax %>
-    <%= form.text_field :fax %>
-  </div>
-
-  <div class="field">
-    <%= form.label :web %>
-    <%= form.text_field :web %>
-  </div>
-
-  <div class="field">
-    <%= form.label :t_cliente_id %>
-    <%= form.text_field :t_cliente_id %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

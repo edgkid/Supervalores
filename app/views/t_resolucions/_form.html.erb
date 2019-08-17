@@ -1,18 +1,22 @@
-<%= @data %>
 <div class="ibox-content">
   <%= form_with(model: registro, local: true) do |form| %>  
   <%= render 't_resolucions/form_fields', registro: registro, editable: editable %>
-  <div class="form-group row center-content">
-    <% if defined?(return_to) %>
-    <div class="col-sm-4 col-offset-sm-2">
-      <%= link_to 'Volver', return_to	, {:class =>"btn btn-white btn-sm col-12"} %>
-    </div>
-    <% end %>
-    <% if defined?(editable) && editable %>
-    <div class="col-sm-4">
-      <%= form.submit 'Guardar', :class => "btn btn-primary btn-sm col-12" %>
-    </div>
-    <% end %>
+  <div class="form-group row">
+      <% if editable %>
+      <%= render "shared/action_buttons",
+        list_route: return_to, list_text: "Resoluciones",
+        back_route: polymorphic_path(registro), back_text: "Cancelar",
+        save_form: true, save_text: "Guardar",
+        button_size: "xs"
+      %>
+      <% else %>
+      <%= render "shared/action_buttons",
+        list_route: return_to, list_text: "Resoluciones",
+        edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
+        delete_route: polymorphic_path(registro), delete_text: "Borrar",
+        button_size: "xs"
+      %>
+      <% end %>
   </div>
   <% end %>
 </div>

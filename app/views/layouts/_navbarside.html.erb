@@ -46,22 +46,22 @@
         </a>
         <ul class="nav nav-second-level collapse">
           <% if can? :crud, TFactura %>
-            <li><%= link_to 'Factura Manual', t_facturas_path %></li>
+          <li><%= link_to 'Factura Manual', t_facturas_path %></li>
           <% end %>
           <% if can? :crud, TRecargo %>
-            <li><%= link_to 'Recargos', t_recargos_path %></li>
+          <li><%= link_to 'Recargos', t_recargos_path %></li>
           <% end %>
           <% if can? :crud, TPeriodo %>
-            <li><%= link_to 'Periodos', t_periodos_path %></li>
+          <li><%= link_to 'Periodos', t_periodos_path %></li>
           <% end %>
           <% if can? :crud, TTarifa %>
-            <li><%= link_to 'Tarifas', t_tarifas_path %></li>
+          <li><%= link_to 'Tarifas', t_tarifas_path %></li>
           <% end %>
           <% if can? :crud, TTarifaServicio %>
-            <li><%= link_to 'Servicios', t_tarifa_servicios_path %></li>
+          <li><%= link_to 'Servicios', t_tarifa_servicios_path %></li>
           <% end %>
           <% if can? :crud, TLeyenda %>
-            <li><%= link_to 'Leyendas de Facturas', t_leyendas_path %></li>
+          <li><%= link_to 'Leyendas de Facturas', t_leyendas_path %></li>
           <% end %>
         </ul>
       </li>
@@ -75,20 +75,23 @@
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
+          <% if can? :crud, TEmpresa %>
+          <li><%= link_to 'Empresas', t_empresas_path %></li>
+          <% end %>
           <% if can? :crud, TCliente %>
-            <li><%= link_to 'Clientes', t_clientes_path %></li>
+          <li><%= link_to 'Clientes', t_clientes_path %></li>
           <% end %>
           <% if can? :crud, TTipoCliente %>
-            <li><%= link_to 'Tipos de Clientes', t_tipo_clientes_path %></li>
+          <li><%= link_to 'Tipos de Clientes', t_tipo_clientes_path %></li>
           <% end %>
           <% if can? :crud, TTipoPersona %>
-            <li><%= link_to 'Tipos de Personas', t_tipo_personas_path %></li>
+          <li><%= link_to 'Tipos de Personas', t_tipo_personas_path %></li>
           <% end %>
           <% if can? :crud, TEstatus %>
-            <li><%= link_to 'Estatus', t_estatuses_path %></li>
+          <li><%= link_to 'Estatus', t_estatuses_path %></li>
           <% end %>
           <% if can? :crud, TResolucion %>
-            <li><%= link_to 'Resoluciones', t_resolucions_path %></li>
+          <li><%= link_to 'Resoluciones', t_resolucions_path %></li>
           <% end %>
         </ul>
       </li>
