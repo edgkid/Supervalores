@@ -1,55 +1,66 @@
 class TRecargosController < ApplicationController
-  respond_to :json, only: :find_by_descripcion
-  before_action :set_t_recargo, only: [:edit, :update, :show, :destroy]
+  before_action :seleccionar_recargo, only: [:show, :edit, :update, :destroy]
 
-  load_and_authorize_resource
+  # load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path, :alert => exception.message
 	end
 
-  def new
-    @t_recargo = TRecargo.new
-  end
-
-  def create
-    @t_recargo = TRecargo.new(t_recargo_params)
-
-    if @t_recargo.save
-      # flash[:success] = "Recargo creada exitosamente."
-      redirect_to t_recargos_path
-    else
-      # flash.now[:danger] = "No se pudo crear el recargo."
-      render 'new'
-    end
-  end
-
-  def edit
-  end
-
-  def update
-    if @t_recargo.update(t_recargo_params)
-      # flash[:success] = "Recargo actualizado exitosamente."
-      redirect_to t_recargos_path
-    else
-      # flash.now[:danger] = "No se pudo modificar el recargo."
-      render 'edit'
-    end
-  end
-
   def index
     @usar_dataTables = true
-    @t_recargos = TRecargo.all
+    @registros = TRecargo.all
   end
 
   def show
   end
 
-  def destroy
-    @t_recargo.destroy
+  def new
+    @registro = TRecargo.new
+  end
 
-    # flash[:warning] = "Recargo eliminado."
-    redirect_to t_recargos_path
+  def edit
+  end
+
+  def create
+    @registro = TRecargo.new(parametros_recargo)
+    respond_to do |format|
+      if @registro.save
+        format.html { redirect_to @registro, notice: 'Recargo creado correctamente.' }
+        format.json { render :show, status: :created, location: @registro }
+      else
+        @notice = @registro.errors
+        format.html { render :new }
+        format.json { render json: @registro.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update
+    respond_to do |format|
+      if @registro.update(parametros_recargo)
+        format.html { redirect_to @registro, notice: 'Recargo actualizado correctamente.' }
+        format.json { render :show, status: :ok, location: @registro }
+      else
+        @notice = @registro.errors
+        format.html { render :edit }
+        format.json { render json: @registro.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    @registro.t_estatus = TEstatus.find_by(description: "Inactivo")
+    respond_to do |format|
+      if @registro.save
+        format.html { redirect_to t_tipo_clientes_url, notice: 'Recargo inhabilitado correctamente.' }
+        format.json { head :no_content }
+      else
+        @notice = @registro.errors
+        format.html { render :new }
+        format.json { render json: @registro.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def find_by_descripcion
@@ -58,16 +69,15 @@ class TRecargosController < ApplicationController
   end
 
   private
+    def seleccionar_recargo
+      @registro = TRecargo.find(params[:id])
+    end
 
-    def t_recargo_params
+    def parametros_recargo
       params.require(:t_recargo).permit(:descripcion, :tasa, :estatus, :factura_id)
     end
 
     def search_params
       params.permit(:search)
-    end
-
-    def set_t_recargo
-      @t_recargo = TRecargo.find(params[:id])
     end
 end
