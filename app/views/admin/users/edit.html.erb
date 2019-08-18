@@ -57,7 +57,7 @@
 										<% if  @user.role == "SuperAdmin" %>
 											<%= text_field_tag :rol_description, "Super Administrador del Sistema",  class:"form-control", disabled: true %>
 										<% else %>
-											<%= select_tag :id_rol, options_from_collection_for_select(@rols, "id", "nombre"),  class: "form-control" %>
+											<%= select_tag :id_rol, options_from_collection_for_select(@rols, "id", "nombre"), prompt: 'Seleccione nuevo rol de usuario',  class: "form-control" %>
 										<% end %>
 									</div>
 								</div>
