@@ -10,17 +10,17 @@
             <fieldset <%= @is_show ? 'disabled="disabled"' : '' %>>
               <div class="row">
                 <div class="col-sm-6">
-                  <div class="form-group row">
+                  <div class="form-group row justify-content-md-center">
                     <%= f.label :nombre, class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                       <%= f.text_field :nombre, class: "form-control" %>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-6">
-                  <div class="form-group row">
+                  <div class="form-group row justify-content-md-center">
                     <%= f.label :descripcion, 'Descripción', class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                       <%= f.text_field :descripcion, class: "form-control" %>
                     </div>
                   </div>
@@ -29,25 +29,25 @@
 
               <div class="row">
                 <div class="col-sm-6">
-                  <div class="form-group row">
+                  <div class="form-group row justify-content-md-center">
                     <%= f.label :rango_monto, 'Rango del monto', class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                       <%= f.number_field :rango_monto, step: 0.01, class: "form-control" %>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-6">
-                  <div class="form-group row">
+                  <div class="form-group row justify-content-md-center">
                     <%= f.label :recargo, class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                       <%= f.number_field :recargo, step: 0.01, class: "form-control" %>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-6">
-                  <div class="form-group row">
+                  <div class="form-group row justify-content-md-center">
                     <%= f.label :estatus, class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                       <%= f.text_field :estatus, class: "form-control" %>
                     </div>
                   </div>
