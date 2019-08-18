@@ -93,4 +93,7 @@ module ApplicationHelper
     return TTipoEmision.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
   end
 
+  def opciones_de_periodos
+    return TPeriodo.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
+  end
 end

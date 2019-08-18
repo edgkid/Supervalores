@@ -1,66 +1,74 @@
 class TPeriodosController < ApplicationController
-  before_action :set_t_periodo, only: [:edit, :update, :show, :destroy]
+  before_action :seleccionar_periodo, only: [:show, :edit, :update, :destroy]
 
-  load_and_authorize_resource
+  # load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path	, :alert => exception.message
+		redirect_to dashboard_access_denied_path, :alert => exception.message
 	end
-
-  def new
-    @t_periodo = TPeriodo.new
-  end
-
-  def create
-    @t_periodo = TPeriodo.new(t_periodo_params)
-
-    if @t_periodo.save
-      # flash[:success] = "Periodo creado exitosamente."
-      redirect_to t_periodos_path
-    else
-      # flash.now[:danger] = "No se pudo crear el periodo."
-      render 'new'
-    end
-  end
-
-  def edit
-  end
-
-  def update
-    if @t_periodo.update(t_periodo_params)
-      # flash[:success] = "Periodo actualizado exitosamente."
-      redirect_to t_periodos_path
-    else
-      # flash.now[:danger] = "No se pudo modificar el periodo."
-      render 'edit'
-    end
-  end
 
   def index
     @usar_dataTables = true
-    @t_periodos = TPeriodo.all
+    @registros = TPeriodo.all
   end
 
   def show
   end
 
-  def destroy
-    @t_periodo.destroy
+  def new
+    @registro = TPeriodo.new
+  end
 
-    # flash[:warning] = "Periodo eliminado."
-    redirect_to t_periodos_path
+  def edit
+  end
+
+  def create
+    @registro = TPeriodo.new(parametros_periodo)
+    respond_to do |format|
+      if @registro.save
+        format.html { redirect_to @registro, notice: 'Período creado correctamente.' }
+        format.json { render :show, status: :created, location: @registro }
+      else
+        @notice = @registro.errors
+        format.html { render :new }
+        format.json { render json: @registro.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update
+    respond_to do |format|
+      if @registro.update(parametros_periodo)
+        format.html { redirect_to @registro, notice: 'Período actualizado correctamente.' }
+        format.json { render :show, status: :ok, location: @registro }
+      else
+        @notice = @registro.errors
+        format.html { render :edit }
+        format.json { render json: @registro.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    @registro.estatus = 0
+    respond_to do |format|
+      if @registro.save
+        format.html { redirect_to t_tipo_clientes_url, notice: 'Período inhabilitado correctamente.' }
+        format.json { head :no_content }
+      else
+        @notice = @registro.errors
+        format.html { render :new }
+        format.json { render json: @registro.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   private
-
-    def t_periodo_params
-      params.require(:t_periodo).permit(
-        :descripcion, :rango_dias, :dia_tope,
-        :mes_tope, :mes_tope_desc, :estatus
-      )
+    def seleccionar_periodo
+      @registro = TPeriodo.find(params[:id])
     end
 
-    def set_t_periodo
-      @t_periodo = TPeriodo.find(params[:id])
+    def parametros_periodo
+      params.require(:t_periodo).permit(:descripcion, :rango_dias, :dia_tope, :mes_tope, :estatus)
     end
 end

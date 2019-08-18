@@ -24,10 +24,11 @@ class TEmisionsController < ApplicationController
 
   def create
     @registro = TEmision.new(parametros_emision)
+    @registro.user = current_user
 
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to @registro, notice: 'Emisión creado correctamente.' }
+        format.html { redirect_to @registro, notice: 'Emisión creada correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
         @notice = @registro.errors
@@ -40,7 +41,7 @@ class TEmisionsController < ApplicationController
   def update
     respond_to do |format|
       if @registro.update(parametros_emision)
-        format.html { redirect_to @registro, notice: 'Emisión actualizado correctamente.' }
+        format.html { redirect_to @registro, notice: 'Emisión actualizada correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
         @notice = @registro.errors
@@ -54,7 +55,7 @@ class TEmisionsController < ApplicationController
     @registro.estatus = 0
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to t_emisions_url, notice: 'Emisión inhabilitado correctamente.' }
+        format.html { redirect_to t_emisions_url, notice: 'Emisión inhabilitada correctamente.' }
         format.json { head :no_content }
       else
         @notice = @registro.errors

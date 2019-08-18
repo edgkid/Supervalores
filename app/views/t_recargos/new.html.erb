@@ -1,2 +1,10 @@
-<% provide(:texto_boton, 'Crear Recargo') %>
-<%= render "form" %>
+<div class="row justify-content-md-center">
+    <div class="col-md-9 col-lg-7">
+      <div class="ibox">
+        <div class="ibox-title">
+          <h5>Registrar Recargo</h5>
+        </div>
+        <%= render 'form', registro: @registro, editable: true, return_to: t_recargos_path %>
+      </div>
+    </div>
+  </div>
