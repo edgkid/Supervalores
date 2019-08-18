@@ -27,16 +27,16 @@
 
 <div class="row">
   <div class="col-md-4">
-    <b>Dirección:</b><br>
-    <b>Apartado Postal:</b><br>
-    <b>Teléfono:</b><br>
-    <b>Email:</b>
+    <b>Dirección:</b> <%= @t_empresa.direccion_empresa %><br>
+    <b>Apartado Postal:</b> <%= '' %><br>
+    <b>Teléfono:</b> <%= @t_empresa.telefono %><br>
+    <b>Email:</b> <%= @t_empresa.email %>
   </div>
   <div class="col-md-4">
     <b>Para</b><br>
-    <b>Cliente:</b> <%= @t_cliente.codigo %><br>
+    <b>Cliente:</b> <%= "#{@t_persona.nombre} #{@t_persona.apellido}" %><br>
     <b>Resolución:</b> <%= @t_resolucion.resolucion %><br>
-    <b>CIP / RUC:</b> <%= @t_cliente.razon_social %><br>
+    <b>CIP / RUC:</b> <%= @t_persona.cedula %><br>
     <b>Teléfono:</b> <%= @t_cliente.telefono %><br>
     <b>Email:</b> <%= @t_cliente.email %><br>
   </div>
@@ -65,16 +65,22 @@
   <tbody>
     <% @t_factura.t_factura_detalles.each do |fd| %>
       <tr>
-        
+        <td><%= fd.cantidad %></td>
+        <td><%= fd.t_tarifa_servicio.nombre %></td>
+        <td><%= fd.t_tarifa_servicio.descripcion %></td>
+        <td><%= fd.t_tarifa_servicio.precio %></td>
+        <td><%= '' %></td>
       </tr>
     <% end %>
-    <tr>
-      <td>1</td>
-      <td>TARIFA / SERVICIO</td>
-      <td>Cobro</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
+    <% @t_factura.t_recargos.each do |r| %>
+      <tr>
+        <td><%= '' %></td>
+        <td>Recargo</td>
+        <td><%= r.descripcion %></td>
+        <td><%= r.tasa %></td>
+        <td><%= '' %></td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
 
@@ -119,10 +125,16 @@
 
 <div class="row">
   <div class="col-sm-6">
-    <button type="button" class="btn btn-default"><i class="fa fa-credit-card"></i> Crear Otra</button>
+    <%= link_to new_t_factura_path, class: 'btn btn-default' do %>
+      <i class="fa fa-credit-card"></i>
+      Crear Otra
+    <% end %>
   </div>
   <div align="center" class="col-sm-6">
-    <button type="button" class="btn btn-danger"><i class="fa fa-edit"></i> Editar Factura</button>
+    <%= link_to edit_t_factura_path(@t_factura), class: 'btn btn-danger' do %>
+      <i class="fa fa-edit"></i>
+      Editar Factura
+    <% end %>
     <button type="button" class="btn btn-info"><i class="fa fa-envelope"></i> Enviar al Correo</button>
     <button type="button" class="btn btn-primary"><i class="fa fa-download"></i> Generar PDF</button>
     <button type="button" class="btn btn-success"><i class="fa fa-credit-card"></i> Realizar Recibo</button>

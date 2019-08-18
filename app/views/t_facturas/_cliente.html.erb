@@ -6,15 +6,15 @@
     </tr>
     <tr>
       <th>Cliente:</th>
-      <td><%= '' %></td>
+      <td><%= @t_persona.cedula if @t_persona %></td>
     </tr>
     <tr>
       <th>Empresa:</th>
-      <td><%= '' %></td>
+      <td><%= @t_persona.t_empresa.rif if @t_persona && @t_persona.t_empresa %></td>
     </tr>
     <tr>
       <th>Dirección:</th>
-      <td><%= '' %></td>
+      <td><%= @t_persona.t_empresa.direccion_empresa if @t_persona && @t_persona.t_empresa %></td>
     </tr>
     <tr>
       <th>Telf.:</th>

@@ -1,7 +1,9 @@
 $("#client-container").html("<%= escape_javascript(render('t_facturas/cliente')) %>");
 var attribute = '<%= @attribute %>',
     codigo = '<%= @t_cliente.codigo %>',
-    razon_social = '<%= @t_cliente.razon_social %>';
+    cedula = '<%= @t_persona.cedula %>'
+    zeroLength = false;
+    // razon_social = '<%= @t_cliente.razon_social %>';
 
 var data = [
   <% @t_cliente.t_resolucions.each do |t_resolucion| %>
@@ -12,22 +14,36 @@ var data = [
   <% end %>
 ]
 
+if (data.length === 0) {
+  zeroLength = true;
+}
+
 switch(attribute) {
   case 'select-codigo':
-    $('#select-resolucion').select2({ data: data })
+    if (zeroLength) {
+      $('#select2-select-resolucion-container').text('');
+      $('#select2-select-resolucion-container').attr('title', '');
+    } else {
+      $('#select-resolucion').select2({ data: data });
+    }
 
-    $('#select2-select-razon_social-container').text(razon_social);
-    $('#select2-select-razon_social-container').attr('title', razon_social);
+    $('#select2-select-cedula-container').text(cedula);
+    $('#select2-select-cedula-container').attr('title', cedula);
     break;
   case 'select-resolucion':
     $('#select2-select-codigo-container').text(codigo);
     $('#select2-select-codigo-container').attr('title', codigo);
 
-    $('#select2-select-razon_social-container').text(razon_social);
-    $('#select2-select-razon_social-container').attr('title', razon_social);
+    $('#select2-select-cedula-container').text(cedula);
+    $('#select2-select-cedula-container').attr('title', cedula);
     break;
-  case 'select-razon_social':
-    $('#select-resolucion').select2({ data: data })
+  case 'select-cedula':
+    if (zeroLength) {
+      $('#select2-select-resolucion-container').text('');
+      $('#select2-select-resolucion-container').attr('title', '');
+    } else {
+      $('#select-resolucion').select2({ data: data });
+    }
 
     $('#select2-select-codigo-container').text(codigo);
     $('#select2-select-codigo-container').attr('title', codigo);

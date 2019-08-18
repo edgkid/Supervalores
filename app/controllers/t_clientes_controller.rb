@@ -2,7 +2,7 @@ class TClientesController < ApplicationController
   include TClientesHelper
 
   respond_to :js, only: [:find]
-  respond_to :json, only: [:find_by_codigo, :find_by_resolucion, :find_by_razon_social]
+  respond_to :json, only: [:find_by_codigo, :find_by_resolucion, :find_by_cedula]
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion]
   before_action :usar_dataTables_en, only: [:index, :show, :edit]
 
@@ -168,24 +168,28 @@ class TClientesController < ApplicationController
     respond_with TResolucion.where('resolucion LIKE ?', "%#{search}%").first(10)
   end
 
-  def find_by_razon_social
+  def find_by_cedula
     search = parametros_de_busqueda[:search]
-    respond_with TCliente.where('razon_social LIKE ?', "%#{search}%").first(10)
+    respond_with TPersona.where('cedula LIKE ?', "%#{search}%").first(10)
+    # respond_with TCliente.where('razon_social LIKE ?', "%#{search}%").first(10)
   end
 
   def find
     @attribute = parametros_de_busqueda[:attribute]
     search = parametros_de_busqueda[:search]
 
-    @t_cliente =  case @attribute
-                  when 'select-codigo'
-                    TCliente.find_by(codigo: search)
-                  when 'select-resolucion'
-                    @t_resolucion = TResolucion.find_by(resolucion: search)
-                    @t_resolucion.t_cliente
-                  when 'select-razon_social'
-                    TCliente.find_by(razon_social: search)
-                  end if search != ''
+    case @attribute
+    when 'select-codigo'
+      @t_cliente = TCliente.find_by(codigo: search)
+      @t_persona = @t_cliente.persona
+    when 'select-resolucion'
+      @t_resolucion = TResolucion.find_by(resolucion: search)
+      @t_cliente = @t_resolucion.t_cliente
+      @t_persona = @t_cliente.persona
+    when 'select-cedula'
+      @t_persona = TPersona.find_by(cedula: search)
+      @t_cliente = @t_persona.t_cliente
+    end if search != ''
   end
 
   private

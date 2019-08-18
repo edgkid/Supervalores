@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   namespace :t_clientes do
     get 'find_by_codigo', as: :find_by_codigo
     get 'find_by_resolucion', as: :find_by_resolucion
-    get 'find_by_razon_social', as: :find_by_razon_social
+    get 'find_by_cedula', as: :find_by_cedula
     get 'find', as: :find
   end
   post 'clientes/:id/nueva_resolucion' => 't_clientes#nueva_resolucion'

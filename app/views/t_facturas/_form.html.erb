@@ -168,9 +168,9 @@
       minimumInputLength: 1
     });
 
-    $("#select-razon_social").select2({
+    $("#select-cedula").select2({
       ajax: {
-        url: '<%= "#{t_clientes_find_by_razon_social_path}" %>',
+        url: '<%= "#{t_clientes_find_by_cedula_path}" %>',
         dataType: 'json',
         data: function (params) {
           var query = {
@@ -181,8 +181,8 @@
         },
         processResults: function (data) {
           return {
-            results: $.map(data, function(t_cliente, i) {
-              return { id: t_cliente.razon_social, text: t_cliente.razon_social } 
+            results: $.map(data, function(t_persona, i) {
+              return { id: t_persona.cedula, text: t_persona.cedula } 
             })
           };
         },
