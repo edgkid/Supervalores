@@ -50,13 +50,20 @@ class Admin::UsersController < ApplicationController
       @user.estado = params[:is_active] == "Activo"? true : false
     end
 
+    id_rol = (params[:id_rol] == nil || params[:id_rol] == "")? 0 : params[:id_rol]
+
     if @user.update(user_params)
 
-      if @user.associate_rol_and_user(params[:id_rol], params[:id])
-        redirect_to admin_users_path, notice: 'Usuario actualizado correctamente.'
+      if id_rol != 0
+        if @user.associate_rol_and_user(id_rol, params[:id])
+          redirect_to admin_users_path, notice: 'Usuario actualizado correctamente.'
+        else
+          render :action => "edit"
+        end
       else
-        render :action => "edit"
+        redirect_to admin_users_path, notice: 'Usuario actualizado correctamente.'
       end
+
     else
       @notice = @user.errors
       render :action => "edit"
