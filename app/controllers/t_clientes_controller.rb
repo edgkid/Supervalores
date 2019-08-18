@@ -6,7 +6,7 @@ class TClientesController < ApplicationController
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion]
   before_action :usar_dataTables_en, only: [:index, :show, :edit]
 
-  # load_and_authorize_resource
+  load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path	, :alert => exception.message
@@ -36,7 +36,7 @@ class TClientesController < ApplicationController
     else
       @registro.persona = TOtro.new(parametros_cliente_tipo_otro)
     end
-    
+
     respond_to do |format|
       if !@registro.persona.save
         @notice = @registro.persona.errors
@@ -72,7 +72,7 @@ class TClientesController < ApplicationController
     crear = false
     actualizar = false
     parametros = {}
-    respond_to do |format|      
+    respond_to do |format|
       if es_empresa
         if @registro.persona != nil && @registro.persona.is_a?(TEmpresa)
           actualizar = true
@@ -201,11 +201,11 @@ class TClientesController < ApplicationController
     def parametros_cliente
       params.require(:t_cliente).permit(:codigo, :t_estatus_id, :cuenta_venta, :t_tipo_cliente_id, :t_tipo_persona_id, :razon_social, :telefono, :email, :es_prospecto)
     end
-    
+
     def parametros_cliente_tipo_empresa
       params.require(:t_empresa).permit(:rif, :razon_social, :t_empresa_tipo_valor_id, :t_empresa_sector_economico_id, :direccion_empresa, :fax, :web, :telefono, :email)
     end
-    
+
     def parametros_cliente_tipo_persona
       params.require(:t_persona).permit(:cedula, :nombre, :apellido, :num_licencia, :t_empresa_id, :cargo, :telefono, :email)
     end
@@ -221,7 +221,7 @@ class TClientesController < ApplicationController
     def es_empresa
       params.require(:t_otro)[:t_tipo_persona_id] == "1"
     end
-    
+
     def es_persona
       params.require(:t_otro)[:t_tipo_persona_id] == "2"
     end

@@ -1,7 +1,7 @@
 class TEmisionsController < ApplicationController
   before_action :seleccionar_emision, only: [:show, :edit, :update, :destroy]
 
-  # load_and_authorize_resource
+  load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path, :alert => exception.message
