@@ -11,32 +11,48 @@
 							<div class="col-12">
 								<div class="form-group  row"><label class="col-sm-2 col-form-label">Nombre</label>
 									<div class="col-sm-10">
-										 <%= f.text_field(:nombre, class: "form-control") %>
+										<% if @rol.nombre == "SuperAdmin" || @rol.nombre == "AdminCxC" %>
+										 <%= f.text_field(:nombre, class: "form-control", disabled: true) %>
+										<% else %>
+											<%= f.text_field(:nombre, class: "form-control") %>
+										<% end %>
 									</div>
 								</div>
 								<div class="form-group  row"><label class="col-sm-2 col-form-label">Descripción</label>
 									<div class="col-sm-10">
-										<%= f.text_field(:descripcion, class: "form-control") %>
+									<% if @rol.nombre == "SuperAdmin" || @rol.nombre == "AdminCxC" %>
+										<%= f.text_area :descripcion, class: "form-control", disabled:true %>
+									<% else %>
+										<%= f.text_area :descripcion, class: "form-control" %>
+									<% end %>
 									</div>
 								</div>
 								<div class="form-group  row"><label class="col-sm-2 col-form-label">Peso</label>
 									<div class="col-sm-10">
-										<%= f.number_field :peso, class: "form-control" %>
+									<% if @rol.nombre == "SuperAdmin" || @rol.nombre == "AdminCxC" %>
+										<%= f.number_field :peso, class: "form-control", disabled:true %>
+									<% else %>
+										<%= f.number_field :peso, class: "form-control"%>
+									<% end %>
 									</div>
 								</div>
 								<div class="form-group  row"><label class="col-sm-2 col-form-label">Estatus</label>
 									<div class="col-sm-10">
-										<%= select_tag :is_active, options_for_select([ "Seleccione un estatus", "Activo", "Inactivo" ], ["0","1", "2"]), class: "form-control" %>
+										<% if @rol.nombre == "SuperAdmin" || @rol.nombre == "AdminCxC" %>
+											<%= text_field_tag :status, @rol.estatus == 1 ? "Ativo":"Inactivo", class: "form-control", disabled: true %>
+										<% else %>
+											<%= select_tag :is_active, options_for_select([ "Seleccione un estatus", "Activo", "Inactivo" ], ["0","1", "2"]), class: "form-control" %>
+										<% end %>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="form-group row">
 							<div class="col-sm-6 col-sm-offset-2">
-								<%= submit_tag("Guardar Cambios", :class => "btn btn-white col-12 float-right") %>
+								<%= submit_tag("Guardar Cambios", :class => "btn btn-primary col-12 float-right") %>
 							</div><br><br>
 							<div class="col-sm-6 col-sm-offset-2">
-								<%= link_to 'Atrás',rols_index_path, {:class =>"btn btn-primary btn-sm col-12"} %>
+								<%= link_to 'Atrás',rols_index_path, {:class =>"btn btn-white btn-sm col-12"} %>
 							</div>
 						</div>
 					<% end %>
