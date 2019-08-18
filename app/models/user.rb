@@ -18,18 +18,18 @@ class User < ApplicationRecord
 
 	validates :password,  presence: {message: "|El pasword no debe estar vacío."},
 												confirmation: {message: "|La confirmación de pasword debe coincidir."},
-												format: { message: "|El password solo debe contener Mayusculas, Minusculas y Números (Minimo 6 caracateres).",
+												format: { message: "|El password solo debe contener Mayúsculas, Minúsculas y Números (Mínimo 6 caracteres).",
 																with: /\A(?=.*[A-Z])(?=.*\d).{6,12}\z/ },
 												:on => [:create]
 
 	validates :nombre, :apellido, presence: {message: "|El nombre y apellido no pueden estar vacío."},
 											 					format: {
-											 					message: "|El nombre y apellido solo acepta caracteres alfabeticos.",
+											 					message: "|El nombre y apellido solo acepta caracteres alfabéticos.",
 												 				with: /\A[a-zA-Z]*\z/
 											 },
 											 :on => [:create, :update ]
 
-	 validates :email , presence: {message: "|El email no debe estar vacío y debe contener un formato valido"}
+	 validates :email , presence: {message: "|El email no debe estar vacío y debe contener un formato válido"}
 
    def get_user_rol(id)
 
