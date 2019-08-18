@@ -67,6 +67,10 @@ class User < ApplicationRecord
 		end
 	end
 
+	def nombre_completo
+		return "#{nombre}, #{apellido}"
+	end
+	
 	private
 	def user_have_rol (id_user)
 		#sql = "DELETE FROM t_users_rols WHERE user_id ="<< id_user<< "commit;"
@@ -87,7 +91,4 @@ class User < ApplicationRecord
 
 	end
 
-	def nombre_completo
-		return "#{nombre}, #{apellido}"
-	end
 end

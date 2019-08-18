@@ -1,3 +1,10 @@
-<% provide(:texto_boton, 'Recargo') %>
-<% @is_show = (controller.action_name == 'show') ? true : false %>
-<%= render 'form' %>
+<div class="row justify-content-md-center">
+    <div class="col-md-9 col-lg-7">
+      <div class="ibox">
+        <div class="ibox-title">
+          <h5>Recargo <%= @registro.descripcion %></h5>
+        </div>
+        <%= render 'form', registro: @registro, editable: false, return_to: t_recargos_path %>
+      </div>
+    </div>
+  </div>

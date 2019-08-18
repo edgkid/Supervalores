@@ -1,74 +1,22 @@
-<div class="wrapper wrapper-content animated fadeInRight">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="ibox ">
-        <div class="ibox-title">
-          <h5><%= yield(:texto_boton) %></h5>
-        </div>
-        <div class="ibox-content">
-          <%= form_for @t_periodo do |f| %>
-            <fieldset <%= @is_show ? 'disabled="disabled"' : '' %>>
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group row">
-                    <%= f.label :descripcion, 'Descripción', class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-9">
-                      <%= f.text_field :descripcion, class: "form-control" %>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group row">
-                    <%= f.label :rango_dias, 'Rango de días', class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-9">
-                      <%= f.number_field :rango_dias, class: "form-control" %>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group row">
-                    <%= f.label :dia_tope, 'Día tope', class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-9">
-                      <%= f.number_field :dia_tope, class: "form-control" %>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group row">
-                    <%= f.label :mes_tope, class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-9">
-                      <%= f.number_field :mes_tope, class: "form-control" %>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group row">
-                    <%= f.label :mes_tope_desc, 'Descripción del mes tope', class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-9">
-                      <%= f.text_field :mes_tope_desc, class: "form-control" %>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group row">
-                    <%= f.label :estatus, class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-9">
-                      <%= f.number_field :estatus, class: "form-control" %>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </fieldset>
-            <%= render 'shared/form_buttons', f: f, object: @t_periodo %>
-          <% end %>
-        </div>
-      </div>
+<div class="ibox-content">
+    <%= form_with(model: registro, local: true) do |form| %>  
+    <%= render 'form_fields', registro: registro, editable: editable %>
+    <div class="form-group row">
+        <% if editable %>
+        <%= render "shared/action_buttons",
+          list_route: return_to, list_text: "Períodos",
+          back_route: polymorphic_path(registro), back_text: "Cancelar",
+          save_form: true, save_text: "Guardar",
+          button_size: "xs"
+        %>
+        <% else %>
+        <%= render "shared/action_buttons",
+          list_route: return_to, list_text: "Períodos",
+          edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
+          delete_route: polymorphic_path(registro), delete_text: "Borrar",
+          button_size: "xs"
+        %>
+        <% end %>
     </div>
+    <% end %>
   </div>
-</div>

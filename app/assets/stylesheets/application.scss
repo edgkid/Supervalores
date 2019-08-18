@@ -11,6 +11,17 @@
   padding-left: 0.5em;
 }
 
+.col-form-label {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.col-form-label label,
+select.m-b {
+  margin: 0;
+}
+
 .hide {
   display:none;  
 }
@@ -33,7 +44,6 @@
   display: flex;  
   align-items: center;
   border-left:solid 1px #eaeaea;
-  margin-bottom: .5rem;
 }
 
 [class*=text-] {

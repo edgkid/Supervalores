@@ -1,0 +1,88 @@
+<%= fields_for registro do |form| %>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :valor_circulacion, 'Valor circulación', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.number_field :valor_circulacion, autofocus: true, autocomplete: "valor_circulacion", class: "form-control" %>
+    <% else %>
+    <%= registro.valor_circulacion %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :fecha_emision, 'Fecha emisión', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.date_field :fecha_emision, autofocus: true, autocomplete: "fecha_emision", class: "form-control" %>
+    <% else %>
+    <%= registro.fecha_emision %>
+    <% end %>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :monto_pagar, 'Monto a pagar', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.number_field :monto_pagar, autofocus: true, autocomplete: "monto_pagar", class: "form-control" %>
+    <% else %>
+    <%= registro.monto_pagar %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label vertical-align">
+    <%= form.label :tasa, 'Tasa', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.number_field :tasa, autofocus: true, autocomplete: "tasa", class: "form-control" %>
+    <% else %>
+    <%= registro.tasa %>
+    <% end %>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :t_periodo_id, 'Periodo', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.select :t_periodo_id, opciones_de_periodos, {}, { :class => 'form-control m-b' } %>
+    <% else %>
+    <%= registro.t_periodo.descripcion %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :t_tipo_emision_id, 'Tipo', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.select :t_tipo_emision_id, opciones_de_tipos_de_emisiones, {}, { :class => 'form-control m-b' } %>
+    <% else %>
+    <%= registro.t_tipo_emision.descripcion %>
+    <% end %>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :estatus, 'Estatus', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.select :estatus, opciones_de_estatus(false), {}, { :class => 'form-control m-b' } %>
+    <% else %>
+    <%= estatus_text registro.estatus %>
+    <% end %>
+  </div>
+  <% if registro.id != nil %>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :user_id, 'Usuario', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <%= registro.user.nombre_completo %>
+  </div>
+  <% end %>
+</div>
+<% end %>

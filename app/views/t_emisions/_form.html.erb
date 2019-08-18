@@ -1,57 +1,22 @@
-<div class="wrapper wrapper-content animated fadeInRight">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="ibox ">
-        <div class="ibox-title">
-          <h5><%= yield(:texto_boton) %></h5>
-        </div>
-        <div class="ibox-content">
-          <%= form_for @t_recargo do |f| %>
-            <div class="row justify-content-sm-center">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :descripcion, 'Descripción', class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.text_field :descripcion, class: "form-control", disabled: @is_show %>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row justify-content-sm-center">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :tasa, 'Tasa', class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.number_field :tasa, step: 0.01, class: "form-control", disabled: @is_show %>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row justify-content-sm-center">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%= f.label :estatus, class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%= f.number_field :estatus, class: "form-control", disabled: @is_show %>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- <div class="row justify-content-sm-center">
-              <div class="col-sm-6">
-                <div class="form-group row">
-                  <%#= f.label :t_factura_id, 'Factura', class: "col-sm-2 col-form-label" %>
-                  <div class="col-sm-10">
-                    <%# facturas_array = TFactura.all.map { |factura| ["#{factura.tipo} | #{factura.justificacion}", factura.id] } %>
-                    <%#= f.select :t_factura_id, options_for_select(facturas_array), class: "form-control m-b", disabled: @is_show %>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-            <%= render 'shared/form_buttons', f: f, object: @t_recargo %>
-          <% end %>
-        </div>
-      </div>
-    </div>
+<div class="ibox-content">
+  <%= form_with(model: registro, local: true) do |form| %>  
+  <%= render 'form_fields', registro: registro, editable: editable %>
+  <div class="form-group row">
+      <% if editable %>
+      <%= render "shared/action_buttons",
+        list_route: return_to, list_text: "Resoluciones",
+        back_route: polymorphic_path(registro), back_text: "Cancelar",
+        save_form: true, save_text: "Guardar",
+        button_size: "xs"
+      %>
+      <% else %>
+      <%= render "shared/action_buttons",
+        list_route: return_to, list_text: "Resoluciones",
+        edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
+        delete_route: polymorphic_path(registro), delete_text: "Borrar",
+        button_size: "xs"
+      %>
+      <% end %>
   </div>
+  <% end %>
 </div>
