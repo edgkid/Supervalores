@@ -87,4 +87,7 @@ class User < ApplicationRecord
 
 	end
 
+	def nombre_completo
+		return "#{nombre}, #{apellido}"
+	end
 end

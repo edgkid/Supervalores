@@ -63,6 +63,12 @@
           <% if can? :crud, TLeyenda %>
           <li><%= link_to 'Leyendas de Facturas', t_leyendas_path %></li>
           <% end %>
+          <% if can? :crud, TEmision %>
+          <li><%= link_to 'Emisiones', t_emisions_path %></li>
+          <% end %>
+          <% if can? :crud, TTipoEmision %>
+          <li><%= link_to 'Tipos de emisión', t_tipo_emisions_path %></li>
+          <% end %>
         </ul>
       </li>
 

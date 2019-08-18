@@ -8,8 +8,8 @@ Rails.application.routes.draw do
     resources :users
   end
   resources :t_leyendas
-  resources :t_periodos
-  resources :t_tarifas
+  resources :t_periodos, path: "periodos"
+  resources :t_tarifas, path: "tarifas"
   resources :t_facturas do
     get 'preview', on: :member
   end
@@ -18,11 +18,13 @@ Rails.application.routes.draw do
   namespace :t_recargos do
     get 'find_by_descripcion', as: :find_by_descripcion
   end
-  resources :t_recargos
-  resources :t_resolucions, :path => "resoluciones"
-  resources :t_tipo_clientes, :path => "tipos_de_clientes"
-  resources :t_tipo_personas, :path => "tipos_de_personas"
-  resources :t_clientes, :path => "clientes"
+  resources :t_emisions, path: "emisiones"
+  resources :t_tipo_emisions, path: "tipo_de_emisiones"
+  resources :t_recargos, path: "recargos"
+  resources :t_resolucions, path: "resoluciones"
+  resources :t_tipo_clientes, path: "tipos_de_clientes"
+  resources :t_tipo_personas, path: "tipos_de_personas"
+  resources :t_clientes, path: "clientes"
   namespace :t_clientes do
     get 'find_by_codigo', as: :find_by_codigo
     get 'find_by_resolucion', as: :find_by_resolucion
@@ -30,9 +32,9 @@ Rails.application.routes.draw do
     get 'find', as: :find
   end
   post 'clientes/:id/nueva_resolucion' => 't_clientes#nueva_resolucion'
-  resources :t_estatuses, :path => "estatus"
-  resources :t_personas, :path => "personas"
-  resources :t_empresas, :path => "empresas"
+  resources :t_estatuses, path: "estatus"
+  resources :t_personas, path: "personas"
+  resources :t_empresas, path: "empresas"
   resources :t_empresa_tipo_valors, path: "tipo_valor_para_empresas"
   resources :t_empresa_sector_economicos, path: "sector_economico_para_empresas"
   resources :t_tipo_cliente_tipos, path: "tipo_para_tipo_cliente"

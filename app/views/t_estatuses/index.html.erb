@@ -13,6 +13,7 @@
           </div>
         </div>
         <div class="ibox-content">
+          <% if @registros != nil && @registros.count > 0 %>
           <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover dataTables clickable">
               <thead>
@@ -24,7 +25,6 @@
                 </tr>
               </thead>
               <tbody>
-                <% if @registros != nil && @registros.count > 0 %>
                 <% @registros.each do |registro| %>
                 <tr data-link="<%= polymorphic_url(registro) %>">
                   <td><%= registro.descripcion %></td>
@@ -33,18 +33,16 @@
                   <td><%= estatus_text registro.estatus %></td>
                 </tr>
                 <% end %>
-                <% else %>
-                <tr>
-                  <td colspan="6">No se encontraron registros.</td>
-                </tr>
-                <% end %>
               </tbody>
             </table>
           </div>
+          <% else %>
+          <div>
+            <p>No se encontraron registros.</p>
+          </div>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-
