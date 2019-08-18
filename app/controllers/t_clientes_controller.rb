@@ -145,7 +145,7 @@ class TClientesController < ApplicationController
   end
 
   def destroy
-    @registro.t_estatus = TEstatus.find_by(descripcion: "Inactivo")
+    @registro.t_estatus = TEstatus.find(1)
     respond_to do |format|
       if @registro.save
         format.html { redirect_to t_clientes_url, notice: 'Cliente inhabilitado correctamente.' }

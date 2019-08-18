@@ -50,7 +50,7 @@ class TResolucionsController < ApplicationController
   end
 
   def destroy
-    @registro.t_estatus = TEstatus.find_by(description: "Inactivo")
+    @registro.t_estatus = TEstatus.find(1)
     respond_to do |format|
       if @registro.save
         format.html { redirect_to t_tipo_clientes_url, notice: 'Resolución inhabilitada correctamente.' }

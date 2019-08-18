@@ -97,7 +97,17 @@ FROM cxc_t_clientes_padre
 WHERE sector_economico != '' AND sector_economico != '0' AND sector_economico != '11' AND sector_economico != '123'
 ORDER BY 1;
 
+INSERT INTO t_tipo_emisions (descripcion, estatus, created_at, updated_at)
+select descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+from cxc_t_tipo_emision;
 
+INSERT INTO t_periodos (descripcion, estatus, created_at, updated_at, rango_dias, dia_tope, mes_tope)
+select descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, rango_dias, dia_tope, mes_tope 
+from cxc_t_periodo;
+
+INSERT INTO t_recargos (descripcion, tasa, estatus, created_at, updated_at)
+select descripcion, tasa, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+from cxc_t_recargo;
 
 -- Ultimo registro
 INSERT INTO schema_migrations VALUES('0');

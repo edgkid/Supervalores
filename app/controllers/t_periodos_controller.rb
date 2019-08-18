@@ -50,7 +50,7 @@ class TPeriodosController < ApplicationController
   end
 
   def destroy
-    @registro.t_estatus = TEstatus.find_by(description: "Inactivo")
+    @registro.estatus = 0
     respond_to do |format|
       if @registro.save
         format.html { redirect_to t_tipo_clientes_url, notice: 'Período inhabilitado correctamente.' }
@@ -69,6 +69,6 @@ class TPeriodosController < ApplicationController
     end
 
     def parametros_periodo
-      params.require(:t_periodo).permit(:descripcion, :rango_dias, :dia_tope, :mes_tope, :mes_tope_desc, :estatus)
+      params.require(:t_periodo).permit(:descripcion, :rango_dias, :dia_tope, :mes_tope, :estatus)
     end
 end
