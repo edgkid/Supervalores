@@ -34,20 +34,28 @@
 						    <div class="form-group row">
 						    	<label class="col-sm-2 col-form-label">Activo</label>
 						        <div class="col-sm-10">
+											<% if  @user.role == "SuperAdmin" %>
+												<%= text_field_tag 'estado', @user.estado ? 'Si' : 'No',  class:"form-control", disabled: true %>
+											<% else %>
 												<%= select_tag :is_active, options_for_select([ "Seleccione un estatus", "Activo", "Inactivo" ], ["0","1", "2"]), class: "form-control" %>
+											<% end %>
 										</div>
 						    </div>
 								<div class="form-group row">
 						    	<label class="col-sm-2 col-form-label">Email</label>
 						    	<div class="col-sm-10">
-						    		<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+										<% if  @user.role == "SuperAdmin" %>
+						    			<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", disabled: true %>
+										<% else %>
+											<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+										<% end %>
 						    	</div>
 						    </div>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">Rol de Usuario</label>
 									<div class="col-sm-10">
-										<% if current_user.email == @user.email %>
-											<%= f.text_field :role, autofocus: true, autocomplete: "role", class: "form-control", disabled: true %>
+										<% if  @user.role == "SuperAdmin" %>
+											<%= text_field_tag :rol_description, "Super Administrador del Sistema",  class:"form-control", disabled: true %>
 										<% else %>
 											<%= select_tag :id_rol, options_from_collection_for_select(@rols, "id", "nombre"),  class: "form-control" %>
 										<% end %>
