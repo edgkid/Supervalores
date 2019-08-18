@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_15_194128) do
+ActiveRecord::Schema.define(version: 2019_08_17_211255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,8 +71,8 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
     t.datetime "updated_at", null: false
     t.bigint "t_tipo_cliente_id", null: false
     t.date "prospecto_at"
-    t.bigint "persona_id"
-    t.string "persona_type"
+    t.bigint "persona_id", null: false
+    t.string "persona_type", null: false
     t.index ["codigo"], name: "index_t_clientes_on_codigo", unique: true
     t.index ["persona_type", "persona_id"], name: "index_persona_as_cliente"
     t.index ["t_estatus_id"], name: "index_t_clientes_on_t_estatus_id"
@@ -129,16 +129,30 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
     t.index ["user_id"], name: "index_t_emisions_on_user_id"
   end
 
+  create_table "t_empresa_sector_economicos", force: :cascade do |t|
+    t.string "descripcion"
+    t.integer "estatus"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "t_empresa_tipo_valors", force: :cascade do |t|
+    t.string "descripcion"
+    t.integer "estatus"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "t_empresas", force: :cascade do |t|
     t.string "rif", null: false
     t.string "razon_social", null: false
-    t.string "tipo_valor", null: false
-    t.string "sector_economico", null: false
     t.string "direccion_empresa"
     t.string "fax"
     t.string "web"
     t.string "telefono"
     t.string "email"
+    t.bigint "t_empresa_tipo_valor_id", null: false
+    t.bigint "t_empresa_sector_economico_id", null: false
     t.index ["rif"], name: "index_t_empresas_on_rif", unique: true
   end
 
@@ -428,14 +442,21 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
     t.index ["t_tarifa_id"], name: "index_t_tarifas_periodos_on_t_tarifa_id"
   end
 
+  create_table "t_tipo_cliente_tipos", force: :cascade do |t|
+    t.string "descripcion"
+    t.integer "estatus"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "t_tipo_clientes", force: :cascade do |t|
     t.string "codigo", null: false
     t.string "descripcion", null: false
-    t.string "tipo", null: false
     t.integer "estatus", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "t_tarifa_id", null: false
+    t.bigint "t_tipo_cliente_tipo_id", null: false
     t.index ["codigo"], name: "index_t_tipo_clientes_on_codigo", unique: true
     t.index ["t_tarifa_id"], name: "index_t_tipo_clientes_on_t_tarifa_id"
   end
@@ -509,6 +530,8 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
   add_foreign_key "t_emisions", "t_periodos"
   add_foreign_key "t_emisions", "t_tipo_emisions"
   add_foreign_key "t_emisions", "users"
+  add_foreign_key "t_empresas", "t_empresa_sector_economicos"
+  add_foreign_key "t_empresas", "t_empresa_tipo_valors"
   add_foreign_key "t_estado_cuenta", "t_clientes"
   add_foreign_key "t_estado_cuenta", "t_facturas"
   add_foreign_key "t_estado_cuenta", "t_recibos"
@@ -545,6 +568,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_194128) do
   add_foreign_key "t_tarifas_periodos", "t_periodos"
   add_foreign_key "t_tarifas_periodos", "t_tarifas"
   add_foreign_key "t_tipo_clientes", "t_tarifas"
+  add_foreign_key "t_tipo_clientes", "t_tipo_cliente_tipos"
   add_foreign_key "t_users_rols", "t_rols"
   add_foreign_key "t_users_rols", "users"
 end
