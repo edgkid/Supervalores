@@ -10,7 +10,7 @@ connection.execute(" DELETE FROM t_users_rols; commit;")
 connection.execute(" DELETE FROM users; commit;")
 connection.execute(" DELETE FROM t_rols; commit;")
 
-email = 'admin@cxc.com'
+email = 'adminSMV@cxc.com'
 pass = '2019AdminCxC'
 
 user = User.find_by(email: email)
@@ -27,11 +27,14 @@ if user == nil
 end
 print "Usuario commun #{email} - #{pass}\n"
 
+TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "SuperAdmin", descripcion:"Rol de usuario con acceso a todos los módulos del sistema", peso:1, estatus: 1, icon_class:nil)
+TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "AdminCxC", descripcion:"Rol de usuario con acceso a todos los módulos del sistema. No gestiona usuarios", peso:1, estatus: 1, icon_class:nil)
+
+connection.execute(" Update users SET role = 'SuperAdmin', estado = 'true' WHERE email = 'admin@cxc.com' AND nombre = 'CXC' AND apellido = 'Administrador'; commit;")
+
 # Requisitos de migracion
 #  sudo -u postgres psql -U postgres -c 'CREATE DATABASE cxc';
 #  sudo -u postgres psql -U postgres cxc < data/cxc_db_export.pgsql
-
-connection = ActiveRecord::Base.connection()
 continue = true
 
 check_previous_migration = connection.execute("SELECT * FROM schema_migrations sm WHERE sm.version = '0'")
@@ -50,7 +53,7 @@ else
   end
 
   begin
-    if continue      
+    if continue
       connection.execute("GRANT USAGE ON SCHEMA public TO migracion")
       connection.execute("GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO migracion")
       connection.execute("GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO migracion")
@@ -69,7 +72,7 @@ else
 
   begin
     if continue
-      connection.execute("GRANT ALL PRIVILEGES ON DATABASE cxc to postgres")  
+      connection.execute("GRANT ALL PRIVILEGES ON DATABASE cxc to postgres")
     end
   rescue Exception => error
     if error.inspect.include? 'database "cxc" does not exist'
@@ -79,10 +82,10 @@ else
   end
 
   begin
-    if continue  
+    if continue
       connection.execute("GRANT ALL PRIVILEGES ON DATABASE supervalores_development to migracion")
     end
-  rescue Exception => error  
+  rescue Exception => error
     if error.inspect.include? 'database "supervalores_development" does not exist'
       print "Problema =(: No se puede migrar sin la base de datos destino (supervalores_development).\n"
       continue = false
@@ -96,7 +99,7 @@ else
     if continue
       connection.execute("CREATE EXTENSION dblink")
     end
-  rescue Exception => error    
+  rescue Exception => error
     if !error.inspect.include?  'extension "dblink" already exists'
       print "Problema =(: #{error.inspect}\n"
       continue = false
@@ -141,7 +144,7 @@ else
     if continue
       connection.execute("GRANT USAGE ON FOREIGN SERVER cxc_server TO postgres")
     end
-  rescue Exception => error  
+  rescue Exception => error
     if error.inspect.include? 'database "supervalores_development" does not exist'
       print "Problema =(: No se puede migrar sin la base de datos destino (supervalores_development).\n"
       continue = false
@@ -166,9 +169,3 @@ else
     end
   end
 end
-
-TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "SuperAdmin", descripcion:"Rol de usuario con acceso a todos los módulos del sistema", peso:1, estatus: 1, icon_class:nil)
-TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "AdminCxC", descripcion:"Rol de usuario con acceso a todos los módulos del sistema. No gestiona usuarios", peso:1, estatus: 1, icon_class:nil)
-
-#Rol por usuario
-connection.execute(" INSERT INTO t_users_rols VALUES (1,1); commit;")
