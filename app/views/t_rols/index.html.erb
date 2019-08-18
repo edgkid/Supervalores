@@ -20,7 +20,6 @@
                   <th>Nombre</th>
                   <th>Descripción</th>
                   <th>Estatus</th>
-                  <!--<th>Acciones</th>-->
                 </tr>
               </thead>
               <tbody>
@@ -30,18 +29,6 @@
                     <td><%= rol.nombre %></td>
                     <td><%= rol.descripcion %></td>
                     <td><center><%= rol.estatus == 1 ? 'Activo' : 'Inactivo'%></center></td>
-                    <!--<td>
-                      <center>
-                      <div class="btn-group">
-                        <%#= link_to({:action => 'show', :id => rol.id}, data: { turbolinks: false }, class: "btn btn-success btn-xs", title: "Consultar Rol de Usuario") do %>
-                            <i class="glyphicon glyphicon-search"></i>
-                        <% #end %>
-                        <%#= link_to({:action => 'edit', :id => rol.id}, data: { turbolinks: false }, class: "btn btn-warning btn-xs", title: "Editar Rol de Usuario") do %>
-                          <i class="glyphicon glyphicon-pencil"></i>
-                        <% #end %>
-                      </div>
-                      </center>
-                    </td>-->
                   </tr>
                 <% end %>
               </tbody>
