@@ -70,6 +70,6 @@ class TTipoClientesController < ApplicationController
     end
 
     def parametros_tipo_cliente
-      params.require(:t_tipo_cliente).permit(:codigo, :descripcion, :tipo, :estatus, :t_tarifa_id)
+      params.require(:t_tipo_cliente).permit(:codigo, :descripcion, :t_tipo_cliente_tipo_id, :estatus, :t_tarifa_id)
     end
 end

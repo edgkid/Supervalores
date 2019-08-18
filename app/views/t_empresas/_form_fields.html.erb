@@ -17,13 +17,13 @@
     <% end %>
   </div>
   <div class="col-sm-2 col-form-label">
-    <%= form.label :tipo_valor, "Tipo Valor", class: "text-right" %>
+    <%= form.label :t_empresa_tipo_valor_id, "Tipo Valor", class: "text-right" %>
   </div>
-  <div class="col-sm-4 input-value">
+  <div class="col-sm-4 input-value">    
     <% if editable %>
-    <%= form.text_field :tipo_valor, autofocus: true, autocomplete: "tipo_valor", class: "form-control" %>
+    <%= form.select :t_empresa_tipo_valor_id, opciones_de_tipos_de_valor_para_empresas , {}, { :class => 'form-control m-b' } %>
     <% else %>
-    <%= persona.tipo_valor %>
+    <%= registro.t_empresa_tipo_valor.descripcion %>
     <% end %>
   </div>
 </div>
@@ -41,13 +41,13 @@
 </div>
 <div class="form-group row">
   <div class="col-sm-3 col-form-label">
-    <%= form.label :sector_economico, "Sector Económico", class: "text-right" %>
+    <%= form.label :t_empresa_sector_economico_id, "Sector Económico", class: "text-right" %>
   </div>
   <div class="col-sm-9 input-value">
     <% if editable %>
-    <%= form.text_field :sector_economico, autofocus: true, autocomplete: "sector_economico", class: "form-control" %>
+    <%= form.select :t_empresa_sector_economico_id, opciones_de_sectores_economicos_para_empresas , {}, { :class => 'form-control m-b' } %>
     <% else %>
-    <%= persona.sector_economico %>
+    <%= registro.t_empresa_sector_economico.descripcion %>
     <% end %>
   </div>
 </div>

@@ -13,16 +13,20 @@
           </div>
         </div>
         <div class="ibox-content">
+          <% if @t_periodos != nil && @t_periodos.count > 0 %>
           <div class="table-responsive">
             <%= render 'shared/table', object_list: @t_periodos, object_attributes: {
                         descripcion: 'Descripción', rango_dias: 'Rango de días',
                         dia_tope: 'Día tope', mes_tope: 'Mes tope',
                         mes_tope_desc: 'Descripción del mes tope', estatus: 'Estatus' } %>
           </div>
+          <% else %>
+          <div>
+            <p>No se encontraron registros.</p>
+          </div>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-

@@ -13,11 +13,17 @@
           </div>
         </div>
         <div class="ibox-content">
+          <% if @t_tarifas != nil && @t_tarifas.count > 0 %>
           <div class="table-responsive">
             <%= render 'shared/table', object_list: @t_tarifas, object_attributes: {
                         nombre: 'Nombre', descripcion: 'Descripción',
                         rango_monto: 'Rango del monto', recargo: 'Recargo', estatus: 'Estatus' } %>
           </div>
+          <% else %>
+          <div>
+            <p>No se encontraron registros.</p>
+          </div>
+          <% end %>
         </div>
       </div>
     </div>

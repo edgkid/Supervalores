@@ -24,8 +24,8 @@ class ClientePolymorphic < ActiveRecord::Migration[5.2]
     add_column :t_personas, :email, :string
     add_column :t_empresas, :telefono, :string
     add_column :t_empresas, :email, :string
-    add_column :t_clientes, :persona_id, :bigint, null: true
-    add_column :t_clientes, :persona_type, :string, null: true
+    add_column :t_clientes, :persona_id, :bigint, null: false
+    add_column :t_clientes, :persona_type, :string, null: false
     add_index :t_clientes, [:persona_type, :persona_id], name: "index_persona_as_cliente"
     add_index :t_otros, :t_tipo_persona_id, name: "index_t_otros_on_t_tipo_persona_id"
     add_foreign_key :t_otros, :t_tipo_personas

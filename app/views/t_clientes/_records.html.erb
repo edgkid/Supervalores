@@ -1,7 +1,7 @@
 <div class="ibox-content">
   <%= render "shared/spiner_loading" %>
+  <% if clientes != nil && clientes.count > 0 %>
   <div class="waiting-content table-responsive">
-    <% if clientes != nil && clientes.count > 0 %>
     <div class="col-12">
       <p class="text-info">Puedes hacer "click" en cualquier fila para ver el detalle del registro.</p>
     </div>

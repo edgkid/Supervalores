@@ -34,8 +34,8 @@
                 <tr data-link="<%= polymorphic_url(registro) %>">
                   <td><%= registro.rif %></td>
                   <td><%= registro.razon_social %></td>
-                  <td><%= registro.tipo_valor %></td>
-                  <td><%= registro.sector_economico %></td>
+                  <td><%= registro.t_empresa_tipo_valor.descripcion %></td>
+                  <td><%= registro.t_empresa_sector_economico.descripcion %></td>
                   <td><%= registro.telefono %></td>
                   <td><%= registro.email %></td>
                 </tr>
