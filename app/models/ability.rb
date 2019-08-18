@@ -8,9 +8,11 @@ class Ability
     #
     #user ||= User.new # guest user (not logged in)
     #can :manage, :all
+
     alias_action :create, :read, :update, :destroy, to: :crud
     #Action to Super Admin
     can :manage, :all if user.role == "SuperAdmin"
+    
     if user.estado && user.role != "SuperAdmin"
       if user.present?
         #Action to AdminCxC
