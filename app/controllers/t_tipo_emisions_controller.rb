@@ -1,5 +1,5 @@
 class TTipoEmisionsController < ApplicationController
-  before_action :seleccionar_tipo_persona, only: [:show, :edit, :update, :destroy]
+  before_action :seleccionar_tipo_emision, only: [:show, :edit, :update, :destroy]
 
   # load_and_authorize_resource
 
@@ -23,7 +23,7 @@ class TTipoEmisionsController < ApplicationController
   end
 
   def create
-    @registro = TTipoEmision.new(parametros_tipo_persona)
+    @registro = TTipoEmision.new(parametros_tipo_emision)
 
     respond_to do |format|
       if @registro.save
@@ -39,7 +39,7 @@ class TTipoEmisionsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(parametros_tipo_persona)
+      if @registro.update(parametros_tipo_emision)
         format.html { redirect_to @registro, notice: 'Tipo de emision actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
@@ -54,7 +54,7 @@ class TTipoEmisionsController < ApplicationController
     @registro.estatus = 0
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to t_tipo_personas_url, notice: 'Tipo de emision inhabilitado correctamente.' }
+        format.html { redirect_to t_tipo_emisions_url, notice: 'Tipo de emision inhabilitado correctamente.' }
         format.json { head :no_content }
       else
         @notice = @registro.errors
@@ -65,11 +65,11 @@ class TTipoEmisionsController < ApplicationController
   end
 
   private
-    def seleccionar_tipo_persona
+    def seleccionar_tipo_emision
       @registro = TTipoEmision.find(params[:id])
     end
 
-    def parametros_tipo_persona
-      params.require(:t_tipo_persona).permit(:descripcion, :estatus)
+    def parametros_tipo_emision
+      params.require(:t_tipo_emision).permit(:descripcion, :estatus)
     end
 end
