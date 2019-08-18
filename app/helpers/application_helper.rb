@@ -88,5 +88,9 @@ module ApplicationHelper
   def opciones_de_sectores_economicos_para_empresas
     return TEmpresaSectorEconomico.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
   end
+  
+  def opciones_de_tipos_de_emisiones
+    return TTipoEmision.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
+  end
 
 end
