@@ -1,7 +1,7 @@
 class TEmpresaSectorEconomicosController < ApplicationController
   before_action :seleccionar_sector_economico, only: [:show, :edit, :update, :destroy]
 
-  load_and_authorize_resource
+  #load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path, :alert => exception.message
@@ -23,6 +23,7 @@ class TEmpresaSectorEconomicosController < ApplicationController
   end
 
   def create
+    authorize! :create, @registro
     @registro = TEmpresaSectorEconomico.new(parametros_sector_economico)
 
     respond_to do |format|
@@ -38,6 +39,8 @@ class TEmpresaSectorEconomicosController < ApplicationController
   end
 
   def update
+
+    authorize! :update, @registro
     respond_to do |format|
       if @registro.update(parametros_sector_economico)
         format.html { redirect_to @registro, notice: 'Sector económico actualizado correctamente.' }
@@ -51,6 +54,7 @@ class TEmpresaSectorEconomicosController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, @registro
     @registro.estatus = 0
     respond_to do |format|
       if @registro.save

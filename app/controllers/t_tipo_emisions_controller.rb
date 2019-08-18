@@ -1,8 +1,6 @@
 class TTipoEmisionsController < ApplicationController
   before_action :seleccionar_tipo_emision, only: [:show, :edit, :update, :destroy]
 
-  load_and_authorize_resource
-
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path, :alert => exception.message
 	end
@@ -24,6 +22,7 @@ class TTipoEmisionsController < ApplicationController
 
   def create
     @registro = TTipoEmision.new(parametros_tipo_emision)
+    authorize! :create, @registro
 
     respond_to do |format|
       if @registro.save
@@ -39,6 +38,7 @@ class TTipoEmisionsController < ApplicationController
 
   def update
     respond_to do |format|
+      authorize! :update, @registro
       if @registro.update(parametros_tipo_emision)
         format.html { redirect_to @registro, notice: 'Tipo de emision actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
@@ -52,6 +52,7 @@ class TTipoEmisionsController < ApplicationController
 
   def destroy
     @registro.estatus = 0
+    authorize! :destroy, @registro
     respond_to do |format|
       if @registro.save
         format.html { redirect_to t_tipo_emisions_url, notice: 'Tipo de emision inhabilitado correctamente.' }

@@ -1,7 +1,7 @@
 class TResolucionsController < ApplicationController
   before_action :seleccionar_resolucion, only: [:show, :edit, :update, :destroy]
 
-  load_and_authorize_resource
+  #load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path, :alert => exception.message
@@ -23,6 +23,8 @@ class TResolucionsController < ApplicationController
   end
 
   def create
+
+    authorize! :create, @registro
     @registro = TResolucion.new(parametros_resolucion)
     respond_to do |format|
       if @registro.save
@@ -37,6 +39,8 @@ class TResolucionsController < ApplicationController
   end
 
   def update
+
+    authorize! :update, @registro
     respond_to do |format|
       if @registro.update(parametros_resolucion)
         format.html { redirect_to @registro, notice: 'Resolución actualizada correctamente.' }
@@ -50,6 +54,8 @@ class TResolucionsController < ApplicationController
   end
 
   def destroy
+
+    authorize! :destroy, @registro
     @registro.t_estatus = TEstatus.find_by(description: "Inactivo")
     respond_to do |format|
       if @registro.save

@@ -1,7 +1,7 @@
 class TTipoClientesController < ApplicationController
   before_action :seleccionar_tipo_cliente, only: [:show, :edit, :update, :destroy]
 
-  load_and_authorize_resource
+  #load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path, :alert => exception.message
@@ -23,6 +23,7 @@ class TTipoClientesController < ApplicationController
   end
 
   def create
+    authorize! :create, @registro
     @registro = TTipoCliente.new(parametros_tipo_cliente)
 
     respond_to do |format|
@@ -38,6 +39,8 @@ class TTipoClientesController < ApplicationController
   end
 
   def update
+
+    authorize! :update, @registro
     respond_to do |format|
       if @registro.update(parametros_tipo_cliente)
         format.html { redirect_to @registro, notice: 'Tipo de cliente actualizado correctamente.' }
@@ -51,6 +54,8 @@ class TTipoClientesController < ApplicationController
   end
 
   def destroy
+
+    authorize! :destroy, @registro
     @registro.estatus = 0
     respond_to do |format|
       if @registro.save

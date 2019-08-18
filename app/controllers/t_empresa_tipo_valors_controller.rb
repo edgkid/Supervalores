@@ -1,7 +1,7 @@
 class TEmpresaTipoValorsController < ApplicationController
   before_action :seleccionar_tipo_valor, only: [:show, :edit, :update, :destroy]
 
-  load_and_authorize_resource
+  #load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path, :alert => exception.message
@@ -23,6 +23,8 @@ class TEmpresaTipoValorsController < ApplicationController
   end
 
   def create
+
+    authorize! :create, @registro
     @registro = TEmpresaTipoValor.new(parametros_tipo_valor)
 
     respond_to do |format|
@@ -38,6 +40,8 @@ class TEmpresaTipoValorsController < ApplicationController
   end
 
   def update
+
+    authorize! :update, @registro
     respond_to do |format|
       if @registro.update(parametros_tipo_valor)
         format.html { redirect_to @registro, notice: 'Tipo de valor actualizado correctamente.' }
@@ -51,6 +55,8 @@ class TEmpresaTipoValorsController < ApplicationController
   end
 
   def destroy
+
+    authorize! :destroy, @registro
     @registro.estatus = 0
     respond_to do |format|
       if @registro.save

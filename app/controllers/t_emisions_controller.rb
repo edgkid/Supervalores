@@ -1,7 +1,7 @@
 class TEmisionsController < ApplicationController
   before_action :seleccionar_emision, only: [:show, :edit, :update, :destroy]
 
-  load_and_authorize_resource
+  #load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path, :alert => exception.message
@@ -23,6 +23,8 @@ class TEmisionsController < ApplicationController
   end
 
   def create
+
+    authorize! :create, @registro
     @registro = TEmision.new(parametros_emision)
 
     respond_to do |format|
@@ -38,6 +40,8 @@ class TEmisionsController < ApplicationController
   end
 
   def update
+
+    authorize! :update, @registro
     respond_to do |format|
       if @registro.update(parametros_emision)
         format.html { redirect_to @registro, notice: 'Emisión actualizado correctamente.' }
@@ -51,6 +55,8 @@ class TEmisionsController < ApplicationController
   end
 
   def destroy
+
+    authorize! :destroy, @registro
     @registro.estatus = 0
     respond_to do |format|
       if @registro.save

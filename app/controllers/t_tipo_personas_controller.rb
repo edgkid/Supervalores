@@ -1,7 +1,7 @@
 class TTipoPersonasController < ApplicationController
   before_action :seleccionar_tipo_persona, only: [:show, :edit, :update, :destroy]
 
-  load_and_authorize_resource
+  #load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path, :alert => exception.message
@@ -24,6 +24,7 @@ class TTipoPersonasController < ApplicationController
 
   def create
     @registro = TTipoPersona.new(parametros_tipo_persona)
+    authorize! :create, @registro
 
     respond_to do |format|
       if @registro.save
@@ -38,6 +39,8 @@ class TTipoPersonasController < ApplicationController
   end
 
   def update
+    authorize! :update, @registro
+
     respond_to do |format|
       if @registro.update(parametros_tipo_persona)
         format.html { redirect_to @registro, notice: 'Tipo de persona actualizado correctamente.' }
@@ -51,6 +54,8 @@ class TTipoPersonasController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, @registro
+
     @registro.estatus = 0
     respond_to do |format|
       if @registro.save

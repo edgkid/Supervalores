@@ -6,7 +6,7 @@ class TClientesController < ApplicationController
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion]
   before_action :usar_dataTables_en, only: [:index, :show, :edit]
 
-  load_and_authorize_resource
+  #load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
 		redirect_to dashboard_access_denied_path	, :alert => exception.message
@@ -28,6 +28,8 @@ class TClientesController < ApplicationController
   end
 
   def create
+
+    authorize! :create, @registro
     @registro = TCliente.new(parametros_cliente)
     if es_empresa
       @registro.persona = TEmpresa.new(parametros_cliente_tipo_empresa)
@@ -69,6 +71,7 @@ class TClientesController < ApplicationController
   end
 
   def update
+    authorize! :update, @registro
     crear = false
     actualizar = false
     parametros = {}
@@ -145,6 +148,7 @@ class TClientesController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, @registro
     @registro.t_estatus = TEstatus.find_by(descripcion: "Inactivo")
     respond_to do |format|
       if @registro.save
