@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_17_211255) do
+ActiveRecord::Schema.define(version: 2019_08_18_211255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -292,7 +292,6 @@ ActiveRecord::Schema.define(version: 2019_08_17_211255) do
     t.integer "rango_dias", null: false
     t.integer "dia_tope", null: false
     t.integer "mes_tope", null: false
-    t.string "mes_tope_desc", null: false
     t.integer "estatus", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

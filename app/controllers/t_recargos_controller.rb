@@ -1,4 +1,5 @@
 class TRecargosController < ApplicationController
+  respond_to :json, only: :find_by_descripcion
   before_action :seleccionar_recargo, only: [:show, :edit, :update, :destroy]
 
   # load_and_authorize_resource
