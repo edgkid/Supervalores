@@ -66,7 +66,7 @@
 								<div class="form-group row">
 						    	<label class="col-sm-2 col-form-label">Descripción del Rol</label>
 						    	<div class="col-sm-10">
-										<%= text_field_tag :rol_user, @rol.descripcion != nil ? @rol.descripcion : "",  class:"form-control", disabled: true %>
+										<%= text_area_tag :rol_user, @rol.descripcion != nil ? @rol.descripcion : "",  class:"form-control", disabled: true %>
 						    </div>
 							</div>
 							<% end %>
