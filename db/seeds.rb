@@ -33,8 +33,6 @@ print "Usuario commun #{email} - #{pass}\n"
 TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "SuperAdmin", descripcion:"Rol de usuario con acceso a todos los módulos del sistema", peso:1, estatus: 1, icon_class:nil)
 TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "AdminCxC", descripcion:"Rol de usuario con acceso a todos los módulos del sistema. No gestiona usuarios", peso:1, estatus: 1, icon_class:nil)
 
-connection.execute(" Update users SET role = 'SuperAdmin', estado = 'true' WHERE email = 'admin@cxc.com' AND nombre = 'CXC' AND apellido = 'Administrador'; commit;")
-
 TElemento.create(nombre: "Consultar Módulos del Sistema", modelo:"Elemento")
 TElemento.create(nombre: "Gestionar Permisos del Sistema", modelo:"Permission")
 TElemento.create(nombre: "Gestionar Sub-Catálogos de Cuentas", modelo:"TCatalogoCuentaSub")
@@ -72,11 +70,7 @@ TElemento.create(nombre: "Gestionar Tipo de Emisiones", modelo:"TTipoEmision")
 TElemento.create(nombre: "Gestionar Tipo de Personas", modelo:"TTipoPersona")
 TElemento.create(nombre: "Gestionar Usuarios", modelo:"User")
 
-
-
-
-
-
+connection.execute(" Update users SET role = 'SuperAdmin', estado = 'true' WHERE email = 'admin@cxc.com' AND nombre = 'CXC' AND apellido = 'Administrador'; commit;")
 
 # Requisitos de migracion
 #  sudo -u postgres psql -U postgres -c 'CREATE DATABASE cxc';
