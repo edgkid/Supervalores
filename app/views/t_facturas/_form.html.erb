@@ -181,8 +181,8 @@
         },
         processResults: function (data) {
           return {
-            results: $.map(data, function(t_persona, i) {
-              return { id: t_persona.cedula, text: t_persona.cedula } 
+            results: $.map(data, function(persona, i) {
+              return { id: persona.cedula ? persona.cedula : persona.rif, text: persona.cedula ? persona.cedula : persona.rif } 
             })
           };
         },
@@ -220,31 +220,6 @@
           setTotal('#total', getTotal('.subtotal-cell'));
           priceInput.val(rate);
           updateAllSurcharges();
-          // alert(priceInput.val());
-          // priceInput.data('price', rate * Number($('#total').text()));
-          // alert(priceInput.data('price'));
-
-          // priceInput.data('price', rate * Number($('#total').data('previous_total')));
-          // if (selectRecargo.data('first_time') == true) {
-          //   selectRecargo.data('first_time', 'false');
-          //   $('#total').data('previous_total', Number($('#total').text()));
-          //   priceInput.data('previous_total', Number($('#total').text()));
-          //   // $('.recargo-input').each(function () {
-          //   //   $(this).data('previous_total', Number($('#total').text()));
-          //   // });
-          //   priceInput.data('price', surcharge * Number($('#total').text()));
-          // } else {
-          //   priceInput.data('price', surcharge * Number($('#total').data('previous_total')));
-          //   $('#total').text(priceInput.data('previous_total'));
-          //   // priceInput.data('previous_total', Number($('#total').text()));
-          // }
-          // alert(priceInput.data('price'));
-          // priceInput.val(Number($('#total').text()) * surcharge);
-
-          //cleanAllSurcharges();
-          // setSubTotal(priceInput, false);
-          // setTotal('#total', getTotal('.subtotal-cell'));
-          //updateAllSurcharges();
         }
       });
     });

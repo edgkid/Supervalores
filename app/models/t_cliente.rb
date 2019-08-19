@@ -3,13 +3,13 @@ class TCliente < ApplicationRecord
   belongs_to :t_tipo_cliente  
   belongs_to :t_estatus    
 
-  has_many :t_resolucions
+  has_many :t_resolucions, dependent: :destroy
   has_many :t_recibos
   #has_many :t_emisions
   has_many :t_email_masivos
   has_many :t_nota_creditos
 
-  has_many :t_recargo_x_clientes
+  has_many :t_recargo_x_clientes, dependent: :destroy
   has_many :t_recargos, through: :t_recargo_x_cliente
 
   has_many :t_estado_cuenta

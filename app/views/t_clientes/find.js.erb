@@ -1,17 +1,18 @@
 $("#client-container").html("<%= escape_javascript(render('t_facturas/cliente')) %>");
 var attribute = '<%= @attribute %>',
-    codigo = '<%= @t_cliente.codigo %>',
-    cedula = '<%= @t_persona.cedula %>'
+    codigo = '<%= @t_cliente ? @t_cliente.codigo : "" %>',
+    cedula = '<%= @t_persona ? @t_persona.cedula : "" %>',
+    rif = '<%= @t_empresa ? @t_empresa.rif : "" %>',
     zeroLength = false;
-    // razon_social = '<%= @t_cliente.razon_social %>';
-
+    // razon_social = '<%#= @t_cliente.razon_social %>';
+<% debugger %>
 var data = [
   <% @t_cliente.t_resolucions.each do |t_resolucion| %>
     {
       id: <%= t_resolucion.id %>,
       text: '<%= t_resolucion.resolucion %>'
     },
-  <% end %>
+  <% end if @t_cliente %>
 ]
 
 if (data.length === 0) {
@@ -27,15 +28,25 @@ switch(attribute) {
       $('#select-resolucion').select2({ data: data });
     }
 
-    $('#select2-select-cedula-container').text(cedula);
-    $('#select2-select-cedula-container').attr('title', cedula);
+    <% if @t_cliente %>
+      $('#select2-select-cedula-container').text(cedula);
+      $('#select2-select-cedula-container').attr('title', cedula);
+    <% elsif @t_empresa %>
+      $('#select2-select-cedula-container').text(rif);
+      $('#select2-select-cedula-container').attr('title', rif);
+    <% end %>
     break;
   case 'select-resolucion':
     $('#select2-select-codigo-container').text(codigo);
     $('#select2-select-codigo-container').attr('title', codigo);
 
-    $('#select2-select-cedula-container').text(cedula);
-    $('#select2-select-cedula-container').attr('title', cedula);
+    <% if @t_cliente %>
+      $('#select2-select-cedula-container').text(cedula);
+      $('#select2-select-cedula-container').attr('title', cedula);
+    <% elsif @t_empresa %>
+      $('#select2-select-cedula-container').text(rif);
+      $('#select2-select-cedula-container').attr('title', rif);
+    <% end %>
     break;
   case 'select-cedula':
     if (zeroLength) {

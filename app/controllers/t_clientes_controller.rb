@@ -170,7 +170,13 @@ class TClientesController < ApplicationController
 
   def find_by_cedula
     search = parametros_de_busqueda[:search]
-    respond_with TPersona.where('cedula LIKE ?', "%#{search}%").first(10)
+
+    personas = TPersona.where('cedula LIKE ?', "%#{search}%").first(10)
+    if personas.empty?
+      personas = TEmpresa.where('rif LIKE ?', "%#{search}%").first(10)
+    end
+
+    respond_with personas
     # respond_with TCliente.where('razon_social LIKE ?', "%#{search}%").first(10)
   end
 
@@ -181,14 +187,27 @@ class TClientesController < ApplicationController
     case @attribute
     when 'select-codigo'
       @t_cliente = TCliente.find_by(codigo: search)
-      @t_persona = @t_cliente.persona
+
+      persona = @t_cliente.persona
+      case persona.class.to_s
+      when 'TPersona'
+        @t_persona = persona
+      when 'TEmpresa'
+        @t_empresa = persona
+      end
     when 'select-resolucion'
       @t_resolucion = TResolucion.find_by(resolucion: search)
       @t_cliente = @t_resolucion.t_cliente
       @t_persona = @t_cliente.persona
     when 'select-cedula'
       @t_persona = TPersona.find_by(cedula: search)
-      @t_cliente = @t_persona.t_cliente
+      if @t_persona
+        @t_cliente = @t_persona.t_cliente
+      else
+        @t_empresa = TEmpresa.find_by(rif: search)
+        @t_cliente = @t_empresa.t_cliente
+        @without_client = true unless @t_cliente
+      end
     end if search != ''
   end
 
