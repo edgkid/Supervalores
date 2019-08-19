@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_17_211255) do
+ActiveRecord::Schema.define(version: 2019_08_19_105304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,6 +97,20 @@ ActiveRecord::Schema.define(version: 2019_08_17_211255) do
     t.integer "estatus"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "t_elementos", force: :cascade do |t|
+    t.string "nombre"
+    t.string "modelo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "t_elementos_x_rols", id: false, force: :cascade do |t|
+    t.bigint "t_rol_id", null: false
+    t.bigint "t_elemento_id", null: false
+    t.index ["t_elemento_id"], name: "index_t_elementos_x_rols_on_t_elemento_id"
+    t.index ["t_rol_id"], name: "index_t_elementos_x_rols_on_t_rol_id"
   end
 
   create_table "t_email_masivos", force: :cascade do |t|
@@ -524,6 +538,8 @@ ActiveRecord::Schema.define(version: 2019_08_17_211255) do
   add_foreign_key "t_clientes", "t_tipo_clientes"
   add_foreign_key "t_cuenta_financieras", "t_presupuestos"
   add_foreign_key "t_cuenta_financieras", "t_tarifa_servicio_groups"
+  add_foreign_key "t_elementos_x_rols", "t_elementos"
+  add_foreign_key "t_elementos_x_rols", "t_rols"
   add_foreign_key "t_email_masivos", "t_clientes"
   add_foreign_key "t_email_masivos", "t_facturas"
   add_foreign_key "t_email_masivos", "users"

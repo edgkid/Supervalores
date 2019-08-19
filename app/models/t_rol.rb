@@ -1,5 +1,6 @@
 class TRol < ApplicationRecord
 	has_and_belongs_to_many :users
+	has_and_belongs_to_many :t_elementos
 	has_many :t_rol_descs
 
 	validates :nombre, presence: {message: "|El nombre del rol no debe estar en blanco."},
