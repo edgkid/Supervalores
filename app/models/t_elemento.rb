@@ -1,0 +1,2 @@
+class TElemento < ApplicationRecord
+end
