@@ -23,7 +23,7 @@
     <% if editable %>
     <%= form.select :t_empresa_tipo_valor_id, opciones_de_tipos_de_valor_para_empresas , {}, { :class => 'form-control m-b' } %>
     <% else %>
-    <%= registro.t_empresa_tipo_valor.descripcion %>
+    <%= persona.t_empresa_tipo_valor != nil ? persona.t_empresa_tipo_valor.descripcion : "Ninguno" %>
     <% end %>
   </div>
 </div>
@@ -47,7 +47,7 @@
     <% if editable %>
     <%= form.select :t_empresa_sector_economico_id, opciones_de_sectores_economicos_para_empresas , {}, { :class => 'form-control m-b' } %>
     <% else %>
-    <%= registro.t_empresa_sector_economico.descripcion %>
+    <%= persona.t_empresa_sector_economico != nil ? persona.t_empresa_sector_economico.descripcion : "Ninguno" %>
     <% end %>
   </div>
 </div>
