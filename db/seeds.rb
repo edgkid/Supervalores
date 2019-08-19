@@ -6,7 +6,10 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 connection = ActiveRecord::Base.connection()
+connection.execute(" DELETE FROM t_elementos_x_rols; commit;")
+connection.execute(" DELETE FROM t_elementos; commit;")
 connection.execute(" DELETE FROM t_users_rols; commit;")
+connection.execute(" DELETE FROM permissions; commit;")
 connection.execute(" DELETE FROM users; commit;")
 connection.execute(" DELETE FROM t_rols; commit;")
 
@@ -31,6 +34,49 @@ TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombr
 TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "AdminCxC", descripcion:"Rol de usuario con acceso a todos los módulos del sistema. No gestiona usuarios", peso:1, estatus: 1, icon_class:nil)
 
 connection.execute(" Update users SET role = 'SuperAdmin', estado = 'true' WHERE email = 'admin@cxc.com' AND nombre = 'CXC' AND apellido = 'Administrador'; commit;")
+
+TElemento.create(nombre: "Consultar Módulos del Sistema", modelo:"Elemento")
+TElemento.create(nombre: "Gestionar Permisos del Sistema", modelo:"Permission")
+TElemento.create(nombre: "Gestionar Sub-Catálogos de Cuentas", modelo:"TCatalogoCuentaSub")
+TElemento.create(nombre: "Gestionar Catálogos de Cuenta", modelo:"TCatalogoCuentum")
+TElemento.create(nombre: "Gestionar Tarifas de Clientes ", modelo:"TClienteTarifa")
+TElemento.create(nombre: "Gestionar Clientes", modelo:"TCliente")
+TElemento.create(nombre: "Gestionar Tarifas", modelo:"TClienteTarifa")
+TElemento.create(nombre: "Gestionar Cuentas Financieras", modelo:"TCuentaFinanciera")
+TElemento.create(nombre: "Gestionar Cuentas de Venta ", modelo:"TCuentaVentum")
+TElemento.create(nombre: "Administración de Correos Masivos ", modelo:"TEmailMasivo")
+TElemento.create(nombre: "Gestion de Emisiones ", modelo:"TEmision")
+TElemento.create(nombre: "Gestion de Empresas", modelo:"TEmpresa")
+TElemento.create(nombre: "Gestionar Estados de Cuenta (Contabilidad)", modelo:"TEstadoCuentaCont")
+TElemento.create(nombre: "Gestionar Estados de Cuenta", modelo:"TEstadoCuentum")
+TElemento.create(nombre: "Gestionar Estatus", modelo:"TEstatus")
+TElemento.create(nombre: "Gestionar Detalles de Factura ", modelo:"TFacturaDetalle")
+TElemento.create(nombre: "Gestionar Facturas", modelo:"TFactura")
+TElemento.create(nombre: "Gestionar Leyendas de Facturas", modelo:"TLeyenda")
+TElemento.create(nombre: "Gestionar Métodos de Pago", modelo:"TMetodoPago")
+TElemento.create(nombre: "Gestionar Notas de Crédito", modelo:"TNotaCredito")
+TElemento.create(nombre: "Gestionar Periodos", modelo:"TPeriodo")
+TElemento.create(nombre: "Gestionar Personas", modelo:"TPersona ")
+TElemento.create(nombre: "Gestionar Presupuestos", modelo:"TPresupuesto")
+TElemento.create(nombre: "Gestionar Recargos a Clientes", modelo:"TRecargoXCliente")
+TElemento.create(nombre: "Gestionar Recargos", modelo:"TRecargo")
+TElemento.create(nombre: "Gestionar Recibos", modelo:"TRecibo")
+TElemento.create(nombre: "Gestionar Información de Resolución de Clientes", modelo:"TResolucion")
+TElemento.create(nombre: "Gestionar Roles de Usuarios", modelo:"TRol")
+TElemento.create(nombre: "Gestionar Conjuntos de Tarifas de Servicios", modelo:"TTarifaServicioGroup")
+TElemento.create(nombre: "Gestionar tarifas de Servicios", modelo:"TTarifaServicio")
+TElemento.create(nombre: "Gestionar Tarifas", modelo:"TTarifa")
+TElemento.create(nombre: "Gestionar Tipo de Clientes", modelo:"TTipoCliente")
+TElemento.create(nombre: "Gestionar Tipo de Cuentas", modelo:"TTipoCuenta")
+TElemento.create(nombre: "Gestionar Tipo de Emisiones", modelo:"TTipoEmision")
+TElemento.create(nombre: "Gestionar Tipo de Personas", modelo:"TTipoPersona")
+TElemento.create(nombre: "Gestionar Usuarios", modelo:"User")
+
+
+
+
+
+
 
 # Requisitos de migracion
 #  sudo -u postgres psql -U postgres -c 'CREATE DATABASE cxc';
