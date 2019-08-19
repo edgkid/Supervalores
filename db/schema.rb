@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_19_105304) do
+ActiveRecord::Schema.define(version: 2019_08_19_113143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "permissions", force: :cascade do |t|
+    t.string "role"
+    t.string "subject_class"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_permissions_on_user_id"
+  end
 
   create_table "t_cajas", force: :cascade do |t|
     t.float "pago_recibido", null: false
@@ -526,6 +536,7 @@ ActiveRecord::Schema.define(version: 2019_08_19_105304) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "permissions", "users"
   add_foreign_key "t_cajas", "t_recibos"
   add_foreign_key "t_cajas", "users"
   add_foreign_key "t_catalogo_cuenta", "t_tipo_cuenta", column: "t_tipo_cuenta_id"
