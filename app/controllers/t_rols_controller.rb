@@ -42,6 +42,9 @@ class TRolsController < ApplicationController
   def update
     @rol = TRol.find(params[:id])
 
+    puts "Mondogo"
+    puts params[:actions_by_rol]
+
     if params[:is_active] == "Activo" or params[:is_active] == "Inactivo"
       @rol.estatus = params[:is_active] == "Activo"? true : false
     end
