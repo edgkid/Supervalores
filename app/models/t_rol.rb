@@ -9,4 +9,25 @@ class TRol < ApplicationRecord
 											  :on => [:create, :update]
 	validates :peso,  presence: {message: "|Debe indicar un peso al rol."},
 												:on => [:create, :update]
+
+	def associate_rol_with_elements (id_rol, elements)
+		access = elements.split("#")
+		inserted = false
+		connection = ActiveRecord::Base.connection()
+
+		access.each do |elemento|
+			sql = " INSERT INTO t_elementos_x_rols VALUES ("<< id_rol << ", (Select id FROM t_elementos WHERE modelo = '" << elemento << "')); "
+
+			results =connection.execute (sql)
+
+			if results.present?
+				inserted = true
+			else
+				inserted = false
+				next
+			end
+		end
+
+		return inserted
+	end
 end

@@ -42,15 +42,17 @@ class TRolsController < ApplicationController
   def update
     @rol = TRol.find(params[:id])
 
-    puts "Mondogo"
-    puts params[:actions_by_rol]
-
     if params[:is_active] == "Activo" or params[:is_active] == "Inactivo"
       @rol.estatus = params[:is_active] == "Activo"? true : false
     end
 
     if @rol.update_attributes(t_rols_params)
-      redirect_to rols_index_path , notice: 'Rol de usuario actualizado correctamente.'
+      if @rol.associate_rol_with_elements(params[:id], params[:actions_by_rol])
+        redirect_to rols_index_path , notice: 'Rol de usuario actualizado correctamente.'
+      else
+        @notice = @rol.errors
+        render :action => "edit"
+      end
     else
       @notice = @rol.errors
       render :action => "edit"
