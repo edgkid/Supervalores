@@ -48,7 +48,8 @@
                   <div class="form-group row justify-content-md-center">
                     <%= f.label :estatus, class: "col-sm-3 col-form-label" %>
                     <div class="col-sm-8">
-                      <%= f.text_field :estatus, class: "form-control" %>
+                      <%#= f.text_field :estatus, class: "form-control" %>
+                      <%= f.select :estatus, opciones_de_estatus(false), {}, { :class => 'form-control m-b' } %>
                     </div>
                   </div>
                 </div>
