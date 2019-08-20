@@ -92,6 +92,21 @@
 		var elecciones = String($("#optionrol").val()).split(",");
 		var valor = "";
 		var backEnd = "";
+
+		$('option').mousedown(function(e) {
+		   e.preventDefault();
+		   var originalScrollTop = $(this).parent().scrollTop();
+		   console.log(originalScrollTop);
+		   $(this).prop('selected', $(this).prop('selected') ? false : true);
+		   var self = this;
+		   $(this).parent().focus();
+		   setTimeout(function() {
+		       $(self).parent().scrollTop(originalScrollTop);
+		   }, 0);
+
+		   return false;
+		});
+
 		for (x=0; x< elecciones.length; x++){
 				valor = valor + elecciones[x].split("-")[0] + "\n" ;
 				backEnd = backEnd + elecciones[x].split("-")[1] +"#";
