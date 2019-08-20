@@ -36,6 +36,7 @@ class TRolsController < ApplicationController
 
   def edit
     @rol =TRol.find(params[:id])
+    @elementos = TElemento.all
   end
 
   def update
