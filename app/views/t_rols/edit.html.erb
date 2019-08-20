@@ -52,7 +52,7 @@
 											 <%= @elementos.each do |elemento| %>
 											 	<option value="<%= elemento.nombre << "-" << elemento.modelo %>" onclick="selectd()"><%= elemento.nombre%></option>
 											 <% end %>
-											 <%= text_field_tag :actions_by_rol, "",class: "form-control", disabled: true, id:"actionroleselecte", hidden: true %>
+											 <%= text_field_tag :actions_by_rol, "", class: "form-control", id: "actionroleselecte", hidden:true %>
 										</select>
 									</div>
 								</div>
@@ -78,7 +78,7 @@
 				<div class="ibox-content">
 					<p class="text-justify">
 						<b>Importante!</b><br>
-						Las acciones seleccionadas serán asignadas de manera predeterminada en solo lectura, luego usted podrá ampliar el alcance de los permisos indicados sobre el rol de usuario actual.
+						Las acciones seleccionadas serán asignadas de manera predeterminada con permiso de solo lectura, luego usted podrá ampliar el alcance de los permisos indicados sobre el rol de usuario actual.
 					</p>
 					<textarea id="actionslected" name="name" rows="21" cols="60" class="form-control" disabled></textarea>
 				</div>
@@ -86,10 +86,6 @@
 		</div>
 	</div>
 </div>
-
-<!--<div class="">
-	<p id="actionroleselecte"></p>
-</div>-->
 
 <script type="text/javascript">
 	function selectd (){
@@ -100,8 +96,7 @@
 				valor = valor + elecciones[x].split("-")[0] + "\n" ;
 				backEnd = backEnd + elecciones[x].split("-")[1] +"#";
 			}
-
 		document.getElementById("actionslected").innerHTML = valor;
-		document.getElementById("actionroleselecte").innerHTML = backEnd;
+		$("#actionroleselecte").val(backEnd);
 	}
  </script>
