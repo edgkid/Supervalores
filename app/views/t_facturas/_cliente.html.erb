@@ -7,14 +7,15 @@
     <tr>
       <th>Cliente:</th>
       <td>
-        <%= @t_persona.cedula if @t_persona %>
+        <%#= @t_persona.cedula if @t_persona %>
+        <%= @t_cliente.codigo if @t_cliente %>
       </td>
     </tr>
     <tr>
       <th>Empresa:</th>
       <td>
-        <% if @t_cliente %>
-          <%= @t_persona.t_empresa.rif if @t_persona && @t_persona.t_empresa %>
+        <% if @t_cliente && @t_persona && @t_persona.t_empresa %>
+          <%= @t_persona.t_empresa.rif %>
         <% else %>
           <%= @t_empresa.rif if @t_empresa %>
         <% end %>

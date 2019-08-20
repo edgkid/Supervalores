@@ -5,7 +5,7 @@ var attribute = '<%= @attribute %>',
     rif = '<%= @t_empresa ? @t_empresa.rif : "" %>',
     zeroLength = false;
     // razon_social = '<%#= @t_cliente.razon_social %>';
-<% debugger %>
+
 var data = [
   <% @t_cliente.t_resolucions.each do |t_resolucion| %>
     {
@@ -28,12 +28,15 @@ switch(attribute) {
       $('#select-resolucion').select2({ data: data });
     }
 
-    <% if @t_cliente %>
+    <% if @t_cliente && @t_persona %>
       $('#select2-select-cedula-container').text(cedula);
       $('#select2-select-cedula-container').attr('title', cedula);
     <% elsif @t_empresa %>
       $('#select2-select-cedula-container').text(rif);
       $('#select2-select-cedula-container').attr('title', rif);
+    <% else %>
+    $('#select2-select-cedula-container').text('');
+    $('#select2-select-cedula-container').attr('title', '');
     <% end %>
     break;
   case 'select-resolucion':
