@@ -47,18 +47,9 @@ class TRolsController < ApplicationController
       @rol.estatus = params[:is_active] == "Activo"? true : false
     end
 
-    if @rol.update_attributes(t_rols_params)
-
-        if @rol.associate_rol_with_elements(params[:id],params[:actions_by_rol])
-          redirect_to rols_index_path , notice: 'Rol de usuario actualizado correctamente.'
-        else
-          @notice = Notice.new("upps", "No fue posible guardar las tareas y permisos, asegúrese de  haber señalado que indico todos los permisos sobre las tareas", :error)
-          render :action => "edit"
-        end
-
-    else
-      @notice = @rol.errors
-      render :action => "edit"
+    puts ("Mondongo")
+    @rol.clean_permisssions(params[:actions_by_rol]).each do |t|
+      puts t
     end
 
 

@@ -167,10 +167,10 @@ $(document).ready(function() {
 
 		for (x=0; x< elecciones.length; x++){
 				backEnd = backEnd + '<td>'+ elecciones[x].split("#")[0] +'</td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("#")[1] +'-read" disabled checked/></center></td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("#")[1] +'-create" /></center></td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("#")[1] +'-update" /></center></td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("#")[1] +'-manage" /></center></td></tr>';
+				'<td><center><input name="checks[]" type="checkbox" value="l-'+ elecciones[x].split("#")[1] +'" disabled checked/></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="g-'+ elecciones[x].split("#")[1] +'" /></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="a-'+ elecciones[x].split("#")[1] +'" /></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="m-'+ elecciones[x].split("#")[1] +'" /></center></td></tr>';
 			}
 		document.getElementById("actionslected").innerHTML = backEnd;
 	}

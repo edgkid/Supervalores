@@ -35,4 +35,51 @@ class TRol < ApplicationRecord
 		return inserted
 	end
 
+	def clean_permisssions (elements)
+		elements_list = elements.split(",").sort.reverse
+		permissions_list = elements.split(",").sort.reverse
+
+		elements_list.each do |element|
+			if element.split("-")[0] == "m"
+
+				count = 0
+				permissions_list.each do |permission|
+					if element.split("-")[1] == permission.split("-")[1]
+						if permission.split("-")[0] == "l" || permission.split("-")[0] == "g" || permission.split("-")[0] == "a"
+							permissions_list.delete_at(count)
+						end
+					end
+					count = count + 1
+					elements_list = permissions_list
+				end
+
+			end
+		end
+
+		return verify_permission_cleanup (elements_list)
+	end
+
+	def verify_permission_cleanup (elements_list)
+
+		permissions_list = elements_list
+		elements_list.each do |element|
+			if element.split("-")[0] == "m"
+
+				count = 0
+				permissions_list.each do |permission|
+					if element.split("-")[1] == permission.split("-")[1]
+						if permission.split("-")[0] == "l" || permission.split("-")[0] == "g" || permission.split("-")[0] == "a"
+							permissions_list.delete_at(count)
+						end
+					end
+					count = count + 1
+					elements_list = permissions_list
+				end
+
+			end
+		end
+
+		return permissions_list
+	end
+
 end
