@@ -36,23 +36,29 @@ class TRolsController < ApplicationController
 
   def edit
     @rol =TRol.find(params[:id])
-    @elementos = TElemento.all
+    @elementos = TElemento.order(:nombre)
   end
 
   def update
     @rol = TRol.find(params[:id])
+    @elementos = TElemento.order(:nombre)
 
     if params[:is_active] == "Activo" or params[:is_active] == "Inactivo"
       @rol.estatus = params[:is_active] == "Activo"? true : false
     end
 
-    puts "Mondongo"
-    puts params[:is_active]
-    puts params[:actions_by_rol]
-    if @rol.associate_rol_with_elements(params[:id],params[:actions_by_rol])
-      puts "Actualizacion adecuada"
+    if @rol.update_attributes(t_rols_params)
+
+        if @rol.associate_rol_with_elements(params[:id],params[:actions_by_rol])
+          redirect_to rols_index_path , notice: 'Rol de usuario actualizado correctamente.'
+        else
+          @notice = Notice.new("upps", "No fue posible guardar las tareas y permisos, asegúrese de  haber señalado que indico todos los permisos sobre las tareas", :error)
+          render :action => "edit"
+        end
+
     else
-      puts "Ocurrio un problema asociando permisos"
+      @notice = @rol.errors
+      render :action => "edit"
     end
 
 

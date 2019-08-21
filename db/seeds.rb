@@ -39,7 +39,6 @@ TElemento.create(nombre: "Gestionar Sub-Catálogos de Cuentas", modelo:"TCatalog
 TElemento.create(nombre: "Gestionar Catálogos de Cuenta", modelo:"TCatalogoCuentum")
 TElemento.create(nombre: "Gestionar Tarifas de Clientes ", modelo:"TClienteTarifa")
 TElemento.create(nombre: "Gestionar Clientes", modelo:"TCliente")
-TElemento.create(nombre: "Gestionar Tarifas", modelo:"TClienteTarifa")
 TElemento.create(nombre: "Gestionar Cuentas Financieras", modelo:"TCuentaFinanciera")
 TElemento.create(nombre: "Gestionar Cuentas de Venta ", modelo:"TCuentaVentum")
 TElemento.create(nombre: "Administración de Correos Masivos ", modelo:"TEmailMasivo")

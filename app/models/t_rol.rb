@@ -12,12 +12,12 @@ class TRol < ApplicationRecord
 
 	def associate_rol_with_elements (id_rol, elements)
 		access = elements.split(",")
-		inserted = false
+		inserted = true
 		connection = ActiveRecord::Base.connection()
 
 		access.each do |elemento|
 
-			if elemento.split("-")[0] != "0"
+			if elements != nil && elemento.split("-")[0] != "0"
 				sql = " INSERT INTO t_elementos_x_rols VALUES ('" << elemento.split("-")[1] << "'," << id_rol << ", (Select id FROM t_elementos WHERE modelo = '" << elemento.split("-")[0] << "')); "
 
 				results =connection.execute (sql)
