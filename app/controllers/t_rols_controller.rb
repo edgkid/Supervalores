@@ -46,17 +46,16 @@ class TRolsController < ApplicationController
       @rol.estatus = params[:is_active] == "Activo"? true : false
     end
 
-    if @rol.update_attributes(t_rols_params)
-      if @rol.associate_rol_with_elements(params[:id], params[:actions_by_rol])
-        redirect_to rols_index_path , notice: 'Rol de usuario actualizado correctamente.'
-      else
-        @notice = @rol.errors
-        render :action => "edit"
-      end
+    puts "Mondongo"
+    puts params[:is_active]
+    puts params[:actions_by_rol]
+    if @rol.associate_rol_with_elements(params[:id],params[:actions_by_rol])
+      puts "Actualizacion adecuada"
     else
-      @notice = @rol.errors
-      render :action => "edit"
+      puts "Ocurrio un problema asociando permisos"
     end
+
+
   end
 
   def destroy

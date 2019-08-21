@@ -50,7 +50,7 @@
 									<div class="col-sm-10">
 										<select id="optionrol" multiple class="form-control" size="12">
 											 <%= @elementos.each do |elemento| %>
-											 	<option value="<%= elemento.nombre << "-" << elemento.modelo %>" onclick="selectd()"><%= elemento.nombre%></option>
+											 	<option value="<%= elemento.nombre + "#" + elemento.modelo %>" onclick="selectd()"><%= elemento.nombre%></option>
 											 <% end %>
 											 <%= text_field_tag :actions_by_rol, "", class: "form-control", id: "actionroleselecte", hidden:true %>
 										</select>
@@ -166,11 +166,11 @@ $(document).ready(function() {
 		});
 
 		for (x=0; x< elecciones.length; x++){
-				backEnd = backEnd + '<td>'+ elecciones[x].split("-")[0] +'</td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-read" disabled checked/></center></td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-create" /></center></td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-update" /></center></td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-manage" /></center></td></tr>';
+				backEnd = backEnd + '<td>'+ elecciones[x].split("#")[0] +'</td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("#")[1] +'-read" disabled checked/></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("#")[1] +'-create" /></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("#")[1] +'-update" /></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("#")[1] +'-manage" /></center></td></tr>';
 			}
 		document.getElementById("actionslected").innerHTML = backEnd;
 	}
