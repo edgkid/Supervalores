@@ -11,23 +11,28 @@ class TRol < ApplicationRecord
 												:on => [:create, :update]
 
 	def associate_rol_with_elements (id_rol, elements)
-		access = elements.split("#")
+		access = elements.split(",")
 		inserted = false
 		connection = ActiveRecord::Base.connection()
 
 		access.each do |elemento|
-			sql = " INSERT INTO t_elementos_x_rols VALUES ("<< id_rol << ", (Select id FROM t_elementos WHERE modelo = '" << elemento << "')); "
 
-			results =connection.execute (sql)
+			if elemento.split("-")[0] != "0"
+				sql = " INSERT INTO t_elementos_x_rols VALUES ('" << elemento.split("-")[1] << "'," << id_rol << ", (Select id FROM t_elementos WHERE modelo = '" << elemento.split("-")[0] << "')); "
 
-			if results.present?
-				inserted = true
-			else
-				inserted = false
-				next
+				results =connection.execute (sql)
+
+				if results.present?
+					inserted = true
+				else
+					inserted = false
+					next
+				end
+
 			end
 		end
 
 		return inserted
 	end
+
 end
