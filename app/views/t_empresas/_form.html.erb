@@ -1,6 +1,6 @@
 <div class="ibox-content">
   <%= form_with(model: registro, local: true) do |form| %>  
-  <%= render 'form_fields', registro: registro, editable: editable %>
+  <%= render 'form_fields', registro: registro, editable: editable, embed: form %>
   <div class="form-group row">
       <% if editable %>
       <%= render "shared/action_buttons",

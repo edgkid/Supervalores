@@ -24,8 +24,9 @@
                   <th>Código</th>
                   <th>Descripción</th>
                   <th>Tipo</th>
-                  <th>Estatus</th>
+                  <th>Período</th>
                   <th>Tarifa</th>
+                  <th>Estatus</th>
                 </tr>
               </thead>
 
@@ -35,8 +36,9 @@
                   <td><%= registro.codigo %></td>
                   <td><%= registro.descripcion %></td>
                   <td><%= registro.t_tipo_cliente_tipo.descripcion %></td>
-                  <td><%= estatus_text registro.estatus %></td>
+                  <td><%= registro.t_periodo != nil ? registro.t_periodo.descripcion : "Sin determinar" %></td>
                   <td><%= registro.t_tarifa.nombre %></td>
+                  <td><%= estatus_text registro.estatus %></td>
                 </tr>
                 <% end %>
               </tbody>

@@ -44,6 +44,7 @@ select.m-b {
   display: flex;  
   align-items: center;
   border-left:solid 1px #eaeaea;
+  word-break:break-all;
 }
 
 [class*=text-] {
@@ -83,4 +84,8 @@ select.m-b {
 
 .spiner-waiting-load-page.stop{
   opacity:0;
+}
+
+.select2-container--default .select2-selection--single {
+  border-radius: unset !important;
 }

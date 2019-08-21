@@ -75,7 +75,7 @@ class TRecargosController < ApplicationController
     end
 
     def parametros_recargo
-      params.require(:t_recargo).permit(:descripcion, :tasa, :estatus, :factura_id)
+      params.require(:t_recargo).permit(:descripcion, :tasa, :estatus, :t_periodo_id, :factura_id)
     end
 
     def search_params

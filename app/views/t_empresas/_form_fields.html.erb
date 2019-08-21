@@ -3,8 +3,13 @@
   if registro != nil && registro.is_a?(TEmpresa)
     persona = registro
   end
+
+  instance = self
+  if defined?(embed)
+    instance = embed
+  end
 %>
-<%= fields_for persona do |form| %>
+<%= instance.fields_for persona do |form| %>
 <div class="form-group row">
   <div class="col-sm-2 col-form-label">
     <%= form.label :rif, "RIF ó RUC", class: "text-right" %>
