@@ -21,6 +21,7 @@ class TClientesController < ApplicationController
 
   def new
     @registro = TCliente.new
+    @registro.t_estatus_id = 2
     @registro.es_prospecto = true
   end
 

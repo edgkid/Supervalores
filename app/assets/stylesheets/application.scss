@@ -40,6 +40,20 @@ select.m-b {
     border-radius: 5px;
 }
 
+form label.col-form-label {    
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+form label:after {
+  content: "*";
+  color:#dc3545;
+}
+form label.opcional:after {
+  content: "";
+}
+
 .input-value {
   display: flex;  
   align-items: center;
@@ -88,4 +102,7 @@ select.m-b {
 
 .select2-container--default .select2-selection--single {
   border-radius: unset !important;
+}
+.select2.select2-container {
+  width: 100% !important;
 }
