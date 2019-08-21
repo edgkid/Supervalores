@@ -1,5 +1,6 @@
 class TTipoCliente < ApplicationRecord
 	belongs_to :t_tarifa
+	belongs_to :t_periodo
 	belongs_to :t_tipo_cliente_tipo
 	
 	has_many :t_cliente	

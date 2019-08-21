@@ -1,6 +1,6 @@
 class TCliente < ApplicationRecord
   belongs_to :persona, polymorphic: true
-  belongs_to :t_tipo_cliente  
+  belongs_to :t_tipo_cliente
   belongs_to :t_estatus    
 
   has_many :t_resolucions

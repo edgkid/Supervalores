@@ -42,6 +42,9 @@
 <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
 <% end %>
 
+<!-- Select2 -->
+<script src="/js/plugins/select2/select2.full.min.js"></script>
+    
 <!-- Sparkline demo data  -->
 <script src="/js/demo/sparkline-demo.js"></script>
     
@@ -55,5 +58,6 @@ $(document).ready(function() {
     <% if @usar_dataTables != nil &&  @usar_dataTables %>    
     <%= render partial: "shared/dataTable.js" %>
     <% end %>
+    $("select").select2();
 });
 </script>

@@ -3,9 +3,9 @@ class TClientesController < ApplicationController
 
   respond_to :js, only: [:find]
   respond_to :json, only: [:find_by_codigo, :find_by_resolucion, :find_by_cedula]
-  before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion]
+  before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion, :nueva_empresa]
   before_action :usar_dataTables_en, only: [:index, :show, :edit]
-
+  before_action :seleccionar_resolucion, only: [:mostrar_resolucion]
   # load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -29,16 +29,41 @@ class TClientesController < ApplicationController
 
   def create
     @registro = TCliente.new(parametros_cliente)
+    @nueva_empresa = nil
     if es_empresa
-      @registro.persona = TEmpresa.new(parametros_cliente_tipo_empresa)
+      if params[:t_empresa][:id]
+        @registro.persona = TEmpresa.find(params[:t_empresa][:id])
+      else
+        @registro.persona = TEmpresa.new(parametros_cliente_tipo_empresa)
+      end      
     elsif es_persona
-      @registro.persona = TPersona.new(parametros_cliente_tipo_persona)
+      if params[:t_persona][:id]
+        @registro.persona = TPersona.find(params[:t_persona][:id])
+      else
+        @registro.persona = TPersona.new(parametros_cliente_tipo_persona)
+      end
+      if params[:t_persona][:crear_empresa] == "1"
+        @nueva_empresa = TEmpresa.new(parametros_nueva_empresa)
+        if @nueva_empresa.save
+          @registro.persona.t_empresa = @nueva_empresa
+          @nueva_empresa = nil
+        end
+      end
     else
-      @registro.persona = TOtro.new(parametros_cliente_tipo_otro)
+      if params[:t_otro][:id]
+        @registro.persona = TOtro.find(params[:t_otro][:id])
+      else
+        @registro.persona = TOtro.new(parametros_cliente_tipo_otro)
+      end
     end
     
     respond_to do |format|
-      if !@registro.persona.save
+      if @nueva_empresa != nil && @nueva_empresa.errors.any?
+        @notice = @nueva_empresa.errors
+        format.html { render :new }
+        format.json { render json: @nueva_empresa.errors, status: :unprocessable_entity }
+      elsif !@registro.persona.save
+        @nueva_empresa = nil
         @notice = @registro.persona.errors
         format.html { render :new }
         format.json { render json: @registro.persona.errors, status: :unprocessable_entity }
@@ -72,6 +97,8 @@ class TClientesController < ApplicationController
     crear = false
     actualizar = false
     parametros = {}
+    @nueva_empresa = nil
+
     respond_to do |format|      
       if es_empresa
         if @registro.persona != nil && @registro.persona.is_a?(TEmpresa)
@@ -90,6 +117,17 @@ class TClientesController < ApplicationController
           @registro.persona.destroy
           @registro.persona = TPersona.new(parametros_cliente_tipo_persona)
         end
+        if params[:t_persona][:crear_empresa] == "1"
+          @nueva_empresa = TEmpresa.new(parametros_nueva_empresa)
+          if @nueva_empresa.save
+            if actualizar
+              parametros[:t_empresa_id] = @nueva_empresa.id
+            else
+              @registro.persona.t_empresa = @nueva_empresa
+            end
+            @nueva_empresa = nil
+          end          
+        end
       else
         if @registro.persona != nil && @registro.persona.is_a?(TOtro)
           actualizar = true
@@ -100,7 +138,12 @@ class TClientesController < ApplicationController
           @registro.persona = TOtro.new(parametros_cliente_tipo_otro)
         end
       end
-      if (actualizar && !@registro.persona.update(parametros)) || (crear && !@registro.persona.save)
+      
+      if @nueva_empresa != nil && @nueva_empresa.errors.any?
+        @notice = @nueva_empresa.errors
+        format.html { render :edit }
+        format.json { render json: @nueva_empresa.errors, status: :unprocessable_entity }
+      elsif (actualizar && !@registro.persona.update(parametros)) || (crear && !@registro.persona.save)
         @notice = @registro.persona.errors
         format.html { render :edit }
         format.json { render json: @registro.persona.errors, status: :unprocessable_entity }
@@ -135,15 +178,18 @@ class TClientesController < ApplicationController
     respond_to do |format|
       if @nueva_resolucion.save
         format.html { redirect_to edit_t_cliente_path(@registro), notice: 'Resolución asociada correctamente.' }
-        format.json { render :show, status: :ok, location: @registro }
+        format.json { render :show, status: :ok, location: @nueva_resolucion }
       else
         @notice = @nueva_resolucion.errors
         format.html { render :edit }
-        format.json { render json: @registro.errors, status: :unprocessable_entity }
+        format.json { render json: @nueva_resolucion.errors, status: :unprocessable_entity }
       end
     end
   end
 
+  def mostrar_resolucion
+  end
+  
   def destroy
     @registro.t_estatus = TEstatus.find(1)
     respond_to do |format|
@@ -198,12 +244,20 @@ class TClientesController < ApplicationController
       @registro.es_prospecto = @registro.prospecto_at == nil
     end
 
+    def seleccionar_resolucion
+      @mostrar_resolucion = TResolucion.find(params[:resolucion])
+    end
+
     def parametros_cliente
       params.require(:t_cliente).permit(:codigo, :t_estatus_id, :cuenta_venta, :t_tipo_cliente_id, :t_tipo_persona_id, :razon_social, :telefono, :email, :es_prospecto)
     end
     
     def parametros_cliente_tipo_empresa
       params.require(:t_empresa).permit(:rif, :razon_social, :t_empresa_tipo_valor_id, :t_empresa_sector_economico_id, :direccion_empresa, :fax, :web, :telefono, :email)
+    end
+
+    def parametros_nueva_empresa
+      params.require(:t_persona).require(:t_empresa).permit(:rif, :razon_social, :t_empresa_tipo_valor_id, :t_empresa_sector_economico_id, :direccion_empresa, :fax, :web, :telefono, :email)
     end
     
     def parametros_cliente_tipo_persona

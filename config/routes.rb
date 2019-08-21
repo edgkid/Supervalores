@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     get 'find_by_cedula', as: :find_by_cedula
     get 'find', as: :find
   end
+  get 'clientes/:id/resolucion/:resolucion' => 't_clientes#mostrar_resolucion'
   post 'clientes/:id/nueva_resolucion' => 't_clientes#nueva_resolucion'
   resources :t_estatuses, path: "estatus"
   resources :t_personas, path: "personas"

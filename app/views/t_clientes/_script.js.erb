@@ -28,4 +28,16 @@ $(document).ready(function(){
   <% if @nueva_resolucion != nil && @nueva_resolucion.errors.any? %>
     $('#agregar_resolucion').modal('show');
   <% end %>
+
+  $("#agregar_empresa")
+  .on('show.bs.modal', function(){
+    $("#t_persona_crear_empresa").val(1)
+  })
+  .on('hide.bs.modal', function(){
+    $("#t_persona_crear_empresa").val(0)
+  });
+
+  <% if @nueva_empresa != nil && @nueva_empresa.errors.any? %>
+    $('#agregar_empresa').modal('show');
+  <% end %>  
 })

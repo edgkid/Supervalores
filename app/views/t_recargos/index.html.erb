@@ -23,6 +23,7 @@
                 <tr>
                   <th>Descripción</th>
                   <th>Tasa</th>
+                  <th>Período</th>
                   <th>Estatus</th>
                 </tr>
               </thead>
@@ -31,6 +32,7 @@
                 <tr data-link="<%= polymorphic_url(registro) %>">
                   <td><%= registro.descripcion %></td>
                   <td><%= registro.tasa %></td>
+                  <td><%= registro.t_periodo != nil ? registro.t_periodo.descripcion : "Sin determinar" %></td>
                   <td><%= estatus_text registro.estatus %></td>
                 </tr>
                 <% end %>

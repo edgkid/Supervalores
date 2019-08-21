@@ -23,6 +23,7 @@
   elsif registro != nil && registro.persona != nil
     otro = registro.persona
   end
+
 %>
 
 <%= form_tag registro.id == nil ? url_for(:controller => 't_clientes', :action => 'create'): url_for(:controller => 't_clientes', :action => 'update', :id => registro.id), method: registro.id == nil ? :post : :put do %>
@@ -121,33 +122,33 @@
 </div>
 <% end %>
 <% if editable && nueva_resolucion != nil %>
-<%= form_tag url_for(:controller => 't_clientes', :action => 'nueva_resolucion', id: registro.id), method: :post do %>
-<div class="modal inmodal" id="agregar_resolucion" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content animated bounceInRight">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
-            class="sr-only">Close</span></button>
-        <i class="fa fa-laptop modal-icon"></i>
-        <h4 class="modal-title">Agregar resolución</h4>
-        <small class="font-bold">Esta resolución se asociará a <span
-            class="text-success text-uppercase font-bold"><%= registro.razon_social %></span>.</small>
-      </div>
+  <%= form_tag url_for(:controller => 't_clientes', :action => 'nueva_resolucion', id: registro.id), method: :post do %>
+  <div class="modal inmodal" id="agregar_resolucion" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content animated bounceInRight">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+              class="sr-only">Close</span></button>
+          <i class="fa fa-laptop modal-icon"></i>
+          <h4 class="modal-title">Agregar resolución</h4>
+          <small class="font-bold">Esta resolución se asociará a <span
+              class="text-success text-uppercase font-bold"><%= registro.razon_social %></span>.</small>
+        </div>
 
-      <div class="modal-body">
-        <%= fields_for registro do |form| %>
-        <%= form.hidden_field :id %>
-        <% end %>
-        <%= render 't_resolucions/form_fields', registro: nueva_resolucion, editable: editable %>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-white" data-dismiss="modal">Cancelar</button>
-        <button type="summit" class="btn btn-primary">Guardar</button>
+        <div class="modal-body">
+          <%= fields_for registro do |form| %>
+          <%= form.hidden_field :id %>
+          <% end %>
+          <%= render 't_resolucions/form_fields', registro: nueva_resolucion, editable: editable %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-dismiss="modal">Cancelar</button>
+          <button type="summit" class="btn btn-primary">Guardar</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<% end%>
+  <% end%>
 <% end%>
 <script>
   <%= render partial: "t_clientes/script.js" %>
