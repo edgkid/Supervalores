@@ -52,7 +52,7 @@
 											 <%= @elementos.each do |elemento| %>
 											 	<option value="<%= elemento.nombre << "-" << elemento.modelo %>" onclick="selectd()"><%= elemento.nombre%></option>
 											 <% end %>
-											 <%= text_field_tag :actions_by_rol, "", class: "form-control", id: "actionroleselecte", hidden:true %>
+											 <%#= text_field_tag :actions_by_rol, "", class: "form-control", id: "actionroleselecte", hidden:true %>
 										</select>
 									</div>
 								</div>
@@ -76,11 +76,42 @@
 					<h5>Acciones que puede ejecutar el rol actual</h5>
 				</div>
 				<div class="ibox-content">
-					<p class="text-justify">
-						<b>Importante!</b><br>
-						Las acciones seleccionadas serán asignadas de manera predeterminada con permiso de solo lectura, luego usted podrá ampliar el alcance de los permisos indicados sobre el rol de usuario actual.
-					</p>
-					<textarea id="actionslected" name="name" rows="21" cols="60" class="form-control" disabled></textarea>
+					<div class="row">
+						<div class="col-12">
+							<p class="text-justify">
+								<b>Importante!</b><br>
+								Las acciones seleccionadas serán asignadas de manera predeterminada en solo lectura. por favor indique qué otras acciones tendrá permitida el rol de usuario.
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<table id ="actionslected" class="table table-striped table-bordered table-hover">
+								<tr>
+									<th>Posibles Tareas del Rol</th>
+									<th><center><button title="Permisos de lectura" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-search"></span></button></center></th>
+									<th><center><button title="Permisos de escritura" class="btn btn-xs btn-white"><span class="glyphicon glyphicon-floppy-disk"></span></button></center></th>
+									<th><center><button title="Permisos de edición" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-pencil"></span></button></center></th>
+									<th><center><button title="Permisos de administración" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-king"></span></button></center></th>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-6">
+							¿Usted indico todos los permisos? &nbsp; Si &nbsp;
+						</div>
+						<div class="col-6">
+							&nbsp;<input name="checks[]" type="checkbox" value="0" class="form-check-input" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div id="associate">
+								<button  id="associatebutton" onclick="myFunction()" class="btn btn-success" disabled >Asignar Permisos</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -91,7 +122,13 @@
 	function selectd (){
 		var elecciones = String($("#optionrol").val()).split(",");
 		var valor = "";
-		var backEnd = "";
+		var backEnd = "<tr>" +
+								   	"<th>Posibles Tareas del Rol</th>" +
+								   	'<th><center><button title="Permisos de lectura" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-search"></span></button></center></th>' +
+								   	'<th><center><button title="Permisos de escritura" class="btn btn-xs btn-white"><span class="glyphicon glyphicon-floppy-disk"></span></button></center></th>' +
+								   	'<th><center><button title="Permisos de edición" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-pencil"></span></button></center></th>' +
+								   	'<th><center><button title="Permisos de administración" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-king"></span></button></center></th>' +
+									"</tr><tr>";
 
 		$('option').mousedown(function(e) {
 		   e.preventDefault();
@@ -108,10 +145,12 @@
 		});
 
 		for (x=0; x< elecciones.length; x++){
-				valor = valor + elecciones[x].split("-")[0] + "\n" ;
-				backEnd = backEnd + elecciones[x].split("-")[1] +"#";
+				backEnd = backEnd + '<td>'+ elecciones[x].split("-")[0] +'</td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-READ" disabled checked/></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-WRITE" /></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-EDIT" /></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-ADMIN" /></center></td></tr>';
 			}
-		document.getElementById("actionslected").innerHTML = valor;
-		$("#actionroleselecte").val(backEnd);
+		document.getElementById("actionslected").innerHTML = backEnd;
 	}
  </script>
