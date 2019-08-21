@@ -52,7 +52,7 @@
 											 <%= @elementos.each do |elemento| %>
 											 	<option value="<%= elemento.nombre << "-" << elemento.modelo %>" onclick="selectd()"><%= elemento.nombre%></option>
 											 <% end %>
-											 <%= text_field_tag :actions_by_rol, "", class: "form-control", id: "actionroleselecte", hidden: true %>
+											 <%= text_field_tag :actions_by_rol, "", class: "form-control", id: "actionroleselecte" %>
 										</select>
 									</div>
 								</div>
@@ -129,7 +129,8 @@ $(document).ready(function() {
 
     var str = arr.join(',');
 
-    document.getElementById("actionroleselecte").innerHTML = str;
+		$("#actionroleselecte").val(str);
+    document.getElementById("actionroleselecte").innerHTML = str
 
     //document.getElementById("associate").innerHTML ='<button id="buttonaction" class="btn btn-success" >Asignar Permisos</button>';
 
@@ -166,10 +167,10 @@ $(document).ready(function() {
 
 		for (x=0; x< elecciones.length; x++){
 				backEnd = backEnd + '<td>'+ elecciones[x].split("-")[0] +'</td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-READ" disabled checked/></center></td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-WRITE" /></center></td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-EDIT" /></center></td>' +
-				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-ADMIN" /></center></td></tr>';
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-read" disabled checked/></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-create" /></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-update" /></center></td>' +
+				'<td><center><input name="checks[]" type="checkbox" value="'+ elecciones[x].split("-")[1] +'-manage" /></center></td></tr>';
 			}
 		document.getElementById("actionslected").innerHTML = backEnd;
 	}
