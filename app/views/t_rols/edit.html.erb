@@ -52,7 +52,7 @@
 											 <%= @elementos.each do |elemento| %>
 											 	<option value="<%= elemento.nombre << "-" << elemento.modelo %>" onclick="selectd()"><%= elemento.nombre%></option>
 											 <% end %>
-											 <%= text_field_tag :actions_by_rol, "", class: "form-control", id: "actionroleselecte" %>
+											 <%= text_field_tag :actions_by_rol, "", class: "form-control", id: "actionroleselecte", hidden:true %>
 										</select>
 									</div>
 								</div>
