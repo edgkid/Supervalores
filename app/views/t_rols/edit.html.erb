@@ -52,7 +52,7 @@
 											 <%= @elementos.each do |elemento| %>
 											 	<option value="<%= elemento.nombre << "-" << elemento.modelo %>" onclick="selectd()"><%= elemento.nombre%></option>
 											 <% end %>
-											 <%#= text_field_tag :actions_by_rol, "", class: "form-control", id: "actionroleselecte", hidden:true %>
+											 <%= text_field_tag :actions_by_rol, "", class: "form-control", id: "actionroleselecte", hidden: true %>
 										</select>
 									</div>
 								</div>
@@ -98,25 +98,45 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-6">
-							¿Usted indico todos los permisos? &nbsp; Si &nbsp;
+						<div class="col-7">
+							¿Usted indico todos los permisos? &nbsp; Si
 						</div>
-						<div class="col-6">
-							&nbsp;<input name="checks[]" type="checkbox" value="0" class="form-check-input" />
+						<div class="col-5">
+							<input name="checks[]" type="checkbox" value="0" class="form-check-input" />
 						</div>
 					</div>
-					<div class="row">
+					<!--<div class="row">
 						<div class="col-12">
 							<div id="associate">
-								<button  id="associatebutton" onclick="myFunction()" class="btn btn-success" disabled >Asignar Permisos</button>
+								<button  id="associatebutton" name="assignpermission" class="btn btn-success" disabled>Asignar Permisos</button>
 							</div>
 						</div>
-					</div>
+					</div>-->
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+  $('[name="checks[]"]').click(function() {
+
+    var arr = $('[name="checks[]"]:checked').map(function(){
+      return this.value;
+    }).get();
+
+    var str = arr.join(',');
+
+    document.getElementById("actionroleselecte").innerHTML = str;
+
+    //document.getElementById("associate").innerHTML ='<button id="buttonaction" class="btn btn-success" >Asignar Permisos</button>';
+
+  });
+
+});
+</script>
 
 <script type="text/javascript">
 	function selectd (){
