@@ -11,14 +11,14 @@ class TRol < ApplicationRecord
 												:on => [:create, :update]
 
 	def associate_rol_with_elements (id_rol, elements)
-		access = elements.split(",")
+
 		inserted = true
 		connection = ActiveRecord::Base.connection()
 
-		access.each do |elemento|
+		elements.each do |element|
 
 			if elements != nil && elemento.split("-")[0] != "0"
-				sql = " INSERT INTO t_elementos_x_rols VALUES ('" << elemento.split("-")[1] << "'," << id_rol << ", (Select id FROM t_elementos WHERE modelo = '" << elemento.split("-")[0] << "')); "
+				sql = " INSERT INTO t_elementos_x_rols VALUES ('" << elemento.split("-")[0] << "'," << id_rol << ", (Select id FROM t_elementos WHERE modelo = '" << elemento.split("-")[1] << "')); "
 
 				results =connection.execute (sql)
 
@@ -77,6 +77,28 @@ class TRol < ApplicationRecord
 				end
 
 			end
+		end
+
+		return modify_permission_key(elements_list)
+	end
+
+	def modify_permission_key(permissions_list)
+
+		count = 0
+		permissions_list.each do |permission|
+			if permission.split("-")[0] == "m"
+				permissions_list[count] = "manage-" + permission.split("-")[1]
+			end
+			if permission.split("-")[0] == "l"
+				permissions_list[count] = "read-" + permission.split("-")[1]
+			end
+			if permission.split("-")[0] == "a"
+				permissions_list[count] = "update-" + permission.split("-")[1]
+			end
+			if permission.split("-")[0] == "g"
+				permissions_list[count] = "create-" + permission.split("-")[1]
+			end
+			count = count +1
 		end
 
 		return permissions_list
