@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_19_113143) do
+ActiveRecord::Schema.define(version: 2019_08_21_034959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 2019_08_19_113143) do
   end
 
   create_table "t_elementos_x_rols", id: false, force: :cascade do |t|
+    t.string "accion", null: false
     t.bigint "t_rol_id", null: false
     t.bigint "t_elemento_id", null: false
     t.index ["t_elemento_id"], name: "index_t_elementos_x_rols_on_t_elemento_id"
