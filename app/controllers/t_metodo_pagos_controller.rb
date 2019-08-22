@@ -6,6 +6,11 @@ class TMetodoPagosController < ApplicationController
     @t_metodo_pago = TMetodoPago.all
   end
 
+  def show
+    @t_metodo_pago = TMetodoPago.find(params[:id])
+    @estatus = TEstatus.find (@t_metodo_pago.estatus)
+  end
+
   def new
     @t_metodo_pago = TMetodoPago.new
     @estatus = TEstatus.all

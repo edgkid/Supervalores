@@ -57,13 +57,14 @@ Rails.application.routes.draw do
 
   #metodo de pago
   get 't_metodo_pagos/index' => 't_metodo_pagos#index'
+  get 't_metodo_pagos/show/:id' => 't_metodo_pagos#show'
 
   get 't_metodo_pagos/new' => 't_metodo_pagos#new'
   post 't_metodo_pagos/create' => 't_metodo_pagos#create'
 
   get 't_metodo_pagos/edit/:id' => 't_metodo_pagos#edit'
   post 't_metodo_pagos/update/:id' => 't_metodo_pagos#update'
-  
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   #root to: 'users#index'
 end
