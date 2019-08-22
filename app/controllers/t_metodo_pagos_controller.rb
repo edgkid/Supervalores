@@ -31,7 +31,7 @@ class TMetodoPagosController < ApplicationController
   def update
     @t_metodo_pago = TMetodoPago.find(params[:id])
 
-    if TMetodoPago.update_attributes(t_metodo_pago_params)
+    if @t_metodo_pago.update_attributes(t_metodo_pago_params)
       redirect_to t_metodo_pagos_index_path , notice: 'Método de pago actualizado correctamente.'
     else
       @notice = @t_metodo_pago.errors
@@ -45,7 +45,7 @@ class TMetodoPagosController < ApplicationController
     end
 
     def set_t_metodo_pago
-      @rol = TRol.find(params[:id])
+      @t_metodo_pago = TMetodoPago.find(params[:id])
     end
 
 end
