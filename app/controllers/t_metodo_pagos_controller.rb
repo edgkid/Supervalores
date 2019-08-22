@@ -3,7 +3,8 @@ class TMetodoPagosController < ApplicationController
   before_action :set_t_metodo_pago, only: [:edit, :update, :destroy]
 
   def index
-    @t_metodo_pago = TMetodoPago.all
+    @usar_dataTables = true
+    @t_metodo_pagos = TMetodoPago.all
   end
 
   def show
