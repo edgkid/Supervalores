@@ -18,6 +18,7 @@ class TMetodoPagosController < ApplicationController
   end
 
   def create
+    @estatus = TEstatus.all
     @t_metodo_pago = TMetodoPago.new(t_metodo_pago_params)
     @t_metodo_pago.estatus = params[:id_estatus]
 
