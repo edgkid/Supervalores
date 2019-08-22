@@ -23,6 +23,11 @@ class TMetodoPagosController < ApplicationController
     @t_metodo_pago = TMetodoPago.new(t_metodo_pago_params)
     @t_metodo_pago.estatus = params[:id_estatus]
 
+    if params[:minimo] == nil || params[:maximo] != nil
+      @t_metodo_pago.minimo = params[:minimo]
+      @t_metodo_pago.maximo = params[:maximo]
+    end
+
     if @t_metodo_pago.save
       redirect_to t_metodo_pagos_index_path, notice: 'Método de pago creado correctamente.'
     else
