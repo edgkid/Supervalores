@@ -14,11 +14,12 @@ class TMetodoPagosController < ApplicationController
 
   def new
     @t_metodo_pago = TMetodoPago.new
-    @estatus = TEstatus.all
+    @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
+    #@estatus = TEstatus.where( "id = ? OR id = ?", 1, 2 )
   end
 
   def create
-    @estatus = TEstatus.all
+    @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
     @t_metodo_pago = TMetodoPago.new(t_metodo_pago_params)
     @t_metodo_pago.estatus = params[:id_estatus]
 
@@ -32,12 +33,12 @@ class TMetodoPagosController < ApplicationController
 
   def edit
     @t_metodo_pago =TMetodoPago.find(params[:id])
-    @estatus = TEstatus.all
+    @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
   end
 
   def update
     @t_metodo_pago = TMetodoPago.find(params[:id])
-    @estatus = TEstatus.all
+    @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
 
     if @t_metodo_pago.update_attributes(t_metodo_pago_params)
       redirect_to t_metodo_pagos_index_path , notice: 'Método de pago actualizado correctamente.'
