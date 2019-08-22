@@ -254,7 +254,10 @@ ActiveRecord::Schema.define(version: 2019_08_21_020546) do
   end
 
   create_table "t_metodo_pagos", force: :cascade do |t|
+    t.string "forma_pago", null: false
     t.string "descripcion", null: false
+    t.float "minimo"
+    t.float "maximo"
     t.integer "estatus", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -359,13 +362,11 @@ ActiveRecord::Schema.define(version: 2019_08_21_020546) do
     t.bigint "t_cliente_id", null: false
     t.bigint "t_periodo_id", null: false
     t.bigint "t_metodo_pago_id", null: false
-    t.bigint "t_tipo_pago_id", null: false
     t.bigint "user_id", null: false
     t.index ["t_cliente_id"], name: "index_t_recibos_on_t_cliente_id"
     t.index ["t_factura_id"], name: "index_t_recibos_on_t_factura_id"
     t.index ["t_metodo_pago_id"], name: "index_t_recibos_on_t_metodo_pago_id"
     t.index ["t_periodo_id"], name: "index_t_recibos_on_t_periodo_id"
-    t.index ["t_tipo_pago_id"], name: "index_t_recibos_on_t_tipo_pago_id"
     t.index ["user_id"], name: "index_t_recibos_on_user_id"
   end
 
@@ -478,15 +479,6 @@ ActiveRecord::Schema.define(version: 2019_08_21_020546) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "t_tipo_pagos", force: :cascade do |t|
-    t.string "forma_pago"
-    t.string "descripcion"
-    t.float "minimo"
-    t.float "maximo"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "t_tipo_personas", force: :cascade do |t|
     t.string "descripcion"
     t.integer "estatus"
@@ -572,7 +564,6 @@ ActiveRecord::Schema.define(version: 2019_08_21_020546) do
   add_foreign_key "t_recibos", "t_facturas"
   add_foreign_key "t_recibos", "t_metodo_pagos"
   add_foreign_key "t_recibos", "t_periodos"
-  add_foreign_key "t_recibos", "t_tipo_pagos"
   add_foreign_key "t_recibos", "users"
   add_foreign_key "t_resolucions", "t_clientes"
   add_foreign_key "t_resolucions", "t_estatuses"
