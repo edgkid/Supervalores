@@ -8,10 +8,12 @@ class TMetodoPagosController < ApplicationController
 
   def new
     @t_metodo_pago = TMetodoPago.new
+    @estatus = TEstatus.all
   end
 
   def create
     @t_metodo_pago = TMetodoPago.new(t_metodo_pago_params)
+    @t_metodo_pago.estatus = params[:id_estatus]
 
     if @t_metodo_pago.save
       redirect_to t_metodo_pagos_index_path, notice: 'Método de pago creado correctamente.'
@@ -23,6 +25,7 @@ class TMetodoPagosController < ApplicationController
 
   def edit
     @t_metodo_pago =TMetodoPago.find(params[:id])
+    @estatus = TEstatus.all
   end
 
   def update
