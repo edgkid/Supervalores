@@ -17,6 +17,7 @@ class CreateTRecibos < ActiveRecord::Migration[5.2]
       t.belongs_to :t_cliente, foreign_key: true, null: false
       t.belongs_to :t_periodo, foreign_key: true, null: false
       t.belongs_to :t_metodo_pago, foreign_key: true, null: false
+      t.belongs_to :t_tipo_pago, foreign_key: true, null: false
       t.belongs_to :user, foreign_key: true, null: false
 
     end

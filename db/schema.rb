@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_18_211255) do
+ActiveRecord::Schema.define(version: 2019_08_21_020546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -339,6 +339,7 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "t_factura_id"
+    t.bigint "t_periodo_id"
     t.index ["t_factura_id"], name: "index_t_recargos_on_t_factura_id"
   end
 
@@ -358,11 +359,13 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
     t.bigint "t_cliente_id", null: false
     t.bigint "t_periodo_id", null: false
     t.bigint "t_metodo_pago_id", null: false
+    t.bigint "t_tipo_pago_id", null: false
     t.bigint "user_id", null: false
     t.index ["t_cliente_id"], name: "index_t_recibos_on_t_cliente_id"
     t.index ["t_factura_id"], name: "index_t_recibos_on_t_factura_id"
     t.index ["t_metodo_pago_id"], name: "index_t_recibos_on_t_metodo_pago_id"
     t.index ["t_periodo_id"], name: "index_t_recibos_on_t_periodo_id"
+    t.index ["t_tipo_pago_id"], name: "index_t_recibos_on_t_tipo_pago_id"
     t.index ["user_id"], name: "index_t_recibos_on_user_id"
   end
 
@@ -456,6 +459,7 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
     t.datetime "updated_at", null: false
     t.bigint "t_tarifa_id", null: false
     t.bigint "t_tipo_cliente_tipo_id", null: false
+    t.bigint "t_periodo_id"
     t.index ["codigo"], name: "index_t_tipo_clientes_on_codigo", unique: true
     t.index ["t_tarifa_id"], name: "index_t_tipo_clientes_on_t_tarifa_id"
   end
@@ -470,6 +474,15 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
   create_table "t_tipo_emisions", force: :cascade do |t|
     t.string "descripcion"
     t.integer "estatus"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "t_tipo_pagos", force: :cascade do |t|
+    t.string "forma_pago"
+    t.string "descripcion"
+    t.float "minimo"
+    t.float "maximo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -559,6 +572,7 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
   add_foreign_key "t_recibos", "t_facturas"
   add_foreign_key "t_recibos", "t_metodo_pagos"
   add_foreign_key "t_recibos", "t_periodos"
+  add_foreign_key "t_recibos", "t_tipo_pagos"
   add_foreign_key "t_recibos", "users"
   add_foreign_key "t_resolucions", "t_clientes"
   add_foreign_key "t_resolucions", "t_estatuses"
