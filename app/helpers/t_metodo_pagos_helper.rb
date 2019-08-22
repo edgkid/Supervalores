@@ -1,0 +1,2 @@
+module TMetodoPagosHelper
+end

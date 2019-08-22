@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_18_211255) do
+ActiveRecord::Schema.define(version: 2019_08_21_020546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -254,7 +254,10 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
   end
 
   create_table "t_metodo_pagos", force: :cascade do |t|
+    t.string "forma_pago", null: false
     t.string "descripcion", null: false
+    t.float "minimo"
+    t.float "maximo"
     t.integer "estatus", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -339,6 +342,7 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "t_factura_id"
+    t.bigint "t_periodo_id"
     t.index ["t_factura_id"], name: "index_t_recargos_on_t_factura_id"
   end
 
@@ -456,6 +460,7 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
     t.datetime "updated_at", null: false
     t.bigint "t_tarifa_id", null: false
     t.bigint "t_tipo_cliente_tipo_id", null: false
+    t.bigint "t_periodo_id"
     t.index ["codigo"], name: "index_t_tipo_clientes_on_codigo", unique: true
     t.index ["t_tarifa_id"], name: "index_t_tipo_clientes_on_t_tarifa_id"
   end

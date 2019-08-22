@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-lg-7">
+    <div class="ibox ">
+      <div class="ibox-title">
+        <h5>Nuevo Método de Pago</h5>
+      </div>
+      <div class="ibox-content">
+        <%= form_for(:t_metodo_pago, :url => {:action => 'create', :id => @t_metodo_pago.id}) do |f| %>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group  row"><label class="col-sm-2 col-form-label">Método de Pago</label>
+                <div class="col-sm-10">
+                  <%= f.text_field :forma_pago, autofocus: true, autocomplete: "metodo_pago", class: "form-control" %>
+                </div>
+              </div>
+              <div class="form-group row"><label class="col-sm-2 col-form-label">Descripción</label>
+                <div class="col-sm-10">
+                  <%= f.text_field(:descripcion, class: "form-control") %>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Mínimo</label>
+                  <div class="col-sm-10">
+                    <%= f.number_field :minimo, autofocus: true, autocomplete: "minimo", class: "form-control", step: ".01" %>
+                  </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Máximo</label>
+                <div class="col-sm-10">
+                  <%= f.number_field :maximo, autofocus: true, autocomplete: "maximo", class: "form-control", step: ".01" %>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Estatus</label>
+                <div class="col-sm-10">
+                  <%= select_tag :id_estatus, options_from_collection_for_select(@estatus, "id", "descripcion"),  class: "form-control" %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-6 col-sm-offset-2">
+              <%= f.submit 'Crear Método de Pago', class: "btn btn-primary col-10" %>
+            </div><br><br>
+            <div class="col-sm-6 col-sm-offset-2">
+              <%= link_to 'Atrás', t_metodo_pagos_index_path, class: 'btn btn-white col-10' %>
+            </div>
+          </div>
+        <% end %>
+    </div>
+  </div>
+</div>
