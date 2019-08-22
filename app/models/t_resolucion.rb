@@ -53,7 +53,7 @@ class TResolucion < ApplicationRecord
 	validates :resolucion_anio, 
 		uniqueness: {
 			scope: :resolucion_codigo,
-			message: "|Ya se registro esta resolución a un cliente, use otra por favor.",
+			message: "|Ya se registró esta resolución a un cliente, use otra por favor.",
 		}
 	
 	def resolucion_codigo=(resolucion_codigo)

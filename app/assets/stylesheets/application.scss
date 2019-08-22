@@ -53,6 +53,9 @@ form label:after {
 form label.opcional:after {
   content: "";
 }
+.dataTables_wrapper label:after {
+  content: ""
+}
 
 .input-value {
   display: flex;  
@@ -103,7 +106,7 @@ form label.opcional:after {
 .select2-container--default .select2-selection--single {
   border-radius: unset !important;
 }
-.select2.select2-container {
+.input-value .select2.select2-container {
   width: 100% !important;
 }
 
@@ -117,4 +120,8 @@ form label.opcional:after {
 }
 .input-value .input-group.input-group-sm.mb-3 {
   margin-bottom: 0px !important;
+}
+
+.select2-container--open {
+  z-index: 9999;
 }
