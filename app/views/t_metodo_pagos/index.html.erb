@@ -29,7 +29,7 @@
                     <td><%= metodo.forma_pago %></td>
                     <td><%= metodo.minimo %></td>
                     <td><%= metodo.maximo %></td>
-                    <td><%= metodo.estatus %></td>
+                    <td><%= TEstatus.find(metodo.estatus).descripcion %></td>
                   </tr>
                 <% end %>
               </tbody>
