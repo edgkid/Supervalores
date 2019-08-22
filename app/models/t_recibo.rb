@@ -4,6 +4,7 @@ class TRecibo < ApplicationRecord
   belongs_to :t_periodo
   belongs_to :t_metodo_pago
   belongs_to :user
+	belongs_to :t_tipo_pago
 
   #has_many :t_recibo_detalle
   has_many :t_cajas, dependent: :destroy
