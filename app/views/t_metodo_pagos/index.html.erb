@@ -25,7 +25,7 @@
               </thead>
               <tbody>
                 <% @t_metodo_pagos.each do |metodo| %>
-                  <tr data-link="<%= t_metodo_pagos_index_path(metodo) %>">
+                  <tr data-link="<%= "/t_metodo_pagos/show/" << t_metodo_pagos_index_path(metodo).split('.')[1] %>">
                     <td><%= metodo.forma_pago %></td>
                     <td><%= metodo.minimo %></td>
                     <td><%= metodo.maximo %></td>
