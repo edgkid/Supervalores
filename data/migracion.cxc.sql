@@ -85,6 +85,8 @@ UNION ALL SELECT 1, 1, descripcion, '#00000000', CURRENT_TIMESTAMP, CURRENT_TIME
 INSERT INTO t_tipo_personas (descripcion, estatus, created_at, updated_at)
 SELECT descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP FROM cxc_t_tipo_persona;
 
+UPDATE t_tipo_personas SET descripcion = REPLACE(descripcion, 'Juridicas', 'Jurídicas');
+
 INSERT INTO t_empresa_tipo_valors(descripcion, estatus, created_at, updated_at)
 SELECT DISTINCT TRIM(UPPER(tipo_valor)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 FROM cxc_t_clientes_padre

@@ -12,7 +12,7 @@
       <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1">SVM</span>
       </div>
-      <%= form.text_field :resolucion_codigo, autofocus: true, class: "form-control", placeholder: "Letras y Números" %>
+      <%= form.text_field :resolucion_codigo, autofocus: true, class: "form-control", placeholder: "Ej. 120M", maxlength: 4 %>
       <div class="input-group-append">
         <%= form.select :resolucion_anio, opciones_de_anios_para_resolucion , {}, { :class => 'input-group-text form-control m-b' } %>
       </div>
