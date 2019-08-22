@@ -30,23 +30,52 @@ class TResolucion < ApplicationRecord
 		},
 		on: [:create, :update]
 
-	validates :resolucion,
+	validates :resolucion_codigo,
+		presence: {
+			message: "|El codigo de la resolución no puede estar vacío."
+		},
+    format: { 
+      message: "|La resolución solo puede tener Letras, Números, Guiones(-).",
+      with: /([A-Za-z0-9\-]+)/ 
+		},
+		on: [:create, :update]
+	
+	validates :resolucion_anio,
 		presence: {
 			message: "|La resolución no puede estar vacía."
 		},
     format: { 
-      message: "|La resolución solo puede tener Letras, Números, Guiones(-).",
-      with: /([A-Za-z0-9\-]){6,18}/ 
+      message: "|La resolución solo puede tener Números.",
+      with: /([0-9]+)/ 
 		},
-    uniqueness: {
-      message: "|Ya se registro esta resolución a un cliente, use otra por favor.",
-    },
 		on: [:create, :update]
+		
+	validates :resolucion_anio, 
+		uniqueness: {
+			scope: :resolucion_codigo,
+			message: "|Ya se registro esta resolución a un cliente, use otra por favor.",
+		}
+	
+	def resolucion_codigo=(resolucion_codigo)
+		write_attribute(:resolucion_codigo, normalizar(resolucion_codigo))
+	end
+	
+	def resolucion_codigo
+		read_attribute(:resolucion_codigo)
+	end
 
-		before_save :before_save_record
+	def resolucion
+		"SVM#{resolucion_codigo}#{resolucion_anio}"
+	end
 
-		def before_save_record
-			resolucion.upcase!
+	private
+	
+	def normalizar(codigo)
+		if codigo
+			value = codigo.strip()[0..3]
+			return "#{"0"*(4-value.length)}#{value}"
 		end
+		return "0000"
+	end
 
 end
