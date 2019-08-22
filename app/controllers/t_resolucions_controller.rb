@@ -53,7 +53,7 @@ class TResolucionsController < ApplicationController
     @registro.t_estatus = TEstatus.find(1)
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to t_tipo_clientes_url, notice: 'Resolución inhabilitada correctamente.' }
+        format.html { redirect_to t_resolucions_url, notice: 'Resolución inhabilitada correctamente.' }
         format.json { head :no_content }
       else
         @notice = @registro.errors
@@ -69,6 +69,6 @@ class TResolucionsController < ApplicationController
     end
 
     def parametros_resolucion
-      params.require(:t_resolucion).permit(:descripcion, :t_cliente_id, :t_estatus_id, :resolucion)
+      params.require(:t_resolucion).permit(:descripcion, :t_cliente_id, :t_estatus_id, :resolucion_codigo, :resolucion_anio)
     end
 end

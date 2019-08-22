@@ -301,7 +301,7 @@ class TClientesController < ApplicationController
     end
 
     def parametros_resolucion
-      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion, :t_cliente_id)
+      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :t_cliente_id)
     end
 
     def parametros_de_busqueda
