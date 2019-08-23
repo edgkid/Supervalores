@@ -1,0 +1,49 @@
+<div class="ibox-content">
+  <%= form_with(model: registro, local: true) do |form| %>  
+    <%= render 'form_fields', registro: registro, editable: editable %>
+    <div class="form-group row">
+      <% if editable %>
+        <%= render "shared/action_buttons",
+          list_route: return_to, list_text: "Métodos de Pago",
+          back_route: polymorphic_path(registro), back_text: "Cancelar",
+          save_form: true, save_text: "Guardar",
+          button_size: "xs"
+        %>
+      <% else %>
+        <%= render "shared/action_buttons",
+          list_route: return_to, list_text: "Métodos de Pago",
+          edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
+          delete_route: polymorphic_path(registro), delete_text: "Borrar",
+          button_size: "xs"
+        %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  $("#marcarTodo").change(function () {
+    if ($(this).is(':checked')) {
+      var section = `
+        <div class='form-group row'>
+          <div class="col-sm-2 col-form-label">
+            <label class="text-right">Mínimo</label>
+          </div>
+          <div class="col-sm-4 input-value">
+            <input type="number" name="minimo" id="minimo" class="form-control" step=".01" min="0">
+          </div>
+
+          <div class="col-sm-2 col-form-label">
+            <label class="text-right">Máximo</label>
+          </div>
+          <div class="col-sm-4 input-value">
+            <input type="number" name="maximo" id="maximo" class="form-control" step=".01" min="0">
+          </div>
+        </div>
+      `
+      document.getElementById("maxMinEnabled").innerHTML = section;
+    } else {
+      document.getElementById("maxMinEnabled").innerHTML = "";
+    }
+  });
+</script>

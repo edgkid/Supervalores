@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   resources :t_empresa_tipo_valors, path: "tipo_valor_para_empresas"
   resources :t_empresa_sector_economicos, path: "sector_economico_para_empresas"
   resources :t_tipo_cliente_tipos, path: "tipo_para_tipo_cliente"
+  resources :t_metodo_pagos
 
   get "redirect" => "t_tipo_clientes#redirect"
 
@@ -56,14 +57,14 @@ Rails.application.routes.draw do
   get 'rols/destroy/:id' => 't_rols#destroy'
 
   #metodo de pago
-  get 't_metodo_pagos/index' => 't_metodo_pagos#index'
-  get 't_metodo_pagos/show/:id' => 't_metodo_pagos#show'
+  # get 't_metodo_pagos/index' => 't_metodo_pagos#index'
+  # get 't_metodo_pagos/show/:id' => 't_metodo_pagos#show'
 
-  get 't_metodo_pagos/new' => 't_metodo_pagos#new'
-  post 't_metodo_pagos/create' => 't_metodo_pagos#create'
+  # get 't_metodo_pagos/new' => 't_metodo_pagos#new'
+  # post 't_metodo_pagos/create' => 't_metodo_pagos#create'
 
-  get 't_metodo_pagos/edit/:id' => 't_metodo_pagos#edit'
-  post 't_metodo_pagos/update/:id' => 't_metodo_pagos#update'
+  # get 't_metodo_pagos/edit/:id' => 't_metodo_pagos#edit'
+  # post 't_metodo_pagos/update/:id' => 't_metodo_pagos#update'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   #root to: 'users#index'

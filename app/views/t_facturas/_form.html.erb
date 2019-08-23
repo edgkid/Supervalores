@@ -253,19 +253,6 @@
       //alert($('#total').text());
       $('#input-total-factura').val(Number($('#total').text()));
       $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-    })
-      // $.ajax({
-      //   url: '<%#= "#{t_clientes_find_path}" %>',
-      //   type: 'get',
-      //   data: {
-      //     attribute: $(this).attr('id'),
-      //     search: $(this).val()
-      //   }
-      // });
-    //});
-
-    // $(document).on('keyup', '.select2-search__field', function (e) {
-    //   //alert($(this).parent().attr('class'));
-    // })
+    });
   });
 </script>

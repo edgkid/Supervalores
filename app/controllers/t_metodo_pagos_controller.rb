@@ -14,14 +14,14 @@ class TMetodoPagosController < ApplicationController
 
   def new
     @t_metodo_pago = TMetodoPago.new
-    @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
+    @estatus = TEstatus.all # where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
     #@estatus = TEstatus.where( "id = ? OR id = ?", 1, 2 )
   end
 
   def create
     @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
     @t_metodo_pago = TMetodoPago.new(t_metodo_pago_params)
-    @t_metodo_pago.estatus = params[:id_estatus]
+    # @t_metodo_pago.estatus = params[:id_estatus]
 
     if params[:minimo] == nil || params[:maximo] != nil
       @t_metodo_pago.minimo = params[:minimo]
@@ -29,7 +29,7 @@ class TMetodoPagosController < ApplicationController
     end
 
     if @t_metodo_pago.save
-      redirect_to t_metodo_pagos_index_path, notice: 'Método de pago creado correctamente.'
+      redirect_to t_metodo_pagos_path, notice: 'Método de pago creado correctamente.'
     else
       @notice = @t_metodo_pago.errors
       render :action => "new"
@@ -38,7 +38,8 @@ class TMetodoPagosController < ApplicationController
 
   def edit
     @t_metodo_pago =TMetodoPago.find(params[:id])
-    @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
+    @estatus = TEstatus.all
+    # @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
   end
 
   def update
@@ -50,7 +51,7 @@ class TMetodoPagosController < ApplicationController
       @t_metodo_pago.maximo = params[:maximo]
     end
 
-    if @t_metodo_pago.update_attributes(t_metodo_pago_params)
+    if @t_metodo_pago.update(t_metodo_pago_params)
       redirect_to t_metodo_pagos_index_path , notice: 'Método de pago actualizado correctamente.'
     else
       @notice = @t_metodo_pago.errors
