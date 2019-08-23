@@ -125,3 +125,22 @@ form label.opcional:after {
 .select2-container--open {
   z-index: 9999;
 }
+
+#toast-container{
+  max-width: calc(100% - 24px);
+}
+#toast-container .toast,
+#toast-container .toast-title,
+#toast-container .toast-message{
+  width: 100%;
+}
+#toast-container .toast-title,
+#toast-container .toast-message {    
+  overflow:auto;
+}
+
+#toast-container .toast-close-button {
+  position: absolute;
+  top: 0.2em;
+  right: 0.8em;
+}
