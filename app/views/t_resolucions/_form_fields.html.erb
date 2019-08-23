@@ -4,11 +4,19 @@
 <%= fields_for registro do |form| %>
 <div class="form-group row">
   <div class="col-sm-2 col-form-label">
-    <%= form.label :resolucion, 'Resolución', class: "text-right" %>
+    <%= form.label :resolucion_codigo, 'Resolución', class: "text-right" %>
   </div>
-  <div class="col-sm-4 input-value">
+  <div class="col-sm-5 input-value">
     <% if defined?(editable) && editable %>
-    <%= form.text_field :resolucion, autofocus: true, class: "form-control" %>
+    <div class="input-group input-group-sm mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">SVM</span>
+      </div>
+      <%= form.text_field :resolucion_codigo, autofocus: true, class: "form-control", placeholder: "Ej. 120M", maxlength: 4 %>
+      <div class="input-group-append">
+        <%= form.select :resolucion_anio, opciones_de_anios_para_resolucion , {}, { :class => 'input-group-text form-control m-b' } %>
+      </div>
+    </div>
     <% else %>
     <%= registro.resolucion %>
     <% end %>
@@ -16,7 +24,7 @@
   <div class="col-sm-2 col-form-label">
     <%= form.label :t_estatus_id, 'Estatus', class: "text-right" %>
   </div>
-  <div class="col-sm-4 input-value">
+  <div class="col-sm-3 input-value">
     <% if defined?(editable) && editable %>
     <%= form.select :t_estatus_id, opciones_de_estatus(true, 3, true) , {}, { :class => 'form-control m-b' } %>
     <% else %>
@@ -25,42 +33,42 @@
   </div>
 </div>
 <div class="form-group row">
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :descripcion, 'Descripción', class: "text-right" %>
-    </div>
-    <div class="col-sm-10 input-value">
-      <% if defined?(editable) && editable %>
-      <%= form.text_area :descripcion, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
-      <% else %>
-      <%= registro.descripcion %>
-      <% end %>
-    </div>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :descripcion, 'Descripción', class: "text-right" %>
   </div>
-  <div class="form-group row">
-    <% if !defined?(ignorar_cliente) || !ignorar_cliente %>
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :t_cliente_id, 'Cliente', class: "text-right" %>
-    </div>
-    <div class="col-sm-4 input-value">
-      <% if !defined?(editable) || editable %>
-        <% if (!defined?(bloquear_cliente) || !bloquear_cliente) %>
-        <%= form.select :t_cliente_id, opciones_de_clientes, {}, { :class => 'form-control m-b' } %>    
-        <% else %>
-        <%= form.hidden_field :t_cliente_id %>
-        <%= registro.t_cliente.razon_social %>
-        <% end %>      
-      <% else %>      
-        <%= registro.t_cliente.razon_social %>
-      <% end %>
-    </div>
-    <% end %>
-    <% if defined?(editable) && !editable %>
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :created_at, 'Fecha', class: "text-right" %>
-    </div>
-    <div class="col-sm-4 input-value">
-      <%= registro.created_at %>
-    </div>
+  <div class="col-sm-10 input-value">
+    <% if defined?(editable) && editable %>
+    <%= form.text_area :descripcion, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+    <% else %>
+    <%= registro.descripcion %>
     <% end %>
   </div>
+</div>
+<div class="form-group row">
+  <% if !defined?(ignorar_cliente) || !ignorar_cliente %>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :t_cliente_id, 'Cliente', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if !defined?(editable) || editable %>
+    <% if (!defined?(bloquear_cliente) || !bloquear_cliente) %>
+    <%= form.select :t_cliente_id, opciones_de_clientes, {}, { :class => 'form-control m-b' } %>
+    <% else %>
+    <%= form.hidden_field :t_cliente_id %>
+    <%= registro.t_cliente.razon_social %>
+    <% end %>
+    <% else %>
+    <%= registro.t_cliente.razon_social %>
+    <% end %>
+  </div>
+  <% end %>
+  <% if defined?(editable) && !editable %>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :created_at, 'Fecha', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <%= registro.created_at %>
+  </div>
+  <% end %>
+</div>
 <% end %>
