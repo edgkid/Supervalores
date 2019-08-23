@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_21_020546) do
+ActiveRecord::Schema.define(version: 2019_08_23_041545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -278,13 +278,13 @@ ActiveRecord::Schema.define(version: 2019_08_21_020546) do
   end
 
   create_table "t_metodo_pagos", force: :cascade do |t|
-    t.string "forma_pago", null: false
     t.string "descripcion", null: false
-    t.float "minimo"
-    t.float "maximo"
     t.integer "estatus", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "forma_pago", null: false
+    t.decimal "minimo"
+    t.decimal "maximo"
   end
 
   create_table "t_nota_creditos", force: :cascade do |t|

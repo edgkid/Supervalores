@@ -14,7 +14,7 @@ class TMetodoPagosController < ApplicationController
 
   def new
     @t_metodo_pago = TMetodoPago.new
-    @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
+    @estatus = TEstatus.all # where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
     #@estatus = TEstatus.where( "id = ? OR id = ?", 1, 2 )
   end
 
