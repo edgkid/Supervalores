@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_18_211255) do
+ActiveRecord::Schema.define(version: 2019_08_21_020546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "permissions", force: :cascade do |t|
+    t.string "role"
+    t.string "subject_class"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_permissions_on_user_id"
+  end
 
   create_table "t_cajas", force: :cascade do |t|
     t.float "pago_recibido", null: false
@@ -97,6 +107,20 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
     t.integer "estatus"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "t_elementos", force: :cascade do |t|
+    t.string "nombre"
+    t.string "modelo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "t_elementos_x_rols", id: false, force: :cascade do |t|
+    t.bigint "t_rol_id", null: false
+    t.bigint "t_elemento_id", null: false
+    t.index ["t_elemento_id"], name: "index_t_elementos_x_rols_on_t_elemento_id"
+    t.index ["t_rol_id"], name: "index_t_elementos_x_rols_on_t_rol_id"
   end
 
   create_table "t_email_masivos", force: :cascade do |t|
@@ -339,6 +363,7 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "t_factura_id"
+    t.bigint "t_periodo_id"
     t.index ["t_factura_id"], name: "index_t_recargos_on_t_factura_id"
   end
 
@@ -456,6 +481,7 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
     t.datetime "updated_at", null: false
     t.bigint "t_tarifa_id", null: false
     t.bigint "t_tipo_cliente_tipo_id", null: false
+    t.bigint "t_periodo_id"
     t.index ["codigo"], name: "index_t_tipo_clientes_on_codigo", unique: true
     t.index ["t_tarifa_id"], name: "index_t_tipo_clientes_on_t_tarifa_id"
   end
@@ -511,6 +537,7 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "permissions", "users"
   add_foreign_key "t_cajas", "t_recibos"
   add_foreign_key "t_cajas", "users"
   add_foreign_key "t_catalogo_cuenta", "t_tipo_cuenta", column: "t_tipo_cuenta_id"
@@ -523,6 +550,8 @@ ActiveRecord::Schema.define(version: 2019_08_18_211255) do
   add_foreign_key "t_clientes", "t_tipo_clientes"
   add_foreign_key "t_cuenta_financieras", "t_presupuestos"
   add_foreign_key "t_cuenta_financieras", "t_tarifa_servicio_groups"
+  add_foreign_key "t_elementos_x_rols", "t_elementos"
+  add_foreign_key "t_elementos_x_rols", "t_rols"
   add_foreign_key "t_email_masivos", "t_clientes"
   add_foreign_key "t_email_masivos", "t_facturas"
   add_foreign_key "t_email_masivos", "users"

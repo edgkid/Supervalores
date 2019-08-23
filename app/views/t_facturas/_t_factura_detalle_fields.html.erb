@@ -10,9 +10,10 @@
     <%= f.number_field :cantidad, 'data-quantity': 1, min: 0, step: 0.01, class: 'quantity', style: 'height: 28px; width: 100%;', value: 1 %>
   </td>
   <td class="price-cell">
-    <%= f.number_field :precio_unitario, min: 0, step: 0.01, class: 'price', readonly: true, style: 'height: 28px; width: 100%;' %>
+    <%= f.number_field :precio_unitario, min: 0, step: 0.01, class: 'price', readonly: true, style: 'height: 28px; width: 100%;', value: 0 %>
   </td>
   <td class="subtotal-cell" style="text-align: center;">
+    0
     <%= f.hidden_field :_destroy %>
     <%= link_to_remove_fields 'Eliminar', f, true, class: 'destroy-service-link', style: 'display: none;' %>
   </td>

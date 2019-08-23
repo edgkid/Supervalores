@@ -79,7 +79,12 @@ function getTotal(target, data = '', total = 0) {
 
 // Asigna el total al elemento HTML objetivo.
 function setTotal(target, total = 0) {
-  $(target).text(total);
+  console.log(total);
+  if (isNaN(total)) {
+    $(target).text(0);
+  } else {
+    $(target).text(total);
+  }
 }
 
 // Asigna el subtotal. Hay que indicar si el campo actual donde se dispara el

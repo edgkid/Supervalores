@@ -8,6 +8,7 @@ class TFacturasController < ApplicationController
 	end
 
   def new
+    @do_not_use_plain_select2 = true
     @t_factura = TFactura.new
     # @t_factura.t_factura_detalles.build
     @t_recargos = TRecargo.all
@@ -36,6 +37,7 @@ class TFacturasController < ApplicationController
       @notice = @t_factura.errors
       @notice.messages[:t_resolucion] -= [@notice.messages[:t_resolucion].first]
       @notice.messages[:t_periodo] -= [@notice.messages[:t_periodo].first]
+      @do_not_use_plain_select2 = true
       render 'new'
     end
   end
