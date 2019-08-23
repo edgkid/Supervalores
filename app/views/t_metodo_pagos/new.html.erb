@@ -8,30 +8,3 @@
     </div>
   </div>
 </div>
-
-<script type="text/javascript">
-  $("#marcarTodo").change(function () {
-    if ($(this).is(':checked')) {
-      var section = `
-        <div class='form-group row'>
-          <div class="col-sm-2 col-form-label">
-            <label class="text-right">Mínimo</label>
-          </div>
-          <div class="col-sm-4 input-value">
-            <input type="number" name="minimo" id="minimo" class="form-control" step=".01" min="0">
-          </div>
-
-          <div class="col-sm-2 col-form-label">
-            <label class="text-right">Máximo</label>
-          </div>
-          <div class="col-sm-4 input-value">
-            <input type="number" name="maximo" id="maximo" class="form-control" step=".01" min="0">
-          </div>
-        </div>
-      `
-      document.getElementById("maxMinEnabled").innerHTML = section;
-    } else {
-      document.getElementById("maxMinEnabled").innerHTML = "";
-    }
-	});
-</script>
