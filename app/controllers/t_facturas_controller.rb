@@ -48,7 +48,7 @@ class TFacturasController < ApplicationController
     @t_estatus = @t_factura.t_estatus
     @t_cliente = @t_resolucion.t_cliente
     @t_persona = @t_cliente.persona
-    @t_empresa = @t_persona.t_empresa
+    @t_empresa = @t_persona.t_empresa if @t_persona
   end
 
   def edit

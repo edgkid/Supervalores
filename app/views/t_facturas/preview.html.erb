@@ -27,16 +27,16 @@
 
 <div class="row">
   <div class="col-md-4">
-    <b>Dirección:</b> <%= @t_empresa.direccion_empresa %><br>
+    <b>Dirección:</b> <%= @t_empresa.direccion_empresa if @t_empresa %><br>
     <b>Apartado Postal:</b> <%= '' %><br>
-    <b>Teléfono:</b> <%= @t_empresa.telefono %><br>
-    <b>Email:</b> <%= @t_empresa.email %>
+    <b>Teléfono:</b> <%= @t_empresa.telefono if @t_empresa %><br>
+    <b>Email:</b> <%= @t_empresa.email if @t_empresa %>
   </div>
   <div class="col-md-4">
     <b>Para</b><br>
-    <b>Cliente:</b> <%= "#{@t_persona.nombre} #{@t_persona.apellido}" %><br>
+    <b>Cliente:</b> <%= "#{@t_persona.nombre} #{@t_persona.apellido}" if @t_persona %><br>
     <b>Resolución:</b> <%= @t_resolucion.resolucion %><br>
-    <b>CIP / RUC:</b> <%= @t_persona.cedula %><br>
+    <b>CIP / RUC:</b> <%= @t_persona.cedula if @t_persona %><br>
     <b>Teléfono:</b> <%= @t_cliente.telefono %><br>
     <b>Email:</b> <%= @t_cliente.email %><br>
   </div>

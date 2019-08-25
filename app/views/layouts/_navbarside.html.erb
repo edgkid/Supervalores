@@ -115,34 +115,33 @@
         </ul>
       </li>
       <!-- -->
-      <%# if (can? :crud, @user ) || (can? :crud, @rol) %>
-      <!-- <li>
+      <% if (can? :crud, @user ) || (can? :crud, @rol) %>
+      <li>
         <a href="#">
-          <i class="fa fa-th-large"></i>
           <i class="glyphicon glyphicon-lock"></i>
           <span class="nav-label">
-            Gestión de Accesos
+            Acceso
           </span>
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
-          <%# if can? :crud, @user %>
+          <% if can? :crud, @user %>
           <li>
             <a href="/admin/users">
               Usuarios
             </a>
           </li>
-          <%# end %>
-          <%# if can? :crud, @rol %>
+          <% end %>
+          <% if can? :crud, @rol %>
           <li>
             <a href="/rols/index">
               Roles de Usuario
             </a>
           </li>
-          <%# end %>
+          <% end %>
         </ul>
-      </li> -->
-      <%# end %>
+      </li>
+      <% end %>
       <!-- -->
     </ul>
   </div>
