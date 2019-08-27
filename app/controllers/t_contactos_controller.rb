@@ -1,5 +1,5 @@
-class TResolucionsController < ApplicationController
-  before_action :seleccionar_resolucion, only: [:show, :edit, :update, :destroy]
+class TContactosController < ApplicationController
+  before_action :seleccionar_contacto, only: [:show, :edit, :update, :destroy]
 
   # load_and_authorize_resource
 
@@ -9,24 +9,24 @@ class TResolucionsController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @registros = TResolucion.all
+    @registros = TContacto.all
   end
 
   def show
   end
 
   def new
-    @registro = TResolucion.new
+    @registro = TContacto.new
   end
 
   def edit
   end
 
   def create
-    @registro = TResolucion.new(parametros_resolucion)
+    @registro = TContacto.new(parametros_contacto)
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to @registro, notice: 'Resolución creada correctamente.' }
+        format.html { redirect_to @registro, notice: 'Contacto creado correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
         @notice = @registro.errors
@@ -38,8 +38,8 @@ class TResolucionsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(parametros_resolucion)
-        format.html { redirect_to @registro, notice: 'Resolución actualizada correctamente.' }
+      if @registro.update(parametros_contacto)
+        format.html { redirect_to @registro, notice: 'Contacto actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
         @notice = @registro.errors
@@ -53,7 +53,7 @@ class TResolucionsController < ApplicationController
     @registro.t_estatus = TEstatus.find(1)
     respond_to do |format|
       if @registro.save
-        format.html { redirect_to t_resolucions_url, notice: 'Resolución inhabilitada correctamente.' }
+        format.html { redirect_to t_contactos_url, notice: 'Contacto inhabilitado correctamente.' }
         format.json { head :no_content }
       else
         @notice = @registro.errors
@@ -64,16 +64,11 @@ class TResolucionsController < ApplicationController
   end
 
   private
-    def seleccionar_resolucion
-      @registro = TResolucion.find(params[:id])
+    def seleccionar_contacto
+      @registro = TContacto.find(params[:id])
     end
 
-    def parametros_resolucion
-      params.require(:t_resolucion).permit(:descripcion, :t_cliente_id, :t_estatus_id, :resolucion_codigo, :resolucion_anio)
-    end
-    
     def parametros_contacto
-      params.require(:t_contacto).permit(:nombre, :apellido, :telefono, :direccion, :email, :empresa)
+      params.require(:t_contacto).permit(:descripcion, :t_cliente_id, :t_estatus_id, :contacto_codigo, :contacto_anio)
     end
-    
 end

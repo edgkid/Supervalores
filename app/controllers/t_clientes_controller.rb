@@ -23,6 +23,7 @@ class TClientesController < ApplicationController
     @registro = TCliente.new
     @registro.t_estatus_id = 2
     @registro.es_prospecto = true
+    @registro.es_prospecto = true
   end
 
   def edit
@@ -266,6 +267,7 @@ class TClientesController < ApplicationController
 
     def seleccionar_resolucion
       @mostrar_resolucion = TResolucion.find(params[:resolucion])
+      @registro.usar_cliente = @registro.t_contacto == nil
     end
 
     def parametros_cliente
@@ -281,11 +283,15 @@ class TClientesController < ApplicationController
     end
     
     def parametros_cliente_tipo_persona
-      params.require(:t_persona).permit(:cedula, :nombre, :apellido, :num_licencia, :t_empresa_id, :cargo, :telefono, :email)
+      params.require(:t_persona).permit(:cedula, :nombre, :apellido, :num_licencia, :t_empresa_id, :cargo, :telefono, :email, :direccion)
     end
 
     def parametros_cliente_tipo_otro
       params.require(:t_otro).permit(:identificacion, :razon_social, :telefono, :email, :t_tipo_persona_id)
+    end
+
+    def usar_cliente
+      params.require(:t_resolucion)[:usar_cliente] == "1"
     end
 
     def es_prospecto
@@ -301,7 +307,11 @@ class TClientesController < ApplicationController
     end
 
     def parametros_resolucion
-      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :t_cliente_id)
+      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :t_cliente_id, :usar_cliente)
+    end
+
+    def parametros_contacto
+      params.require(:t_contacto).permit(:nombre, :apellido, :telefono, :direccion, :email, :empresa)
     end
 
     def parametros_de_busqueda

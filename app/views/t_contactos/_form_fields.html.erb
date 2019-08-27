@@ -1,0 +1,72 @@
+<%
+%>
+<%= fields_for registro do |form| %>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :nombre, 'Nombre', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if defined?(editable) && editable %>
+    <%= form.text_field :nombre, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+    <% else %>
+    <%= registro.nombre %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :apellido, 'Apellido', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if defined?(editable) && editable %>
+    <%= form.text_field :apellido, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+    <% else %>
+    <%= registro.apellido %>
+    <% end %>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :telefono, 'Teléfono', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if defined?(editable) && editable %>
+    <%= form.text_field :telefono, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+    <% else %>
+    <%= registro.telefono %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :email, 'Email', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if defined?(editable) && editable %>
+    <%= form.text_field :email, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+    <% else %>
+    <%= registro.email %>
+    <% end %>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :direccion, 'Dirección', class: "text-right" %>
+  </div>
+  <div class="col-sm-10 input-value">
+    <% if defined?(editable) && editable %>
+    <%= form.text_area :direccion, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+    <% else %>
+    <%= registro.direccion %>
+    <% end %>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :empresa, 'Empresa', class: "text-right" %>
+  </div>
+  <div class="col-sm-10 input-value">
+    <% if defined?(editable) && editable %>
+    <%= form.text_field :empresa, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
+    <% else %>
+    <%= registro.empresa %>
+    <% end %>
+  </div>
+</div>
+<% end %>

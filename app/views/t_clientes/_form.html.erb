@@ -2,12 +2,14 @@
   tiene_resoluciones = defined?(registro) && registro.t_resolucions != nil && registro.t_resolucions.count > 0
   asociar_resolucion = editable && !tiene_resoluciones
   if asociar_resolucion
-    resolucion = TResolucion.new 
+    resolucion = TResolucion.new
+    resolucion.usar_cliente = true
     if @resolucion != nil
       resolucion = @resolucion
     end
   else
     nueva_resolucion = TResolucion.new
+    nueva_resolucion.usar_cliente = true
     if @nueva_resolucion != nil
       nueva_resolucion = @nueva_resolucion
     end
@@ -95,33 +97,44 @@
     </div>
   </div>
   <div id="ibox_resoluciones" class="col-md-7<%= registro.es_prospecto ? " hide" : "" %>">
-    <div class="ibox">
-      <% if asociar_resolucion %>
-      <div class="ibox-title">
-        <h5>Resolución Asociada</h5>
-      </div>
-      <div class="ibox-content">
-        <%= render 't_resolucions/form_fields', 
+    <div class="col-md-12">
+      <div class="ibox">
+        <% if asociar_resolucion %>
+        <div class="ibox-title">
+          <h5>Resolución Asociada</h5>
+        </div>
+        <div class="ibox-content">
+          <%= render 't_resolucions/form_fields', 
               editable: true,
               registro: resolucion,
               ignorar_cliente: resolucion.t_cliente == nil
         %>
-      </div>
-      <% else %>
-      <div class="ibox-title">
-        <h5>Resoluciones</h5>
-        <% if editable %>
-        <%= button_tag 'Añadir resolución', type: :button, class: "btn btn-primary float-right btn-xs", "data-toggle" => "modal", "data-target" =>"#agregar_resolucion" %>
+        </div>
+        <% else %>
+        <div class="ibox-title">
+          <h5>Resoluciones</h5>
+          <% if editable %>
+          <%= button_tag 'Añadir resolución', type: :button, class: "btn btn-primary float-right btn-xs", "data-toggle" => "modal", "data-target" =>"#agregar_resolucion" %>
 
+          <% end %>
+        </div>
+        <%= render 't_resolucions/records', del_cliente: registro %>
         <% end %>
       </div>
-      <%= render 't_resolucions/records', del_cliente: registro %>
-      <% end %>
+    </div>
+    <div id="info_contacto" class="col-md-12<%= resolucion.usar_cliente ? " hide" : "" %>">
+      <div class="ibox">
+        <div class="ibox-title">
+          <h5>Contacto de resolución</h5>
+        </div>
+        <div class="ibox-content">
+          <%= render 't_contactos/form_fields', editable: editable, registro: resolucion.t_contacto %>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-<% end %>
-<% if editable && nueva_resolucion != nil %>
+  <% end %>
+  <% if editable && nueva_resolucion != nil %>
   <%= form_tag url_for(:controller => 't_clientes', :action => 'nueva_resolucion', id: registro.id), method: :post do %>
   <div class="modal inmodal" id="agregar_resolucion" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -149,7 +162,7 @@
     </div>
   </div>
   <% end%>
-<% end%>
-<script>
+  <% end%>
+  <script>
   <%= render partial: "t_clientes/script.js" %>
-</script>
+  </script>
