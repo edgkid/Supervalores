@@ -13,9 +13,11 @@ class TRecibo < ApplicationRecord
   has_many :t_clientes, through: :t_estado_cuentum
 
   def calculate_default_attributes(t_factura, t_cliente, t_periodo, current_user)
-    remaining = t_factura.total_factura - self.pago_recibido
+    remaining = t_factura.calculate_pending_payment - self.pago_recibido
     credited_amount = remaining < 0 ? (remaining * (-1)) : 0
     pending_payment = remaining > 0 ? remaining : 0
+
+    debugger
 
     self.monto_acreditado = credited_amount
     self.pago_pendiente = pending_payment

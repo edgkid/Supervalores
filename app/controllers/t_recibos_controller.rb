@@ -1,6 +1,6 @@
 class TRecibosController < ApplicationController
   before_action :set_t_factura
-  before_action :set_necessary_attributes, only: [:new, :create]
+  before_action :set_necessary_objects, only: [:new, :create]
 
   def new
     @t_recibo = TRecibo.new
@@ -37,7 +37,7 @@ class TRecibosController < ApplicationController
       params.require(:t_recibo).permit(:pago_recibido, :pago_pendiente)
     end
 
-    def set_necessary_attributes
+    def set_necessary_objects
       @t_recibos = @t_factura.t_recibos
       @pending_payment = @t_factura.calculate_pending_payment
 
