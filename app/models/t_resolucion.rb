@@ -64,9 +64,9 @@ class TResolucion < ApplicationRecord
 		read_attribute(:resolucion_codigo)
 	end
 
-	# def resolucion
-	# 	"SVM#{resolucion_codigo}#{resolucion_anio}" if defined?(resolucion_anio)
-	# end
+	def resolucion
+		"SVM#{resolucion_codigo}#{resolucion_anio}" if defined?(resolucion_anio)
+	end
 
 	private
 	

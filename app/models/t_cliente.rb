@@ -39,6 +39,18 @@ class TCliente < ApplicationRecord
 
   attr_accessor :es_prospecto
 
+  def identificacion
+    if persona.is_a?(TPersona)
+      return persona.cedula
+    elsif persona.is_a?(TEmpresa) 
+      return persona.rif
+    elsif persona.is_a?(TOtro)
+      return persona.identificacion
+    else
+      return "Indeterminado"
+    end
+  end
+  
   def razon_social
     if persona.is_a?(TPersona)
       return "#{persona.nombre}, #{persona.apellido}"
@@ -76,4 +88,15 @@ class TCliente < ApplicationRecord
       return "null"
     end
   end
+  
+  def empresa
+    if persona.is_a?(TPersona)
+      return persona.t_empresa.razon_social
+    elsif persona.is_a?(TEmpresa) || persona.is_a?(TOtro)
+      return persona.razon_social
+    else
+      return "Indeterminado"
+    end
+  end
+  
 end
