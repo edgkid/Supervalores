@@ -6,6 +6,8 @@ class TClientesController < ApplicationController
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion, :nueva_empresa]
   before_action :usar_dataTables_en, only: [:index, :show, :edit]
   before_action :seleccionar_resolucion, only: [:mostrar_resolucion]
+  before_action :clients_with_resolutions, only: :find_by_codigo
+  before_action :companies_with_clients_with_resolutions, only: :find_by_cedula
   # load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -207,12 +209,7 @@ class TClientesController < ApplicationController
 
   def find_by_codigo
     search = parametros_de_busqueda[:search]
-    respond_with TCliente.where('codigo LIKE ?', "%#{search}%").first(10)
-  end
-
-  def find_by_resolucion
-    search = parametros_de_busqueda[:search]
-    respond_with TResolucion.where('resolucion LIKE ?', "%#{search}%").first(10)
+    respond_with @clients_with_resolutions.where('codigo LIKE ?', "%#{search}%").first(10)
   end
 
   def find_by_cedula
@@ -220,11 +217,16 @@ class TClientesController < ApplicationController
 
     personas = TPersona.where('cedula LIKE ?', "%#{search}%").first(10)
     if personas.empty?
-      personas = TEmpresa.where('rif LIKE ?', "%#{search}%").first(10)
+      personas = @companies_with_clients_with_resolutions.where('rif LIKE ?', "%#{search}%").first(10)
     end
 
     respond_with personas
     # respond_with TCliente.where('razon_social LIKE ?', "%#{search}%").first(10)
+  end
+
+  def find_by_resolucion
+    search = parametros_de_busqueda[:search]
+    respond_with TResolucion.where('resolucion_codigo LIKE ?', "%#{search}%").first(10)
   end
 
   def find
@@ -310,5 +312,13 @@ class TClientesController < ApplicationController
 
     def usar_dataTables_en
       @usar_dataTables = true
+    end
+
+    def clients_with_resolutions
+      @clients_with_resolutions = TCliente.joins("INNER JOIN t_resolucions ON t_resolucions.t_cliente_id = t_clientes.id")
+    end
+
+    def companies_with_clients_with_resolutions
+      @companies_with_clients_with_resolutions = TEmpresa.where(t_cliente: TCliente.joins("INNER JOIN t_resolucions ON t_resolucions.t_cliente_id = t_clientes.id"))
     end
 end

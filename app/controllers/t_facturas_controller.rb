@@ -48,18 +48,23 @@ class TFacturasController < ApplicationController
     @t_estatus = @t_factura.t_estatus
     @t_cliente = @t_resolucion.t_cliente
     @t_persona = @t_cliente.persona
-    @t_empresa = @t_persona.t_empresa if @t_persona
+    if @t_persona.class.to_s == 'TEmpresa'
+      @t_empresa = @t_persona
+      @t_persona = nil
+    else
+      @t_empresa = @t_persona.t_empresa
+    end
   end
 
   def edit
+    @do_not_use_plain_select2 = true
   end
 
   def update
     if @t_factura.update(t_factura_params)
-      # flash[:success] = "Factura actualizado exitosamente."
       redirect_to t_facturas_path
     else
-      # flash.now[:danger] = "No se pudo modificar el factura."
+      @do_not_use_plain_select2 = true
       render 'edit'
     end
   end
@@ -72,12 +77,10 @@ class TFacturasController < ApplicationController
   def show
   end
 
-  def destroy
-    @t_factura.destroy
-
-    # flash[:warning] = "Factura eliminado."
-    redirect_to t_facturas_path
-  end
+  # def destroy
+  #   @t_factura.destroy
+  #   redirect_to t_facturas_path
+  # end
 
   private
 

@@ -46,6 +46,11 @@ class TRecibosController < ApplicationController
       @t_estatus = @t_factura.t_estatus
       @t_cliente = @t_resolucion.t_cliente
       @t_persona = @t_cliente.persona
-      @t_empresa = @t_persona.t_empresa if @t_persona
+      if @t_persona.class.to_s == 'TEmpresa'
+        @t_empresa = @t_persona
+        @t_persona = nil
+      else
+        @t_empresa = @t_persona.t_empresa
+      end
     end
 end
