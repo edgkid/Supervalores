@@ -31,7 +31,7 @@
               </thead>
               <tbody>
                 <% @t_facturas.each do |t_factura| %>
-                  <tr data-link="<%= polymorphic_url(t_factura) %>">
+                  <tr data-link="<%= preview_t_factura_path(t_factura) %>">
                     <td><%= t_factura.id %></td>
                     <td><%= (t_factura.t_resolucion && t_factura.t_resolucion.t_cliente) ? t_factura.t_resolucion.t_cliente.codigo : 'Sin cliente' %></td>
                     <td><%= t_factura.t_resolucion ? t_factura.t_resolucion.resolucion : 'Sin resolución' %></td>

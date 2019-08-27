@@ -1,0 +1,43 @@
+<%= render template: 't_facturas/preview' %>
+
+<hr>
+<h3 align="center">Recibos</h3>
+<hr>
+
+<%= render 't_recibos' if @t_recibos.any? %>
+
+<%= form_for [:t_factura, @t_recibo] do |f| %>
+  <div class="row">
+    <div class="col-sm-5">
+      <div class="form-group row justify-content-md-center">
+        <%= f.label :pago_recibido, 'Monto Pagado', class: "col-sm-4 col-form-label" %>
+        <div class="col-sm-7">
+          <%= f.number_field :pago_recibido, class: "form-control", id: 'payment-received-input', min: 0, step: 0.01 %>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <div class="form-group row justify-content-md-center">
+        <%= f.label :pago_pendiente, 'Monto por Pagar', class: "col-sm-4 col-form-label" %>
+        <div class="col-sm-7">
+          <%= f.number_field :pago_pendiente, class: "form-control", id: 'pending-payment-input', readonly: 'readonly', step: 0.01, value: @pending_payment %>
+        </div>
+      </div>
+    </div>
+    <div align="center" class="col-sm-2">
+      <%= f.submit 'Crear Recibo', class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#payment-received-input').keyup(function() {
+      calculatePendingPayment(
+        Number(<%= @pending_payment %>),
+        Number($(this).val()),
+        $('#pending-payment-input')
+      );
+    });
+  });
+</script>

@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 't_recibos/new'
+  get 't_recibos/edit'
+  get 't_recibos/index'
+  get 't_recibos/show'
   root to: 'dashboard#index'
   get 'dashboard/access_denied' => 'dashboard#access_denied'
 
@@ -13,8 +17,8 @@ Rails.application.routes.draw do
   resources :t_tarifas, path: "tarifas"
   resources :t_facturas do
     get 'preview', on: :member
+    resources :t_recibos
   end
-  # get 't_facturas/previsualizacion' => 't_facturas#preview', as: :previsualizar_factura
   resources :t_tarifa_servicios
   namespace :t_recargos do
     get 'find_by_descripcion', as: :find_by_descripcion
@@ -55,16 +59,6 @@ Rails.application.routes.draw do
   post 'rols/create' => "t_rols#create"
 
   get 'rols/destroy/:id' => 't_rols#destroy'
-
-  #metodo de pago
-  # get 't_metodo_pagos/index' => 't_metodo_pagos#index'
-  # get 't_metodo_pagos/show/:id' => 't_metodo_pagos#show'
-
-  # get 't_metodo_pagos/new' => 't_metodo_pagos#new'
-  # post 't_metodo_pagos/create' => 't_metodo_pagos#create'
-
-  # get 't_metodo_pagos/edit/:id' => 't_metodo_pagos#edit'
-  # post 't_metodo_pagos/update/:id' => 't_metodo_pagos#update'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   #root to: 'users#index'

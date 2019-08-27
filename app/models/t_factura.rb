@@ -32,4 +32,8 @@ class TFactura < ApplicationRecord
     presence: {
       message: "|Debe seleccionar un periodo"
     }
+
+  def calculate_pending_payment
+    self.total_factura - self.t_recibos.sum(:pago_recibido)
+  end
 end

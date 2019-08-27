@@ -1,0 +1,18 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Fecha de pago</th>
+      <th>Monto Pagado</th>
+      <th>Monto por Pagar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @t_recibos.each do |t_recibo| %>
+      <tr>
+        <td><%= t_recibo.fecha_pago %></td>
+        <td><%= t_recibo.pago_recibido %></td>
+        <td><%= t_recibo.pago_pendiente %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

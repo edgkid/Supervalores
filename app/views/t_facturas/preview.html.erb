@@ -137,7 +137,10 @@
     <% end %>
     <button type="button" class="btn btn-info"><i class="fa fa-envelope"></i> Enviar al Correo</button>
     <button type="button" class="btn btn-primary"><i class="fa fa-download"></i> Generar PDF</button>
-    <button type="button" class="btn btn-success"><i class="fa fa-credit-card"></i> Realizar Recibo</button>
+    <%= link_to new_t_factura_t_recibo_path(@t_factura), class: 'btn btn-success' do %>
+      <i class="fa fa-credit-card"></i>
+      Realizar Recibo
+    <% end %>
   </div>
 </div>
 
