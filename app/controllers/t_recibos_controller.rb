@@ -34,7 +34,9 @@ class TRecibosController < ApplicationController
     end
 
     def t_recibo_params
-      params.require(:t_recibo).permit(:pago_recibido, :pago_pendiente)
+      params.require(:t_recibo).permit(
+        :pago_recibido, :pago_pendiente, :justificacion, :t_metodo_pago_id
+      )
     end
 
     def set_necessary_objects

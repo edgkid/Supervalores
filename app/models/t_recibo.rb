@@ -23,7 +23,6 @@ class TRecibo < ApplicationRecord
     self.t_factura = t_factura
     self.t_cliente = t_cliente
     self.t_periodo = t_periodo
-    self.t_metodo_pago = TMetodoPago.first
     self.estatus = 1
     self.user = current_user
   end

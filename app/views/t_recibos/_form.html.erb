@@ -8,26 +8,50 @@
 
 <%= form_for [:t_factura, @t_recibo] do |f| %>
   <div class="row">
-    <div class="col-sm-5">
-      <div class="form-group row justify-content-md-center">
+    <div class="col-sm-6">
+      <div class="form-group row">
         <%= f.label :pago_recibido, 'Monto Pagado', class: "col-sm-4 col-form-label" %>
         <div class="col-sm-7">
           <%= f.number_field :pago_recibido, class: "form-control", id: 'payment-received-input', min: 0, step: 0.01 %>
         </div>
       </div>
     </div>
-    <div class="col-sm-5">
-      <div class="form-group row justify-content-md-center">
+    <div class="col-sm-6">
+      <div class="form-group row">
         <%= f.label :pago_pendiente, 'Monto por Pagar', class: "col-sm-4 col-form-label" %>
         <div class="col-sm-7">
           <%= f.number_field :pago_pendiente, class: "form-control", id: 'pending-payment-input', readonly: 'readonly', step: 0.01, value: @pending_payment %>
         </div>
       </div>
     </div>
-    <div align="center" class="col-sm-2">
-      <%= f.submit 'Crear Recibo', class: 'btn btn-primary' %>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="form-group row">
+        <%= f.label :t_metodo_pago_id, 'Método de Pago', class: "col-sm-4 col-form-label" %>
+        <div class="col-sm-7">
+          <%= f.select :t_metodo_pago_id, payment_method_options, {}, { class: "form-control" } %>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group row">
+        <%= f.label :justificacion, 'Justificación', class: "col-sm-4 col-form-label" %>
+        <div class="col-sm-7">
+          <%= f.text_field :justificacion, class: "form-control" %>
+        </div>
+      </div>
     </div>
   </div>
+
+  <div class="row justify-content-sm-center">
+    <div class="col-sm-2">
+      <%= render "shared/action_buttons", save_form: true, save_text: "Guardar" %>
+    </div>
+  </div>
+
+  <br>
 <% end %>
 
 <script type="text/javascript">
