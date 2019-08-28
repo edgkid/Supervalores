@@ -1,26 +1,38 @@
-<%= render template: 't_facturas/preview' %>
+<%= render template: 't_facturas/preview' unless @is_show %>
 
 <hr>
-<h3 align="center">RECIBOS</h3>
+<% if @is_show %>
+  <h3 align="center">RECIBO</h3>
+<% else %>
+  <h3 align="center">RECIBOS</h3>
+<% end %>
 <hr>
 
-<%= render 't_recibos' if @t_recibos.any? %>
+<%= render 't_recibos' if !@is_show && @t_recibos.any? %>
 
 <%= form_for [:t_factura, @t_recibo] do |f| %>
   <div class="row">
     <div class="col-sm-6">
       <div class="form-group row">
-        <%= f.label :pago_recibido, 'Monto Pagado', class: "col-sm-4 col-form-label" %>
+        <%= f.label :pago_recibido, 'Monto Pagado', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
         <div class="col-sm-7">
-          <%= f.number_field :pago_recibido, class: "form-control", id: 'payment-received-input', min: 0, step: 0.01 %>
+          <% unless @is_show %>
+            <%= f.number_field :pago_recibido, class: "form-control", id: 'payment-received-input', min: 0, step: 0.01 %>
+          <% else %>
+            <%= @t_recibo.pago_recibido %>
+          <% end %>
         </div>
       </div>
     </div>
     <div class="col-sm-6">
       <div class="form-group row">
-        <%= f.label :pago_pendiente, 'Monto por Pagar', class: "col-sm-4 col-form-label" %>
+        <%= f.label :pago_pendiente, 'Monto por Pagar', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
         <div class="col-sm-7">
-          <%= f.number_field :pago_pendiente, class: "form-control", id: 'pending-payment-input', readonly: 'readonly', step: 0.01, value: @pending_payment %>
+          <% unless @is_show %>
+            <%= f.number_field :pago_pendiente, class: "form-control", id: 'pending-payment-input', readonly: 'readonly', step: 0.01, value: @pending_payment %>
+          <% else %>
+            <%= @t_recibo.pago_pendiente %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -29,17 +41,25 @@
   <div class="row">
     <div class="col-sm-6">
       <div class="form-group row">
-        <%= f.label :t_metodo_pago_id, 'Método de Pago', class: "col-sm-4 col-form-label" %>
+        <%= f.label :t_metodo_pago_id, 'Método de Pago', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
         <div class="col-sm-7">
-          <%= f.select :t_metodo_pago_id, payment_method_options, {}, { class: "form-control" } %>
+          <% unless @is_show %>
+            <%= f.select :t_metodo_pago_id, payment_method_options, {}, { class: "form-control" } %>
+          <% else %>
+            <%= @t_recibo.t_metodo_pago.forma_pago %>
+          <% end %>
         </div>
       </div>
     </div>
     <div class="col-sm-6">
       <div class="form-group row">
-        <%= f.label :justificacion, 'Justificación', class: "col-sm-4 col-form-label" %>
+        <%= f.label :justificacion, 'Justificación', class: "col-sm-4 col-form-label opcional" %>
         <div class="col-sm-7">
-          <%= f.text_field :justificacion, class: "form-control" %>
+          <% unless @is_show %>
+            <%= f.text_field :justificacion, class: "form-control" %>
+          <% else %>
+            <%= @t_recibo.justificacion %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -47,7 +67,14 @@
 
   <div class="row justify-content-sm-center">
     <div class="col-sm-2">
-      <%= render "shared/action_buttons", save_form: true, save_text: "Guardar" %>
+      <% if @is_show %>
+        <%= render "shared/action_buttons",
+          list_route: return_to, list_text: "Recibos",
+          button_size: "xs"
+        %>
+      <% else %>
+        <%= render "shared/action_buttons", save_form: true, save_text: "Guardar" %>
+      <% end %>
     </div>
   </div>
 

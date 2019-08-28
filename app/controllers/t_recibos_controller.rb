@@ -1,5 +1,6 @@
 class TRecibosController < ApplicationController
-  before_action :set_t_factura
+  before_action :set_t_factura, except: [:index, :show]
+  # before_action :set_t_recibo, only: :show
   before_action :set_necessary_objects, only: [:new, :create]
 
   def new
@@ -22,9 +23,13 @@ class TRecibosController < ApplicationController
   end
 
   def index
+    @usar_dataTables = true
+    @registros = TRecibo.all
   end
 
   def show
+    @is_show = true
+    @t_recibo = TRecibo.find(params[:id])
   end
 
   private

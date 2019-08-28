@@ -1,9 +1,4 @@
 Rails.application.routes.draw do
-
-  get 't_recibos/new'
-  get 't_recibos/edit'
-  get 't_recibos/index'
-  get 't_recibos/show'
   root to: 'dashboard#index'
   get 'dashboard/access_denied' => 'dashboard#access_denied'
 
@@ -19,6 +14,7 @@ Rails.application.routes.draw do
     get 'preview', on: :member
     resources :t_recibos
   end
+  resources :t_recibos, only: [:index, :show]
   resources :t_tarifa_servicios
   namespace :t_recargos do
     get 'find_by_descripcion', as: :find_by_descripcion

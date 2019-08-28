@@ -46,31 +46,29 @@
         </a>
         <ul class="nav nav-second-level collapse">
           <% if can? :crud, TFactura %>
-          <li><%= link_to 'Factura Manual', t_facturas_path %></li>
+            <li><%= link_to 'Factura Manual', t_facturas_path %></li>
           <% end %>
+          <li><%= link_to 'Recibos', t_recibos_path %></li>
           <% if can? :crud, TRecargo %>
-          <li><%= link_to 'Recargos', t_recargos_path %></li>
+            <li><%= link_to 'Recargos', t_recargos_path %></li>
           <% end %>
           <% if can? :crud, TPeriodo %>
-          <li><%= link_to 'Periodos', t_periodos_path %></li>
+            <li><%= link_to 'Periodos', t_periodos_path %></li>
           <% end %>
           <% if can? :crud, TTarifa %>
-          <li><%= link_to 'Tarifas', t_tarifas_path %></li>
+            <li><%= link_to 'Tarifas', t_tarifas_path %></li>
           <% end %>
           <% if can? :crud, TTarifaServicio %>
-          <li><%= link_to 'Servicios', t_tarifa_servicios_path %></li>
+            <li><%= link_to 'Servicios', t_tarifa_servicios_path %></li>
           <% end %>
           <% if can? :crud, TLeyenda %>
-          <li><%= link_to 'Leyendas de Facturas', t_leyendas_path %></li>
+            <li><%= link_to 'Leyendas de Facturas', t_leyendas_path %></li>
           <% end %>
-          <!-- <% if can? :crud, TEmision %>
-          <li><%= link_to 'Emisiones', t_emisions_path %></li>
-          <% end %> -->
           <% if can? :crud, TTipoEmision %>
-          <li><%= link_to 'Tipos de emisión', t_tipo_emisions_path %></li>
+            <li><%= link_to 'Tipos de emisión', t_tipo_emisions_path %></li>
           <% end %>
           <% if can? :crud,TMetodoPago %>
-          <li><%= link_to 'Método de Pago', t_metodo_pagos_path %></li>
+            <li><%= link_to 'Métodos de Pago', t_metodo_pagos_path %></li>
           <% end %>
         </ul>
       </li>

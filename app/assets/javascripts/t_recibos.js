@@ -1,3 +1,3 @@
 function calculatePendingPayment(invoiceTotal, amountPaid, target) {
-  target.val(invoiceTotal - amountPaid);
+  target.val((invoiceTotal - amountPaid).toFixedDown());
 }
