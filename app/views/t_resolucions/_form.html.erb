@@ -1,22 +1,64 @@
-<div class="ibox-content">
-  <%= form_with(model: registro, local: true) do |form| %>  
-  <%= render 't_resolucions/form_fields', registro: registro, editable: editable %>
-  <div class="form-group row">
-      <% if editable %>
-      <%= render "shared/action_buttons",
-        list_route: return_to, list_text: "Resoluciones",
-        back_route: polymorphic_path(registro), back_text: "Cancelar",
-        save_form: true, save_text: "Guardar",
-        button_size: "xs"
-      %>
-      <% else %>
-      <%= render "shared/action_buttons",
-        list_route: return_to, list_text: "Resoluciones",
-        edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
-        delete_route: polymorphic_path(registro), delete_text: "Borrar",
-        button_size: "xs"
-      %>
-      <% end %>
-  </div>
-  <% end %>
+<%
+  contacto = TContacto.new
+  if registro.t_contacto != nil
+    contacto = registro.t_contacto
+  end
+%>
+<%= form_with(model: registro, local: true) do |form| %>
+<div class="row justify-content-md-center">
+  <div class="col-md-6">
+    <div class="ibox">
+      <div class="ibox-title">
+        <%= yield %>
+        <div class="row" style="position: absolute; right: 3em; top: 0.5em;">
+          <%= fields_for registro do |form| %>
+          <div class="col-form-label">
+            <%= label_tag :usar_cliente, '¿Usar cliente de contacto?', class: "text-right" %>
+          </div>
+          <div class="input-value" style="margin-left:0.5em; padding-left:0.5em;">
+            <% if editable %>
+            <%= form.check_box :usar_cliente %>
+            <% else %>
+            <%= registro.usar_cliente ? "Si": "No" %>
+            <% end %>
+          </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="ibox-content">
+        <%= render 't_resolucions/form_fields', registro: registro, editable: editable %>
+        <div class="form-group row">
+          <% if editable %>
+          <%= render "shared/action_buttons",
+              list_route: return_to, list_text: "Resoluciones",
+              back_route: polymorphic_path(registro), back_text: "Cancelar",
+              save_form: true, save_text: "Guardar",
+              button_size: "xs"
+            %>
+          <% else %>
+          <%= render "shared/action_buttons",
+              list_route: return_to, list_text: "Resoluciones",
+              edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
+              delete_route: polymorphic_path(registro), delete_text: "Borrar",
+              button_size: "xs"
+            %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>  
+  <div id="info_contacto" class="col-md-6<%= registro.usar_cliente ? " hide" : "" %>">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>Contacto de resolución</h5>
+      </div>
+      <div class="ibox-content">
+        <%= render 't_contactos/form_fields', editable: editable, registro: contacto %>
+      </div>
+    </div>
+  </div>  
 </div>
+<% end %>
+<script>
+  <%= render partial: "script.js" %>
+</script>

@@ -62,4 +62,14 @@ class TPersona < ApplicationRecord
         },
         :on => [:create, :update]
     
+    validates :direccion,
+        presence: {
+            message: "|La dirección no puede estar vacía."
+        },
+        format: {
+            message: "|La dirección solo puede tener Letras, Números, Guiones(-) y espacios.",
+            with: /([A-Za-z0-9\-\s]+)/ 
+        },
+        :on => [:create, :update]
+
 end

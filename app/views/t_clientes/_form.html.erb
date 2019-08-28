@@ -1,20 +1,18 @@
 <%
   tiene_resoluciones = defined?(registro) && registro.t_resolucions != nil && registro.t_resolucions.count > 0
   asociar_resolucion = editable && !tiene_resoluciones
-  if asociar_resolucion
-    resolucion = TResolucion.new 
+  if asociar_resolucion || tiene_resoluciones
+    resolucion = TResolucion.new
+    resolucion.t_contacto = TContacto.new
     if @resolucion != nil
       resolucion = @resolucion
+      if @contacto != nil
+        resolucion.t_contacto = @contacto
+      end
     end
-  else
-    nueva_resolucion = TResolucion.new
-    if @nueva_resolucion != nil
-      nueva_resolucion = @nueva_resolucion
-    end
-    nueva_resolucion.t_cliente = registro
   end
   
-  resolucion.t_cliente = registro if asociar_resolucion && registro.id != nil
+  resolucion.t_cliente = registro if resolucion != nil && registro.id != nil
   otro = TOtro.new
   if registro != nil && registro.persona.is_a?(TEmpresa)
     otro.t_tipo_persona_id = 1
@@ -95,33 +93,55 @@
     </div>
   </div>
   <div id="ibox_resoluciones" class="col-md-7<%= registro.es_prospecto ? " hide" : "" %>">
-    <div class="ibox">
-      <% if asociar_resolucion %>
-      <div class="ibox-title">
-        <h5>Resolución Asociada</h5>
-      </div>
-      <div class="ibox-content">
-        <%= render 't_resolucions/form_fields', 
+    <div class="col-md-12">
+      <div class="ibox">
+        <% if asociar_resolucion %>
+        <div class="ibox-title">
+          <h5>Resolución Asociada</h5>
+          <div class="row" style="position: absolute; right: 3em; top: 0.5em;">
+            <%= fields_for resolucion do |form| %>
+            <div class="col-form-label">
+              <%= label_tag :usar_cliente, '¿Usar cliente de contacto?', class: "text-right" %>
+            </div>
+            <div class="input-value" style="margin-left:0.5em; padding-left:0.5em;">
+              <% if editable %>
+              <%= form.check_box :usar_cliente %>
+              <% else %>
+              <%= resolucion.usar_cliente ? "Si": "No" %>
+              <% end %>
+            </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="ibox-content">
+          <%= render 't_resolucions/form_fields', 
               editable: true,
               registro: resolucion,
               ignorar_cliente: resolucion.t_cliente == nil
         %>
-      </div>
-      <% else %>
-      <div class="ibox-title">
-        <h5>Resoluciones</h5>
-        <% if editable %>
-        <%= button_tag 'Añadir resolución', type: :button, class: "btn btn-primary float-right btn-xs", "data-toggle" => "modal", "data-target" =>"#agregar_resolucion" %>
-
+        </div>
+        <div id="info_contacto" class="<%= resolucion.usar_cliente ? " hide" : "" %>" style="margin-top: 0.5em;">
+          <div class="ibox-title">
+            <h5>Contacto de resolución</h5>
+          </div>
+          <div class="ibox-content">
+            <%= render 't_contactos/form_fields', editable: editable, registro: resolucion.t_contacto %>
+          </div>
+        </div>
+        <% else %>
+        <div class="ibox-title">
+          <h5>Resoluciones</h5>
+          <% if editable %>
+          <%= button_tag 'Añadir resolución', type: :button, class: "btn btn-primary float-right btn-xs", "data-toggle" => "modal", "data-target" =>"#agregar_resolucion" %>
+          <% end %>
+        </div>
+        <%= render 't_resolucions/records', del_cliente: registro %>
         <% end %>
       </div>
-      <%= render 't_resolucions/records', del_cliente: registro %>
-      <% end %>
     </div>
   </div>
-</div>
-<% end %>
-<% if editable && nueva_resolucion != nil %>
+  <% end %>
+  <% if editable && resolucion != nil && tiene_resoluciones %>
   <%= form_tag url_for(:controller => 't_clientes', :action => 'nueva_resolucion', id: registro.id), method: :post do %>
   <div class="modal inmodal" id="agregar_resolucion" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -129,17 +149,35 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
               class="sr-only">Close</span></button>
-          <i class="fa fa-laptop modal-icon"></i>
           <h4 class="modal-title">Agregar resolución</h4>
           <small class="font-bold">Esta resolución se asociará a <span
               class="text-success text-uppercase font-bold"><%= registro.razon_social %></span>.</small>
+          <div class="row" style="position: absolute; right: 3em; top: 6.5em;">
+            <%= fields_for resolucion do |form| %>
+            <div class="col-form-label">
+              <%= label_tag :usar_cliente, '¿Usar cliente de contacto?', class: "text-right" %>
+            </div>
+            <div class="input-value" style="margin-left:0.5em; padding-left:0.5em;">
+              <% if editable %>
+              <%= form.check_box :usar_cliente %>
+              <% else %>
+              <%= registro.usar_cliente ? "Si": "No" %>
+              <% end %>
+            </div>
+            <% end %>
+          </div>
         </div>
 
         <div class="modal-body">
           <%= fields_for registro do |form| %>
           <%= form.hidden_field :id %>
           <% end %>
-          <%= render 't_resolucions/form_fields', registro: nueva_resolucion, editable: editable %>
+          <%= render 't_resolucions/form_fields', registro: resolucion, editable: editable %>
+          <div id="info_contacto" class="<%= resolucion.usar_cliente ? " hide" : "" %>">
+            <hr />
+            <h3 class="text-center">Contacto de resolución</h3>
+            <%= render 't_contactos/form_fields', editable: editable, registro: resolucion.t_contacto %>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-white" data-dismiss="modal">Cancelar</button>
@@ -149,7 +187,7 @@
     </div>
   </div>
   <% end%>
-<% end%>
-<script>
-  <%= render partial: "t_clientes/script.js" %>
-</script>
+  <% end%>
+  <script>
+  <%= render partial: "script.js" %>
+  </script>

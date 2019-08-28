@@ -17,6 +17,10 @@ $(document).ready(function(){
   $("#t_cliente_es_prospecto").click(function(){
     $("#ibox_resoluciones").toggleClass("hide")
   })
+
+  $("#t_resolucion_usar_cliente").click(function(){
+    $("#info_contacto").toggleClass("hide")
+  })
   
   mostrar_form_tipo_persona(<%= @registro.tipo_persona %> | $("#select-tipo-persona").val())
   $("#select-tipo-persona").change(function(evt){
@@ -25,7 +29,7 @@ $(document).ready(function(){
     mostrar_form_tipo_persona(value)
   })
 
-  <% if @nueva_resolucion != nil && @nueva_resolucion.errors.any? %>
+  <% if @resolucion != nil && @resolucion.errors.any? %>
     $('#agregar_resolucion').modal('show');
   <% end %>
 

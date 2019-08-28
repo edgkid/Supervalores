@@ -1,10 +1,3 @@
-<div class="row justify-content-md-center">
-  <div class="col-md-9 col-lg-7">
-    <div class="ibox">
-      <div class="ibox-title">
-        <h5>Editar <%= @registro.resolucion %></h5>
-      </div>
-      <%= render 'form', registro: @registro, editable: true, return_to: t_resolucions_path %>
-    </div>
-  </div>
-</div>
+<%= render 'form', registro: @registro, editable: true, return_to: t_resolucions_path do %>
+<h5>Editar <%= @registro.resolucion %></h5>
+<% end %>

@@ -2,6 +2,7 @@ class TResolucion < ApplicationRecord
 	belongs_to :t_cliente	
 	belongs_to :t_estatus	
 
+	has_one :t_contacto, dependent: :destroy
 	has_many :t_facturas, dependent: :destroy
 	has_many :t_recargo_x_clientes, dependent: :destroy
 	has_many :t_recargos, through: :t_recargo_x_cliente
@@ -56,6 +57,8 @@ class TResolucion < ApplicationRecord
 			message: "|Ya se registró esta resolución a un cliente, use otra por favor.",
 		}
 	
+	attr_accessor :usar_cliente
+
 	def resolucion_codigo=(resolucion_codigo)
 		write_attribute(:resolucion_codigo, normalizar(resolucion_codigo))
 	end

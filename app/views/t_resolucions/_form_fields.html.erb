@@ -51,14 +51,18 @@
   </div>
   <div class="col-sm-4 input-value">
     <% if !defined?(editable) || editable %>
-    <% if (!defined?(bloquear_cliente) || !bloquear_cliente) %>
-    <%= form.select :t_cliente_id, opciones_de_clientes, {}, { :class => 'form-control m-b' } %>
-    <% else %>
-    <%= form.hidden_field :t_cliente_id %>
-    <%= registro.t_cliente.razon_social %>
-    <% end %>
-    <% else %>
-    <%= registro.t_cliente.razon_social %>
+      <% if (!defined?(bloquear_cliente) || !bloquear_cliente) %>
+        <%= form.select :t_cliente_id, opciones_de_clientes, {}, { :class => 'form-control m-b' } %>
+      <% else %>
+        <%= form.hidden_field :t_cliente_id %>
+        <%= link_to registro.t_cliente do%>
+          <%= registro.t_cliente.razon_social %>
+        <% end %>
+      <% end %>
+      <% else %>
+      <%= link_to registro.t_cliente do%>
+        <%= registro.t_cliente.razon_social %>
+      <% end %>
     <% end %>
   </div>
   <% end %>
@@ -67,7 +71,7 @@
     <%= form.label :created_at, 'Fecha', class: "text-right" %>
   </div>
   <div class="col-sm-4 input-value">
-    <%= registro.created_at %>
+    <%= registro.created_at.to_formatted_s(:short) %>
   </div>
   <% end %>
 </div>
