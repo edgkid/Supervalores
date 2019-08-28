@@ -315,10 +315,10 @@ class TClientesController < ApplicationController
     end
 
     def clients_with_resolutions
-      @clients_with_resolutions = TCliente.joins("INNER JOIN t_resolucions ON t_resolucions.t_cliente_id = t_clientes.id")
+      @clients_with_resolutions = TCliente.joins("INNER JOIN t_resolucions ON t_resolucions.t_cliente_id = t_clientes.id").distinct
     end
 
     def companies_with_clients_with_resolutions
-      @companies_with_clients_with_resolutions = TEmpresa.where(t_cliente: TCliente.joins("INNER JOIN t_resolucions ON t_resolucions.t_cliente_id = t_clientes.id"))
+      @companies_with_clients_with_resolutions = TEmpresa.where(t_cliente: TCliente.joins("INNER JOIN t_resolucions ON t_resolucions.t_cliente_id = t_clientes.id")).distinct
     end
 end
