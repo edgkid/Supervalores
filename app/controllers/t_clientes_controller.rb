@@ -23,13 +23,12 @@ class TClientesController < ApplicationController
     @registro = TCliente.new
     @registro.t_estatus_id = 2
     @registro.es_prospecto = true
-    @registro.es_prospecto = true
   end
 
   def edit
   end
 
-  def create
+  def create    
     @registro = TCliente.new(parametros_cliente)
     @nueva_empresa = nil
     if es_empresa
@@ -73,16 +72,34 @@ class TClientesController < ApplicationController
         @registro.es_prospecto = es_prospecto
         if !@registro.es_prospecto
           @resolucion = TResolucion.new(parametros_resolucion)
+          @resolucion.usar_cliente = usar_cliente
           @resolucion.t_cliente = @registro
-          if @resolucion.save
-            @registro.prospecto_at = Time.now
-            @registro.save
-            format.html { redirect_to @registro, notice: 'Cliente creado y resolución asociada correctamente.' }
-            format.json { render :show, status: :created, location: @registro }
-          else
+
+          @contacto = nil                    
+          if !@resolucion.usar_cliente
+            @contacto = TContacto.new(parametros_contacto)
+            @contacto.t_resolucion = @resolucion
+            @contacto.valid?
+          end
+
+          if @contacto != nil && @contacto.errors.any?
+            @notice = @contacto.errors
+            format.html { render :new }
+            format.json { render json: @contacto.errors, status: :unprocessable_entity }
+          elsif @resolucion.errors.any?
             @notice = @resolucion.errors
             format.html { render :new }
             format.json { render json: @resolucion.errors, status: :unprocessable_entity }
+          else
+            @resolucion.save
+            @registro.prospecto_at = Time.now
+            @registro.save
+            if @contacto != nil
+              @contacto.t_resolucion = @resolucion
+              @contacto.save
+            end
+            format.html { redirect_to @registro, notice: 'Cliente creado y resolución asociada correctamente.' }
+            format.json { render :show, status: :created, location: @registro }
           end
         end
         format.html { redirect_to @registro, notice: 'Cliente creado correctamente.' }
@@ -95,7 +112,7 @@ class TClientesController < ApplicationController
     end
   end
 
-  def update
+  def update    
     crear = false
     actualizar = false
     parametros = {}
@@ -153,16 +170,35 @@ class TClientesController < ApplicationController
         @registro.es_prospecto = es_prospecto
         if (!@registro.es_prospecto && @registro.prospecto_at == nil)
           @resolucion = TResolucion.new(parametros_resolucion)
+          @resolucion.usar_cliente = usar_cliente
           @resolucion.t_cliente = @registro
-          if @resolucion.save
-            @registro.prospecto_at = Time.now
-            @registro.save
-            format.html { redirect_to edit_t_cliente_path(@registro), notice: 'Cliente actualizado y resolución asociada correctamente.' }
-            format.json { render :show, status: :ok, location: @registro }
-          else
+          
+          @contacto = nil          
+          if !usar_cliente
+            @contacto = TContacto.new(parametros_contacto)
+            @contacto.t_resolucion = @resolucion
+            @contacto.valid?
+          end
+          @resolucion.valid?
+
+          if @contacto != nil && @contacto.errors.any?
+            @notice = @contacto.errors
+            format.html { render :edit }
+            format.json { render json: @contacto.errors, status: :unprocessable_entity }
+          elsif @resolucion.errors.any?
             @notice = @resolucion.errors
             format.html { render :edit }
-            format.json { render json: @resolucion.errors, status: :unprocessable_entity }
+            format.json { render json: @contacto.errors, status: :unprocessable_entity }
+          else
+            @resolucion.save
+            @registro.prospecto_at = Time.now
+            @registro.save
+            if @contacto != nil
+              @contacto.t_resolucion = @resolucion
+              @contacto.save
+            end
+            format.html { redirect_to edit_t_cliente_path(@registro), notice: 'Cliente actualizado y resolución asociada correctamente.' }
+            format.json { render :show, status: :ok, location: @registro }
           end
         end
         format.html { redirect_to @registro, notice: 'Cliente actualizado correctamente.' }
@@ -176,15 +212,30 @@ class TClientesController < ApplicationController
   end
 
   def nueva_resolucion
-    @nueva_resolucion = TResolucion.new(parametros_resolucion)
+    @resolucion = TResolucion.new(parametros_resolucion)
+    @resolucion.usar_cliente = usar_cliente    
+          
+    @contacto = nil          
+    if !usar_cliente
+      @contacto = TContacto.new(parametros_contacto)
+      @contacto.t_resolucion = @resolucion
+      @contacto.valid?
+    end
+    @resolucion.valid?
+
     respond_to do |format|
-      if @nueva_resolucion.save
-        format.html { redirect_to edit_t_cliente_path(@registro), notice: 'Resolución asociada correctamente.' }
-        format.json { render :show, status: :ok, location: @nueva_resolucion }
-      else
-        @notice = @nueva_resolucion.errors
+      if @contacto != nil && @contacto.errors.any?
+        @notice = @contacto.errors
         format.html { render :edit }
-        format.json { render json: @nueva_resolucion.errors, status: :unprocessable_entity }
+        format.json { render json: @contacto.errors, status: :unprocessable_entity }
+      elsif @resolucion.errors.any?
+        @notice = @resolucion.errors
+        format.html { render :edit }
+        format.json { render json: @resolucion.errors, status: :unprocessable_entity }
+      else
+        @resolucion.save
+        format.html { redirect_to edit_t_cliente_path(@registro), notice: 'Resolución asociada correctamente.' }
+        format.json { render :show, status: :ok, location: @resolucion }
       end
     end
   end
@@ -267,7 +318,7 @@ class TClientesController < ApplicationController
 
     def seleccionar_resolucion
       @mostrar_resolucion = TResolucion.find(params[:resolucion])
-      @registro.usar_cliente = @registro.t_contacto == nil
+      @mostrar_resolucion.usar_cliente = usar_cliente
     end
 
     def parametros_cliente
@@ -307,7 +358,7 @@ class TClientesController < ApplicationController
     end
 
     def parametros_resolucion
-      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :t_cliente_id, :usar_cliente)
+      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :t_cliente_id)
     end
 
     def parametros_contacto

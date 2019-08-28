@@ -44,20 +44,6 @@
     <% end %>
   </div>
 </div>
-<div class="row" style="position: absolute; right: 3em; top: 0.5em;">
-  <%= fields_for registro do |form| %>
-  <div class="col-form-label">
-    <%= label_tag :usar_cliente, '¿Usar cliente de contacto?', class: "text-right" %>
-  </div>
-  <div class="input-value" style="margin-left:0.5em; padding-left:0.5em;">
-    <% if editable && registro.t_contacto == nil %>
-    <%= form.check_box :usar_cliente %>
-    <% else %>
-    <%= registro.usar_cliente ? "Si": "No" %>
-    <% end %>
-  </div>
-  <% end %>
-</div>
 <div class="form-group row">
   <% if !defined?(ignorar_cliente) || !ignorar_cliente %>
   <div class="col-sm-2 col-form-label">
@@ -65,14 +51,18 @@
   </div>
   <div class="col-sm-4 input-value">
     <% if !defined?(editable) || editable %>
-    <% if (!defined?(bloquear_cliente) || !bloquear_cliente) %>
-    <%= form.select :t_cliente_id, opciones_de_clientes, {}, { :class => 'form-control m-b' } %>
-    <% else %>
-    <%= form.hidden_field :t_cliente_id %>
-    <%= registro.t_cliente.razon_social %>
-    <% end %>
-    <% else %>
-    <%= registro.t_cliente.razon_social %>
+      <% if (!defined?(bloquear_cliente) || !bloquear_cliente) %>
+        <%= form.select :t_cliente_id, opciones_de_clientes, {}, { :class => 'form-control m-b' } %>
+      <% else %>
+        <%= form.hidden_field :t_cliente_id %>
+        <%= link_to registro.t_cliente do%>
+          <%= registro.t_cliente.razon_social %>
+        <% end %>
+      <% end %>
+      <% else %>
+      <%= link_to registro.t_cliente do%>
+        <%= registro.t_cliente.razon_social %>
+      <% end %>
     <% end %>
   </div>
   <% end %>
@@ -81,7 +71,7 @@
     <%= form.label :created_at, 'Fecha', class: "text-right" %>
   </div>
   <div class="col-sm-4 input-value">
-    <%= registro.created_at %>
+    <%= registro.created_at.to_formatted_s(:short) %>
   </div>
   <% end %>
 </div>
