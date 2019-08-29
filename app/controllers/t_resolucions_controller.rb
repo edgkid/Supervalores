@@ -100,7 +100,7 @@ class TResolucionsController < ApplicationController
     end
 
     def parametros_resolucion
-      params.require(:t_resolucion).permit(:descripcion, :t_cliente_id, :t_estatus_id, :resolucion_codigo, :resolucion_anio)
+      params.require(:t_resolucion).permit(:descripcion, :t_cliente_id, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :t_tipo_cliente_id)
     end
     
     def parametros_contacto

@@ -100,11 +100,11 @@ class TClientesController < ApplicationController
               @contacto.t_resolucion = @resolucion
               @contacto.save
             end
-            format.html { redirect_to @registro, notice: 'Cliente creado y resolución asociada correctamente.' }
+            format.html { redirect_to edit_t_cliente_path(@registro), notice: 'Cliente creado y resolución asociada correctamente.' }
             format.json { render :show, status: :created, location: @registro }
           end
         end
-        format.html { redirect_to @registro, notice: 'Cliente creado correctamente.' }
+        format.html { redirect_to edit_t_cliente_path(@registro), notice: 'Cliente creado correctamente.' }
         format.json { render :show, status: :created, location: @registro }
       else
         @notice = @registro.errors
@@ -203,7 +203,7 @@ class TClientesController < ApplicationController
             format.json { render :show, status: :ok, location: @registro }
           end
         end
-        format.html { redirect_to @registro, notice: 'Cliente actualizado correctamente.' }
+        format.html { redirect_to edit_t_cliente_path(@registro), notice: 'Cliente actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
         @notice = @registro.errors

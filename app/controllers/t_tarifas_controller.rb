@@ -55,7 +55,7 @@ class TTarifasController < ApplicationController
 
     def t_tarifa_params
       params.require(:t_tarifa).permit(
-        :nombre, :descripcion, :rango_monto,
+        :nombre, :descripcion, :monto, :rango_monto,
         :recargo, :estatus
       )
     end

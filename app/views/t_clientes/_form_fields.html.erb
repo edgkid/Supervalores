@@ -21,16 +21,4 @@
       <% end %>
     </div>
   </div>
-  <div class="form-group row">
-    <div class="col-sm-3 col-form-label">
-      <%= form.label :t_tipo_cliente_id, 'Tipo de Cliente', class: "text-right" %>
-    </div>
-    <div class="col-sm-9 input-value">
-      <% if editable %>
-      <%= form.select :t_tipo_cliente_id, opciones_de_tipos_de_clientes , {}, { :class => 'form-control m-b' } %>
-      <% else %>
-      <%= registro.t_tipo_cliente.descripcion %>
-      <% end %>
-    </div>
-  </div>
 <% end %>

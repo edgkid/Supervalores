@@ -30,6 +30,25 @@
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group row justify-content-md-center">
+                    <%= f.label :monto, class: "col-sm-3 col-form-label" %>
+                    <div class="col-sm-8">
+                      <%= f.number_field :monto, min: 0, step: 0.01, class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row justify-content-md-center">
+                    <%= f.label :recargo, class: "col-sm-3 col-form-label" %>
+                    <div class="col-sm-8">
+                      <%= f.number_field :recargo, min: 0, step: 0.01, class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group row justify-content-md-center">
                     <%= f.label :rango_monto, 'Rango del monto', class: "col-sm-3 col-form-label" %>
                     <div class="col-sm-8">
                       <%= f.number_field :rango_monto, step: 0.01, class: "form-control" %>
@@ -38,24 +57,19 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group row justify-content-md-center">
-                    <%= f.label :recargo, class: "col-sm-3 col-form-label" %>
-                    <div class="col-sm-8">
-                      <%= f.number_field :recargo, step: 0.01, class: "form-control" %>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group row justify-content-md-center">
                     <%= f.label :estatus, class: "col-sm-3 col-form-label" %>
                     <div class="col-sm-8">
-                      <%#= f.text_field :estatus, class: "form-control" %>
                       <%= f.select :estatus, opciones_de_estatus(false), {}, { :class => 'form-control m-b' } %>
                     </div>
                   </div>
                 </div>
               </div>
             </fieldset>
-            <%= render 'shared/form_buttons', f: f, object: @t_tarifa %>
+            <%= render "shared/action_buttons",
+              list_route: t_tarifas_path, list_text: "Tarifas",
+              save_form: true, save_text: "Guardar",
+              button_size: "xs"
+            %>
           <% end %>
         </div>
       </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_26_020546) do
+ActiveRecord::Schema.define(version: 2019_08_29_232041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,14 +69,12 @@ ActiveRecord::Schema.define(version: 2019_08_26_020546) do
     t.integer "t_estatus_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "t_tipo_cliente_id", null: false
     t.date "prospecto_at"
     t.bigint "persona_id", null: false
     t.string "persona_type", null: false
     t.index ["codigo"], name: "index_t_clientes_on_codigo", unique: true
     t.index ["persona_type", "persona_id"], name: "index_persona_as_cliente"
     t.index ["t_estatus_id"], name: "index_t_clientes_on_t_estatus_id"
-    t.index ["t_tipo_cliente_id"], name: "index_t_clientes_on_t_tipo_cliente_id"
   end
 
   create_table "t_contactos", force: :cascade do |t|
@@ -392,9 +390,11 @@ ActiveRecord::Schema.define(version: 2019_08_26_020546) do
     t.bigint "t_estatus_id", null: false
     t.integer "resolucion_anio"
     t.string "resolucion_codigo"
+    t.bigint "t_tipo_cliente_id"
     t.index ["resolucion_anio", "resolucion_codigo"], name: "index_t_resolucions_on_resolucion_anio_and_resolucion_codigo", unique: true
     t.index ["t_cliente_id"], name: "index_t_resolucions_on_t_cliente_id"
     t.index ["t_estatus_id"], name: "index_t_resolucions_on_t_estatus_id"
+    t.index ["t_tipo_cliente_id"], name: "index_t_resolucions_on_t_tipo_cliente_id"
   end
 
   create_table "t_rol_descs", force: :cascade do |t|
@@ -451,6 +451,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_020546) do
     t.string "estatus"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "monto"
   end
 
   create_table "t_tarifas_periodos", id: false, force: :cascade do |t|
@@ -540,7 +541,6 @@ ActiveRecord::Schema.define(version: 2019_08_26_020546) do
   add_foreign_key "t_cliente_tarifas", "t_resolucions"
   add_foreign_key "t_cliente_tarifas", "t_tarifas"
   add_foreign_key "t_clientes", "t_estatuses"
-  add_foreign_key "t_clientes", "t_tipo_clientes"
   add_foreign_key "t_cuenta_financieras", "t_presupuestos"
   add_foreign_key "t_cuenta_financieras", "t_tarifa_servicio_groups"
   add_foreign_key "t_email_masivos", "t_clientes"
@@ -582,6 +582,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_020546) do
   add_foreign_key "t_recibos", "users"
   add_foreign_key "t_resolucions", "t_clientes"
   add_foreign_key "t_resolucions", "t_estatuses"
+  add_foreign_key "t_resolucions", "t_tipo_clientes"
   add_foreign_key "t_rol_descs", "t_rols"
   add_foreign_key "t_tarifa_servicio_groups", "t_presupuestos"
   add_foreign_key "t_tarifas_periodos", "t_periodos"
