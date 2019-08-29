@@ -1,7 +1,7 @@
 class TRecibosController < ApplicationController
-  before_action :set_t_factura, except: [:index, :show]
+  before_action :set_t_factura, except: :index
   # before_action :set_t_recibo, only: :show
-  before_action :set_necessary_objects, only: [:new, :create]
+  before_action :set_necessary_objects, only: [:new, :create, :show]
 
   def new
     @t_recibo = TRecibo.new

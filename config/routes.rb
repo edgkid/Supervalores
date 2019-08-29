@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     get 'preview', on: :member
     resources :t_recibos
   end
-  resources :t_recibos, only: [:index, :show]
+  resources :t_recibos, only: :index
   resources :t_tarifa_servicios
   namespace :t_recargos do
     get 'find_by_descripcion', as: :find_by_descripcion

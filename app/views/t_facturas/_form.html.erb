@@ -81,14 +81,18 @@
 
   <br>
 
-  <%#= render 'shared/form_buttons', f: f, object: @t_factura %>
-
   <div class="row">
     <div align="center" class="col-sm-12">
-      <%= link_to 'Atrás', :back, class: 'btn btn-white col-2' %>
+      <%#= link_to 'Atrás', :back, class: 'btn btn-white col-2' %>
       <% unless @is_show %>
         <%#= link_to 'Crear Factura', preview_t_facturas_path, class: "btn btn-primary col-2" %>
-        <%= f.submit yield(:texto_boton), class: "btn btn-primary col-2" %>
+        <%#= f.submit yield(:texto_boton), class: "btn btn-primary col-2" %>
+        <%= render "shared/action_buttons",
+          list_route: t_facturas_path, list_text: "Facturas",
+          # back_route: t_facturas_path, back_text: "Cancelar",
+          save_form: true, save_text: "Guardar",
+          button_size: "xs"
+        %>
       <% end %>
     </div>
   </div>

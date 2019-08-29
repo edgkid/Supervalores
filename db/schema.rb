@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_21_020546) do
+ActiveRecord::Schema.define(version: 2019_08_26_020546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,19 @@ ActiveRecord::Schema.define(version: 2019_08_21_020546) do
     t.index ["persona_type", "persona_id"], name: "index_persona_as_cliente"
     t.index ["t_estatus_id"], name: "index_t_clientes_on_t_estatus_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_clientes_on_t_tipo_cliente_id"
+  end
+
+  create_table "t_contactos", force: :cascade do |t|
+    t.string "nombre"
+    t.string "apellido"
+    t.string "telefono"
+    t.string "direccion"
+    t.string "email"
+    t.string "empresa"
+    t.bigint "t_resolucion_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["t_resolucion_id"], name: "index_t_contactos_on_t_resolucion_id"
   end
 
   create_table "t_cuenta_financieras", force: :cascade do |t|
@@ -311,6 +324,7 @@ ActiveRecord::Schema.define(version: 2019_08_21_020546) do
     t.string "cargo"
     t.string "telefono"
     t.string "email"
+    t.string "direccion"
     t.index ["cedula"], name: "index_t_personas_on_cedula", unique: true
     t.index ["t_empresa_id"], name: "index_t_personas_on_t_empresa_id"
   end
