@@ -12,15 +12,9 @@
         <% object_attributes.each do |attribute, _| %>
           <td>
             <% if attribute.to_s == 'estatus' %>
-              <% status = case object.send(attribute)
-                          when 1, '1'
-                            'Activo'
-                          else
-                            'Inactivo'
-                          end %>
-              <%= status %>
+              <%= estatus_text object.send(attribute) %>
             <% else %>
-              <%= object.send attribute %>
+              <%= object.send(attribute) %>
             <% end %>
           </td>
         <% end %>

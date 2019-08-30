@@ -16,8 +16,7 @@
           <% if @t_tarifas != nil && @t_tarifas.count > 0 %>
           <div class="table-responsive">
             <%= render 'shared/table', object_list: @t_tarifas, object_attributes: {
-                        nombre: 'Nombre', descripcion: 'Descripción',
-                        rango_monto: 'Rango del monto', recargo: 'Recargo', estatus: 'Estatus' } %>
+                        nombre: 'Nombre', descripcion: 'Descripción', monto: 'Monto', recargo: 'Recargo', rango_monto: 'Rango del monto', estatus: 'Estatus' } %>
           </div>
           <% else %>
           <div>

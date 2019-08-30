@@ -29,17 +29,43 @@
       <div class="col">
         <div class="card">
           <div class="card-body">
-            <h3>Detalle de Factura</h3>
-            <div class="btn-group" role="group">
-              <button type="button" class="btn btn-primary" onclick="$('#add-service-link').click();">
-                Nuevo Servicio
-              </button>
-              <button type="button" class="btn btn-success" onclick="addRecargoRow();">
-                Nuevo Recargo
-              </button>
-              <button type="button" class="btn btn-danger" onclick="deleteCheckedRows();">
-                Eliminar Filas Seleccionadas
-              </button>
+            <div class="row">
+              <div class="col-md-6">
+                <h3>Detalle de Factura</h3>
+                <br>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-primary btn-xs" onclick="$('#add-service-link').click();">
+                    Nuevo Servicio
+                  </button>
+                  <button type="button" class="btn btn-success btn-xs" onclick="addRecargoRow();">
+                    Nuevo Recargo
+                  </button>
+                  <button type="button" class="btn btn-danger btn-xs" onclick="deleteCheckedRows();">
+                    Eliminar Filas Seleccionadas
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <table class="table table-bordered" id="rate-table">
+                  <thead>
+                    <tr>
+                      <th colspan="2" style="text-align: center;">Tarifa de la Resolución</th>
+                      <th style="text-align: center;">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Monto</td>
+                      <td align="center" id="rate-amount" width="20%">0</td>
+                      <td rowspan="2" id="total-rate" style="text-align: center; vertical-align: middle;">0</td>
+                    </tr>
+                    <tr>
+                      <td>Recargo</td>
+                      <td align="center" id="rate-surcharge">0</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <br><br>
             <table class="table table-bordered">
@@ -68,7 +94,7 @@
                   <td width="25%"></td>
                   <td id="total-quantity" width="20%"></td>
                   <td></td>
-                  <td id="total" width="10%"></td>
+                  <td id="total" width="10%">0</td>
                 </tr>
               </tbody>
             </table>
@@ -112,7 +138,7 @@
       setTotal('#total-quantity', getTotal('.quantity'));
       setSubTotal(this);
       cleanAllSurcharges();
-      setTotal('#total', getTotal('.subtotal-cell'));
+      setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
       updateAllSurcharges();
     });
 
@@ -120,7 +146,7 @@
     $(document).on('keyup', '.price', function() {
       setSubTotal(this, false);
       cleanAllSurcharges();
-      setTotal('#total', getTotal('.subtotal-cell'));
+      setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
       updateAllSurcharges();
     });
 
@@ -224,6 +250,7 @@
           setTotal('#total', getTotal('.subtotal-cell'));
           priceInput.val(rate);
           updateAllSurcharges();
+          setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
         }
       });
     });
@@ -238,7 +265,7 @@
           priceInput.val(price);
           priceInput.data('price', price);
           setSubTotal(priceInput, false);
-          setTotal('#total', getTotal('.subtotal-cell'));
+          setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
         }
 
         if ($(this).hasClass('descripcion-cell')) {
@@ -250,6 +277,7 @@
       cleanAllSurcharges();
       setTotal('#total', getTotal('.subtotal-cell'));
       updateAllSurcharges();
+      setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
     });
 
     $('form').submit(function(event) {
@@ -260,3 +288,14 @@
     });
   });
 </script>
+
+<style type="text/css">
+  #rate-table {
+    margin-bottom: -20px;
+  }
+
+  #rate-table th, #rate-table td {
+    padding: 5px !important;
+    color: gray;
+  }
+</style>

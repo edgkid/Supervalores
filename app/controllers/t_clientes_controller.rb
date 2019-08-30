@@ -297,7 +297,8 @@ class TClientesController < ApplicationController
         @t_empresa = persona
       end
     when 'select-resolucion'
-      @t_resolucion = TResolucion.find_by(resolucion: search)
+      @t_resolucion = TResolucion.find(search)
+      @t_tarifa = @t_resolucion.t_tipo_cliente.t_tarifa
       @t_cliente = @t_resolucion.t_cliente
       @t_persona = @t_cliente.persona
     when 'select-cedula'
@@ -310,6 +311,11 @@ class TClientesController < ApplicationController
         @without_client = true unless @t_cliente
       end
     end if search != ''
+
+    if @t_persona.class.to_s == 'TEmpresa'
+      @t_empresa = @t_persona
+      @t_persona = nil
+    end
   end
 
   private

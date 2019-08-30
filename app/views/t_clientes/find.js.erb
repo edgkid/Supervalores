@@ -10,7 +10,7 @@ var data = [
   <% @t_cliente.t_resolucions.each do |t_resolucion| %>
     {
       id: <%= t_resolucion.id %>,
-      text: '<%= t_resolucion.resolucion %>'
+      text: '<%= t_resolucion.resolucion_codigo %>'
     },
   <% end if @t_cliente %>
 ]
@@ -69,3 +69,15 @@ switch(attribute) {
 <% else %>
   $('#input-resolucion').val($('#select-resolucion').val());
 <% end %>
+
+// alert($('#input-resolucion').val());
+// alert(<%= @t_resolucion.t_tipo_cliente.t_tarifa.monto %>);
+let amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
+    surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
+    totalRate = amount + (amount * surcharge);
+$('#rate-amount').text(amount);
+$('#rate-surcharge').text(surcharge);
+$('#total-rate').text(totalRate);
+
+$('#total').text(Number($('#total').text()) + totalRate);
+// setTtotal('#total', getTotal('.subtotal-cell'));

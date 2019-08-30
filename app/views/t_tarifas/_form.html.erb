@@ -65,11 +65,27 @@
                 </div>
               </div>
             </fieldset>
-            <%= render "shared/action_buttons",
-              list_route: t_tarifas_path, list_text: "Tarifas",
-              save_form: true, save_text: "Guardar",
-              button_size: "xs"
-            %>
+            <% if controller.action_name == 'edit' %>
+              <%= render "shared/action_buttons",
+                list_route: t_tarifas_path, list_text: "Tarifas",
+                back_route: polymorphic_path(@t_tarifa), back_text: "Cancelar",
+                save_form: true, save_text: "Guardar",
+                button_size: "xs"
+              %>
+            <% elsif controller.action_name == 'new' %>
+              <%= render "shared/action_buttons",
+                list_route: t_tarifas_path, list_text: "Tarifas",
+                save_form: true, save_text: "Guardar",
+                button_size: "xs"
+              %>
+            <% else %>
+              <%= render "shared/action_buttons",
+                list_route: t_tarifas_path, list_text: "Tarifas",
+                edit_route: edit_polymorphic_path(@t_tarifa), edit_text: "Editar",
+                delete_route: polymorphic_path(@t_tarifa), delete_text: "Borrar",
+                button_size: "xs"
+              %>
+            <% end %>
           <% end %>
         </div>
       </div>
