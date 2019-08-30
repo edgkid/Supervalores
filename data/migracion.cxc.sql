@@ -88,28 +88,145 @@ SELECT descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP FROM cxc_t_tip
 UPDATE t_tipo_personas SET descripcion = REPLACE(descripcion, 'Juridicas', 'Jurídicas');
 
 INSERT INTO t_empresa_tipo_valors(descripcion, estatus, created_at, updated_at)
-SELECT DISTINCT TRIM(UPPER(tipo_valor)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT 'Desconocido', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+UNION ALL (SELECT DISTINCT TRIM(UPPER(tipo_valor)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 FROM cxc_t_clientes_padre
 WHERE TRIM(UPPER(tipo_valor)) != '' AND TRIM(UPPER(tipo_valor)) != '0'
-ORDER BY 1;
+ORDER BY 1);
 
 INSERT INTO t_empresa_sector_economicos(descripcion, estatus, created_at, updated_at)
-SELECT DISTINCT TRIM(UPPER(sector_economico)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT 'Desconocido', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+UNION ALL (SELECT DISTINCT TRIM(UPPER(sector_economico)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 FROM cxc_t_clientes_padre
 WHERE sector_economico != '' AND sector_economico != '0' AND sector_economico != '11' AND sector_economico != '123'
-ORDER BY 1;
+ORDER BY 1);
 
 INSERT INTO t_tipo_emisions (descripcion, estatus, created_at, updated_at)
-select descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-from cxc_t_tipo_emision;
+SELECT 'Desconocido', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+UNION ALL (SELECT descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+from cxc_t_tipo_emision
+ORDER BY 1);
 
 INSERT INTO t_periodos (descripcion, estatus, created_at, updated_at, rango_dias, dia_tope, mes_tope)
-select descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, rango_dias, dia_tope, mes_tope 
-from cxc_t_periodo;
+SELECT 'Desconocido', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '0', 1, 1
+UNION ALL (select descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, rango_dias, dia_tope, mes_tope 
+from cxc_t_periodo
+ORDER BY 1);
 
 INSERT INTO t_recargos (descripcion, tasa, estatus, created_at, updated_at)
-select descripcion, tasa, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-from cxc_t_recargo;
+SELECT 'Desconocido', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+UNION ALL (select descripcion, tasa, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+from cxc_t_recargo
+ORDER BY 1);
+
+INSERT INTO t_empresas (rif, razon_social, direccion_empresa, fax, web, telefono, email, t_empresa_tipo_valor_id, t_empresa_sector_economico_id)
+SELECT 
+	'RUC'||row_number() OVER (ORDER BY dt.razon_social) AS rif
+	, dt.razon_social
+	, COALESCE((SELECT TRIM(ctcs.direccion_empresa)
+		 from cxc_t_clientes_padre ctcp
+	   JOIN cxc_t_clientes ctcs ON ctcp.idt_clientes_padre = ctcs.idt_cliente_padre AND UPPER(TRIM(ctcp.razon_social)) = dt.razon_social
+		 WHERE TRIM(ctcs.direccion_empresa) <> '0' AND TRIM(ctcs.direccion_empresa) <> ''
+		 LIMIT 1 ), 'Desconocida') as direccion
+	, COALESCE((SELECT TRIM(ctcs.fax)
+		 from cxc_t_clientes_padre ctcp
+	   JOIN cxc_t_clientes ctcs ON ctcp.idt_clientes_padre = ctcs.idt_cliente_padre AND UPPER(TRIM(ctcp.razon_social)) = dt.razon_social
+		 WHERE TRIM(ctcs.fax) <> '0' AND TRIM(ctcs.fax) <> ''
+		 LIMIT 1 ), null) as fax
+  , COALESCE((SELECT TRIM(ctcs.web)
+		 from cxc_t_clientes_padre ctcp
+	   JOIN cxc_t_clientes ctcs ON ctcp.idt_clientes_padre = ctcs.idt_cliente_padre AND UPPER(TRIM(ctcp.razon_social)) = dt.razon_social
+		 WHERE TRIM(ctcs.web) <> '0' AND TRIM(ctcs.web) <> ''
+		 LIMIT 1 ), null) as web
+  , COALESCE((SELECT TRIM(ctcs.telefono)
+		 from cxc_t_clientes_padre ctcp
+	   JOIN cxc_t_clientes ctcs ON ctcp.idt_clientes_padre = ctcs.idt_cliente_padre AND UPPER(TRIM(ctcp.razon_social)) = dt.razon_social
+		 WHERE TRIM(ctcs.telefono) <> '0' AND TRIM(ctcs.telefono) <> ''
+		 LIMIT 1 ), '0') as telefono
+  , COALESCE((SELECT TRIM(ctcs.email)
+		 from cxc_t_clientes_padre ctcp
+	   JOIN cxc_t_clientes ctcs ON ctcp.idt_clientes_padre = ctcs.idt_cliente_padre AND UPPER(TRIM(ctcp.razon_social)) = dt.razon_social
+		 WHERE TRIM(ctcs.email) <> '0' AND TRIM(ctcs.email) <> ''
+		 LIMIT 1 ), 'desconocido@svm.com') as email
+	, COALESCE(dt.tipo_valor, 1) tipo_valor
+	, COALESCE(dt.sector_economico, 1) sector_economico
+FROM (
+	SELECT 
+	  UPPER(TRIM(ctcp.razon_social)) as razon_social		
+		, tetv.id as tipo_valor
+		, tese.id as sector_economico
+	FROM cxc_t_clientes_padre ctcp
+	LEFT JOIN t_empresa_sector_economicos tese on upper(trim(ctcp.sector_economico)) = tese.descripcion
+	LEFT JOIN t_empresa_tipo_valors tetv on upper(trim(ctcp.tipo_valor)) = tetv.descripcion
+	WHERE ctcp.tipo_persona = 1
+	GROUP BY 1,2,3
+) dt;
+
+INSERT INTO t_personas (cedula, nombre, apellido, num_licencia, created_at, updated_at, t_empresa_id, cargo, telefono, email, direccion)
+SELECT 
+  'CED'||row_number() OVER (ORDER BY dt.nombre) AS cedula	
+	, COALESCE(CASE
+		WHEN dt.apellido IS NOT NULL THEN dt.nombre
+		WHEN array_length(res, 1) = 1 
+			OR array_length(res, 1) = 2 
+			OR array_length(res, 1) = 3 
+			OR (array_length(res, 1) = 4 AND lower(trim(res[2])) = 'de' AND lower(trim(res[3])) = 'la')
+			OR (array_length(res, 1) = 4 AND lower(trim(res[2])) = 'del')
+			OR (array_length(res, 1) = 5 AND lower(trim(res[2])) = 'de')
+		THEN res[1] 
+		WHEN array_length(res, 1) = 4 OR array_length(res, 1) = 5 THEN res[1] || ' ' || res[2]		
+		WHEN array_length(res, 1) = 6 OR array_length(res, 1) = 7 THEN res[1] || ' ' || res[2] || ' ' || res[3]
+		WHEN array_length(res, 1) = 8 THEN res[1] || ' ' || res[2] || ' ' || res[3] || ' ' || res[4]
+		ELSE '-' END, '-') nombre
+, COALESCE(CASE 
+		WHEN dt.apellido IS NOT NULL THEN dt.apellido
+		WHEN array_length(res, 1) = 2 THEN res[2] 
+		WHEN array_length(res, 1) = 3 THEN res[2] || ' ' || res[3]
+		WHEN array_length(res, 1) = 4 AND (
+				(lower(trim(res[2])) = 'de' AND lower(trim(res[3])) = 'la') 
+			OR lower(trim(res[2])) = 'del') THEN res[2] || ' ' || res[3] || ' ' || res[4]
+		WHEN array_length(res, 1) = 4 THEN res[3] || ' ' || res[4]
+		WHEN (array_length(res, 1) = 5 AND lower(trim(res[2])) = 'de') THEN res[2] || ' ' || res[3] || ' ' || res[4] || ' ' || res[5]
+		WHEN array_length(res, 1) = 5 THEN res[3] || ' ' || res[4] || res[5]
+		WHEN array_length(res, 1) = 6 OR array_length(res, 1) = 7 THEN res[4] || ' ' || res[5] || ' ' || res[6] || ' ' || res[7]
+		WHEN array_length(res, 1) = 8 THEN res[5] || ' ' || res[6] || ' ' || res[7] || ' ' || res[8]
+		ELSE '-' END, '-') apellido
+	, dt.num_licencia
+	, CURRENT_TIMESTAMP created_at
+	, CURRENT_TIMESTAMP updated_at
+	, null empresa
+	, dt.cargo
+	, COALESCE(dt.telefono, '0') telefono
+	, COALESCE(dt.email, 'desconocido@svm.com') email
+	, COALESCE(dt.direccion_empresa, 'Desconocida') direccion
+FROM (SELECT 
+	  CASE WHEN TRIM(ctcs.nombre) = '' OR TRIM(ctcs.nombre) = '0' THEN NULL ELSE UPPER(TRIM(ctcs.nombre)) END nombre
+	, CASE WHEN TRIM(ctcs.apellido) = '' OR TRIM(ctcs.apellido) = '0' THEN NULL ELSE UPPER(TRIM(ctcs.apellido)) END apellido
+	, 0 num_licencia --ctcs.num_licencia
+	, CASE WHEN TRIM(ctcs.telefono) = '' OR TRIM(ctcs.telefono) = '0' THEN NULL ELSE TRIM(ctcs.telefono) END telefono
+  , CASE WHEN TRIM(ctcs.email) = '' OR TRIM(ctcs.email) = '0' THEN NULL ELSE TRIM(ctcs.email) END email
+  , CASE WHEN TRIM(ctcs.direccion_empresa) = '' OR TRIM(ctcs.direccion_empresa) = '0' THEN NULL ELSE TRIM(ctcs.direccion_empresa) END direccion_empresa
+	, CASE WHEN TRIM(ctcs.cargo) = '' OR TRIM(ctcs.cargo) = '0' THEN NULL ELSE TRIM(ctcs.cargo) END cargo
+FROM cxc_t_clientes ctcs
+LEFT JOIN cxc_t_tipo_cliente cttc ON ctcs.idt_tipo_cliente = cttc.idt_tipo_cliente
+WHERE NOT (ctcs.nombre ~ '(INC\.{0,1}|Inc\.|S\.\s{0,1}A\.{0,1}|Corp|[0-9]|\*|S\.R\.L\.)' OR ctcs.apellido ~ '(CORP\.{0,1}|S\.A\.{0,1})') AND ctcs.idt_cliente_padre = 360
+GROUP BY 1,2,3,4,5,6,7
+ORDER BY 1
+) dt
+LEFT JOIN regexp_split_to_array(trim(dt.nombre), '(?:[\s,\.]+)') res ON 1 = 1;
+
+INSERT INTO t_clientes (codigo, t_estatus_id, created_at, updated_at, persona_id, persona_type)
+SELECT 
+	'CLI'||row_number() OVER (ORDER BY dt.status) AS codigo
+	, dt.status, dt.created_at, dt.updated_at, dt."id", dt."type"
+FROM (
+  SELECT 2 status, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, rw."id", 'TEmpresa' "type" FROM t_empresas rw
+	UNION ALL SELECT 2 status, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, rw."id", 'TPersona' "type" FROM t_personas rw
+)	dt;
+
+INSERT INTO t_tarifa_servicios (codigo, descripcion, nombre, clase, precio, estatus, created_at, updated_at)
+select ctts.codigo, ctts.descripcion, ctts.nombre, ctts.clase, ctts.precio, ctts.estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+from cxc_t_tarifa_servicios ctts;
 
 -- Ultimo registro
 INSERT INTO schema_migrations VALUES('0');
