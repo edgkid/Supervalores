@@ -30,3 +30,8 @@ Number.prototype.toFixedDown = function(digits) {
       m = this.toString().match(re);
   return m ? parseFloat(m[1]) : this.valueOf();
 };
+
+function allowOnlyNumbers(thys) {
+  var value = thys.value;
+  $(thys).val(value.replace(/[^\d.]+/, ''));
+}

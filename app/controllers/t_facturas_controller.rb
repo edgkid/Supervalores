@@ -44,6 +44,7 @@ class TFacturasController < ApplicationController
 
   def preview
     @t_resolucion = @t_factura.t_resolucion
+    @t_tarifa  = @t_resolucion.t_tipo_cliente.t_tarifa
     @t_periodo = @t_factura.t_periodo
     @t_estatus = @t_factura.t_estatus
     @t_cliente = @t_resolucion.t_cliente

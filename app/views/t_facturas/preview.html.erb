@@ -72,6 +72,13 @@
         <td><%= '' %></td>
       </tr>
     <% end %>
+    <tr>
+      <td>1</td>
+      <td><%= @t_tarifa.nombre %></td>
+      <td><%= @t_tarifa.descripcion %></td>
+      <td><%= @t_tarifa.monto %></td>
+      <td></td>
+    </tr>
     <% @t_factura.t_recargos.each do |r| %>
       <tr>
         <td><%= '' %></td>

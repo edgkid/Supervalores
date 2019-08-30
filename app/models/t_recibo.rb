@@ -12,6 +12,11 @@ class TRecibo < ApplicationRecord
   has_many :t_estado_cuenta, dependent: :destroy
   has_many :t_clientes, through: :t_estado_cuentum
 
+  validates :pago_recibido,
+    numericality: {
+      message: "|El monto pagado debe ser un número válido"
+    }
+
   def calculate_default_attributes(t_factura, t_cliente, t_periodo, current_user)
     remaining = t_factura.calculate_pending_payment - self.pago_recibido
     credited_amount = remaining < 0 ? (remaining * (-1)) : 0

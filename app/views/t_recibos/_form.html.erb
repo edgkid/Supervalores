@@ -19,7 +19,7 @@
             <%= f.label :pago_recibido, 'Monto Pagado', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
             <div class="col-sm-7 input-value">
               <% unless @is_show %>
-                <%= f.number_field :pago_recibido, class: "form-control", id: 'payment-received-input', min: 0, step: 0.01 %>
+                <%= f.text_field :pago_recibido, class: "form-control", id: 'payment-received-input', min: 0, step: 0.01 %>
               <% else %>
                 <%= @t_recibo.pago_recibido %>
               <% end %>
@@ -86,6 +86,8 @@
 <script type="text/javascript">
   $(document).ready(function(){
     $('#payment-received-input').keyup(function() {
+      allowOnlyNumbers(this);
+
       calculatePendingPayment(
         Number(<%= @pending_payment %>),
         Number($(this).val()),

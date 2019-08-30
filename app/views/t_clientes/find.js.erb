@@ -26,6 +26,18 @@ switch(attribute) {
       $('#select2-select-resolucion-container').attr('title', '');
     } else {
       $('#select-resolucion').select2({ data: data });
+
+      <% @t_tarifa = @t_cliente.t_resolucions.first.t_tipo_cliente.t_tarifa %>
+
+      amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
+      surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
+      totalRate = amount + (amount * surcharge);
+
+      $('#rate-amount').text(amount);
+      $('#rate-surcharge').text(surcharge);
+      $('#total-rate').text(totalRate);
+
+      $('#total').text(Number($('#total').text()) + totalRate);
     }
 
     <% if @t_cliente && @t_persona %>
@@ -35,20 +47,8 @@ switch(attribute) {
       $('#select2-select-cedula-container').text(rif);
       $('#select2-select-cedula-container').attr('title', rif);
     <% else %>
-    $('#select2-select-cedula-container').text('');
-    $('#select2-select-cedula-container').attr('title', '');
-    <% end %>
-    break;
-  case 'select-resolucion':
-    $('#select2-select-codigo-container').text(codigo);
-    $('#select2-select-codigo-container').attr('title', codigo);
-
-    <% if @t_cliente %>
-      $('#select2-select-cedula-container').text(cedula);
-      $('#select2-select-cedula-container').attr('title', cedula);
-    <% elsif @t_empresa %>
-      $('#select2-select-cedula-container').text(rif);
-      $('#select2-select-cedula-container').attr('title', rif);
+      $('#select2-select-cedula-container').text('');
+      $('#select2-select-cedula-container').attr('title', '');
     <% end %>
     break;
   case 'select-cedula':
@@ -57,10 +57,42 @@ switch(attribute) {
       $('#select2-select-resolucion-container').attr('title', '');
     } else {
       $('#select-resolucion').select2({ data: data });
+
+      amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
+      surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
+      totalRate = amount + (amount * surcharge);
+
+      $('#rate-amount').text(amount);
+      $('#rate-surcharge').text(surcharge);
+      $('#total-rate').text(totalRate);
+
+      $('#total').text(Number($('#total').text()) + totalRate);
     }
 
     $('#select2-select-codigo-container').text(codigo);
     $('#select2-select-codigo-container').attr('title', codigo);
+    break;
+  case 'select-resolucion':
+    $('#select2-select-codigo-container').text(codigo);
+    $('#select2-select-codigo-container').attr('title', codigo);
+
+    <% if @t_cliente && @t_persona %>
+      $('#select2-select-cedula-container').text(cedula);
+      $('#select2-select-cedula-container').attr('title', cedula);
+    <% elsif @t_empresa %>
+      $('#select2-select-cedula-container').text(rif);
+      $('#select2-select-cedula-container').attr('title', rif);
+    <% end %>
+
+    amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
+    surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
+    totalRate = amount + (amount * surcharge);
+
+    $('#rate-amount').text(amount);
+    $('#rate-surcharge').text(surcharge);
+    $('#total-rate').text(totalRate);
+
+    $('#total').text(Number($('#total').text()) + totalRate);
     break;
 }
 
@@ -71,13 +103,5 @@ switch(attribute) {
 <% end %>
 
 // alert($('#input-resolucion').val());
-// alert(<%= @t_resolucion.t_tipo_cliente.t_tarifa.monto %>);
-let amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
-    surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
-    totalRate = amount + (amount * surcharge);
-$('#rate-amount').text(amount);
-$('#rate-surcharge').text(surcharge);
-$('#total-rate').text(totalRate);
-
-$('#total').text(Number($('#total').text()) + totalRate);
+// alert(<%#= @t_resolucion.t_tipo_cliente.t_tarifa.monto %>);
 // setTtotal('#total', getTotal('.subtotal-cell'));
