@@ -330,7 +330,7 @@ class TClientesController < ApplicationController
     end
 
     def parametros_cliente
-      params.require(:t_cliente).permit(:codigo, :t_estatus_id, :cuenta_venta, :t_tipo_cliente_id, :t_tipo_persona_id, :razon_social, :telefono, :email, :es_prospecto)
+      params.require(:t_cliente).permit(:codigo, :t_estatus_id, :cuenta_venta, :t_tipo_persona_id, :razon_social, :telefono, :email, :es_prospecto)
     end
     
     def parametros_cliente_tipo_empresa
@@ -366,7 +366,7 @@ class TClientesController < ApplicationController
     end
 
     def parametros_resolucion
-      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :t_cliente_id)
+      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :t_cliente_id, :t_tipo_cliente_id)
     end
 
     def parametros_contacto
