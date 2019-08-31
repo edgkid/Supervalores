@@ -66,7 +66,22 @@
                 </div>
               </div>
             </fieldset>
-            <%= render 'shared/form_buttons', f: f, object: @t_tarifa_servicio %>
+            <%#= render 'shared/form_buttons', f: f, object: @t_tarifa_servicio %>
+            <% if controller.action_name != 'edit' %>
+              <%= render "shared/action_buttons",
+                list_route: t_tarifa_servicios_path, list_text: "Servicios",
+                back_route: polymorphic_path(@t_tarifa_servicio), back_text: "Cancelar",
+                save_form: true, save_text: "Guardar",
+                button_size: "xs"
+              %>
+            <% else %>
+              <%= render "shared/action_buttons",
+                list_route: t_tarifa_servicios_path, list_text: "Servicios",
+                edit_route: edit_polymorphic_path(@t_tarifa_servicio), edit_text: "Editar",
+                delete_route: polymorphic_path(@t_tarifa_servicio), delete_text: "Borrar",
+                button_size: "xs"
+              %>
+            <% end %>
           <% end %>
         </div>
       </div>

@@ -33,5 +33,6 @@ Number.prototype.toFixedDown = function(digits) {
 
 function allowOnlyNumbers(thys) {
   var value = thys.value;
-  $(thys).val(value.replace(/[^\d.]+/, ''));
+  console.log(value);
+  $(thys).val(value.replace(/[^\d.\-]+/, ''));
 }

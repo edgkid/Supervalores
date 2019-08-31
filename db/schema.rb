@@ -541,6 +541,7 @@ ActiveRecord::Schema.define(version: 2019_08_29_232041) do
   add_foreign_key "t_cliente_tarifas", "t_resolucions"
   add_foreign_key "t_cliente_tarifas", "t_tarifas"
   add_foreign_key "t_clientes", "t_estatuses"
+  add_foreign_key "t_contactos", "t_resolucions"
   add_foreign_key "t_cuenta_financieras", "t_presupuestos"
   add_foreign_key "t_cuenta_financieras", "t_tarifa_servicio_groups"
   add_foreign_key "t_email_masivos", "t_clientes"
