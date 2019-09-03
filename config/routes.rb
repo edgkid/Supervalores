@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   resources :t_leyendas
   resources :t_periodos, path: "periodos"
   resources :t_tarifas, path: "tarifas"
+  namespace :automaticas do
+    resources :t_facturas
+  end
   resources :t_facturas do
     get 'preview', on: :member
     resources :t_recibos

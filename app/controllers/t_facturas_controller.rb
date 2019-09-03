@@ -73,6 +73,8 @@ class TFacturasController < ApplicationController
   def index
     @usar_dataTables = true
     @t_facturas = TFactura.all
+    @title = 'Facturas Manuales'
+    @add_invoice_path = new_t_factura_path
   end
 
   def show

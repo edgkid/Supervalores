@@ -5,10 +5,10 @@
         <div class="ibox-title">
           <div class="row">
             <div class="col-10">
-              <h5>Facturas</h5>
+              <h5><%= @title %></h5>
             </div>
             <div class="col-2">
-              <%= link_to 'Añadir Factura', new_t_factura_path, data: { turbolinks: false }, class: 'btn btn-primary float-right' %>
+              <%= link_to 'Añadir Factura', @add_invoice_path, data: { turbolinks: false }, class: 'btn btn-primary float-right' %>
             </div>
           </div>
         </div>

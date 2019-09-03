@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_29_232041) do
+ActiveRecord::Schema.define(version: 2019_09_03_052706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -249,6 +249,7 @@ ActiveRecord::Schema.define(version: 2019_08_29_232041) do
     t.bigint "t_estatus_id", null: false
     t.bigint "t_leyenda_id"
     t.bigint "user_id", null: false
+    t.boolean "automatica", default: false
     t.index ["t_estatus_id"], name: "index_t_facturas_on_t_estatus_id"
     t.index ["t_leyenda_id"], name: "index_t_facturas_on_t_leyenda_id"
     t.index ["t_periodo_id"], name: "index_t_facturas_on_t_periodo_id"

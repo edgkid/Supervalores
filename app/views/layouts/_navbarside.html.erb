@@ -38,7 +38,7 @@
         <ul class="nav nav-second-level collapse">
           <% if can? :crud, TFactura %>
             <li><%= link_to 'Factura Manual', t_facturas_path %></li>
-            <li><%= link_to 'Factura Automática', t_facturas_path %></li>
+            <li><%= link_to 'Factura Automática', automaticas_t_facturas_path %></li>
           <% end %>
           <li><%= link_to 'Recibos', t_recibos_path %></li>
           <% if can? :crud, TRecargo %>

@@ -1,4 +1,7 @@
 module TResolucionsHelper
+  def opciones_de_resoluciones
+    TResolucion.pluck(:descripcion, :id)
+  end
 
   def opciones_de_anios_para_resolucion
     time = Time.new
@@ -8,5 +11,4 @@ module TResolucionsHelper
     end
     return optiones
   end
-
 end
