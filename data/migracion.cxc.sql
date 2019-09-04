@@ -386,11 +386,13 @@ SELECT
 		END ) "year"
 , dt.client_id		
 , dt.original
+, COALESCE(dt.fecha_resolucion, CURRENT_DATE) fecha_resolucion
 , dt.tipo_client_id
 FROM (
 	SELECT
 		ctc.id client_id
 		, ctc.resolucion
+		, ctc.fecha_resolucion
 		, ctc.original
 		, SUBSTRING (ctc.resolucion FROM 1 FOR POSITION('-' in ctc.resolucion)-1) as code
 		, SUBSTRING (ctc.resolucion FROM POSITION('-' in ctc.resolucion)+1 FOR LENGTH(ctc.resolucion)) as "year"
@@ -407,14 +409,15 @@ FROM (
 						, (SELECT res[1]||'-'||res[2] from regexp_matches(trim(cli.resolucion), '([0-9]{1,4})\s.+\s([0-9]{1,4})') res))
 				, cli.resolucion
 			) resolucion
+			, cli.fecha_resolucion
 			, ttcs.id tipo_client_id
 		FROM (
-			SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, tcs.id
+			SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, ctcs.fecha_resolucion, tcs.id
 				FROM personas_normalizados pns
 				JOIN cxc_t_clientes ctcs ON ctcs.idt_clientes = pns.prev_id
 				JOIN  t_personas tpa ON tpa.nombre = pns.nombre AND tpa.apellido = pns.apellido
 				JOIN t_clientes tcs ON tpa.id = tcs.persona_id AND tcs.persona_type = 'TPersona'
-			UNION ALL SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, tcs.id
+			UNION ALL SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, ctcs.fecha_resolucion, tcs.id
 				FROM empresas_normalizadas ens
 				JOIN cxc_t_clientes ctcs ON ctcs.idt_clientes = ens.prev_id
 				JOIN  t_empresas tes ON ens.razon_social = tes.razon_social
@@ -432,7 +435,7 @@ SELECT
 	  rw.code
 	, CAST(rw."year" as int) "year"
 	, 'Resolución de migración ' || string_agg(rw.original, ', ') descripcion
-	, CURRENT_TIMESTAMP created_at
+	, (SELECT res[1] from array_agg(rw.fecha_resolucion) res) created_at
 	, CURRENT_TIMESTAMP updated_at
 	, (SELECT res[1] from array_agg(rw.client_id) res) client_id
 	, 2 estatus
@@ -444,6 +447,7 @@ FROM (
 			, rns.original
 			, rns.client_id
 			, rns.tipo_client_id
+			, rns.fecha_resolucion
 		FROM resoluciones_normalizadas rns
 	) rw
 	GROUP BY 1, 2;
