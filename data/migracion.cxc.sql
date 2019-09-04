@@ -448,5 +448,10 @@ FROM (
 	) rw
 	GROUP BY 1, 2;
 
+UPDATE t_clientes 
+	SET prospecto_at = CURRENT_TIMESTAMP
+FROM t_resolucions trs
+WHERE trs.t_cliente_id = t_clientes."id";
+
 -- Ultimo registro
 INSERT INTO schema_migrations VALUES('0');
