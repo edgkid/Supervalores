@@ -1,0 +1,85 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>Factura Automática</h5>
+      </div>
+
+      <div class="ibox-content">
+        <div class="form-group row">
+          <div class="col-sm-2 col-form-label">
+            <label class="text-right">
+              Nombre del Ciclo de Facturación
+            </label>
+          </div>
+          <div class="col-sm-4 input-value">
+            <%= @t_factura_automatica.nombre_ciclo_facturacion %>
+          </div>
+          <div class="col-sm-2 col-form-label">
+            <label class="text-right">
+              Tipo de Cliente
+            </label>
+          </div>
+          <div class="col-sm-4 input-value">
+            <%= @t_factura_automatica.t_tipo_cliente.descripcion %>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-sm-2 col-form-label">
+            <label class="text-right">
+              Periodo
+            </label>
+          </div>
+          <div class="col-sm-4 input-value">
+            <%= @t_factura_automatica.t_periodo.descripcion %>
+          </div>
+          <div class="col-sm-2 col-form-label">
+            <label class="text-right">
+              Fecha de Inicio de Facturación
+            </label>
+          </div>
+          <div class="col-sm-4 input-value">
+            <%= @t_factura_automatica.fecha_inicio.strftime('%d/%m/%Y') %>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-sm-1 col-form-label">
+            <label class="text-right">
+              Servicios
+            </label>
+          </div>
+          <div class="col-sm-3 input-value">
+            <% @t_tarifa_servicios.each_with_index do |servicio, i| %>
+              <%= servicio.descripcion %>
+              <%= ', ' if (i + 1) < @t_tarifa_servicios.count %>
+            <% end %>
+          </div>
+          <div class="col-sm-1 col-form-label">
+            <label class="text-right">
+              Recargos
+            </label>
+          </div>
+          <div class="col-sm-3 input-value">
+            <% @t_recargos.each_with_index do |recargo, i| %>
+              <%= recargo.descripcion %>
+              <%= ', ' if (i + 1) < @t_recargos.count %>
+            <% end %>
+          </div>
+          <div class="col-sm-1 col-form-label">
+            <label class="text-right">
+              Tarifas
+            </label>
+          </div>
+          <div class="col-sm-3 input-value">
+            <% @t_tarifas.each_with_index do |tarifa, i| %>
+              <%= tarifa.descripcion %>
+              <%= ', ' if (i + 1) < @t_tarifas.count %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

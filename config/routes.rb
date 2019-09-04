@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 't_factura_automaticas/new'
+  get 't_factura_automaticas/index'
   root to: 'dashboard#index'
   get 'dashboard/access_denied' => 'dashboard#access_denied'
 
@@ -17,6 +19,7 @@ Rails.application.routes.draw do
     get 'preview', on: :member
     resources :t_recibos
   end
+  resources :t_factura_automaticas
   resources :t_recibos, only: :index
   resources :t_tarifa_servicios
   namespace :t_recargos do

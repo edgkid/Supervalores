@@ -1,0 +1,111 @@
+<%= form_for @t_factura_automatica do |f| %>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="ibox">
+        <div class="ibox-title">
+          <h5>Factura Automática</h5>
+        </div>
+
+        <div class="ibox-content">
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <%= f.label :nombre_ciclo_facturacion, 'Nombre del Ciclo de Facturación', class: "text-right" %>
+            </div>
+            <div class="col-sm-4 input-value">
+              <% if true %>
+                <%= f.text_field :nombre_ciclo_facturacion, class: "form-control" %>
+              <% else %>
+                <%#= @t_factura.descripcion %>
+              <% end %>
+            </div>
+            <div class="col-sm-2 col-form-label">
+              <%= f.label :t_tipo_cliente_id, 'Tipo de Cliente', class: "text-right" %>
+            </div>
+            <div class="col-sm-4 input-value">
+              <% if true %>
+                <%= f.select :t_tipo_cliente_id, opciones_de_tipos_de_clientes, {}, { class: "form-control" } %>
+              <% else %>
+                <%#= @t_factura.descripcion %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <%= f.label :t_periodo_id, 'Periodo', class: "text-right" %>
+            </div>
+            <div class="col-sm-4 input-value">
+              <% if true %>
+                <%= f.select :t_periodo_id, opciones_de_periodos, {}, { class: "form-control" } %>
+              <% else %>
+                <%#= @t_factura.descripcion %>
+              <% end %>
+            </div>
+            <div class="col-sm-2 col-form-label">
+              <%= f.label :fecha_inicio, 'Fecha de Inicio de Facturación', class: "text-right" %>
+            </div>
+            <div class="col-sm-4 input-value">
+              <% if true %>
+                <%= f.text_field :fecha_inicio, class: "datepicker form-control" %>
+              <% else %>
+                <%#= @t_factura.descripcion %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-1 col-form-label">
+              <%= f.label :t_tarifa_servicio_ids, 'Servicios', class: "text-right opcional" %>
+            </div>
+            <div class="col-sm-3 input-value">
+              <% if true %>
+                <%= f.select :t_tarifa_servicio_ids, object_options(TTarifaServicio), {}, { class: "form-control", multiple: true } %>
+              <% else %>
+                <%#= @t_factura.descripcion %>
+              <% end %>
+            </div>
+            <div class="col-sm-1 col-form-label">
+              <%= f.label :t_recargo_ids, 'Recargos', class: "text-right opcional" %>
+            </div>
+            <div class="col-sm-3 input-value">
+              <% if true %>
+                <%= f.select :t_recargo_ids, object_options(TRecargo), {}, { class: "form-control", multiple: true } %>
+              <% else %>
+                <%#= @t_factura.descripcion %>
+              <% end %>
+            </div>
+            <div class="col-sm-1 col-form-label">
+              <%= f.label :t_tarifa_ids, 'Tarifas', class: "text-right opcional" %>
+            </div>
+            <div class="col-sm-3 input-value">
+              <% if true %>
+                <%= f.select :t_tarifa_ids, object_options(TTarifa, 'nombre'), {}, { class: "form-control", multiple: true } %>
+              <% else %>
+                <%#= @t_factura.descripcion %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <%= render "shared/action_buttons",
+              list_route: t_factura_automaticas_path, list_text: "Facturas Automáticas",
+              back_route: polymorphic_path(@t_factura_automatica), back_text: "Cancelar",
+              save_form: true, save_text: "Guardar",
+              button_size: "xs"
+            %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.datepicker').datepicker({
+      autoclose: true,
+      format: "dd/mm/yyyy",
+      startDate: new Date()
+    });
+  });
+</script>

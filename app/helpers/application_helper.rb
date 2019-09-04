@@ -44,6 +44,10 @@ module ApplicationHelper
     return estatus == 0 ? "Inactivo" : "Disponible"
   end
 
+  def object_options(klass, description = 'descripcion')
+    klass.pluck(description, 'id')
+  end
+
   def opciones_de_tarifas
     return TTarifa.where(estatus: 1).order(:nombre).pluck :nombre, :id
   end
