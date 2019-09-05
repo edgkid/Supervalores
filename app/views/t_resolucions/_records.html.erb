@@ -34,7 +34,7 @@ end
           <% end %>
           <td><%= registro.resolucion %></td>
           <td><%= registro.descripcion %></td>
-          <td><%= registro.created_at.to_formatted_s(:short) %></td>
+          <td><%= registro.created_at.strftime("%d/%m/%Y") %></td>
         </tr>
         <% end %>
       </tbody>

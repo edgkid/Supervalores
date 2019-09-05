@@ -83,7 +83,7 @@
     <%= form.label :created_at, 'Fecha', class: "text-right" %>
   </div>
   <div class="col-sm-4 input-value">
-    <%= registro.created_at.to_formatted_s(:short) %>
+    <%= registro.created_at.strftime("%d/%m/%Y") %>
   </div>
   <% end %>
 </div>
