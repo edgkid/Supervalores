@@ -1,4 +1,4 @@
-<%= form_for @t_factura_automatica do |f| %>
+<%= form_for @t_conf_fac_automatica do |f| %>
   <div class="row">
     <div class="col-md-12">
       <div class="ibox">
@@ -88,8 +88,8 @@
 
           <div class="form-group row">
             <%= render "shared/action_buttons",
-              list_route: t_factura_automaticas_path, list_text: "Facturas Automáticas",
-              back_route: polymorphic_path(@t_factura_automatica), back_text: "Cancelar",
+              list_route: t_conf_fac_automaticas_path, list_text: "Facturas Automáticas",
+              back_route: polymorphic_path(@t_conf_fac_automatica), back_text: "Cancelar",
               save_form: true, save_text: "Guardar",
               button_size: "xs"
             %>

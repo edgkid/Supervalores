@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_03_232723) do
+ActiveRecord::Schema.define(version: 2019_09_04_200555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,17 @@ ActiveRecord::Schema.define(version: 2019_09_03_232723) do
     t.index ["codigo"], name: "index_t_clientes_on_codigo", unique: true
     t.index ["persona_type", "persona_id"], name: "index_persona_as_cliente"
     t.index ["t_estatus_id"], name: "index_t_clientes_on_t_estatus_id"
+  end
+
+  create_table "t_conf_fac_automaticas", force: :cascade do |t|
+    t.string "nombre_ciclo_facturacion"
+    t.date "fecha_inicio"
+    t.bigint "t_tipo_cliente_id"
+    t.bigint "t_periodo_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["t_periodo_id"], name: "index_t_conf_fac_automaticas_on_t_periodo_id"
+    t.index ["t_tipo_cliente_id"], name: "index_t_conf_fac_automaticas_on_t_tipo_cliente_id"
   end
 
   create_table "t_contactos", force: :cascade do |t|
@@ -214,17 +225,6 @@ ActiveRecord::Schema.define(version: 2019_09_03_232723) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "t_factura_automaticas", force: :cascade do |t|
-    t.string "nombre_ciclo_facturacion"
-    t.date "fecha_inicio"
-    t.bigint "t_tipo_cliente_id"
-    t.bigint "t_periodo_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["t_periodo_id"], name: "index_t_factura_automaticas_on_t_periodo_id"
-    t.index ["t_tipo_cliente_id"], name: "index_t_factura_automaticas_on_t_tipo_cliente_id"
-  end
-
   create_table "t_factura_detalles", force: :cascade do |t|
     t.integer "cantidad", null: false
     t.string "cuenta_desc", null: false
@@ -238,29 +238,29 @@ ActiveRecord::Schema.define(version: 2019_09_03_232723) do
   end
 
   create_table "t_factura_recargos", force: :cascade do |t|
-    t.bigint "t_factura_automatica_id"
+    t.bigint "t_conf_fac_automatica_id"
     t.bigint "t_recargo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["t_factura_automatica_id"], name: "index_t_factura_recargos_on_t_factura_automatica_id"
+    t.index ["t_conf_fac_automatica_id"], name: "index_t_factura_recargos_on_t_conf_fac_automatica_id"
     t.index ["t_recargo_id"], name: "index_t_factura_recargos_on_t_recargo_id"
   end
 
   create_table "t_factura_servicios", force: :cascade do |t|
-    t.bigint "t_factura_automatica_id"
+    t.bigint "t_conf_fac_automatica_id"
     t.bigint "t_tarifa_servicio_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["t_factura_automatica_id"], name: "index_t_factura_servicios_on_t_factura_automatica_id"
+    t.index ["t_conf_fac_automatica_id"], name: "index_t_factura_servicios_on_t_conf_fac_automatica_id"
     t.index ["t_tarifa_servicio_id"], name: "index_t_factura_servicios_on_t_tarifa_servicio_id"
   end
 
   create_table "t_factura_tarifas", force: :cascade do |t|
-    t.bigint "t_factura_automatica_id"
+    t.bigint "t_conf_fac_automatica_id"
     t.bigint "t_tarifa_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["t_factura_automatica_id"], name: "index_t_factura_tarifas_on_t_factura_automatica_id"
+    t.index ["t_conf_fac_automatica_id"], name: "index_t_factura_tarifas_on_t_conf_fac_automatica_id"
     t.index ["t_tarifa_id"], name: "index_t_factura_tarifas_on_t_tarifa_id"
   end
 
@@ -580,6 +580,8 @@ ActiveRecord::Schema.define(version: 2019_09_03_232723) do
   add_foreign_key "t_cliente_tarifas", "t_resolucions"
   add_foreign_key "t_cliente_tarifas", "t_tarifas"
   add_foreign_key "t_clientes", "t_estatuses"
+  add_foreign_key "t_conf_fac_automaticas", "t_periodos"
+  add_foreign_key "t_conf_fac_automaticas", "t_tipo_clientes"
   add_foreign_key "t_contactos", "t_resolucions"
   add_foreign_key "t_cuenta_financieras", "t_presupuestos"
   add_foreign_key "t_cuenta_financieras", "t_tarifa_servicio_groups"
@@ -599,15 +601,13 @@ ActiveRecord::Schema.define(version: 2019_09_03_232723) do
   add_foreign_key "t_estado_cuenta_conts", "t_estado_cuenta"
   add_foreign_key "t_estado_cuenta_conts", "t_factura_detalles"
   add_foreign_key "t_estado_cuenta_conts", "t_tarifa_servicios"
-  add_foreign_key "t_factura_automaticas", "t_periodos"
-  add_foreign_key "t_factura_automaticas", "t_tipo_clientes"
   add_foreign_key "t_factura_detalles", "t_facturas"
   add_foreign_key "t_factura_detalles", "t_tarifa_servicios"
-  add_foreign_key "t_factura_recargos", "t_factura_automaticas"
+  add_foreign_key "t_factura_recargos", "t_conf_fac_automaticas"
   add_foreign_key "t_factura_recargos", "t_recargos"
-  add_foreign_key "t_factura_servicios", "t_factura_automaticas"
+  add_foreign_key "t_factura_servicios", "t_conf_fac_automaticas"
   add_foreign_key "t_factura_servicios", "t_tarifa_servicios"
-  add_foreign_key "t_factura_tarifas", "t_factura_automaticas"
+  add_foreign_key "t_factura_tarifas", "t_conf_fac_automaticas"
   add_foreign_key "t_factura_tarifas", "t_tarifas"
   add_foreign_key "t_facturas", "t_estatuses"
   add_foreign_key "t_facturas", "t_leyendas"

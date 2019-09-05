@@ -8,7 +8,7 @@
               <h5>Factura Automática</h5>
             </div>
             <div class="col-2">
-              <%= link_to 'Configurar Nueva Factura Automática', new_t_factura_automatica_path, data: { turbolinks: false }, class: 'btn btn-primary float-right' %>
+              <%= link_to 'Configurar Nueva Factura Automática', new_t_conf_fac_automatica_path, data: { turbolinks: false }, class: 'btn btn-primary float-right' %>
             </div>
           </div>
         </div>
@@ -25,7 +25,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% @t_factura_automaticas.each do |t_factura| %>
+                <% @t_conf_fac_automaticas.each do |t_factura| %>
                   <tr data-link="<%= polymorphic_path(t_factura) %>">
                     <td><%= t_factura.id %></td>
                     <td><%= t_factura.nombre_ciclo_facturacion %></td>

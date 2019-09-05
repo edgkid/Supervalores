@@ -1,4 +1,4 @@
-class TFacturaAutomatica < ApplicationRecord
+class TConfFacAutomatica < ApplicationRecord
   belongs_to :t_tipo_cliente
   belongs_to :t_periodo
 
