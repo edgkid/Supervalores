@@ -2,23 +2,13 @@ require 'rufus-scheduler'
 
 # Let's use the rufus-scheduler singleton
 #
-scheduler = Rufus::Scheduler.singleton
+# scheduler = Rufus::Scheduler.singleton
 
-
-start = false
-
-unless start
-  scheduler.every '5s' do
-    # Rails.logger.info "hello, it's #{Time.now}"
-    # puts User.first.nombre
-    # Rails.logger.flush
-    puts 'start: true'
-    start = true
-  end
-end
-
-if start
-  scheduler.every '5s' do
-    puts 'Started!'
-  end
-end
+# TConfFacAutomatica.all.each do |configuracion|
+#   scheduler.in (configuracion.fecha_inicio - Date.today).to_i.to_s + 's' do
+#     puts (configuracion.fecha_inicio - Date.today).to_i
+#     scheduler.every '2s' do
+#       puts configuracion.nombre_ciclo_facturacion
+#     end
+#   end
+# end

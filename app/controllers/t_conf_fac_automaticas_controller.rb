@@ -21,6 +21,51 @@ class TConfFacAutomaticasController < ApplicationController
   def index
     @usar_dataTables = true
     @t_conf_fac_automaticas = TConfFacAutomatica.all
+    # job_id =
+    #   Rufus::Scheduler.singleton.in '10s' do
+    #     Rails.logger.info "time flies, it's now #{Time.now}"
+    #   end
+    # j = 0
+    # jobs = []
+    scheduler = Rufus::Scheduler.singleton
+
+    TConfFacAutomatica.all.each_with_index do |configuracion, i|
+      # scheduler.at "#{configuracion.fecha_inicio} 0000" do
+      scheduler.in '2s' do
+        # scheduler.every 
+        scheduler.schedule_every '1month' do |job|
+          t_tipo_cliente = configuracion.t_tipo_cliente
+          t_periodo = configuracion.t_periodo
+          # puts configuracion.nombre_ciclo_facturacion
+          # j += 1
+          # if j > 2
+            # puts "Job 1 corriendo? #{jobs[0].running?}"
+            # puts "Job 2 corriendo? #{jobs[1].running?}"
+            # puts "Job corriendo? #{job.running?}"
+
+            # job.unschedule if job.scheduled?
+            # job.kill if job.running?
+
+            # puts "Job corriendo? #{job.running?}"
+
+            # jobs.each do |job|
+            #   job.unschedule if job.scheduled?
+            #   job.kill if job.running?
+            # end
+          # end
+        end
+
+        # jobs << job
+      end
+
+      # puts "scheduled job #{job_id}"
+    end
+
+    # scheduler.every '3s' do
+    #   puts "Jobs corriendo: #{scheduler.running_jobs}"
+    #   puts "Cantidad de jobs: #{scheduler.running_jobs.count}"
+    #   scheduler.shutdown
+    # end
   end
 
   def show
