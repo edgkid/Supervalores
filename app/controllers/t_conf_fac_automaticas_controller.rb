@@ -21,7 +21,7 @@ class TConfFacAutomaticasController < ApplicationController
   def index
     @usar_dataTables = true
     @t_conf_fac_automaticas = TConfFacAutomatica.all
-    # j = 0
+    j = 0
     # jobs = []
     scheduler = Rufus::Scheduler.singleton
 
@@ -37,7 +37,11 @@ class TConfFacAutomaticasController < ApplicationController
       # scheduler.at "#{configuracion.fecha_inicio} 0000" do
       scheduler.in '2s' do
         # scheduler.schedule_every '1month' do |job|
-        scheduler.schedule_every '3s' do |job|
+        scheduler.schedule_every '12h' do |job|
+          if j > 2
+            job.unschedule if job.scheduled?
+            job.kill if job.running?
+          end
           t_clientes = TCliente.joins("
             INNER JOIN t_resolucions
             ON t_resolucions.t_cliente_id = t_clientes.id
@@ -79,6 +83,8 @@ class TConfFacAutomaticasController < ApplicationController
             else
               puts "\n" * 5 + 'Al menos una factura no se pudo crear'
             end
+
+            j += 1
           end
 
           # ESTE ES EL MISMO CÓDIGO DE ARRIBA, PERO SIN NEW LINES PARA PROBAR MÁS
