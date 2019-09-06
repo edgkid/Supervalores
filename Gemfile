@@ -32,6 +32,7 @@ gem 'jquery-ui-rails'
 gem 'bootstrap'
 gem 'bootstrap-wysihtml5-rails'
 gem 'jquery-rails'
+gem 'rufus-scheduler', '~> 3.6'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
