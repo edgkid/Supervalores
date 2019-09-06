@@ -36,4 +36,15 @@ class TFactura < ApplicationRecord
   def calculate_pending_payment
     self.total_factura - self.t_recibos.sum(:pago_recibido)
   end
+
+  def calculate_total(services_total, surcharges, rates)
+    total = services_total
+    surcharges.each do |surcharge|
+      total += (total * surcharge)
+    end
+    rates.each do |rate|
+      total += rate
+    end
+    self.total_factura = total
+  end
 end

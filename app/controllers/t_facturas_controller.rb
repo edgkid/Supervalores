@@ -27,7 +27,7 @@ class TFacturasController < ApplicationController
     @t_factura.pendiente_fact = 0
     @t_factura.pendiente_ts = 0
     @t_factura.tipo = '-'
-    @t_factura.next_fecha_recargo = Date.today
+    @t_factura.next_fecha_recargo = Date.today + 1.month
     @t_factura.monto_emision = 0
     @t_factura.t_estatus_id = TEstatus.first.id
 
