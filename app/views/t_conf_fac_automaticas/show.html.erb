@@ -79,6 +79,23 @@
             <% end %>
           </div>
         </div>
+
+        <div class="form-group row">
+          <% if controller.action_name != 'edit' %>
+            <%= render "shared/action_buttons",
+              list_route: t_conf_fac_automaticas_path, list_text: "Facturas Automáticas",
+              delete_route: polymorphic_path(@t_conf_fac_automatica), delete_text: "Borrar",
+              button_size: "xs"
+            %>
+          <% else %>
+            <%= render "shared/action_buttons",
+              list_route: t_conf_fac_automaticas_path, list_text: "Facturas Automáticas",
+              back_route: polymorphic_path(@t_conf_fac_automatica), back_text: "Cancelar",
+              save_form: true, save_text: "Guardar",
+              button_size: "xs"
+            %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

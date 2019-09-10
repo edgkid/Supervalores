@@ -11,7 +11,7 @@ class TConfFacAutomaticasController < ApplicationController
     @t_conf_fac_automatica = TConfFacAutomatica.new(t_factura_params)
 
     if @t_conf_fac_automatica.save
-      redirect_to t_conf_fac_automaticas_path
+      redirect_to t_conf_fac_automaticas_path, notice: 'Configuración de Factura creada exitosamente'
     else
       @notice = @t_conf_fac_automatica.errors
       render 'new'
@@ -138,6 +138,13 @@ class TConfFacAutomaticasController < ApplicationController
     @t_tarifa_servicios = @t_conf_fac_automatica.t_tarifa_servicios
     @t_recargos = @t_conf_fac_automatica.t_recargos
     @t_tarifas = @t_conf_fac_automatica.t_tarifas
+  end
+
+  def destroy
+    @t_conf_fac_automatica = TConfFacAutomatica.find(params[:id])
+    @t_conf_fac_automatica.destroy
+
+    redirect_to t_conf_fac_automaticas_path, notice: 'Configuración de Factura eliminada exitosamente'
   end
 
   private
