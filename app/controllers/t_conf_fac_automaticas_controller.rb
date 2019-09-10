@@ -35,9 +35,9 @@ class TConfFacAutomaticasController < ApplicationController
       t_tarifas = configuracion.t_tarifas
 
       # scheduler.at "#{configuracion.fecha_inicio} 0000" do
-      scheduler.in '2s' do
+      scheduler.in '10m' do
         # scheduler.schedule_every '1month' do |job|
-        scheduler.schedule_every '12h' do |job|
+        scheduler.schedule_every '4h' do |job|
           if j > 2
             job.unschedule if job.scheduled?
             job.kill if job.running?

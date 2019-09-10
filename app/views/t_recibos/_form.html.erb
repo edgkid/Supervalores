@@ -72,10 +72,13 @@
           <% if @is_show %>
             <%= render "shared/action_buttons",
               list_route: return_to, list_text: "Recibos",
+              delete_route: t_factura_t_recibo_path(@t_factura, @t_recibo), delete_text: "Borrar",
               button_size: "xs"
             %>
           <% else %>
-            <%= render "shared/action_buttons", save_form: true, save_text: "Guardar" %>
+            <%= render "shared/action_buttons",
+              save_form: true,
+              save_text: "Guardar" %>
           <% end %>
         </div>
       </div>

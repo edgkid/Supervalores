@@ -136,9 +136,13 @@
       <i class="fa fa-credit-card"></i>
       Crear Otra
     <% end %>
-    <%= link_to edit_t_factura_path(@t_factura), class: 'btn btn-danger' do %>
+    <%= link_to edit_t_factura_path(@t_factura), class: 'btn btn-warning' do %>
       <i class="fa fa-edit"></i>
       Editar Factura
+    <% end %>
+    <%= link_to @t_factura, method: :delete, data: { confirm: '¿Está seguro de querer eliminar esta factura?' }, class: 'btn btn-danger' do %>
+      <i class="fa fa-trash"></i>
+      Eliminar Factura
     <% end %>
     <button type="button" class="btn btn-info"><i class="fa fa-envelope"></i> Enviar al Correo</button>
     <button type="button" class="btn btn-primary"><i class="fa fa-download"></i> Generar PDF</button>

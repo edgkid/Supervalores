@@ -80,10 +80,10 @@ class TFacturasController < ApplicationController
   def show
   end
 
-  # def destroy
-  #   @t_factura.destroy
-  #   redirect_to t_facturas_path
-  # end
+  def destroy
+    @t_factura.destroy
+    redirect_to t_facturas_path, notice: 'Factura eliminada exitosamente'
+  end
 
   private
 

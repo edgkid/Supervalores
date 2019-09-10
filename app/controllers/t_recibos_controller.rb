@@ -1,6 +1,6 @@
 class TRecibosController < ApplicationController
   before_action :set_t_factura, except: :index
-  # before_action :set_t_recibo, only: :show
+  before_action :set_t_recibo, only: :destroy
   before_action :set_necessary_objects, only: [:new, :create, :show]
 
   def new
@@ -32,10 +32,20 @@ class TRecibosController < ApplicationController
     @t_recibo = TRecibo.find(params[:id])
   end
 
+  def destroy
+    @t_recibo.destroy
+
+    redirect_to t_factura_t_recibos_path()
+  end
+
   private
 
     def set_t_factura
       @t_factura = TFactura.find(params[:t_factura_id])
+    end
+
+    def set_t_recibo
+      @t_recibo = TRecibo.find(params[:id])
     end
 
     def t_recibo_params
