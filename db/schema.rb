@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_05_002946) do
+ActiveRecord::Schema.define(version: 2019_09_10_214934) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -444,32 +444,6 @@ ActiveRecord::Schema.define(version: 2019_09_05_002946) do
     t.index ["t_tipo_cliente_id"], name: "index_t_resolucions_on_t_tipo_cliente_id"
   end
 
-  create_table "t_rol_descs", force: :cascade do |t|
-    t.string "id_objeto"
-    t.string "nombre", null: false
-    t.text "pagina"
-    t.integer "estatus", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "t_rol_id", null: false
-    t.text "descripcion"
-    t.index ["t_rol_id"], name: "index_t_rol_descs_on_t_rol_id"
-  end
-
-  create_table "t_rols", force: :cascade do |t|
-    t.string "direccion_url"
-    t.string "li_class"
-    t.string "i_class"
-    t.string "u_class"
-    t.string "nombre", null: false
-    t.string "descripcion", null: false
-    t.integer "peso"
-    t.integer "estatus", null: false
-    t.string "icon_class"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "t_tarifa_servicio_groups", force: :cascade do |t|
     t.string "nombre", null: false
     t.integer "estatus", null: false
@@ -547,13 +521,6 @@ ActiveRecord::Schema.define(version: 2019_09_05_002946) do
     t.integer "estatus"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "t_users_rols", id: false, force: :cascade do |t|
-    t.bigint "t_rol_id", null: false
-    t.bigint "user_id", null: false
-    t.index ["t_rol_id"], name: "index_t_users_rols_on_t_rol_id"
-    t.index ["user_id"], name: "index_t_users_rols_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -639,12 +606,9 @@ ActiveRecord::Schema.define(version: 2019_09_05_002946) do
   add_foreign_key "t_resolucions", "t_clientes"
   add_foreign_key "t_resolucions", "t_estatuses"
   add_foreign_key "t_resolucions", "t_tipo_clientes"
-  add_foreign_key "t_rol_descs", "t_rols"
   add_foreign_key "t_tarifa_servicio_groups", "t_presupuestos"
   add_foreign_key "t_tarifas_periodos", "t_periodos"
   add_foreign_key "t_tarifas_periodos", "t_tarifas"
   add_foreign_key "t_tipo_clientes", "t_tarifas"
   add_foreign_key "t_tipo_clientes", "t_tipo_cliente_tipos"
-  add_foreign_key "t_users_rols", "t_rols"
-  add_foreign_key "t_users_rols", "users"
 end
