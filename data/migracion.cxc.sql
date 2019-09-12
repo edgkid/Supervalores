@@ -540,9 +540,35 @@ INSERT INTO t_leyendas (anio, descripcion, estatus, created_at, updated_at)
 SELECT anio, descripcion, estatus, created_at, updated_at
 FROM leyendas_normalizadas;
 
-
 CREATE MATERIALIZED VIEW facturas_normalizadas AS
-SELECT CURRENT_TIMESTAMP fecha_notificacion, ctfs.fecha_vencimiento fecha_vencimiento, ctfs.recargo recargo, ctfs.recargo_desc recargo_desc, ctfs.itbms itbms, ctfs.cantidad_total cantidad_total, ctfs.importe_total importe_total, ctfs.total_factura total_factura, ctfs.pendiente_fact pendiente_fact, ctfs.pendiente_ts pendiente_ts, ctfs.tipo tipo, ctfs.justificacion justificacion, ctfs.fecha_erroneo fecha_erroneo, COALESCE(ctfs.next_fecha_recargo, CURRENT_TIMESTAMP) next_fecha_recargo, 0 monto_emision, COALESCE(ctfs.fecha_factura, CURRENT_TIMESTAMP) created_at, COALESCE(ctfs.fecha_factura, CURRENT_TIMESTAMP) updated_at, resoluciones.ids[1] t_resolucion_id, tps.id t_periodo_id, tes.id t_estatus_id, 1 t_leyenda_id, COALESCE(us.id, 1) user_id, false automatica, ctfs.idt_facturas prev_id
+SELECT 
+	row_number() OVER (ORDER BY dt.prev_id, dt.fecha_notificacion, dt.fecha_vencimiento, dt.recargo, dt.recargo_desc, dt.itbms, dt.cantidad_total, dt.importe_total, dt.total_factura, dt.pendiente_fact, dt.pendiente_ts, dt.tipo, dt.justificacion, dt.fecha_erroneo, dt.next_fecha_recargo, dt.monto_emision, dt.created_at, dt.updated_at, dt.t_resolucion_id, dt.t_periodo_id, dt.t_estatus_id, dt.t_leyenda_id, dt.user_id, dt.automatica) AS prediction_id
+	, dt.fecha_notificacion, dt.fecha_vencimiento, dt.recargo, dt.recargo_desc, dt.itbms, dt.cantidad_total, dt.importe_total, dt.total_factura, dt.pendiente_fact, dt.pendiente_ts, dt.tipo, dt.justificacion, dt.fecha_erroneo, dt.next_fecha_recargo, dt.monto_emision, dt.created_at, dt.updated_at, dt.t_resolucion_id, dt.t_periodo_id, dt.t_estatus_id, dt.t_leyenda_id, dt.user_id, dt.automatica, dt.prev_id
+FROM ( SELECT
+	CURRENT_TIMESTAMP fecha_notificacion
+	, ctfs.fecha_vencimiento fecha_vencimiento
+	, ctfs.recargo recargo
+	, UPPER(TRIM(ctfs.recargo_desc)) recargo_desc
+	, ctfs.itbms itbms
+	, ctfs.cantidad_total cantidad_total
+	, ctfs.importe_total importe_total
+	, ctfs.total_factura total_factura
+	, ctfs.pendiente_fact pendiente_fact
+	, ctfs.pendiente_ts pendiente_ts
+	, ctfs.tipo tipo
+	, ctfs.justificacion justificacion
+	, ctfs.fecha_erroneo fecha_erroneo
+	, COALESCE(ctfs.next_fecha_recargo, CURRENT_TIMESTAMP) next_fecha_recargo
+	, 0 monto_emision
+	, COALESCE(ctfs.fecha_factura, CURRENT_TIMESTAMP) created_at
+	, COALESCE(ctfs.fecha_factura, CURRENT_TIMESTAMP) updated_at
+	, resoluciones.ids[1] t_resolucion_id
+	, tps.id t_periodo_id
+	, tes.id t_estatus_id
+	, 1 t_leyenda_id
+	, COALESCE(us.id, 1) user_id
+	, false automatica
+	, ctfs.idt_facturas prev_id
 FROM cxc_t_facturas ctfs
 JOIN (
 	SELECT rns.client_id, array_agg(trs.id) ids
@@ -555,32 +581,44 @@ JOIN t_periodos tps ON pns.descripcion = tps.descripcion
 JOIN estatuses_normalizados ens ON ctfs.estatus = ens.prev_id
 JOIN t_estatuses tes ON ens.para = 1 AND ens.descripcion = tes.descripcion
 LEFT JOIN usuarios_normalizados uns ON ctfs.id_usuario = uns.prev_id
-LEFT JOIN users us ON uns.email = us.email; 
+LEFT JOIN users us ON uns.email = us.email
+)	dt; 
 
 INSERT INTO t_facturas (fecha_notificacion, fecha_vencimiento, recargo, recargo_desc, itbms, cantidad_total, importe_total, total_factura, pendiente_fact, pendiente_ts, tipo, justificacion, fecha_erroneo, next_fecha_recargo, monto_emision, created_at, updated_at, t_resolucion_id, t_periodo_id, t_estatus_id, t_leyenda_id, user_id, automatica)
 SELECT fecha_notificacion, fecha_vencimiento, recargo, recargo_desc, itbms, cantidad_total, importe_total, total_factura, pendiente_fact, pendiente_ts, tipo, justificacion, fecha_erroneo, next_fecha_recargo, monto_emision, created_at, updated_at, t_resolucion_id, t_periodo_id, t_estatus_id, t_leyenda_id, user_id, automatica
 FROM facturas_normalizadas;
 
 CREATE MATERIALIZED VIEW tarifa_servicios_normalizados AS
-SELECT '0000' codigo, 'Desconocida' descripcion, 'Desconocido' nombre, 'Desconocido' clase, 0 precio, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id
-UNION ALL (SELECT ctts.codigo codigo, TRIM(ctts.descripcion) descripcion, TRIM(ctts.nombre) nombre, ctts.clase clase, ctts.precio precio, ctts.estatus estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, ctts.idt_tarifa_servicios prev_id FROM cxc_t_tarifa_servicios ctts);
+SELECT 
+	row_number() OVER (ORDER BY dt.prev_id, dt.codigo, dt.descripcion, dt.nombre, dt.clase, dt.precio, dt.estatus, dt.created_at, dt.updated_at) AS prediction_id
+	, dt.codigo, dt.descripcion, dt.nombre, dt.clase, dt.precio, dt.estatus, dt.created_at, dt.updated_at, dt.prev_id
+FROM (SELECT '0000' codigo, 'Desconocida' descripcion, 'Desconocido' nombre, 'Desconocido' clase, 0 precio, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id
+UNION ALL (SELECT ctts.codigo codigo, TRIM(ctts.descripcion) descripcion, TRIM(ctts.nombre) nombre, ctts.clase clase, ctts.precio precio, ctts.estatus estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, ctts.idt_tarifa_servicios prev_id FROM cxc_t_tarifa_servicios ctts)) dt;
 
 INSERT INTO t_tarifa_servicios (codigo, descripcion, nombre, clase, precio, estatus, created_at, updated_at)
 SELECT codigo, descripcion, nombre, clase, precio, estatus, created_at, updated_at
 FROM tarifa_servicios_normalizados;
-/*
+
 CREATE MATERIALIZED VIEW factura_detalle_normalizado AS
-SELECT ctfd.cantidad, ctfd.cuenta_desc, ctfd.precio_unitario, tfs.id t_factura_id, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, ctfd.idt_factura_detalle prev_id
+SELECT ctfd.cantidad, ctfd.cuenta_desc, ctfd.precio_unitario, tfs.id t_factura_id, tts.id t_tarifa_servicio_id, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, ctfd.idt_factura_detalle prev_id
 FROM cxc_t_factura_detalle ctfd
 JOIN facturas_normalizadas fns ON ctfd.idt_factura = fns.prev_id
-JOIN t_facturas tfs ON fns.t_resolucion_id = tfs.t_resolucion_id AND fns.t_periodo_id = tfs.t_periodo_id AND fns.t_estatus_id = tfs.t_estatus_id AND fns.t_leyenda_id = tfs.t_leyenda_id AND fns.user_id = tfs.user_id AND fns.automatica = tfs.automatica
+JOIN t_facturas tfs ON fns.prediction_id = tfs.id
 JOIN tarifa_servicios_normalizados tsns ON ctfd.idt_tarifa_servicios = tsns.prev_id
-JOIN t_tarifa_servicios tts ON tsns.codigo = tts.codigo;
+JOIN t_tarifa_servicios tts ON tsns.prediction_id = tts.id;
 
-
-INSERT INTO t_factura_detalle (cantidad, cuenta_desc, precio_unitario, created_at, updated_at, t_factura_id, t_tarifa_servicio_id)
+INSERT INTO t_factura_detalles (cantidad, cuenta_desc, precio_unitario, created_at, updated_at, t_factura_id, t_tarifa_servicio_id)
 SELECT cantidad, cuenta_desc, precio_unitario, created_at, updated_at, t_factura_id, t_tarifa_servicio_id
 FROM factura_detalle_normalizado;
-*/
+
+UPDATE t_facturas
+SET monto_emision = dt.monto
+FROM (
+	SELECT tfds.t_factura_id, SUM(COALESCE(tfds.cantidad, 0) * COALESCE(tfds.precio_unitario, 0)) monto
+	FROM t_factura_detalles tfds
+	GROUP BY tfds.t_factura_id) dt
+WHERE dt.t_factura_id = t_facturas.id;
+
+
 -- Ultimo registro
 INSERT INTO schema_migrations VALUES('0');
