@@ -1,13 +1,14 @@
 <div class="row justify-content-md-center">
   <div class="col-md-9 col-lg-7">
     <div class="ibox">
-      <div class="ibox-title">
+      <div class="ibox-title" style="padding-right: 20px;">
         <div class="row">
-          <div class="col-8">
+          <div class="col-md-5">
             <h5>Rol <%= @t_rol.nombre %></h5>
           </div>
-          <div class="col-4">
-            <%= link_to 'Agregar Módulos', modules_t_rol_path, class: "btn btn-primary btn-sm float-right" %>
+          <div align="right" class="col-md-7">
+            <%= link_to 'Agregar Módulos', modules_t_rol_path, class: "btn btn-primary btn-sm" %>
+            <%= link_to 'Asignar Permisos', permissions_t_rol_path, class: "btn btn-primary btn-sm"  %>
           </div>
         </div>
       </div>

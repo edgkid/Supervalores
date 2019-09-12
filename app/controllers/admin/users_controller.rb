@@ -14,12 +14,12 @@ class Admin::UsersController < ApplicationController
   end
 
   def show
-    rol_info = @user.get_user_rol(params[:id])
-    @rol = TRol.new
-    if rol_info != nil
-      @rol.nombre = rol_info[0]['nombre']
-      @rol.descripcion = rol_info[0]['descripcion']
-    end
+    # rol_info = @user.get_user_rol(params[:id])
+    # @rol = TRol.new
+    # if rol_info != nil
+    #   @rol.nombre = rol_info[0]['nombre']
+    #   @rol.descripcion = rol_info[0]['descripcion']
+    # end
   end
 
   def new

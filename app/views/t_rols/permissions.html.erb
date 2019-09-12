@@ -1,0 +1,31 @@
+<%= form_for @t_rol do |f| %>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Rol <%= @t_rol.nombre %></h4>
+          <div class="row justify-content-md-center">
+            <%= f.fields_for :t_modulo_rols do |mr_form| %>
+              <div class="col-md-3">
+                <%= mr_form.object.t_modulo.nombre %>
+                <%= mr_form.select :t_permiso_ids, object_options(TPermiso, 'nombre'), {}, { class: 'form-control m-b', multiple: true } %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div class="col s6 offset-s3">
+      <%= render "shared/action_buttons",
+        list_route: t_rols_path, list_text: "Roles de Usuario",
+        back_route: polymorphic_path(@t_rol), back_text: "Cancelar",
+        save_form: true, save_text: "Guardar",
+        button_size: "xs" %>
+    </div>
+  </div>
+<% end %>

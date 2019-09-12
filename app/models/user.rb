@@ -31,22 +31,22 @@ class User < ApplicationRecord
 
 	 validates :email , presence: {message: "|El email no debe estar vacío y debe contener un formato valido"}
 
-   def get_user_rol(id)
+ #   def get_user_rol(id)
 
-	 	select = " SELECT r.nombre, r.descripcion, r.peso, r.estatus"
-		from = " FROM users u, t_users_rols ur, t_rols r"
-		where = " WHERE u.id = ur.user_id AND ur.t_rol_id = r.id AND r.estatus = 1 AND u.id = " << id
-		sql = select << from << where
+	#   # select = " SELECT r.nombre, r.descripcion, r.peso, r.estatus"
+	# 	# from = " FROM users u, t_users_rols ur, t_rols r"
+	# 	# where = " WHERE u.id = ur.user_id AND ur.t_rol_id = r.id AND r.estatus = 1 AND u.id = " << id
+	# 	# sql = select << from << where
 
-		#results = ActiveRecord::Base.connection.execute(sql)
-		results = ActiveRecord::Base.connection.exec_query(sql)
+	# 	# results = ActiveRecord::Base.connection.execute(sql)
+	# 	# results = ActiveRecord::Base.connection.exec_query(sql)
 
-		if results.present?
-			return results
-		else
-			return nil
-		end
-	end
+	# 	if results.present?
+	# 		return results
+	# 	else
+	# 		return nil
+	# 	end
+	# end
 
 	def associate_rol_and_user (id_rol, id_user)
 
