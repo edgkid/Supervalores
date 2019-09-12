@@ -45,20 +45,27 @@ Rails.application.routes.draw do
   resources :t_empresa_sector_economicos, path: "sector_economico_para_empresas"
   resources :t_tipo_cliente_tipos, path: "tipo_para_tipo_cliente"
   resources :t_metodo_pagos
+  resources :t_rols do
+    member do
+      get 'modules'
+      get 'permissions'
+    end
+  end
+  resources :t_modulos, only: :index
 
   get "redirect" => "t_tipo_clientes#redirect"
 
   #routes roles
-  get 'rols/index' => 't_rols#index'
-  get 'rols/show/:id' => 't_rols#show'
+  # get 'rols/index' => 't_rols#index'
+  # get 'rols/show/:id' => 't_rols#show'
 
-  get 'rols/edit/:id' => 't_rols#edit'
-  post 'rols/update/:id' =>'t_rols#update'
+  # get 'rols/edit/:id' => 't_rols#edit'
+  # post 'rols/update/:id' =>'t_rols#update'
 
-  get 'rols/new' => 't_rols#new'
-  post 'rols/create' => "t_rols#create"
+  # get 'rols/new' => 't_rols#new'
+  # post 'rols/create' => "t_rols#create"
 
-  get 'rols/destroy/:id' => 't_rols#destroy'
+  # get 'rols/destroy/:id' => 't_rols#destroy'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   #root to: 'users#index'

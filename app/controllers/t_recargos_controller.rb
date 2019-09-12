@@ -51,17 +51,8 @@ class TRecargosController < ApplicationController
   end
 
   def destroy
-    @registro.estatus = 0
-    respond_to do |format|
-      if @registro.save
-        format.html { redirect_to t_tipo_clientes_url, notice: 'Recargo inhabilitado correctamente.' }
-        format.json { head :no_content }
-      else
-        @notice = @registro.errors
-        format.html { render :new }
-        format.json { render json: @registro.errors, status: :unprocessable_entity }
-      end
-    end
+    @registro.destroy
+    redirect_to t_recargos_path, notice: 'Recargo eliminado correctamente'
   end
 
   def find_by_descripcion

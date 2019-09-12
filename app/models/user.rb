@@ -2,8 +2,8 @@ class User < ApplicationRecord
 
 	mount_uploader :picture, PictureUploader
 
-	has_and_belongs_to_many :t_roles
-
+  has_many :t_rol_usuarios, dependent: :destroy
+	has_many :t_rols, through: :t_rol_usuarios
 	has_many :t_clientes, dependent: :destroy
 	has_many :t_facturas, dependent: :destroy
 	has_many :t_recibos, dependent: :destroy
@@ -70,25 +70,33 @@ class User < ApplicationRecord
 	def nombre_completo
 		return "#{nombre}, #{apellido}"
 	end
+
+  def has_role?(t_rol_name)
+    t_rols.any? {|t_rol| t_rol.nombre == t_rol_name}
+  end
+
+  def is_admin?
+    has_role?("Administrador")
+  end
 	
 	private
-	def user_have_rol (id_user)
-		#sql = "DELETE FROM t_users_rols WHERE user_id ="<< id_user<< "commit;"
-		sql = "SELECT * FROM t_users_rols WHERE user_id = " << id_user
-		results = ActiveRecord::Base.connection.execute(sql)
 
-		if results.present?
-			return true
-		else
-			return false
-		end
-	end
+  	def user_have_rol (id_user)
+  		#sql = "DELETE FROM t_users_rols WHERE user_id ="<< id_user<< "commit;"
+  		sql = "SELECT * FROM t_users_rols WHERE user_id = " << id_user
+  		results = ActiveRecord::Base.connection.execute(sql)
 
-	def delete_associate (id_user)
-		sql = "DELETE FROM t_users_rols WHERE user_id = "<< id_user<< "; commit;"
+  		if results.present?
+  			return true
+  		else
+  			return false
+  		end
+  	end
 
-		results = ActiveRecord::Base.connection.execute(sql)
+  	def delete_associate (id_user)
+  		sql = "DELETE FROM t_users_rols WHERE user_id = "<< id_user<< "; commit;"
 
-	end
+  		results = ActiveRecord::Base.connection.execute(sql)
 
+  	end
 end

@@ -1,0 +1,17 @@
+<div class="row justify-content-md-center">
+  <div class="col-md-9 col-lg-7">
+    <div class="ibox">
+      <div class="ibox-title">
+        <div class="row">
+          <div class="col-8">
+            <h5>Rol <%= @t_rol.nombre %></h5>
+          </div>
+          <div class="col-4">
+            <%= link_to 'Agregar Módulos', modules_t_rol_path, class: "btn btn-primary btn-sm float-right" %>
+          </div>
+        </div>
+      </div>
+      <%= render 'form', registro: @t_rol, editable: false, return_to: t_rols_path %>
+    </div>
+  </div>
+</div>

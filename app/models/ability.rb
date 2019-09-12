@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Ability
   include CanCan::Ability
 
@@ -8,6 +6,19 @@ class Ability
     #
     user ||= User.new # guest user (not logged in)
     can :manage, :all
+
+    # if user.is_admin?
+    #   can :manage, :all
+    # else
+    #   user.t_rols.each do |t_rol|
+    #     t_rol.t_modulo_rols.each do |modulo_rol|
+    #       modulo_rol.t_permisos.each do |t_permiso|
+    #         can t_permiso.nombre.to_sym, modulo_rol.t_modulo.nombre.constantize # if t_permiso.estatus
+    #       end
+    #     end # if t_rol.estatus
+    #   end
+    # end
+
     # if user.admin?
     #   can :manage, :all
     # else
@@ -32,25 +43,5 @@ class Ability
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
     # alias_action :create, :read, :update, :destroy, to: :crud
-    # if user.estado
-    #   if user.present?
-    #       #Action to Super Admin
-    #       can :manage, :all if user.role == "SuperAdmin"
-
-    #       #Action to AdminCxC
-    #       can :crud, TCliente if user.role == "AdminCxC"
-    #       can :crud, TEmpresa if user.role == "AdminCxC"
-    #       can :crud, TEstatus if user.role == "AdminCxC"
-    #       can :crud, TFactura if user.role == "AdminCxC"
-    #       can :crud, TLeyenda if user.role == "AdminCxC"
-    #       can :crud, TPeriodo if user.role == "AdminCxC"
-    #       can :crud, TPersona if user.role == "AdminCxC"
-    #       can :crud, TRecargo if user.role == "AdminCxC"
-    #       can :crud, TResolucion if user.role == "AdminCxC"
-    #       can :crud, TTarifaServicio if user.role == "AdminCxC"
-    #       can :crud, TTipoPersona if user.role == "AdminCxC"
-
-    #   end
-    # end
   end
 end

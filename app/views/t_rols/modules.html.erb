@@ -1,0 +1,22 @@
+<br>
+
+<%= form_for @t_rol do |f| %>
+  <div class="row justify-content-md-center">
+    <div class="col-md-4">
+      <label class="opcional">Módulos de Rol</label>
+      <%= f.select :t_modulo_ids, object_options(TModulo, 'nombre'), {}, { class: 'form-control m-b', multiple: true } %>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div class="col s6">
+      <%= render "shared/action_buttons",
+        list_route: t_rols_path, list_text: "Roles de Usuario",
+        back_route: polymorphic_path(@t_rol), back_text: "Cancelar",
+        save_form: true, save_text: "Guardar",
+        button_size: "xs" %>
+    </div>
+  </div>
+<% end %>

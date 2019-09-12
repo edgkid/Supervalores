@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_10_222533) do
+ActiveRecord::Schema.define(version: 2019_09_12_000634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -323,6 +323,23 @@ ActiveRecord::Schema.define(version: 2019_09_10_222533) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "t_modulo_rols", force: :cascade do |t|
+    t.bigint "t_rol_id"
+    t.bigint "t_modulo_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["t_modulo_id"], name: "index_t_modulo_rols_on_t_modulo_id"
+    t.index ["t_rol_id"], name: "index_t_modulo_rols_on_t_rol_id"
+  end
+
+  create_table "t_modulos", force: :cascade do |t|
+    t.string "nombre"
+    t.text "descripcion"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "alias"
+  end
+
   create_table "t_nota_creditos", force: :cascade do |t|
     t.float "monto", null: false
     t.string "detalle", null: false
@@ -356,6 +373,22 @@ ActiveRecord::Schema.define(version: 2019_09_10_222533) do
     t.integer "dia_tope", null: false
     t.integer "mes_tope", null: false
     t.integer "estatus", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "t_permiso_modulo_rols", force: :cascade do |t|
+    t.bigint "t_permiso_id"
+    t.bigint "t_modulo_rol_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["t_modulo_rol_id"], name: "index_t_permiso_modulo_rols_on_t_modulo_rol_id"
+    t.index ["t_permiso_id"], name: "index_t_permiso_modulo_rols_on_t_permiso_id"
+  end
+
+  create_table "t_permisos", force: :cascade do |t|
+    t.string "nombre"
+    t.integer "estatus"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -442,6 +475,15 @@ ActiveRecord::Schema.define(version: 2019_09_10_222533) do
     t.index ["t_cliente_id"], name: "index_t_resolucions_on_t_cliente_id"
     t.index ["t_estatus_id"], name: "index_t_resolucions_on_t_estatus_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_resolucions_on_t_tipo_cliente_id"
+  end
+
+  create_table "t_rol_usuarios", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "t_rol_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["t_rol_id"], name: "index_t_rol_usuarios_on_t_rol_id"
+    t.index ["user_id"], name: "index_t_rol_usuarios_on_user_id"
   end
 
   create_table "t_rols", force: :cascade do |t|
@@ -597,11 +639,15 @@ ActiveRecord::Schema.define(version: 2019_09_10_222533) do
   add_foreign_key "t_facturas", "t_periodos"
   add_foreign_key "t_facturas", "t_resolucions"
   add_foreign_key "t_facturas", "users"
+  add_foreign_key "t_modulo_rols", "t_modulos"
+  add_foreign_key "t_modulo_rols", "t_rols"
   add_foreign_key "t_nota_creditos", "t_clientes"
   add_foreign_key "t_nota_creditos", "t_facturas"
   add_foreign_key "t_nota_creditos", "t_recibos"
   add_foreign_key "t_nota_creditos", "users"
   add_foreign_key "t_otros", "t_tipo_personas"
+  add_foreign_key "t_permiso_modulo_rols", "t_modulo_rols"
+  add_foreign_key "t_permiso_modulo_rols", "t_permisos"
   add_foreign_key "t_personas", "t_empresas"
   add_foreign_key "t_recargo_x_clientes", "t_recargos"
   add_foreign_key "t_recargo_x_clientes", "t_resolucions"
@@ -614,6 +660,8 @@ ActiveRecord::Schema.define(version: 2019_09_10_222533) do
   add_foreign_key "t_resolucions", "t_clientes"
   add_foreign_key "t_resolucions", "t_estatuses"
   add_foreign_key "t_resolucions", "t_tipo_clientes"
+  add_foreign_key "t_rol_usuarios", "t_rols"
+  add_foreign_key "t_rol_usuarios", "users"
   add_foreign_key "t_tarifa_servicio_groups", "t_presupuestos"
   add_foreign_key "t_tarifas_periodos", "t_periodos"
   add_foreign_key "t_tarifas_periodos", "t_tarifas"

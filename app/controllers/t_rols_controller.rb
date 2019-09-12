@@ -1,71 +1,58 @@
 class TRolsController < ApplicationController
-
-  before_action :set_t_rol, only: [:edit, :update, :destroy]
-
+  before_action :set_t_rol, only: [:edit, :update, :show, :destroy]
   load_and_authorize_resource
 
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path, :alert => exception.message
-	end
-
-  def index
-    @usar_dataTables = true
-    @rols = TRol.all
-  end
-
-  def show
-    @rol =TRol.find(params[:id])
-  end
-
   def new
-    @rol=TRol.new
+    @t_rol = TRol.new
   end
 
   def create
-    @rol = TRol.new(t_rols_params)
+    @t_rol = TRol.new(t_rol_params)
 
-    @rol.estatus = params[:is_active] == "Activo"? true : false
-
-    if @rol.save
-      redirect_to rols_index_path, notice: 'Rol de usuario creado correctamente.'
+    if @t_rol.save
+      redirect_to t_rols_path, notice: 'Rol de usuario creado exitosamente'
     else
       @notice = @rol.errors
-      render :action => "new"
+      render 'new'
     end
+  end
+
+  def index
+    @usar_dataTables = true
+    @t_rols = TRol.all
+  end
+
+  def show
   end
 
   def edit
-    @rol =TRol.find(params[:id])
   end
 
   def update
-    @rol = TRol.find(params[:id])
-
-    if params[:is_active] == "Activo" or params[:is_active] == "Inactivo"
-      @rol.estatus = params[:is_active] == "Activo"? true : false
-    end
-
-    if @rol.update_attributes(t_rols_params)
-      redirect_to rols_index_path , notice: 'Rol de usuario actualizado correctamente.'
+    if @t_rol.update!(t_rol_params)
+      redirect_to t_rols_path, notice: 'Rol actualizado exitosamente'
     else
-      @notice = @rol.errors
-      render :action => "edit"
+      render 'edit'
     end
+  end
+
+  def modules
+  end
+
+  def permissions
   end
 
   def destroy
-    @rol = TRol.find(params[:id])
-    @rol.delete
-    redirect_to(:action => 'index')
   end
 
   private
-    def t_rols_params
-      params.require(:rol).permit(:direccion_url, :li_class, :i_class, :u_class, :nombre, :descripcion, :peso, :estatus, :icon_class)
+    def t_rol_params
+      params.require(:t_rol).permit(
+        :nombre, :descripcion, :estatus, t_modulo_ids: []
+      )
     end
 
     def set_t_rol
-      @rol = TRol.find(params[:id])
+      @t_rol = TRol.find(params[:id])
     end
-
 end
