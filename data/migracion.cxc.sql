@@ -356,7 +356,7 @@ FROM (
 LEFT JOIN regexp_split_to_array(trim(dt.nombre, ' .'), '(?:[\s,\.]+)') res ON 1 = 1
 ) rw;
 
-INSERT INTO t_personas (cedula, nombre, apellido, num_licencia, t_empresa_id, cargo, telefono, email, direccion)
+INSERT INTO t_personas (cedula, nombre, apellido, t_empresa_id, cargo, telefono, email, direccion)
 SELECT
 	'CED'|| (
 		CASE 
@@ -368,8 +368,7 @@ SELECT
 			ELSE '' 
 		END) || rw.row_num AS cedula,
 	rw.nombre,
-	rw.apellido,
-	rw.num_licencia,
+	rw.apellido,	
 	cast(rw.empresa as BIGINT),
 	rw.cargo,
 	rw.telefono,
@@ -379,8 +378,7 @@ FROM (
 	SELECT 
 		row_number() OVER (ORDER BY dt.nombre) AS row_num,
 		dt.nombre,
-		dt.apellido,
-		0 num_licencia,
+		dt.apellido,		
 		null empresa,
 		dt.cargo,
 		trim(replace(dt.telefono, '0,', '')) telefono,
@@ -414,9 +412,11 @@ from cxc_t_tarifa_servicios ctts;
 
 CREATE MATERIALIZED VIEW resoluciones_normalizadas AS
 SELECT
-	( CASE WHEN LENGTH(dt.code) = 1 THEN '000'||dt.code
-		WHEN LENGTH(dt.code) = 2 THEN '00'||dt.code
-		WHEN LENGTH(dt.code) = 3 THEN '0'||dt.code
+	( CASE WHEN LENGTH(dt.code) = 1 THEN '00000'||dt.code
+		WHEN LENGTH(dt.code) = 2 THEN '0000'||dt.code
+		WHEN LENGTH(dt.code) = 3 THEN '000'||dt.code
+		WHEN LENGTH(dt.code) = 4 THEN '00'||dt.code
+		WHEN LENGTH(dt.code) = 5 THEN '0'||dt.code
 		ELSE dt.code
 		END ) code
 ,	( CASE WHEN LENGTH(dt.year) = 1 THEN '200'||dt.year
@@ -427,12 +427,14 @@ SELECT
 		END ) "year"
 , dt.client_id		
 , dt.original
+, '' || dt.num_licencia num_licencia
 , COALESCE(dt.fecha_resolucion, CURRENT_DATE) fecha_resolucion
 , dt.tipo_client_id
 FROM (
 	SELECT
 		ctc.id client_id
 		, ctc.resolucion
+		, ctc.num_licencia
 		, ctc.fecha_resolucion
 		, ctc.original
 		, SUBSTRING (ctc.resolucion FROM 1 FOR POSITION('-' in ctc.resolucion)-1) as code
@@ -442,6 +444,7 @@ FROM (
 		SELECT 
 				cli.id				
 			, cli.resolucion as original
+			, cli.num_licencia
 			, COALESCE(
 						COALESCE(
 							COALESCE(
@@ -453,12 +456,12 @@ FROM (
 			, cli.fecha_resolucion
 			, ttcs.id tipo_client_id
 		FROM (
-			SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, ctcs.fecha_resolucion, tcs.id
+			SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, ctcs.fecha_resolucion, tcs.id, ctcs.num_licencia
 				FROM personas_normalizados pns
 				JOIN cxc_t_clientes ctcs ON ctcs.idt_clientes = pns.prev_id
 				JOIN  t_personas tpa ON tpa.nombre = pns.nombre AND tpa.apellido = pns.apellido
 				JOIN t_clientes tcs ON tpa.id = tcs.persona_id AND tcs.persona_type = 'TPersona'
-			UNION ALL SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, ctcs.fecha_resolucion, tcs.id
+			UNION ALL SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, ctcs.fecha_resolucion, tcs.id, ctcs.num_licencia
 				FROM empresas_normalizadas ens
 				JOIN cxc_t_clientes ctcs ON ctcs.idt_clientes = ens.prev_id
 				JOIN  t_empresas tes ON ens.razon_social = tes.razon_social
@@ -471,16 +474,18 @@ FROM (
 	where ctc.resolucion ~ '^([0-9]{1,4}-[0-9]{2,4})$'
 ) dt;
 
-INSERT INTO t_resolucions (resolucion_codigo, resolucion_anio, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id)
-SELECT 
+INSERT INTO t_resolucions (resolucion_codigo, resolucion_anio, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia)
+SELECT 	
 	  rw.code
 	, CAST(rw."year" as int) "year"
+	, CONCAT(rw."year", rw.code)
 	, 'Resolución de migración ' || string_agg(rw.original, ', ') descripcion
 	, (SELECT res[1] from array_agg(rw.fecha_resolucion) res) created_at
 	, CURRENT_TIMESTAMP updated_at
 	, (SELECT res[1] from array_agg(rw.client_id) res) client_id
 	, 2 estatus
 	, (SELECT res[1] from array_agg(rw.tipo_client_id) res) tipo_client_id
+	, string_agg(rw.num_licencia, ', ') num_licencia
 FROM (
 		SELECT 
 			rns.code
@@ -489,9 +494,10 @@ FROM (
 			, rns.client_id
 			, rns.tipo_client_id
 			, rns.fecha_resolucion
+			, rns.num_licencia
 		FROM resoluciones_normalizadas rns
 	) rw
-	GROUP BY 1, 2;
+	GROUP BY 1, 2, 3;
 
 UPDATE t_clientes 
 	SET prospecto_at = CURRENT_TIMESTAMP

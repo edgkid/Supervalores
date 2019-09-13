@@ -4,6 +4,16 @@
 <%= fields_for registro do |form| %>
 <div class="form-group row">
   <div class="col-sm-2 col-form-label">
+    <%= form.label :codigo, "Código", class: "text-right" %>
+  </div>
+  <div class="col-sm-3 input-value">
+    <% if editable %>
+    <%= form.text_field :codigo, autofocus: true, autocomplete: "codigo", class: "form-control" %>
+    <% else %>
+    <%= registro.codigo %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label">
     <%= form.label :resolucion_codigo, 'Resolución', class: "text-right" %>
   </div>
   <div class="col-sm-5 input-value">
@@ -12,13 +22,25 @@
       <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1">SVM</span>
       </div>
-      <%= form.text_field :resolucion_codigo, autofocus: true, class: "form-control", placeholder: "Ej. 120M", maxlength: 4 %>
+      <%= form.text_field :resolucion_codigo, autofocus: true, class: "form-control", placeholder: "Ej. 00120M", maxlength: 6 %>
       <div class="input-group-append">
         <%= form.select :resolucion_anio, opciones_de_anios_para_resolucion , {}, { :class => 'input-group-text form-control m-b' } %>
       </div>
     </div>
     <% else %>
     <%= registro.resolucion %>
+    <% end %>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :num_licencia, "N° Licencia", class: "text-right" %>
+  </div>
+  <div class="col-sm-3 input-value">
+    <% if editable %>
+    <%= form.text_field :num_licencia, autofocus: true, autocomplete: "num_licencia", class: "form-control" %>
+    <% else %>
+    <%= registro.num_licencia %>
     <% end %>
   </div>
   <div class="col-sm-2 col-form-label">
@@ -33,10 +55,10 @@
   </div>
 </div>
 <div class="form-group row">
-  <div class="col-sm-2 col-form-label">
+  <div class="col-sm-3 col-form-label">
     <%= form.label :t_tipo_cliente_id, 'Tipo de Cliente', class: "text-right" %>
   </div>
-  <div class="col-sm-10 input-value">
+  <div class="col-sm-9 input-value">
     <% if editable %>
     <%= form.select :t_tipo_cliente_id, opciones_de_tipos_de_clientes , {}, { :class => 'form-control m-b' } %>
     <% else %>
@@ -45,10 +67,10 @@
   </div>
 </div>
 <div class="form-group row">
-  <div class="col-sm-2 col-form-label">
+  <div class="col-sm-3 col-form-label">
     <%= form.label :descripcion, 'Descripción', class: "text-right" %>
   </div>
-  <div class="col-sm-10 input-value">
+  <div class="col-sm-9 input-value">
     <% if defined?(editable) && editable %>
     <%= form.text_area :descripcion, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
     <% else %>
@@ -63,18 +85,18 @@
   </div>
   <div class="col-sm-4 input-value">
     <% if !defined?(editable) || editable %>
-      <% if (!defined?(bloquear_cliente) || !bloquear_cliente) %>
-        <%= form.select :t_cliente_id, opciones_de_clientes, {}, { :class => 'form-control m-b' } %>
-      <% else %>
-        <%= form.hidden_field :t_cliente_id %>
-        <%= link_to registro.t_cliente do%>
-          <%= registro.t_cliente.razon_social %>
-        <% end %>
-      <% end %>
-      <% else %>
-      <%= link_to registro.t_cliente do%>
-        <%= registro.t_cliente.razon_social %>
-      <% end %>
+    <% if (!defined?(bloquear_cliente) || !bloquear_cliente) %>
+    <%= form.select :t_cliente_id, opciones_de_clientes, {}, { :class => 'form-control m-b' } %>
+    <% else %>
+    <%= form.hidden_field :t_cliente_id %>
+    <%= link_to registro.t_cliente do%>
+    <%= registro.t_cliente.razon_social %>
+    <% end %>
+    <% end %>
+    <% else %>
+    <%= link_to registro.t_cliente do%>
+    <%= registro.t_cliente.razon_social %>
+    <% end %>
     <% end %>
   </div>
   <% end %>

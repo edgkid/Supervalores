@@ -57,6 +57,13 @@ class TResolucion < ApplicationRecord
 			scope: :resolucion_codigo,
 			message: "|Ya se registró esta resolución a un cliente, use otra por favor.",
 		}
+
+		validates :num_licencia,
+		presence: {
+				message: "|El número licencia no puede estar vacía."
+		},
+		:on => [:create, :update]
+
 	
 	attr_accessor :usar_cliente
 
@@ -69,15 +76,15 @@ class TResolucion < ApplicationRecord
 	end
 
 	def resolucion
-		"SVM#{resolucion_codigo}#{resolucion_anio}"# if defined?(resolucion_anio)
+		"SMV#{resolucion_codigo}#{resolucion_anio}"# if defined?(resolucion_anio)
 	end
 
 	private
 	
 	def normalizar(codigo)
 		if codigo
-			value = codigo.strip()[0..3]
-			return "#{"0"*(4-value.length)}#{value}"
+			value = codigo.strip()[0..5]
+			return "#{"0"*(6-value.length)}#{value}"
 		end
 		return "0000"
 	end

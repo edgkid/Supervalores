@@ -16,16 +16,6 @@ class TPersona < ApplicationRecord
         },
         :on => [:create, :update]
   
-    validates :num_licencia,
-        presence: {
-            message: "|El número licencia no puede estar vacía."
-        },
-        format: {
-            message: "|El número licencia solo puede tener Números.",
-            with: /([0-9]+)/
-        },
-        :on => [:create, :update]
-    
     validates :nombre,
         presence: {
             message: "|El nombre no puede estar vacía."
