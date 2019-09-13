@@ -342,7 +342,7 @@ class TClientesController < ApplicationController
     end
     
     def parametros_cliente_tipo_persona
-      params.require(:t_persona).permit(:cedula, :nombre, :apellido, :num_licencia, :t_empresa_id, :cargo, :telefono, :email, :direccion)
+      params.require(:t_persona).permit(:cedula, :nombre, :apellido, :t_empresa_id, :cargo, :telefono, :email, :direccion)
     end
 
     def parametros_cliente_tipo_otro
@@ -366,7 +366,7 @@ class TClientesController < ApplicationController
     end
 
     def parametros_resolucion
-      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :t_cliente_id, :t_tipo_cliente_id)
+      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :codigo, :num_licencia, :t_cliente_id, :t_tipo_cliente_id)
     end
 
     def parametros_contacto
