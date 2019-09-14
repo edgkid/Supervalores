@@ -7,11 +7,12 @@
           <%= image_tag current_user.picture.small.url, class: "rounded-circle", width:"40%", heigth: "40%" %>
           <a data-toggle="dropdown" class="dropdown-toggle" href="#">
             <span class="block m-t-xs font-bold">
-              <%= current_user.nombre != nil ?  current_user.nombre: " " %>
-              &nbsp;
-              <%= current_user.apellido != nil ?  current_user.apellido: " " %>
+              <%= current_user.nombre ?  current_user.nombre : '' %>
+              <%= current_user.apellido ? current_user.apellido : '' %>
             </span>
-            <p>Rol de Usuario</p>
+            <% current_user.t_rols.each do |t_rol| %>
+              <%= t_rol.nombre %><br>
+            <% end %>
           </a>
         </div>
         <div class="logo-element">

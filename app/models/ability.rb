@@ -4,20 +4,20 @@ class Ability
   def initialize(user)
     # Define abilities for the passed in user here. For example:
     #
-    user ||= User.new # guest user (not logged in)
-    can :manage, :all
+    # user ||= User.new # guest user (not logged in)
+    # can :manage, :all
 
-    # if user.is_admin?
-    #   can :manage, :all
-    # else
-    #   user.t_rols.each do |t_rol|
-    #     t_rol.t_modulo_rols.each do |modulo_rol|
-    #       modulo_rol.t_permisos.each do |t_permiso|
-    #         can t_permiso.nombre.to_sym, modulo_rol.t_modulo.nombre.constantize # if t_permiso.estatus
-    #       end
-    #     end # if t_rol.estatus
-    #   end
-    # end
+    if user.is_admin?
+      can :manage, :all
+    else
+      user.t_rols.each do |t_rol|
+        t_rol.t_modulo_rols.each do |modulo_rol|
+          modulo_rol.t_permisos.each do |t_permiso|
+            can t_permiso.nombre.to_sym, modulo_rol.t_modulo.nombre.constantize # if t_permiso.estatus
+          end
+        end # if t_rol.estatus
+      end
+    end
 
     # if user.admin?
     #   can :manage, :all

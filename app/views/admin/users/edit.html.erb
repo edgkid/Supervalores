@@ -1,71 +1,10 @@
-<div class="wrapper wrapper-content animated fadeInRight">
-	<div class="row">
-  	<div class="col-lg-6">
-    	<div class="ibox ">
-      	<div class="ibox-title">
-        	<h5>Edición de Usuario</h5>
-        </div>
-				<div class="ibox-title">
-					<div class="row">
-						<div class="col-4">
-							<%= image_tag @user.picture.small.url, width:"100%", heigth: "100%" %>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-4">
-							<%= file_field :picture, @user%>
-						</div>
-					</div>
-				</div>
-        <div class="ibox-content">
-					<%= form_for [:admin, @user] do |f| %>
-					<div class="row"><!-- Seccion de la derecha-->
-						<div class="col-sm-12">
-							<div class="form-group  row"><label class="col-sm-2 col-form-label">Nombre</label>
-						    	<div class="col-sm-10">
-						    		<%= f.text_field :nombre, autofocus: true, autocomplete: "nombre", class: "form-control" %>
-						    	</div>
-						   </div>
-						    <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido</label>
-						    	<div class="col-sm-10">
-						    		<%= f.text_field :apellido, autofocus: true, autocomplete: "apellido", class: "form-control" %>
-						    	</div>
-						    </div>
-						    <div class="form-group row">
-						    	<label class="col-sm-2 col-form-label">Activo</label>
-						        <div class="col-sm-10">
-												<%= select_tag :is_active, options_for_select([ "Seleccione un estatus", "Activo", "Inactivo" ], ["0","1", "2"]), class: "form-control" %>
-										</div>
-						    </div>
-								<div class="form-group row">
-						    	<label class="col-sm-2 col-form-label">Email</label>
-						    	<div class="col-sm-10">
-						    		<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
-						    	</div>
-						    </div>
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Rol de Usuario</label>
-									<div class="col-sm-10">
-										<% if current_user.email == @user.email %>
-											<%= f.text_field :role, autofocus: true, autocomplete: "role", class: "form-control", disabled: true %>
-										<% else %>
-											<%= select_tag :id_rol, options_from_collection_for_select(@rols, "id", "nombre"),  class: "form-control" %>
-										<% end %>
-									</div>
-								</div>
-						</div>
-					</div>
-					<div class="form-group row">
-						<div class="col-sm-6 col-sm-offset-2">
-							<%= f.submit 'Guardar Cambios', :class => "btn btn-primary btn-sm col-12" %>
-						</div><br><br>
-						<div class="col-sm-6 col-sm-offset-2">
-							<%= link_to 'Atrás',admin_users_path	, {:class =>"btn btn-white btn-sm col-12"} %>
-						</div>
-					</div>
-					<% end %>
-
+<div class="row justify-content-md-center">
+  <div class="col-md-10 col-lg-8">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>Editar Usuario</h5>
       </div>
+      <%= render 'form', registro: @user, editable: true, return_to: admin_users_path %>
     </div>
-	</div>
+  </div>
 </div>

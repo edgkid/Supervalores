@@ -9,11 +9,17 @@
         save_form: true, save_text: "Guardar",
         button_size: "xs" %>
     <% else %>
-      <%= render "shared/action_buttons",
-        list_route: return_to, list_text: "Roles de Usuario",
-        edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
-        delete_route: polymorphic_path(registro), delete_text: "Borrar",
+      <% if @t_rol.nombre == 'Administrador' %>
+        <%= render "shared/action_buttons",
+        list_route: t_rols_path, list_text: "Roles de Usuario",
         button_size: "xs" %>
+      <% else %>
+        <%= render "shared/action_buttons",
+          list_route: return_to, list_text: "Roles de Usuario",
+          edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
+          delete_route: polymorphic_path(registro), delete_text: "Borrar",
+          button_size: "xs" %>
+      <% end %>
     <% end %>
   </div>
   <% end %>

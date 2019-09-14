@@ -1,74 +1,10 @@
-
-	<div class="row">
-  	<div class="col-lg-6">
-    	<div class="ibox ">
-      	<div class="ibox-title">
-        	<h5>Nuevo Usuario</h5>
-        </div>
-				<div class="ibox-title">
-						<div class="row">
-							<div class="col-4">
-								<%= image_tag @user.picture.small.url, width:"100%", heigth: "100%" %>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-4">
-								<%= file_field :picture, class: "btn btn-primary btn-xs" %>
-							</div>
-						</div>
-				</div>
-        <div class="ibox-content">
-        	<%= form_for [:admin, @user] do |f| %>
-						<div class="row">
-							<div class="col-sm-12">
-								<div class="form-group  row"><label class="col-sm-2 col-form-label">Nombre</label>
-						    	<div class="col-sm-10">
-						    		<%= f.text_field :nombre, autofocus: true, autocomplete: "nombre", class: "form-control" %>
-									</div>
-						    </div>
-						    <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido</label>
-						    	<div class="col-sm-10">
-						    		<%= f.text_field :apellido, autofocus: true, autocomplete: "apellido", class: "form-control" %>
-						    	</div>
-						    </div>
-						    <div class="form-group row">
-						    	<label class="col-sm-2 col-form-label">Activo</label>
-						        <div class="col-sm-10">
-											<%= select_tag :is_active, options_for_select([ "Seleccione un estatus", "Activo", "Inactivo" ], ["0","1", "2"]), class: "form-control" %>
-						        </div>
-						    </div>
-								<div class="form-group row">
-						    	<label class="col-sm-2 col-form-label">Email</label>
-						    	<div class="col-sm-10">
-						    		<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
-						    	</div>
-						    </div>
-								<div class="form-group row">
-						    	<label class="col-sm-2 col-form-label">Contraseña</label>
-						    	<div class="col-sm-10">
-										<% if @minimum_password_length %>
-											<em>(<%= @minimum_password_length %> caracteres mínimo)</em>
-										<% end %>
-										<%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
-						    	</div>
-						    </div>
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Confirmar Contraseña</label>
-									<div class="col-sm-10">
-										<%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-group row">
-            	<div class="col-sm-6 col-sm-offset-2">
-              	<%= f.submit 'Crear Usuario', class: "btn btn-primary col-12" %>
-              </div><br><br>
-              <div class="col-sm-6 col-sm-offset-2">
-								<%= link_to 'Atrás', admin_users_path, class: 'btn btn-white col-12' %>
-              </div>
-            </div>
-					<% end %>
+<div class="row justify-content-md-center">
+  <div class="col-md-10 col-lg-8">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>Crear Usuario</h5>
       </div>
+      <%= render 'form', registro: @user, editable: true, return_to: admin_users_path %>
     </div>
-	</div>
+  </div>
+</div>

@@ -6,10 +6,12 @@
           <div class="col-md-5">
             <h5>Rol <%= @t_rol.nombre %></h5>
           </div>
-          <div align="right" class="col-md-7">
-            <%= link_to 'Agregar Módulos', modules_t_rol_path, class: "btn btn-primary btn-sm" %>
-            <%= link_to 'Asignar Permisos', permissions_t_rol_path, class: "btn btn-primary btn-sm"  %>
-          </div>
+          <% unless @t_rol.nombre == 'Administrador' %>
+            <div align="right" class="col-md-7">
+              <%= link_to 'Agregar Módulos', modules_t_rol_path, class: "btn btn-primary btn-sm" %>
+              <%= link_to 'Asignar Permisos', permissions_t_rol_path, class: "btn btn-primary btn-sm"  %>
+            </div>
+          <% end %>
         </div>
       </div>
       <%= render 'form', registro: @t_rol, editable: false, return_to: t_rols_path %>

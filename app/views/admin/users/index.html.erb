@@ -8,7 +8,7 @@
               <h5>Usuarios del Sistema</h5>
             </div>
             <div class="col-2">
-              <%= link_to 'Añadir Usuario',new_admin_user_path, class: "btn btn-primary float-right" %>
+              <%= link_to 'Añadir Usuario', new_admin_user_path, class: "btn btn-primary float-right" %>
             </div>
           </div>
         </div>
@@ -31,7 +31,7 @@
                     <td>
                       <center><%= user.last_sign_in_at != nil ? user.last_sign_in_at.strftime("%F %H:%M") : "No ha iniciado sesión" %></center>
                     </td>
-                    <td><center><%= user.estado ? 'Activo' : 'Inactivo'%></center></td>
+                    <td><center><%= estatus_text user.estatus %></center></td>
                   </tr>
                 <% end %>
               </tbody>

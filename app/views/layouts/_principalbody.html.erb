@@ -9,7 +9,7 @@
       </div>
 
       <div class="wrapper wrapper-content">
-        <% if current_user.estado %>
+        <% if current_user.estatus == 1 %>
           <%= yield %>
         <% else %>
           <div class="alert alert-danger">

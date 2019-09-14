@@ -3,23 +3,12 @@ class Admin::UsersController < ApplicationController
 
   load_and_authorize_resource
 
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path, :alert => exception.message
-	end
-
   def index
     @usar_dataTables = true
     @users = User.all
-    @notice = "Lista de usuarios registrados"
   end
 
   def show
-    # rol_info = @user.get_user_rol(params[:id])
-    # @rol = TRol.new
-    # if rol_info != nil
-    #   @rol.nombre = rol_info[0]['nombre']
-    #   @rol.descripcion = rol_info[0]['descripcion']
-    # end
   end
 
   def new
@@ -29,44 +18,34 @@ class Admin::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    @user.estado = params[:is_active] == "Activo"? true : false
-
     if @user.save
-        redirect_to admin_users_path, notice: 'Usuario creado correctamente.'
+      redirect_to admin_users_path, notice: 'Usuario creado exitosamente'
     else
       @notice = @user.errors
-      render :action => "new"
+      render 'new'
     end
   end
 
   def edit
-    @rols = TRol.all
   end
 
   def update
-    @rols = TRol.all
-
-    if params[:is_active] == "Activo" or params[:is_active] == "Inactivo"
-      @user.estado = params[:is_active] == "Activo"? true : false
+    if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
+      params[:user].delete(:password)
+      params[:user].delete(:password_confirmation)
     end
 
     if @user.update(user_params)
-
-      if @user.associate_rol_and_user(params[:id_rol], params[:id])
-        redirect_to admin_users_path, notice: 'Usuario actualizado correctamente.'
-      else
-        render :action => "edit"
-      end
+      redirect_to [:admin, @user], notice: 'Usuario actualizado correctamente.'
     else
       @notice = @user.errors
-      render :action => "edit"
+      render 'edit'
     end
   end
 
   def destroy
     @user.delete
-    # flash[:warning] = "Usuario eliminado para siempre"
-    redirect_to admin_users_path
+    redirect_to admin_users_path, notice: 'Usuario eliminado exitosamente'
   end
 
   private
@@ -75,6 +54,9 @@ class Admin::UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:nombre, :apellido, :estado, :email, :password, :password_confirmation, :picture)
+      params.require(:user).permit(
+        :nombre, :apellido, :estatus,
+        :email, :password, :password_confirmation,
+        :picture, t_rol_ids: [])
     end
 end

@@ -1,0 +1,97 @@
+<%= fields_for @user do |form| %>
+  <div class="row justify-content-md-center">
+    <div class="col-md-4" style="text-align: center;">
+      <%= image_tag @user.picture.small.url, width:"150px", heigth: "150px" %>
+      <%= form.file_field :picture, class: "btn btn-primary btn-xs" if editable %>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="form-group row">
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :nombre, class: "text-right" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= form.text_field :nombre, autofocus: true, class: "form-control" %>
+      <% else %>
+        <%= @user.nombre %>
+      <% end %>
+    </div>
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :apellido, class: "text-right" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= form.text_field :apellido, autofocus: true, class: "form-control" %>
+      <% else %>
+        <%= @user.apellido %>
+      <% end %>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :email, 'Correo', class: "text-right" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= form.email_field :email, class: 'form-control' %>
+      <% else %>
+        <%= @user.email %>
+      <% end %>
+    </div>
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :estatus, 'Estatus', class: "text-right" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= form.select :estatus, opciones_de_estatus(false), {}, { :class => 'form-control m-b' } %>
+      <% else %>
+        <%= estatus_text @user.estatus %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :password, 'Contraseña', class: "text-right" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <% if @minimum_password_length %>
+          <em>(<%= @minimum_password_length %> caracteres mínimo)</em>
+        <% end %>
+        <%= form.password_field :password, class: "form-control" %>
+      <% else %>
+        ********
+      <% end %>
+    </div>
+
+    <% if editable %>
+      <div class="col-sm-2 col-form-label">
+        <%= form.label :password_confirmation, 'Confirmar Contraseña', class: "text-right" %>
+      </div>
+      <div class="col-sm-4 input-value">
+        <%= form.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-2 col-form-label">
+      <%= form.label :t_rol_ids, 'Roles', class: "text-right" %>
+    </div>
+    <div class="col-sm-10 input-value">
+      <% if editable %>
+        <%= form.select :t_rol_ids, object_options(TRol, 'nombre'), {}, { class: "form-control", multiple: true } %>
+      <% else %>
+        <% t_rols = @user.t_rols %>
+        <% t_rols.each_with_index do |t_rol, i| %>
+          <%= t_rol.nombre %>
+          <%= ', ' if i + 1 < t_rols.count %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
