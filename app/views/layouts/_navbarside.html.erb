@@ -7,7 +7,7 @@
           <%= image_tag current_user.picture.small.url, class: "rounded-circle", width:"40%", heigth: "40%" %>
           <a data-toggle="dropdown" class="dropdown-toggle" href="#">
             <span class="block m-t-xs font-bold">
-              <%= current_user.nombre ?  current_user.nombre : '' %>
+              <%= current_user.nombre ? current_user.nombre : '' %>
               <%= current_user.apellido ? current_user.apellido : '' %>
             </span>
             <% current_user.t_rols.each do |t_rol| %>
@@ -37,30 +37,34 @@
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level collapse">
-          <% if can? :crud, TFactura %>
+          <% if can? :read, TFactura %>
             <li><%= link_to 'Factura Manual', t_facturas_path %></li>
+          <% end %>
+          <% if can? :read, TConfFacAutomatica %>
             <li><%= link_to 'Factura Automática', t_conf_fac_automaticas_path %></li>
           <% end %>
-          <li><%= link_to 'Recibos', t_recibos_path %></li>
-          <% if can? :crud, TRecargo %>
+          <% if can? :read, TRecibo %>
+            <li><%= link_to 'Recibos', t_recibos_path %></li>
+          <% end %>
+          <% if can? :read, TRecargo %>
             <li><%= link_to 'Recargos', t_recargos_path %></li>
           <% end %>
-          <% if can? :crud, TPeriodo %>
+          <% if can? :read, TPeriodo %>
             <li><%= link_to 'Periodos', t_periodos_path %></li>
           <% end %>
-          <% if can? :crud, TTarifa %>
+          <% if can? :read, TTarifa %>
             <li><%= link_to 'Tarifas', t_tarifas_path %></li>
           <% end %>
-          <% if can? :crud, TTarifaServicio %>
+          <% if can? :read, TTarifaServicio %>
             <li><%= link_to 'Servicios', t_tarifa_servicios_path %></li>
           <% end %>
-          <% if can? :crud, TLeyenda %>
+          <% if can? :read, TLeyenda %>
             <li><%= link_to 'Leyendas de Facturas', t_leyendas_path %></li>
           <% end %>
-          <% if can? :crud, TTipoEmision %>
+          <% if can? :read, TTipoEmision %>
             <li><%= link_to 'Tipos de emisión', t_tipo_emisions_path %></li>
           <% end %>
-          <% if can? :crud, TMetodoPago %>
+          <% if can? :read, TMetodoPago %>
             <li><%= link_to 'Métodos de Pago', t_metodo_pagos_path %></li>
           <% end %>
         </ul>
@@ -75,38 +79,36 @@
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
-          <% if can? :crud, TCliente %>
+          <% if can? :read, TCliente %>
             <li><%= link_to 'Clientes', t_clientes_path %></li>
           <% end %>
-          <% if can? :crud, TTipoCliente %>
+          <% if can? :read, TTipoCliente %>
             <li><%= link_to 'Tipos de Clientes', t_tipo_clientes_path %></li>
           <% end %>
-          <% if can? :crud, TTipoClienteTipo %>
+          <% if can? :read, TTipoClienteTipo %>
             <li><%= link_to 'Tipos de Clientes - Tipos', t_tipo_cliente_tipos_path %></li>
           <% end %>
-          <% if can? :crud, TTipoPersona %>
+          <% if can? :read, TTipoPersona %>
             <li><%= link_to 'Tipos de Personas', t_tipo_personas_path %></li>
           <% end %>
-          <% if can? :crud, TEstatus %>
+          <% if can? :read, TEstatus %>
             <li><%= link_to 'Estatus', t_estatuses_path %></li>
           <% end %>
-          <% if can? :crud, TResolucion %>
+          <% if can? :read, TResolucion %>
             <li><%= link_to 'Resoluciones', t_resolucions_path %></li>
           <% end %>
-          <% if can? :crud, TEmpresa %>
+          <% if can? :read, TEmpresa %>
             <li><%= link_to 'Empresas', t_empresas_path %></li>
           <% end %>
-          <% if can? :crud, TEmpresaTipoValor %>
+          <% if can? :read, TEmpresaTipoValor %>
             <li><%= link_to 'Empresas - Tipo de valores', t_empresa_tipo_valors_path %></li>
           <% end %>
-          <% if can? :crud, TEmpresaSectorEconomico %>
+          <% if can? :read, TEmpresaSectorEconomico %>
             <li><%= link_to 'Empresas - Sectores económicos', t_empresa_sector_economicos_path %></li>
           <% end %>
-
         </ul>
       </li>
-      <!-- -->
-      <% if (can? :crud, @user ) || (can? :crud, @rol) %>
+      <% if (can? :read, User ) || (can? :read, TRol) %>
         <li>
           <a href="#">
             <i class="glyphicon glyphicon-lock"></i>
@@ -116,21 +118,18 @@
             <span class="fa arrow"></span>
           </a>
           <ul class="nav nav-second-level">
-            <li>
-              <a href="/admin/users">
-                Usuarios
-              </a>
-            </li>
-            <li>
-              <%= link_to 'Roles de Usuario', t_rols_path %>
-            </li>
-            <li>
-              <%= link_to 'Módulos de Rol', t_modulos_path %>
-            </li>
+            <% if can? :read, User %>
+              <li><%= link_to 'Usuarios', admin_users_path %></li>
+            <% end %>
+            <% if can? :read, TRol %>
+              <li><%= link_to 'Roles de Usuario', t_rols_path %></li>
+            <% end %>
+            <% if can? :read, TModulo %>
+              <li><%= link_to 'Módulos de Rol', t_modulos_path %></li>
+            <% end %>
           </ul>
         </li>
       <% end %>
-      <!-- -->
     </ul>
   </div>
 </nav>
