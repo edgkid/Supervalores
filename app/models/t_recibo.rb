@@ -30,4 +30,24 @@ class TRecibo < ApplicationRecord
     self.estatus = 1
     self.user = current_user
   end
+
+  def self.count_paid_receipts_by_month(month_number)
+    TRecibo.where(
+      'extract(month  from created_at) = ?
+      AND pago_pendiente <= ?',
+      month_number,
+      0
+    ).count
+  end
+
+  def self.count_paid_receipts_by_months(number_of_months)
+    older_month = (Date.today - number_of_months.months).month
+    paid_receipts_list = []
+
+    (older_month..Date.today.month).each do |month_number|
+      paid_receipts_list << TRecibo.count_paid_receipts_by_month(month_number)
+    end
+
+    paid_receipts_list
+  end
 end

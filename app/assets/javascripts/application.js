@@ -23,6 +23,7 @@
 //= require vendor/typehead/bootstrap3-typeahead.min.js
 //= require vendor/select2/select2.full.min.js
 //= require vendor/datapicker/bootstrap-datepicker.js
+//= require vendor/chartJs/Chart.min.js
 //= require_tree .
 
 Number.prototype.toFixedDown = function(digits) {

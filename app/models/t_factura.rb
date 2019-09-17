@@ -47,4 +47,19 @@ class TFactura < ApplicationRecord
     end
     self.total_factura = total
   end
+
+  def self.count_invoices_by_month(month_number)
+    TFactura.where('extract(month  from created_at) = ?', month_number).count
+  end
+
+  def self.count_invoices_by_months(number_of_months)
+    older_month = (Date.today - number_of_months.months).month
+    invoices_list = []
+
+    (older_month..Date.today.month).each do |month_number|
+      invoices_list << TFactura.count_invoices_by_month(month_number)
+    end
+
+    invoices_list
+  end
 end

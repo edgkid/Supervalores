@@ -100,4 +100,47 @@ module ApplicationHelper
   def opciones_de_periodos
     return TPeriodo.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
   end
+
+  def translate_months(months)
+    months.map do |month|
+      case month.capitalize
+      when 'January'
+        'Enero'
+      when 'February'
+        'Febrero'
+      when 'March'
+        'Marzo'
+      when 'April'
+        'Abril'
+      when 'May'
+        'Mayo'
+      when 'June'
+        'Junio'
+      when 'July'
+        'Julio'
+      when 'August'
+        'Agosto'
+      when 'September'
+        'Septiembre'
+      when 'October'
+        'Octubre'
+      when 'November'
+        'Noviembre'
+      when 'December'
+        'Diciembre'
+      else
+        nil
+      end
+    end
+  end
+
+  def get_list_of_past_months(quantity_of_months)
+    months = []
+
+    ((Date.today - quantity_of_months.months)..Date.today).each do |date|
+      months << date.strftime('%B')
+    end
+
+    months.uniq
+  end
 end

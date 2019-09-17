@@ -25,7 +25,7 @@ if user == nil
   user.estado = true
   user.save!
 end
-print "Usuario commun #{email} - #{pass}\n"
+print "Usuario común #{email} - #{pass}\n"
 
 # Requisitos de migracion
 #  sudo -u postgres psql -U postgres -c 'CREATE DATABASE cxc';
