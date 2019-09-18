@@ -1,0 +1,105 @@
+<%= fields_for @t_conf_fac_automatica do |f| %>
+  <div class="form-group row">
+    <div class="col-sm-2 col-form-label">
+      <%= f.label :nombre_ciclo_facturacion, 'Nombre del Ciclo de Facturación', class: "text-right" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= f.text_field :nombre_ciclo_facturacion, class: "form-control" %>
+      <% else %>
+        <%= @t_conf_fac_automatica.nombre_ciclo_facturacion %>
+      <% end %>
+    </div>
+    <div class="col-sm-2 col-form-label">
+      <%= f.label :t_tipo_cliente_id, 'Tipo de Cliente', class: "text-right" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= f.select :t_tipo_cliente_id, opciones_de_tipos_de_clientes, {}, { class: "form-control" } %>
+      <% else %>
+        <%= @t_conf_fac_automatica.t_tipo_cliente.descripcion %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-2 col-form-label">
+      <%= f.label :t_periodo_id, 'Periodo', class: "text-right" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= f.select :t_periodo_id, opciones_de_periodos, {}, { class: "form-control" } %>
+      <% else %>
+        <%= @t_conf_fac_automatica.t_periodo.descripcion %>
+      <% end %>
+    </div>
+    <div class="col-sm-2 col-form-label">
+      <%= f.label :fecha_inicio, 'Fecha de Inicio de Facturación', class: "text-right" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= f.text_field :fecha_inicio, class: "datepicker form-control" %>
+      <% else %>
+        <%= @t_conf_fac_automatica.fecha_inicio %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-2 col-form-label">
+      <%= f.label :t_tarifa_servicio_ids, 'Servicios', class: "text-right opcional" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= f.select :t_tarifa_servicio_ids, object_options(TTarifaServicio), {}, { class: "form-control", multiple: true } %>
+      <% else %>
+        <% t_tarifa_servicios = @t_conf_fac_automatica.t_tarifa_servicios %>
+        <% t_tarifa_servicios.each_with_index do |servicio, i| %>
+          <%= servicio.nombre %>
+          <%= ', ' if i + 1 < t_tarifa_servicios.count %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-sm-2 col-form-label">
+      <%= f.label :t_recargo_ids, 'Recargos', class: "text-right opcional" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= f.select :t_recargo_ids, object_options(TRecargo), {}, { class: "form-control", multiple: true } %>
+      <% else %>
+        <% t_recargos = @t_conf_fac_automatica.t_recargos %>
+        <% t_recargos.each_with_index do |t_recargo, i| %>
+          <%= t_recargo.descripcion %>
+          <%= ', ' if i + 1 < t_recargos.count %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-2 col-form-label">
+      <%= f.label :t_tarifa_ids, 'Tarifas', class: "text-right opcional" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= f.select :t_tarifa_ids, object_options(TTarifa, 'nombre'), {}, { class: "form-control", multiple: true } %>
+      <% else %>
+        <% t_tarifas = @t_conf_fac_automatica.t_tarifas %>
+        <% t_tarifas.each_with_index do |t_tarifa, i| %>
+          <%= t_tarifa.descripcion %>
+          <%= ', ' if i + 1 < t_tarifas.count %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-sm-2 col-form-label">
+      <%= f.label :estatus, class: "text-right" %>
+    </div>
+    <div class="col-sm-4 input-value">
+      <% if editable %>
+        <%= f.select :estatus, opciones_de_estatus(false), {}, { :class => 'form-control m-b' } %>
+      <% else %>
+        <%= estatus_text @t_conf_fac_automatica.estatus %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

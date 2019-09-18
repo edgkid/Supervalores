@@ -1,1 +1,10 @@
-<%= render "form" %>
+<div class="row justify-content-md-center">
+  <div class="col-md-10 col-lg-9">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>Configurar Nueva Factura Automática</h5>
+      </div>
+      <%= render 'form', registro: @t_conf_fac_automatica, editable: true, return_to: t_conf_fac_automaticas_path %>
+    </div>
+  </div>
+</div>

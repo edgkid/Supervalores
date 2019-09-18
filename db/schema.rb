@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_13_220749) do
+ActiveRecord::Schema.define(version: 2019_09_18_023333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,8 +94,11 @@ ActiveRecord::Schema.define(version: 2019_09_13_220749) do
     t.bigint "t_periodo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "estatus"
+    t.bigint "user_id"
     t.index ["t_periodo_id"], name: "index_t_conf_fac_automaticas_on_t_periodo_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_conf_fac_automaticas_on_t_tipo_cliente_id"
+    t.index ["user_id"], name: "index_t_conf_fac_automaticas_on_user_id"
   end
 
   create_table "t_contactos", force: :cascade do |t|
@@ -607,6 +610,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_220749) do
   add_foreign_key "t_clientes", "t_estatuses"
   add_foreign_key "t_conf_fac_automaticas", "t_periodos"
   add_foreign_key "t_conf_fac_automaticas", "t_tipo_clientes"
+  add_foreign_key "t_conf_fac_automaticas", "users"
   add_foreign_key "t_contactos", "t_resolucions"
   add_foreign_key "t_cuenta_financieras", "t_presupuestos"
   add_foreign_key "t_cuenta_financieras", "t_tarifa_servicio_groups"
