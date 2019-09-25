@@ -57,8 +57,9 @@ CREATE MATERIALIZED VIEW cxc_t_usuario_x_rol AS SELECT dt.* FROM dblink('cxc_ser
 /* Migracion por Querys */
 
 CREATE MATERIALIZED VIEW tarifas_normalizados AS
-SELECT nombre, descripcion, rango_monto, recargo, estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
-FROM cxc_t_tarifa;
+SELECT 'Desconocida' nombre, 'Desconocida' descripcion, '0' rango_monto, 0 recargo, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
+UNION ALL (SELECT nombre, descripcion, rango_monto, recargo, estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
+	FROM cxc_t_tarifa);
 
 INSERT INTO t_tarifas (nombre, descripcion, rango_monto, recargo, estatus, created_at, updated_at)
 SELECT nombre, descripcion, rango_monto, recargo, estatus, created_at, updated_at
@@ -504,39 +505,39 @@ UPDATE t_clientes
 FROM t_resolucions trs
 WHERE trs.t_cliente_id = t_clientes."id";
 
-CREATE MATERIALIZED VIEW rols_normalizados AS
-SELECT url direccion_url, li_class, i_class, u_class, trim(nombre) nombre, descripcion, peso, estatus, icon_class, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, idt_rol prev_id
-FROM cxc_t_rol;
+--CREATE MATERIALIZED VIEW rols_normalizados AS
+--SELECT url direccion_url, li_class, i_class, u_class, trim(nombre) nombre, descripcion, peso, estatus, icon_class, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, idt_rol prev_id
+--FROM cxc_t_rol;
 
-INSERT INTO t_rols (direccion_url, li_class, i_class, u_class, nombre, descripcion, peso, estatus, icon_class, created_at, updated_at)
-SELECT direccion_url, li_class, i_class, u_class, nombre, descripcion, peso, estatus, icon_class, created_at, updated_at
-FROM rols_normalizados;
+--INSERT INTO t_rols (direccion_url, li_class, i_class, u_class, nombre, descripcion, peso, estatus, icon_class, created_at, updated_at)
+--SELECT direccion_url, li_class, i_class, u_class, nombre, descripcion, peso, estatus, icon_class, created_at, updated_at
+--FROM rols_normalizados;
 
-CREATE MATERIALIZED VIEW rols_desc_normalizados AS
-SELECT  trs.id t_rol_id, ctrd.id_objeto, TRIM(ctrd.nombre) nombre, ctrd.pagina, ctrd.estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 'Por definir' descripcion
-FROM cxc_t_rol_desc ctrd
-JOIN rols_normalizados rns ON ctrd.idt_rol = rns.prev_id
-JOIN t_rols trs ON rns.nombre = trs.nombre;
+--CREATE MATERIALIZED VIEW rols_desc_normalizados AS
+--SELECT  trs.id t_rol_id, ctrd.id_objeto, TRIM(ctrd.nombre) nombre, ctrd.pagina, ctrd.estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 'Por definir' descripcion
+--FROM cxc_t_rol_desc ctrd
+--JOIN rols_normalizados rns ON ctrd.idt_rol = rns.prev_id
+--JOIN t_rols trs ON rns.nombre = trs.nombre;
 
-INSERT INTO t_rol_descs (t_rol_id, id_objeto, nombre, pagina, estatus, created_at, updated_at, descripcion)
-SELECT t_rol_id, id_objeto, nombre, pagina, estatus, created_at, updated_at, descripcion
-FROM rols_desc_normalizados;
+--INSERT INTO t_rol_descs (t_rol_id, id_objeto, nombre, pagina, estatus, created_at, updated_at, descripcion)
+--SELECT t_rol_id, id_objeto, nombre, pagina, estatus, created_at, updated_at, descripcion
+--FROM rols_desc_normalizados;
 
 CREATE MATERIALIZED VIEW usuarios_normalizados AS
-SELECT ctus.nombre nombre, ctus.apellido apellido, true estado, null avatar, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, ctus.email email, '$2a$11$2QPwHf1tjsRuGKQpk.eOxu4LyJbMwrxwHwnooWhU6a1IptooFo4O6' encrypted_password, null reset_password_token, null reset_password_sent_at, null remember_created_at, 0 sign_in_count, null current_sign_in_at, null last_sign_in_at, null current_sign_in_ip, null last_sign_in_ip, null picture, 'SuperAdmin' "role", ctus.idt_usuario prev_id, ctus.idt_rol prev_rol_id
+SELECT ctus.nombre nombre, ctus.apellido apellido, 1 estatus, null avatar, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, ctus.email email, '$2a$11$2QPwHf1tjsRuGKQpk.eOxu4LyJbMwrxwHwnooWhU6a1IptooFo4O6' encrypted_password, null reset_password_token, null reset_password_sent_at, null remember_created_at, 0 sign_in_count, null current_sign_in_at, null last_sign_in_at, null current_sign_in_ip, null last_sign_in_ip, null picture, 'SuperAdmin' "role", ctus.idt_usuario prev_id, ctus.idt_rol prev_rol_id
 FROM cxc_t_usuario ctus;
 
-INSERT INTO users (nombre, apellido, estado, avatar, created_at, updated_at, email, encrypted_password, picture, "role")
-SELECT nombre, apellido, estado, avatar, created_at, updated_at, email, encrypted_password, picture, "role"
+INSERT INTO users (nombre, apellido, estatus, avatar, created_at, updated_at, email, encrypted_password, picture, "role")
+SELECT nombre, apellido, estatus, avatar, created_at, updated_at, email, encrypted_password, picture, "role"
 FROM usuarios_normalizados;
 
-INSERT INTO t_users_rols (t_rol_id, user_id)
-SELECT  trs.id t_rol_id, us.id user_id
-FROM cxc_t_usuario_x_rol ctuxr
-JOIN rols_normalizados rns ON ctuxr.idt_rol = rns.prev_id
-JOIN t_rols trs ON trs.nombre = rns.nombre
-JOIN usuarios_normalizados uns ON ctuxr.idt_usuario = uns.prev_id
-JOIN users us ON uns.email = us.email;
+--INSERT INTO t_users_rols (t_rol_id, user_id)
+--SELECT  trs.id t_rol_id, us.id user_id
+--FROM cxc_t_usuario_x_rol ctuxr
+--JOIN rols_normalizados rns ON ctuxr.idt_rol = rns.prev_id
+--JOIN t_rols trs ON trs.nombre = rns.nombre
+--JOIN usuarios_normalizados uns ON ctuxr.idt_usuario = uns.prev_id
+--JOIN users us ON uns.email = us.email;
 
 CREATE MATERIALIZED VIEW leyendas_normalizadas AS
 SELECT 0 anio, 'Desconocido' descripcion, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id

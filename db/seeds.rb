@@ -1,14 +1,5 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+# Los delete, update e insert mediante SQL, agregarlos en /data/migracion.cxc.sql
 connection = ActiveRecord::Base.connection()
-connection.execute(" DELETE FROM t_users_rols; commit;")
-connection.execute(" DELETE FROM users; commit;")
-connection.execute(" DELETE FROM t_rols; commit;")
 
 email = 'admin@cxc.com'
 pass = '2019AdminCxC'
@@ -16,16 +7,19 @@ pass = '2019AdminCxC'
 user = User.find_by(email: email)
 if user == nil
   user = User.new
-  user.nombre = "CXC"
+  user.nombre = "Cxc"
   user.apellido = "Administrador"
   user.email = email
   user.password = pass
   user.password_confirmation = pass
   user.role = "SuperAdmin"
-  user.estado = true
+  user.estatus = true
   user.save!
 end
 print "Usuario común #{email} - #{pass}\n"
+
+TRol.create(nombre: "SuperAdmin", descripcion:"Rol de usuario con acceso a todos los módulos del sistema", estatus: 1)
+TRol.create(nombre: "AdminCxC", descripcion:"Rol de usuario con acceso a todos los módulos del sistema. No gestiona usuarios", estatus: 1)
 
 # Requisitos de migracion
 #  sudo -u postgres psql -U postgres -c 'CREATE DATABASE cxc';
@@ -161,14 +155,10 @@ else
         sql = file.read
         file.close
         connection.execute(sql)
-        print "Migración ejecutada\n"
+        print "Migración ejecutada =D\n"
       end
     end
   end
 end
 
-TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "SuperAdmin", descripcion:"Rol de usuario con acceso a todos los módulos del sistema", peso:1, estatus: 1, icon_class:nil)
-TRol.create(direccion_url: nil, li_class: nil, i_class: nil, u_class: nil, nombre: "AdminCxC", descripcion:"Rol de usuario con acceso a todos los módulos del sistema. No gestiona usuarios", peso:1, estatus: 1, icon_class:nil)
-
-#Rol por usuario
-connection.execute(" INSERT INTO t_users_rols VALUES (1,1); commit;")
+# Los delete, update e insert mediante SQL, agregarlos en /data/migracion.cxc.sql
