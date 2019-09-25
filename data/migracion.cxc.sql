@@ -531,6 +531,8 @@ INSERT INTO users (nombre, apellido, estatus, avatar, created_at, updated_at, em
 SELECT nombre, apellido, estatus, avatar, created_at, updated_at, email, encrypted_password, picture, "role"
 FROM usuarios_normalizados;
 
+INSERT INTO t_rol_usuarios(user_id, t_rol_id, created_at, updated_at) VALUES (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 --INSERT INTO t_users_rols (t_rol_id, user_id)
 --SELECT  trs.id t_rol_id, us.id user_id
 --FROM cxc_t_usuario_x_rol ctuxr
