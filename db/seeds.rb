@@ -21,7 +21,7 @@ if user == nil
   user.email = email
   user.password = pass
   user.password_confirmation = pass
-  user.role = "SuperAdmin"
+  # user.role = "SuperAdmin"
   user.estado = true
   user.save!
 end
