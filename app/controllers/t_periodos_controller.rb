@@ -8,8 +8,22 @@ class TPeriodosController < ApplicationController
 	end
 
   def index
+    # @usar_dataTables = true
+    # @registros = TPeriodo.all
+
     @usar_dataTables = true
-    @registros = TPeriodo.all
+    @attributes_to_display = [
+      :descripcion, :rango_dias, :dia_tope, :mes_tope, :estatus
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: ApplicationDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }))
+      }
+    end
   end
 
   def show

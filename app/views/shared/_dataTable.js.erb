@@ -1,21 +1,24 @@
-$('.dataTables').DataTable({
+$('#ajax-datatable').DataTable({
   processing: true,
   serverSide: true,
   ajax: {
-    url: $('#daty').data('source')
+    url: $('#ajax-datatable').data('source')
   },
   pagingType: 'full_numbers',
   columns: [
-    {data: 'descripcion'},
-    {data: 'tasa'},
-    {data: 'periodo'},
-    {data: 'estatus'}
+    // {data: 'descripcion'},
+    // {data: 'tasa'},
+    // {data: 'periodo'},
+    // {data: 'estatus'}
+    <% @attributes_to_display.each do |attribute| %>
+      {data: '<%= attribute.to_s %>'},
+    <% end %>
   ],
 
   pageLength: 25,
   responsive: true,
   language: {
-    processing:     "Procesando",
+    processing:     "Procesando...",
     search:         "Buscar&nbsp;:",
     lengthMenu:    "Mostrar _MENU_ registros",
     info:           "De _TOTAL_ registro(s) <br/> Se muestran del _START_ al _END_.",

@@ -55,7 +55,7 @@
 $(document).ready(function() {
     <%= render partial: "shared/spiner_loading.js" %>
     <%= render partial: "shared/notices.js" %>
-    <% if @usar_dataTables != nil &&  @usar_dataTables %>    
+    <% if @usar_dataTables != nil &&  @usar_dataTables %>
       <%= render partial: "shared/dataTable.js" %>
     <% end %>
     
