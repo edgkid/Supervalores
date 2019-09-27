@@ -1,28 +1,41 @@
 $('.dataTables').DataTable({
+  processing: true,
+  serverSide: true,
+  ajax: {
+    url: $('#daty').data('source')
+  },
+  pagingType: 'full_numbers',
+  columns: [
+    {data: 'descripcion'},
+    {data: 'tasa'},
+    {data: 'periodo'},
+    {data: 'estatus'}
+  ],
+
   pageLength: 25,
   responsive: true,
   language: {
-              processing:     "Procesando",
-              search:         "Buscar&nbsp;:",
-              lengthMenu:    "Mostrar _MENU_ registros",
-              info:           "De _TOTAL_ registro(s) <br/> Se muestran del _START_ al _END_.",
-              infoEmpty:      "No existen registros por mostrar",
-              infoFiltered:   "No existen registros por mostrar",
-              infoPostFix:    "",
-              loadingRecords: "Cargando registros....",
-              zeroRecords:    "",
-              emptyTable:     "",
-              paginate: {
-                  first:      "Primero",
-                  previous:   "Anterior",
-                  next:       "Sguiente",
-                  last:       "Último"
-              },
-              aria: {
-                  sortAscending:  ": Activar para ordenar la columna de manera ascendente",
-                  sortDescending: ": Activar para ordenar la columna de manera descendente"
-              }
-          }
+    processing:     "Procesando",
+    search:         "Buscar&nbsp;:",
+    lengthMenu:    "Mostrar _MENU_ registros",
+    info:           "De _TOTAL_ registro(s) <br/> Se muestran del _START_ al _END_.",
+    infoEmpty:      "No existen registros por mostrar",
+    infoFiltered:   "No existen registros por mostrar",
+    infoPostFix:    "",
+    loadingRecords: "Cargando registros...",
+    zeroRecords:    "",
+    emptyTable:     "",
+    paginate: {
+      first:      "Primero",
+      previous:   "Anterior",
+      next:       "Siguiente",
+      last:       "Último"
+    },
+    aria: {
+      sortAscending:  ": Activar para ordenar la columna de manera ascendente",
+      sortDescending: ": Activar para ordenar la columna de manera descendente"
+    }
+  }
 });
 
 $('.dataTables.clickable').on('click', 'tbody tr', function () {
