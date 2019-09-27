@@ -19,9 +19,8 @@ class TPeriodosController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: ApplicationDatatable.new(
-        params.merge({
-          attributes_to_display: @attributes_to_display
-        }))
+        params.merge({ attributes_to_display: @attributes_to_display }),
+        view_context: view_context)
       }
     end
   end

@@ -1,4 +1,11 @@
 class ApplicationDatatable < AjaxDatatablesRails::ActiveRecord
+  extend Forwardable
+  def_delegator :@view, :url_for
+
+  def initialize(params, opts = {})
+    @view = opts[:view_context]
+    super
+  end
 
   def view_columns
     columns = {}
@@ -27,6 +34,7 @@ class ApplicationDatatable < AjaxDatatablesRails::ActiveRecord
           records_list.last.merge!({ "#{attribute}": record.send(attribute) })
         end
       end
+      records_list.last.merge!({ DT_RowId: url_for(record) })
     end
     records_list
   end

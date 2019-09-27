@@ -42,11 +42,11 @@ $('#ajax-datatable').DataTable({
 });
 
 $('.dataTables.clickable').on('click', 'tbody tr', function () {
-  link = $(this).data('link')
+  link = $(this).attr('id');
   if (link){
-    window.location.href = link
+    window.location.href = link;
   }
   else{
-    console.log("No se encuentra el atributo 'data-link'.")
+    console.log("No se encuentra el URL.");
   }
 });
