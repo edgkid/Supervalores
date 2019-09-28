@@ -34,7 +34,10 @@ class ApplicationDatatable < AjaxDatatablesRails::ActiveRecord
           records_list.last.merge!({ "#{attribute}": record.send(attribute) })
         end
       end
-      records_list.last.merge!({ DT_RowId: url_for(record) })
+      records_list.last.merge!({
+        DT_RowId: url_with_or_without_parent_resource_for(
+          record.try(params[:parent_resource] || ''), record)
+      })
     end
     records_list
   end
@@ -43,7 +46,10 @@ class ApplicationDatatable < AjaxDatatablesRails::ActiveRecord
     params[:controller].singularize.camelize.constantize.all
   end
 
-  private
+  protected
+    def url_with_or_without_parent_resource_for(parent_resource, resource)
+      if parent_resource then url_for([parent_resource, resource]) else url_for(resource) end
+    end
 
     def estatus_text estatus
       estatus == 0 ? "Inactivo" : "Disponible"

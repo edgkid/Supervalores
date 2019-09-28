@@ -24,7 +24,21 @@ class TRecibosController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @registros = TRecibo.all
+    @attributes_to_display = [
+      :fecha_pago, :t_metodo_pago, :justificacion,
+      :pago_recibido, :pago_pendiente, :monto_acreditado
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: TReciboDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display,
+          parent_resource: 't_factura'
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show

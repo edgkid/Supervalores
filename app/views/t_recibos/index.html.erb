@@ -13,12 +13,12 @@
           </div>
         </div>
         <div class="ibox-content">
-          <% if @registros != nil && @registros.count > 0 %>
+          <% if TRecibo.count > 0 %>
             <div class="table-responsive">
               <div class="col-12">
                 <p class="text-info">Puedes hacer clic en cualquier fila para ver el detalle del registro.</p>
               </div>
-              <table class="table table-striped table-bordered table-hover dataTables clickable">
+              <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= t_recibos_path(format: :json) %>" id="ajax-datatable">
                 <thead>
                   <tr>
                     <th>Fecha de pago</th>
@@ -29,18 +29,7 @@
                     <th>Monto Acreditado</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <% @registros.each do |t_recibo| %>
-                    <tr data-link="<%= t_factura_t_recibo_path(t_recibo.t_factura, t_recibo) %>">
-                      <td><%= t_recibo.fecha_pago %></td>
-                      <td><%= t_recibo.t_metodo_pago.forma_pago %></td>
-                      <td><%= t_recibo.justificacion %></td>
-                      <td><%= t_recibo.pago_recibido %></td>
-                      <td><%= t_recibo.pago_pendiente %></td>
-                      <td><%= t_recibo.monto_acreditado %></td>
-                    </tr>
-                  <% end %>
-                </tbody>
+                <tbody></tbody>
               </table>
             </div>
           <% else %>

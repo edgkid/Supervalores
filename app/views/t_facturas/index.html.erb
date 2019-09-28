@@ -5,16 +5,16 @@
         <div class="ibox-title">
           <div class="row">
             <div class="col-10">
-              <h5><%= @title %></h5>
+              <h5>Facturas Manuales</h5>
             </div>
             <div class="col-2">
-              <%= link_to 'Añadir Factura', @add_invoice_path, data: { turbolinks: false }, class: 'btn btn-primary float-right' %>
+              <%= link_to 'Añadir Factura', new_t_factura_path, data: { turbolinks: false }, class: 'btn btn-primary float-right' %>
             </div>
           </div>
         </div>
         <div class="ibox-content">
           <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover dataTables clickable">
+            <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= t_facturas_path(format: :json) %>" id="ajax-datatable">
               <thead>
                 <tr>
                   <th>No.</th>
@@ -26,24 +26,24 @@
                   <th>Total</th>
                   <th>Pendiente</th>
                   <th>Tp</th>
-                  <th>Prosp.</th>
+                  <!-- <th>Prosp.</th> -->
                 </tr>
               </thead>
               <tbody>
-                <% @t_facturas.each do |t_factura| %>
-                  <tr data-link="<%= preview_t_factura_path(t_factura) %>">
-                    <td><%= t_factura.id %></td>
-                    <td><%= (t_factura.t_resolucion && t_factura.t_resolucion.t_cliente) ? t_factura.t_resolucion.t_cliente.codigo : 'Sin cliente' %></td>
-                    <td><%= t_factura.t_resolucion ? t_factura.t_resolucion.resolucion : 'Sin resolución' %></td>
-                    <td><%= t_factura.fecha_notificacion %></td>
-                    <td><%= t_factura.fecha_vencimiento %></td>
-                    <td><%= t_factura.recargo %></td>
-                    <td><%= t_factura.total_factura %></td>
-                    <td><%= t_factura.pendiente_fact %></td>
-                    <td><%= t_factura.tipo %></td>
-                    <td><%= '' %></td>
-                  </tr>
-                <% end %>
+                <%# @t_facturas.each do |t_factura| %>
+                  <!-- <tr data-link="<%#= preview_t_factura_path(t_factura) %>">
+                    <td><%#= t_factura.id %></td>
+                    <td><%#= (t_factura.t_resolucion && t_factura.t_resolucion.t_cliente) ? t_factura.t_resolucion.t_cliente.codigo : 'Sin cliente' %></td>
+                    <td><%#= t_factura.t_resolucion ? t_factura.t_resolucion.resolucion : 'Sin resolución' %></td>
+                    <td><%#= t_factura.fecha_notificacion %></td>
+                    <td><%#= t_factura.fecha_vencimiento %></td>
+                    <td><%#= t_factura.recargo %></td>
+                    <td><%#= t_factura.total_factura %></td>
+                    <td><%#= t_factura.pendiente_fact %></td>
+                    <td><%#= t_factura.tipo %></td>
+                    <td><%#= '' %></td>
+                  </tr> -->
+                <%# end %>
               </tbody>
             </table>
           </div>
