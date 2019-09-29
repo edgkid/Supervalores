@@ -1,15 +1,24 @@
 class TTipoClientesController < ApplicationController
   before_action :seleccionar_tipo_cliente, only: [:show, :edit, :update, :destroy]
-
-  # load_and_authorize_resource
-
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path, :alert => exception.message
-	end
+  load_and_authorize_resource
 
   def index
     @usar_dataTables = true
-    @registros = TTipoCliente.all
+    @attributes_to_display = [
+      :codigo, :descripcion, :t_tipo_cliente_tipo,
+      :periodo, :t_tarifa, :estatus
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: TTipoClienteDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display,
+          parent_resource: 't_factura'
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show
@@ -23,7 +32,7 @@ class TTipoClientesController < ApplicationController
   end
 
   def create
-    @registro = TTipoCliente.new(parametros_tipo_cliente)
+    @registro = TTipoCliente.new(t_tipo_cliente_params)
 
     respond_to do |format|
       if @registro.save
@@ -39,7 +48,7 @@ class TTipoClientesController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(parametros_tipo_cliente)
+      if @registro.update(t_tipo_cliente_params)
         format.html { redirect_to @registro, notice: 'Tipo de cliente actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
@@ -69,7 +78,7 @@ class TTipoClientesController < ApplicationController
       @registro = TTipoCliente.find(params[:id])
     end
 
-    def parametros_tipo_cliente
+    def t_tipo_cliente_params
       params.require(:t_tipo_cliente).permit(:codigo, :descripcion, :t_tipo_cliente_tipo_id, :t_periodo_id, :estatus, :t_tarifa_id)
     end
 end

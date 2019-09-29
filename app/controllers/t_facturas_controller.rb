@@ -1,11 +1,6 @@
 class TFacturasController < ApplicationController
   before_action :set_t_factura, only: [:edit, :update, :preview, :show, :destroy]
-
   load_and_authorize_resource
-
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path, :alert => exception.message
-	end
 
   def new
     @do_not_use_plain_select2 = true
@@ -72,9 +67,18 @@ class TFacturasController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @t_facturas = TFactura.all
-    @title = 'Facturas Manuales'
-    @add_invoice_path = new_t_factura_path
+    @attributes_to_display = [
+      :id, :t_cliente, :t_resolucion, :fecha_notificacion, :fecha_vencimiento,
+      :recargo, :total_factura, :pendiente_fact, :tipo
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: TFacturaDatatable.new(
+        params.merge({ attributes_to_display: @attributes_to_display }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show

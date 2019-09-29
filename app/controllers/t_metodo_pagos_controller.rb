@@ -1,10 +1,19 @@
 class TMetodoPagosController < ApplicationController
-
   before_action :set_t_metodo_pago, only: [:edit, :update, :destroy]
 
   def index
     @usar_dataTables = true
-    @t_metodo_pagos = TMetodoPago.all
+    @attributes_to_display = [:forma_pago, :minimo, :maximo, :estatus]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: ApplicationDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show

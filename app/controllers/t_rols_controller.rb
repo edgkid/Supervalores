@@ -19,7 +19,15 @@ class TRolsController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @t_rols = TRol.all
+    @attributes_to_display = [:nombre, :descripcion, :estatus]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: ApplicationDatatable.new(
+        params.merge({ attributes_to_display: @attributes_to_display }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show

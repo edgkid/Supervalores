@@ -3,10 +3,6 @@ class TTarifaServiciosController < ApplicationController
 
   load_and_authorize_resource
 
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path, :alert => exception.message
-	end
-
   def new
     @t_tarifa_servicio = TTarifaServicio.new
   end
@@ -38,7 +34,21 @@ class TTarifaServiciosController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @t_tarifa_servicios = TTarifaServicio.all
+    @attributes_to_display = [
+      :codigo, :descripcion, :nombre,
+      :clase, :precio, :estatus
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: ApplicationDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display,
+          parent_resource: 't_factura'
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show

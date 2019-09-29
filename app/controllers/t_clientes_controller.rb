@@ -10,12 +10,22 @@ class TClientesController < ApplicationController
   before_action :companies_with_clients_with_resolutions, only: :find_by_cedula
   # load_and_authorize_resource
 
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path	, :alert => exception.message
-	end
-
   def index
     @registros = list_clientes
+    # @usar_dataTables = true
+    # @attributes_to_display = [
+    #   :codigo
+    # ]
+
+    # respond_to do |format|
+    #   format.html
+    #   format.json { render json: TClienteDatatable.new(
+    #     params.merge({
+    #       attributes_to_display: @attributes_to_display
+    #     }),
+    #     view_context: view_context)
+    #   }
+    # end
   end
 
   def show

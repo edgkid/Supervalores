@@ -1,11 +1,6 @@
 class TLeyendasController < ApplicationController
   before_action :set_t_leyenda, only: [:edit, :update, :show, :destroy]
-
   load_and_authorize_resource
-
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path, :alert => exception.message
-	end
 
   def new
     @t_leyenda = TLeyenda.new
@@ -38,7 +33,17 @@ class TLeyendasController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @t_leyendas = TLeyenda.all
+    @attributes_to_display = [:anio, :descripcion, :estatus]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: ApplicationDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show

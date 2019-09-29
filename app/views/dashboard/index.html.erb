@@ -127,9 +127,9 @@
 <%#= render "dashboard/scriptdashboard" %>
 
 <script type="text/javascript">
-  monthsInSpanish = <%= raw translate_months(get_list_of_past_months(3)) %>
-  invoiceData = <%= raw TFactura.count_invoices_by_months(3) %>
-  receiptData = <%= raw TRecibo.count_paid_receipts_by_months(3) %>
+  monthsInSpanish = <%= raw translate_months(get_list_of_past_months(5)) %>
+  invoiceData = <%= raw TFactura.count_invoices_by_months(5) %>
+  receiptData = <%= raw TRecibo.count_paid_receipts_by_months(5) %>
 
   $(document).ready(function () {
     setInvoiceVsReceiptLineChart(

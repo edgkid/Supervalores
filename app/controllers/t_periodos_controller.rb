@@ -1,15 +1,20 @@
 class TPeriodosController < ApplicationController
   before_action :seleccionar_periodo, only: [:show, :edit, :update, :destroy]
-
-  # load_and_authorize_resource
-
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path, :alert => exception.message
-	end
+  load_and_authorize_resource
 
   def index
     @usar_dataTables = true
-    @registros = TPeriodo.all
+    @attributes_to_display = [
+      :descripcion, :rango_dias, :dia_tope, :mes_tope, :estatus
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: ApplicationDatatable.new(
+        params.merge({ attributes_to_display: @attributes_to_display }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show
@@ -23,7 +28,7 @@ class TPeriodosController < ApplicationController
   end
 
   def create
-    @registro = TPeriodo.new(parametros_periodo)
+    @registro = TPeriodo.new(t_periodo_params)
     respond_to do |format|
       if @registro.save
         format.html { redirect_to @registro, notice: 'Período creado correctamente.' }
@@ -38,7 +43,7 @@ class TPeriodosController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(parametros_periodo)
+      if @registro.update(t_periodo_params)
         format.html { redirect_to @registro, notice: 'Período actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
@@ -68,7 +73,7 @@ class TPeriodosController < ApplicationController
       @registro = TPeriodo.find(params[:id])
     end
 
-    def parametros_periodo
+    def t_periodo_params
       params.require(:t_periodo).permit(:descripcion, :rango_dias, :dia_tope, :mes_tope, :estatus)
     end
 end
