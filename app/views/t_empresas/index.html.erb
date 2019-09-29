@@ -13,12 +13,12 @@
           </div>
         </div>
         <div class="ibox-content">
-          <% if @registros != nil && @registros.count > 0 %>
+          <% if TEmpresa.count > 0 %>
           <div class="table-responsive">
             <div class="col-12">
               <p class="text-info">Puedes hacer "click" en cualquier fila para ver el detalle del registro.</p>
             </div>
-            <table class="table table-striped table-bordered table-hover dataTables clickable">
+            <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= t_empresas_path(format: :json) %>" id="ajax-datatable">
               <thead>
                 <tr>
                   <th>Rif</th>
@@ -29,18 +29,7 @@
                   <th>Email</th>
                 </tr>
               </thead>
-              <tbody>
-                <% @registros.each do |registro| %>
-                <tr data-link="<%= polymorphic_url(registro) %>">
-                  <td><%= registro.rif %></td>
-                  <td><%= registro.razon_social %></td>
-                  <td><%= registro.t_empresa_tipo_valor.descripcion %></td>
-                  <td><%= registro.t_empresa_sector_economico.descripcion %></td>
-                  <td><%= registro.telefono %></td>
-                  <td><%= registro.email %></td>
-                </tr>
-                <% end %>
-              </tbody>
+              <tbody></tbody>
             </table>
           </div>
           <% else %>

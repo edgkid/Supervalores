@@ -1,15 +1,20 @@
 class TTipoPersonasController < ApplicationController
   before_action :seleccionar_tipo_persona, only: [:show, :edit, :update, :destroy]
-
-  # load_and_authorize_resource
-
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path, :alert => exception.message
-	end
+  load_and_authorize_resource
 
   def index
     @usar_dataTables = true
-    @registros = TTipoPersona.all
+    @attributes_to_display = [:descripcion, :estatus]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: ApplicationDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show
@@ -23,7 +28,7 @@ class TTipoPersonasController < ApplicationController
   end
 
   def create
-    @registro = TTipoPersona.new(parametros_tipo_persona)
+    @registro = TTipoPersona.new(t_tipo_persona_params)
 
     respond_to do |format|
       if @registro.save
@@ -39,7 +44,7 @@ class TTipoPersonasController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(parametros_tipo_persona)
+      if @registro.update(t_tipo_persona_params)
         format.html { redirect_to @registro, notice: 'Tipo de persona actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
@@ -69,7 +74,7 @@ class TTipoPersonasController < ApplicationController
       @registro = TTipoPersona.find(params[:id])
     end
 
-    def parametros_tipo_persona
+    def t_tipo_persona_params
       params.require(:t_tipo_persona).permit(:descripcion, :estatus)
     end
 end

@@ -13,8 +13,7 @@ class TTipoClientesController < ApplicationController
       format.html
       format.json { render json: TTipoClienteDatatable.new(
         params.merge({
-          attributes_to_display: @attributes_to_display,
-          parent_resource: 't_factura'
+          attributes_to_display: @attributes_to_display
         }),
         view_context: view_context)
       }

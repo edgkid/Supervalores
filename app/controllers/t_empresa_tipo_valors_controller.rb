@@ -1,15 +1,20 @@
 class TEmpresaTipoValorsController < ApplicationController
   before_action :seleccionar_tipo_valor, only: [:show, :edit, :update, :destroy]
-
-  ##load_and_authorize_resource
-
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path, :alert => exception.message
-	end
+  load_and_authorize_resource
 
   def index
     @usar_dataTables = true
-    @registros = TEmpresaTipoValor.all
+    @attributes_to_display = [:descripcion, :estatus]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: ApplicationDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show
@@ -23,7 +28,7 @@ class TEmpresaTipoValorsController < ApplicationController
   end
 
   def create
-    @registro = TEmpresaTipoValor.new(parametros_tipo_valor)
+    @registro = TEmpresaTipoValor.new(t_empresa_tipo_valor_params)
 
     respond_to do |format|
       if @registro.save
@@ -39,7 +44,7 @@ class TEmpresaTipoValorsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(parametros_tipo_valor)
+      if @registro.update(t_empresa_tipo_valor_params)
         format.html { redirect_to @registro, notice: 'Tipo de valor actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
@@ -69,7 +74,7 @@ class TEmpresaTipoValorsController < ApplicationController
       @registro = TEmpresaTipoValor.find(params[:id])
     end
 
-    def parametros_tipo_valor
+    def t_empresa_tipo_valor_params
       params.require(:t_empresa_tipo_valor).permit(:descripcion, :estatus)
     end
 end

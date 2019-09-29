@@ -1,15 +1,23 @@
 class TEmpresasController < ApplicationController
   before_action :seleccionar_empresa, only: [:show, :edit, :update, :destroy]
-
-  # load_and_authorize_resource
-
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path, :alert => exception.message
-	end
+  load_and_authorize_resource
 
   def index
     @usar_dataTables = true
-    @registros = TEmpresa.all
+    @attributes_to_display = [
+      :rif, :razon_social, :t_empresa_tipo_valor,
+      :t_empresa_sector_economico, :telefono, :email
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: TEmpresaDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show
@@ -23,7 +31,7 @@ class TEmpresasController < ApplicationController
   end
 
   def create
-    @registro = TEmpresa.new(parametros_empresa)
+    @registro = TEmpresa.new(t_empresa_params)
 
     respond_to do |format|
       if @registro.save
@@ -39,7 +47,7 @@ class TEmpresasController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(parametros_empresa)
+      if @registro.update(t_empresa_params)
         format.html { redirect_to @registro, notice: 'Empresa actualizada correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
@@ -69,7 +77,7 @@ class TEmpresasController < ApplicationController
       @registro = TEmpresa.find(params[:id])
     end
 
-    def parametros_empresa
+    def t_empresa_params
       params.require(:t_empresa).permit(:rif, :razon_social, :t_empresa_tipo_valor_id, :t_empresa_sector_economico_id, :direccion_empresa, :fax, :web, :telefono, :email)
     end
 end
