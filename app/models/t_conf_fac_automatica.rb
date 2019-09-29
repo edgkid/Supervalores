@@ -24,6 +24,18 @@ class TConfFacAutomatica < ApplicationRecord
     message: "|El periodo no puede estar vacío"
   }
 
+  def terminar_tareas_actuales
+    scheduler = Rufus::Scheduler.singleton
+    scheduler.jobs(tag: self.job_tag).each do |job|
+      job.unschedule
+      job.kill      
+    end
+  end
+
+  def job_tag
+    return "fac_auto_#{self.id}"
+  end
+
   def schedule_invoices(current_user)
     scheduler = Rufus::Scheduler.singleton
 
@@ -31,7 +43,7 @@ class TConfFacAutomatica < ApplicationRecord
       # scheduler.at "#{configuracion.fecha_inicio} 0000" do
       scheduler.in '2s' do
         # scheduler.schedule_every '1month' do |job|
-        $job = scheduler.schedule_every '5s' do |job|
+        $job = scheduler.schedule_every '5s', :tags => self.job_tag do |job|
           if TConfFacAutomatica.find(self.id).estatus != 1
             puts 'Terminating jobs!'
             job.unschedule if job.scheduled?
@@ -47,6 +59,7 @@ class TConfFacAutomatica < ApplicationRecord
             AND t_resolucions.t_tipo_cliente_id = #{self.t_tipo_cliente_id}",
           ).distinct
 
+          estatus_disponible = TEstatus.find_by(descripcion: 'Disponible')
           t_clientes.each do |t_cliente|
             t_factura = TFactura.new(
               fecha_notificacion: Date.today,
@@ -62,25 +75,27 @@ class TConfFacAutomatica < ApplicationRecord
               monto_emision: 0,
               justificacion: self.nombre_ciclo_facturacion,
               automatica: true,
-              t_estatus: TEstatus.first,
+              t_estatus: estatus_disponible,
               t_periodo: self.t_periodo,
               t_recargos: self.t_recargos,
               t_resolucion: self.t_tipo_cliente.t_resolucion,
               user: current_user
             )
+            # El error a partir de aca...
+            #t_factura.calculate_total(
+            #  self.t_tarifa_servicios.sum(:precio),
+            #  self.t_recargos.map { |r| r.tasa },
+            #  self.t_tarifas.map { |t| t.calculate_total }
+            #)
 
-            t_factura.calculate_total(
-              self.t_tarifa_servicios.sum(:precio),
-              self.t_recargos.map { |r| r.tasa },
-              self.t_tarifas.map { |t| t.calculate_total }
-            )
-
-            if t_factura.save
-              puts "\n" * 5 + '¡Facturas automáticas creadas!'
-            else
-              puts "\n" * 5 + '¡La factura no se pudo crear!'
-            end
+            #if t_factura.save
+            #  puts "\n" * 5 + '¡Facturas automáticas creadas!'
+            #else
+            #  puts "\n" * 5 + '¡La factura no se pudo crear!'
+            #end
           end
+          
+          puts self.job_tag + " -> " + self.updated_at.strftime("%s") #+ " -- " + jobs.inspect()
         end
       end
     end

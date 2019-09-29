@@ -29,5 +29,11 @@ module Supervalores
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.after_initialize do
+      admin = User.find(1)
+      TConfFacAutomatica.all.each do |task|
+        task.schedule_invoices(admin)
+      end
+    end
   end
 end

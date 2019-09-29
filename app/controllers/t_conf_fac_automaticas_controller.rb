@@ -25,6 +25,7 @@ class TConfFacAutomaticasController < ApplicationController
 
   def update
     if @t_conf_fac_automatica.update(t_conf_fac_automatica_params)
+      @t_conf_fac_automatica.terminar_tareas_actuales()
       @t_conf_fac_automatica.schedule_invoices(current_user)
 
       redirect_to t_conf_fac_automaticas_path, notice: 'Configuración de Factura actualizada exitosamente'
@@ -158,6 +159,7 @@ class TConfFacAutomaticasController < ApplicationController
 
   def destroy
     @t_conf_fac_automatica = TConfFacAutomatica.find(params[:id])
+    @t_conf_fac_automatica.terminar_tareas_actuales()
     @t_conf_fac_automatica.destroy
 
     redirect_to t_conf_fac_automaticas_path, notice: 'Configuración de Factura eliminada exitosamente'

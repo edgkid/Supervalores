@@ -1,8 +1,8 @@
 class DropTRolsTable < ActiveRecord::Migration[5.2]
   def self.up
-    drop_table :t_users_rols
-    drop_table :t_rol_descs
-    drop_table :t_rols
+    #drop_table :t_users_rols
+    #drop_table :t_rol_descs
+    #drop_table :t_rols
   end
 
   def self.down
