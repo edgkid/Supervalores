@@ -1,5 +1,4 @@
 class TReciboDatatable < ApplicationDatatable
-
   def view_columns
     super
     @view_columns.merge!({
@@ -14,5 +13,4 @@ class TReciboDatatable < ApplicationDatatable
     end
     records_array
   end
-
 end
