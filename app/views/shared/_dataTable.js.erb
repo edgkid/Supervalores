@@ -12,7 +12,7 @@ $('#ajax-datatable').DataTable({
     // {data: 'estatus'}
     <% @attributes_to_display.each do |attribute| %>
       {data: '<%= attribute.to_s %>'},
-    <% end %>
+    <% end if @attributes_to_display %>
   ],
 
   pageLength: 25,
