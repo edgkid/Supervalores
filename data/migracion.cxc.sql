@@ -158,8 +158,8 @@ UNION ALL (select descripcion, tasa, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTA
 from cxc_t_recargo
 ORDER BY 1);
 
-INSERT INTO t_recargos (descripcion, tasa, estatus, created_at, updated_at)
-SELECT descripcion, tasa, estatus, created_at, updated_at
+INSERT INTO t_recargos (descripcion, tasa, estatus, created_at, updated_at, t_periodo_id)
+SELECT descripcion, tasa, estatus, created_at, updated_at, 2
 FROM recargos_normalizados;
 
 CREATE MATERIALIZED VIEW empresas_normalizadas AS

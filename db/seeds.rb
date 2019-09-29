@@ -18,8 +18,7 @@ if user == nil
 end
 print "Usuario común #{email} - #{pass}\n"
 
-TRol.create(nombre: "SuperAdmin", descripcion:"Rol de usuario con acceso a todos los módulos del sistema", estatus: 1)
-TRol.create(nombre: "AdminCxC", descripcion:"Rol de usuario con acceso a todos los módulos del sistema. No gestiona usuarios", estatus: 1)
+TRol.create(nombre: "Administrador", descripcion:"Rol de usuario con acceso a todos los módulos del sistema", estatus: 1)
 
 # Requisitos de migracion
 #  sudo -u postgres psql -U postgres -c 'CREATE DATABASE cxc';
