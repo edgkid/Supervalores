@@ -15,16 +15,6 @@ ActiveRecord::Schema.define(version: 2019_09_18_023333) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "crono_jobs", force: :cascade do |t|
-    t.string "job_id", null: false
-    t.text "log"
-    t.datetime "last_performed_at"
-    t.boolean "healthy"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["job_id"], name: "index_crono_jobs_on_job_id", unique: true
-  end
-
   create_table "t_cajas", force: :cascade do |t|
     t.float "pago_recibido", null: false
     t.float "monto_factura", null: false
@@ -281,7 +271,7 @@ ActiveRecord::Schema.define(version: 2019_09_18_023333) do
     t.date "fecha_notificacion", null: false
     t.date "fecha_vencimiento", null: false
     t.float "recargo", null: false
-    t.float "recargo_desc", null: false
+    t.string "recargo_desc", null: false
     t.float "itbms", null: false
     t.integer "cantidad_total"
     t.float "importe_total", null: false
@@ -400,7 +390,6 @@ ActiveRecord::Schema.define(version: 2019_09_18_023333) do
     t.string "cedula", null: false
     t.string "nombre", null: false
     t.string "apellido", null: false
-    t.bigint "num_licencia", null: false
     t.bigint "t_empresa_id"
     t.string "cargo"
     t.string "telefono"
@@ -473,6 +462,8 @@ ActiveRecord::Schema.define(version: 2019_09_18_023333) do
     t.bigint "t_estatus_id", null: false
     t.integer "resolucion_anio"
     t.string "resolucion_codigo"
+    t.string "num_licencia"
+    t.string "codigo"
     t.bigint "t_tipo_cliente_id"
     t.index ["resolucion_anio", "resolucion_codigo"], name: "index_t_resolucions_on_resolucion_anio_and_resolucion_codigo", unique: true
     t.index ["t_cliente_id"], name: "index_t_resolucions_on_t_cliente_id"
