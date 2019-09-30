@@ -5,8 +5,8 @@ class TFacturaDatatable < ApplicationDatatable
 
     @view_columns ||= {
       id: { source: "TFactura.id" },
-      t_cliente: { source: "TCliente.codigo" },
-      t_resolucion: { source: "TFactura.t_resolucion.resolucion" },
+      codigo: { source: "TCliente.codigo" },
+      resolucion: { source: "TResolucion.resolucion_codigo" },
       fecha_notificacion: { source: "TFactura.fecha_notificacion" },
       fecha_vencimiento: { source: "TFactura.fecha_vencimiento" },
       recargo: { source: "TFactura.recargo" },
@@ -20,8 +20,8 @@ class TFacturaDatatable < ApplicationDatatable
     records.map do |record|
       {
         id: record.id,
-        t_cliente: record.t_resolucion.t_cliente.codigo,
-        t_resolucion: record.t_resolucion.resolucion,
+        codigo: record.t_resolucion.t_cliente.codigo,
+        resolucion: record.t_resolucion.resolucion_codigo,
         fecha_notificacion: record.fecha_notificacion,
         fecha_vencimiento: record.fecha_vencimiento,
         recargo: record.recargo,
@@ -33,5 +33,9 @@ class TFacturaDatatable < ApplicationDatatable
         })
       }
     end
+  end
+
+  def get_raw_records
+    TFactura.joins(:t_resolucion, { t_resolucion: [:t_cliente] })
   end
 end

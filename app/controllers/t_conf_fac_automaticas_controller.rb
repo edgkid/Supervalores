@@ -38,7 +38,7 @@ class TConfFacAutomaticasController < ApplicationController
   def index
     @usar_dataTables = true
     @attributes_to_display = [
-      :id, :nombre_ciclo_facturacion, :periodo,
+      :id, :nombre_ciclo_facturacion, :t_periodo,
       :fecha_inicio, :t_tipo_cliente
     ]
 

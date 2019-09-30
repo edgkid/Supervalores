@@ -13,4 +13,8 @@ class TReciboDatatable < ApplicationDatatable
     end
     records_array
   end
+
+  def get_raw_records
+    TRecibo.joins(:t_metodo_pago)
+  end
 end

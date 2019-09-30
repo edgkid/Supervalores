@@ -5,11 +5,11 @@ class TRecargosController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @attributes_to_display = [:descripcion, :tasa, :periodo, :estatus]
+    @attributes_to_display = [:descripcion, :tasa, :t_periodo, :estatus]
 
     respond_to do |format|
       format.html
-      format.json { render json: ApplicationDatatable.new(
+      format.json { render json: TRecargoDatatable.new(
         params.merge({ attributes_to_display: @attributes_to_display }),
         view_context: view_context)
       }

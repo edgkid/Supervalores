@@ -10,13 +10,9 @@ class ApplicationDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     columns = {}
     params[:columns].each do |_, column|
-      if column[:data] == 'periodo'
-        columns[:t_periodo] = { source: "TPeriodo.descripcion" }
-      else
-        columns[column[:data].to_sym] = {
-          source: "#{params[:controller].singularize.camelize}.#{column[:data]}"
-        }
-      end
+      columns[column[:data].to_sym] = {
+        source: "#{params[:controller].singularize.camelize}.#{column[:data]}"
+      }
     end
     @view_columns = columns
   end
@@ -26,9 +22,7 @@ class ApplicationDatatable < AjaxDatatablesRails::ActiveRecord
     records.each do |record|
       records_list << {}
       params[:attributes_to_display].each do |attribute|
-        if attribute == :periodo
-          records_list.last.merge!({ "#{attribute}": record.t_periodo.descripcion })
-        elsif attribute == :estatus
+        if attribute == :estatus
           records_list.last.merge!({ "#{attribute}": estatus_text(record.send(attribute)) })
         else
           records_list.last.merge!({ "#{attribute}": record.send(attribute) })

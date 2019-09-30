@@ -6,7 +6,7 @@ class TTipoClientesController < ApplicationController
     @usar_dataTables = true
     @attributes_to_display = [
       :codigo, :descripcion, :t_tipo_cliente_tipo,
-      :periodo, :t_tarifa, :estatus
+      :t_periodo, :t_tarifa, :estatus
     ]
 
     respond_to do |format|

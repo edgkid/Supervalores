@@ -17,4 +17,8 @@ class TEmpresaDatatable < ApplicationDatatable
     end
     records_array
   end
+
+  def get_raw_records
+    TEmpresa.joins(:t_empresa_tipo_valor, :t_empresa_sector_economico)
+  end
 end
