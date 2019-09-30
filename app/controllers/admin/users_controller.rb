@@ -1,11 +1,20 @@
 class Admin::UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-
   load_and_authorize_resource
 
   def index
     @usar_dataTables = true
-    @users = User.all
+    @attributes_to_display = [:nombre, :apellido, :email, :last_sign_in_at, :estatus]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: AdminUserDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show

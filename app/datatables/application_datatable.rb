@@ -34,10 +34,12 @@ class ApplicationDatatable < AjaxDatatablesRails::ActiveRecord
           records_list.last.merge!({ "#{attribute}": record.send(attribute) })
         end
       end
-      records_list.last.merge!({
-        DT_RowId: url_with_or_without_parent_resource_for(
-          record.try(params[:parent_resource] || ''), record)
-      })
+      unless params[:no_DT_RowId] == true
+        records_list.last.merge!({
+          DT_RowId: url_with_or_without_parent_resource_for(
+            record.try(params[:parent_resource] || ''), record)
+        })
+      end
     end
     records_list
   end

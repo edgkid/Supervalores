@@ -119,7 +119,7 @@
           </a>
           <ul class="nav nav-second-level">
             <% if can? :read, User %>
-              <li><%= link_to 'Usuarios', admin_users_path %></li>
+              <li><%= link_to 'Usuarios', users_path %></li>
             <% end %>
             <% if can? :read, TRol %>
               <li><%= link_to 'Roles de Usuario', t_rols_path %></li>

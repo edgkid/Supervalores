@@ -1,15 +1,20 @@
 class TEmpresaSectorEconomicosController < ApplicationController
   before_action :seleccionar_sector_economico, only: [:show, :edit, :update, :destroy]
-
-  ##load_and_authorize_resource
-
-  rescue_from CanCan::AccessDenied do |exception|
-		redirect_to dashboard_access_denied_path, :alert => exception.message
-	end
+  load_and_authorize_resource
 
   def index
     @usar_dataTables = true
-    @registros = TEmpresaSectorEconomico.all
+    @attributes_to_display = [:descripcion, :estatus]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: ApplicationDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show
@@ -23,7 +28,7 @@ class TEmpresaSectorEconomicosController < ApplicationController
   end
 
   def create
-    @registro = TEmpresaSectorEconomico.new(parametros_sector_economico)
+    @registro = TEmpresaSectorEconomico.new(t_empresa_sector_economico_params)
 
     respond_to do |format|
       if @registro.save
@@ -39,7 +44,7 @@ class TEmpresaSectorEconomicosController < ApplicationController
 
   def update
     respond_to do |format|
-      if @registro.update(parametros_sector_economico)
+      if @registro.update(t_empresa_sector_economico_params)
         format.html { redirect_to @registro, notice: 'Sector económico actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @registro }
       else
@@ -69,7 +74,7 @@ class TEmpresaSectorEconomicosController < ApplicationController
       @registro = TEmpresaSectorEconomico.find(params[:id])
     end
 
-    def parametros_sector_economico
+    def t_empresa_sector_economico_params
       params.require(:t_empresa_sector_economico).permit(:descripcion, :estatus)
     end
 end

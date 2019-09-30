@@ -4,7 +4,10 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  namespace :admin do
+  # namespace :admin do
+  #   resources :users
+  # end
+  scope module: 'admin' do
     resources :users
   end
   resources :t_leyendas
