@@ -10,14 +10,13 @@ function addRecargoRow () {
       </td>
       <td class="descripcion-cell"></td>
       <td class="quantity-cell"><input class="quantity" data-quantity="1" min="0" style="height: 28px; width: 100%;" type="number" value="1"></td>
-      <td class="price-cell"><input class="price recargo-input" min="0" readonly="readonly" step="0.01" style="height: 28px; width: 100%;" type="number"></td>
-      <td class="subtotal-cell subtotal-cell-surcharge" style="color: aqua; text-align: center;"></td>
+      <td class="price-cell"><input class="price recargo-input" min="0" step="0.01" style="height: 28px; width: 100%;" type="number"></td>
+      <td class="surcharge-subtotal-cell" style="color: aqua; text-align: center;"></td>
     </tr>
   `);
   $(`#t_recargo${i}`).select2({
     ajax: {
       url: '/t_recargos/find_by_descripcion',
-      //url: '/t_clientes/find_by_codigo.json',
       dataType: 'json',
       data: function (params) {
         var query = {
@@ -80,6 +79,7 @@ function getTotal(target, data = '', total = 0) {
 // Asigna el total al elemento HTML objetivo.
 function setTotal(target, total = 0) {
   // alert(calculateRatePrice());
+  console.log(`Total en setTotal: ${total}`);
   if (isNaN(total)) {
     $(target).text(0);
   } else {
@@ -117,10 +117,11 @@ function setSubTotal(thys, isQuantity = true) {
         // alert($(this).children().first().data('quantity'));
       }
     }
-    if ($(this).hasClass('subtotal-cell')) {
+    if ($(this).hasClass('subtotal-cell') || $(this).hasClass('surcharge-subtotal-cell') ) {
       if (isSurcharge) {
         // alert(price);
-        $(this).text(quantity * price * Number($('#total').text()) / 100);// Number($('#total').text()) / 100);
+        $(this).text(quantity * price * Number(getTotal('.subtotal-cell')) / 100);
+        // $(this).text(quantity * price * Number($('#total').text()) / 100);// Number($('#total').text()) / 100);
       } else {
         $(this).text(quantity * price);
       }
@@ -128,26 +129,22 @@ function setSubTotal(thys, isQuantity = true) {
   });
 }
 
-function cleanAllSurcharges() {
-  $('.subtotal-cell-surcharge').each(function () {
-    $(this).text(0);
-  });
-}
+// function cleanAllSurcharges() {
+//   $('.surcharge-subtotal-cell').each(function () {
+//     $(this).text(0);
+//   });
+// }
 
 function updateAllSurcharges() {
   $('.recargo-input').each(function () {
     let rate = $(this).val();
-    $(this).data('price', rate * Number($('#total').text()));
+    // console.log(Number(getTotal('.subtotal-cell')));
+    $(this).data('price', rate * Number(getTotal('.subtotal-cell')));
+    // $(this).data('price', rate * Number($('#total').text()));
     // alert(rate * Number($('#total').text()));
     setSubTotal(this, false);
-    setTotal('#total', getTotal('.subtotal-cell'));
+    console.log(`Total surcharges: ${getTotal('.surcharge-subtotal-cell')}`);
+    console.log(`Total: ${getTotal('.subtotal-cell') + getTotal('.surcharge-subtotal-cell')}`);
+    setTotal('#total', getTotal('.subtotal-cell') + getTotal('.surcharge-subtotal-cell'));
   });
-
-  // $('.recargo-input').each(function () {
-  //   let previousPrice = Number($(this).data('previous_price'));
-  //   $(this).val(previousPrice / 100);
-  //   $(this).data('price', previousPrice);
-    // setSubTotal(this, false);
-    // setTotal('#total', getTotal('.subtotal-cell'));
-  // });
 }
