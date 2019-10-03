@@ -36,6 +36,6 @@ class TFacturaDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    TFactura.joins(:t_resolucion, { t_resolucion: [:t_cliente] })
+    TFactura.joins(:t_resolucion, { t_resolucion: [:t_cliente] }).where(automatica: false)
   end
 end

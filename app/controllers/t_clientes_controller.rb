@@ -271,15 +271,15 @@ class TClientesController < ApplicationController
 
   def find_by_codigo
     search = parametros_de_busqueda[:search]
-    respond_with @clients_with_resolutions.where('codigo LIKE ?', "%#{search}%").first(10)
+    respond_with @clients_with_resolutions.where('t_clientes.codigo ILIKE ?', "%#{search}%").first(10)
   end
 
   def find_by_cedula
     search = parametros_de_busqueda[:search]
 
-    personas = TPersona.where('cedula LIKE ?', "%#{search}%").first(10)
+    personas = TPersona.where('cedula ILIKE ?', "%#{search}%").first(10)
     if personas.empty?
-      personas = @companies_with_clients_with_resolutions.where('rif LIKE ?', "%#{search}%").first(10)
+      personas = @companies_with_clients_with_resolutions.where('rif ILIKE ?', "%#{search}%").first(10)
     end
 
     respond_with personas
@@ -288,7 +288,7 @@ class TClientesController < ApplicationController
 
   def find_by_resolucion
     search = parametros_de_busqueda[:search]
-    respond_with TResolucion.where('resolucion_codigo LIKE ?', "%#{search}%").first(10)
+    respond_with TResolucion.where('resolucion_codigo ILIKE ?', "%#{search}%").first(10)
   end
 
   def find

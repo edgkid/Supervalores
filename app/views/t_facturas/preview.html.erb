@@ -67,9 +67,9 @@
       <tr>
         <td><%= fd.cantidad %></td>
         <td><%= fd.t_tarifa_servicio.nombre %></td>
-        <td><%= fd.t_tarifa_servicio.descripcion %></td>
-        <td><%= fd.t_tarifa_servicio.precio %></td>
-        <td><%= '' %></td>
+        <td><%= fd.cuenta_desc %></td>
+        <td><%= fd.precio_unitario %></td>
+        <td><%= fd.precio_unitario * fd.cantidad %></td>
       </tr>
     <% end %>
     <tr>
@@ -77,11 +77,11 @@
       <td><%= @t_tarifa.nombre %></td>
       <td><%= @t_tarifa.descripcion %></td>
       <td><%= @t_tarifa.monto %></td>
-      <td></td>
+      <td><%= @t_tarifa.monto %></td>
     </tr>
     <% @t_factura.t_recargos.each do |r| %>
       <tr>
-        <td><%= '' %></td>
+        <td></td>
         <td>Recargo</td>
         <td><%= r.descripcion %></td>
         <td><%= r.tasa %></td>
