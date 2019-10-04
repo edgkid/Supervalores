@@ -37,11 +37,12 @@ class TFactura < ApplicationRecord
     self.total_factura - self.t_recibos.sum(:pago_recibido)
   end
 
-  def calculate_total(services_total, surcharges, rates)
+  def calculate_total_surcharge
+    self.t_factura_detalles.sum(:precio_unitario) * self.t_recargos.sum(:tasa)
+  end
+
+  def calculate_total(services_total, rates)
     total = services_total
-    surcharges.each do |surcharge|
-      total += (total * surcharge)
-    end
     rates.each do |rate|
       total += rate
     end

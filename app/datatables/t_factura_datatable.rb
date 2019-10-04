@@ -24,9 +24,9 @@ class TFacturaDatatable < ApplicationDatatable
         resolucion: record.t_resolucion.resolucion_codigo,
         fecha_notificacion: record.fecha_notificacion,
         fecha_vencimiento: record.fecha_vencimiento,
-        recargo: record.recargo,
+        recargo: record.calculate_total_surcharge,
         total_factura: record.total_factura,
-        pendiente_fact: record.pendiente_fact,
+        pendiente_fact: record.calculate_pending_payment,
         tipo: record.tipo,
         DT_RowId: url_for({
           id: record.id, controller: 't_facturas', action: 'preview', only_path: true
@@ -36,6 +36,8 @@ class TFacturaDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    TFactura.joins(:t_resolucion, { t_resolucion: [:t_cliente] }).where(automatica: false)
+    TFactura.joins(:t_resolucion, { t_resolucion: [:t_cliente] }).where(
+      automatica: (params[:automatica] && params[:automatica] == 'true') ? true : false
+    )
   end
 end
