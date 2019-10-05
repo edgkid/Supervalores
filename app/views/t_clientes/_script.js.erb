@@ -22,7 +22,7 @@ $(document).ready(function(){
     $("#info_contacto").toggleClass("hide")
   })
   
-  mostrar_form_tipo_persona(<%= @registro.tipo_persona %> | $("#select-tipo-persona").val())
+  mostrar_form_tipo_persona(<%= @registro.tipo_persona_id %> | $("#select-tipo-persona").val())
   $("#select-tipo-persona").change(function(evt){
     select = $(evt.target)
     value = select.val()

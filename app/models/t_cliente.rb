@@ -77,7 +77,7 @@ class TCliente < ApplicationRecord
     end
   end
 
-  def tipo_persona
+  def tipo_persona_id
     if persona.is_a?(TPersona)
       return 2
     elsif persona.is_a?(TEmpresa)
@@ -98,5 +98,17 @@ class TCliente < ApplicationRecord
       return "Indeterminado"
     end
   end
-  
+
+  def tipo_persona
+    if persona.is_a?(TPersona)
+      return "Natural"
+    elsif persona.is_a?(TEmpresa)
+      return "Jurídica"
+    elsif persona.is_a?(TOtro)
+      return persona.t_tipo_persona.descripcion
+    else
+      return "null"
+    end
+  end
+
 end
