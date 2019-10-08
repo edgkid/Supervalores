@@ -25,7 +25,7 @@ switch(attribute) {
       $('#select2-select-resolucion-container').text('');
       $('#select2-select-resolucion-container').attr('title', '');
     } else {
-      $('#select-resolucion').select2({ data: data });
+      $('#select-resolucion').select2({ data: data, placeholder: 'Seleccione' });
 
       <% @t_tarifa = @t_cliente.t_resolucions.first.t_tipo_cliente.t_tarifa %>
 
@@ -56,7 +56,7 @@ switch(attribute) {
       $('#select2-select-resolucion-container').text('');
       $('#select2-select-resolucion-container').attr('title', '');
     } else {
-      $('#select-resolucion').select2({ data: data });
+      $('#select-resolucion').select2({ data: data, placeholder: 'Seleccione' });
 
       amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
       surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),

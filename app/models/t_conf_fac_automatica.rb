@@ -36,7 +36,7 @@ class TConfFacAutomatica < ApplicationRecord
     return "fac_auto_#{self.id}"
   end
 
-  def schedule_invoices(user)
+  def schedule_invoices
     scheduler = Rufus::Scheduler.singleton
 
     if self.estatus == 1
@@ -44,7 +44,7 @@ class TConfFacAutomatica < ApplicationRecord
       scheduler.in '2s' do
         # scheduler.schedule_every '1month' do |job|
         scheduler.schedule_every '5s', :tags => self.job_tag do |job|
-          create_invoices(user, job)
+          create_invoices(job)
         end
       end
     end
@@ -87,8 +87,7 @@ class TConfFacAutomatica < ApplicationRecord
         t_estatus: estatus_disponible,
         t_periodo: configuracion_actual.t_periodo,
         t_recargos: configuracion_actual.t_recargos,
-        t_resolucion: configuracion_actual.t_tipo_cliente.t_resolucion,
-        user: user
+        t_resolucion: configuracion_actual.t_tipo_cliente.t_resolucion
       )
 
       configuracion_actual.t_tarifa_servicios.each do |t_tarifa_servicio|
@@ -101,11 +100,16 @@ class TConfFacAutomatica < ApplicationRecord
         )
       end
 
-      # El error a partir de aca...
       t_factura.calculate_total(
         configuracion_actual.t_tarifa_servicios.sum(:precio),
         configuracion_actual.t_tarifas.map { |t| t.calculate_total }
       )
+
+      # configuracion_actual.t_recargos.each do |t_recargo|
+      #   scheduler.schedule_every "#{t_recargo.t_periodo.rango_dias}d" do |recargo_job|
+      #     t_factura.t_recargos
+      #   end
+      # end
 
       if t_factura.save!
         puts "\n" * 5 + '¡Facturas automáticas creadas!'

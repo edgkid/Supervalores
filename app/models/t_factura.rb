@@ -14,7 +14,8 @@ class TFactura < ApplicationRecord
   has_many :t_nota_creditos, dependent: :destroy
   has_many :t_estado_cuentums, dependent: :destroy
   has_many :t_clientes, through: :t_estado_cuentum
-  has_many :t_recargos, dependent: :nullify
+  has_many :t_recargo_facturas, dependent: :destroy
+  has_many :t_recargos, through: :t_recargo_facturas
 
   validates :fecha_notificacion,
     presence: {

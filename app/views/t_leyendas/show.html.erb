@@ -1,3 +1,10 @@
-<% provide(:texto_boton, 'Leyenda') %>
-<% @is_show = (controller.action_name == 'show') ? true : false %>
-<%= render 'form' %>
+<div class="row justify-content-md-center">
+  <div class="col-md-7 col-lg-6">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>Leyenda de Factura</h5>
+      </div>
+      <%= render 'form', registro: @t_leyenda, editable: false, return_to: t_leyendas_path %>
+    </div>
+  </div>
+</div>

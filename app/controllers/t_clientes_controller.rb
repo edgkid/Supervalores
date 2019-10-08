@@ -1,5 +1,5 @@
 class TClientesController < ApplicationController
-  include TClientesHelper
+  # include TClientesHelper
 
   respond_to :js, only: [:find]
   respond_to :json, only: [:find_by_codigo, :find_by_resolucion, :find_by_cedula]

@@ -9,9 +9,10 @@ class TConfFacAutomaticasController < ApplicationController
 
   def create
     @t_conf_fac_automatica = TConfFacAutomatica.new(t_conf_fac_automatica_params)
+    @t_conf_fac_automatica.user = current_user
 
     if @t_conf_fac_automatica.save
-      @t_conf_fac_automatica.schedule_invoices(current_user)
+      @t_conf_fac_automatica.schedule_invoices
 
       redirect_to t_conf_fac_automaticas_path, notice: 'Configuración de Factura creada exitosamente'
     else
@@ -24,9 +25,11 @@ class TConfFacAutomaticasController < ApplicationController
   end
 
   def update
+    @t_conf_fac_automatica.user = current_user
+    
     if @t_conf_fac_automatica.update(t_conf_fac_automatica_params)
       @t_conf_fac_automatica.terminar_tareas_actuales()
-      @t_conf_fac_automatica.schedule_invoices(current_user)
+      @t_conf_fac_automatica.schedule_invoices
 
       redirect_to t_conf_fac_automaticas_path, notice: 'Configuración de Factura actualizada exitosamente'
     else
