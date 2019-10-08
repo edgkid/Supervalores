@@ -5,13 +5,13 @@ class TMetodoPago < ApplicationRecord
   validates :descripcion, presence: { message: "|La descripción no debe estar vacía" }
   validates :minimo, numericality: {
     message: "|El monto mínimo debe ser un número válido"
-  }
+  }, allow_blank: true
   validates :maximo, numericality: {
     message: "|El monto máximo debe ser un número válido"
-  }
+  }, allow_blank: true
 
-	validate :validar_minimo, on: [:create, :update ]
-	validate :validar_montos, on: [:create, :update ]
+	validate :validar_minimo, on: [:create, :update]
+	validate :validar_montos, on: [:create, :update]
 
 	def validar_minimo
 	  if minimo != nil && minimo < 0
