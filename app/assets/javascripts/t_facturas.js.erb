@@ -6,7 +6,12 @@ function addRecargoRow () {
     <tr id="recargo${i}" style="background-color: #1C84C6;">
       <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
       <td>
-        <select class="select-recargo" data-first_time="true" id="t_recargo${i}" name="t_factura[t_recargo_ids][]" style="width: 100%;"></select>
+        <select class="select-recargo" data-first_time="true" id="t_recargo${i}" name="t_factura[t_recargo_ids][]" style="width: 100%;">
+          <option></option>
+          <% TRecargo.all.each do |t_recargo| %>
+            <option data-rate="<%= t_recargo.tasa %>" value="<%= t_recargo.id %>"><%= t_recargo.descripcion %></option>
+          <% end %>
+        </select>
         <input class="recargo-descripcion" name="dynamic_attributes[t_recargo][descripcions][]" type="hidden">
         <input class="recargo-id" name="dynamic_attributes[t_recargo][ids][]" type="hidden">
       </td>
@@ -16,28 +21,29 @@ function addRecargoRow () {
       <td class="surcharge-subtotal-cell" style="color: aqua; text-align: center;"></td>
     </tr>
   `);
-  $(`#t_recargo${i}`).select2({
-    ajax: {
-      url: '/t_recargos/find_by_descripcion',
-      dataType: 'json',
-      data: function (params) {
-        var query = {
-          search: params.term
-        }
+  $(`#t_recargo${i}`).select2({ placeholder: 'Seleccione' });
+  // $(`#t_recargo${i}`).select2({
+  //   ajax: {
+  //     url: '/t_recargos/find_by_descripcion',
+  //     dataType: 'json',
+  //     data: function (params) {
+  //       var query = {
+  //         search: params.term
+  //       }
 
-        return query;
-      },
-      processResults: function (data) {
-        return {
-          results: $.map(data, function(t_recargo, i) {
-            return { id: t_recargo.id, text: t_recargo.descripcion, rate: t_recargo.tasa } 
-          })
-        };
-      },
-      delay: 250
-    },
-    placeholder: 'Seleccione'
-  });
+  //       return query;
+  //     },
+  //     processResults: function (data) {
+  //       return {
+  //         results: $.map(data, function(t_recargo, i) {
+  //           return { id: t_recargo.id, text: t_recargo.descripcion, rate: t_recargo.tasa } 
+  //         })
+  //       };
+  //     },
+  //     delay: 250
+  //   },
+  //   placeholder: 'Seleccione'
+  // });
   i++;
 }
 
@@ -157,7 +163,7 @@ function setDynamicClientData(inputClass, dynamicData) {
     switch($(this).attr('id')) {
       case 'select-codigo-input':
         // alert($(this).attr('id'));
-        console.log(dynamicData.t_cliente);
+        // console.log(dynamicData.t_cliente);
         var data = [{ id: dynamicData.t_cliente.codigo_select, text: dynamicData.t_cliente.codigo_select},]
 
         var option = new Option(dynamicData.t_cliente.codigo_select, dynamicData.t_cliente.codigo_select, true, true);
@@ -210,11 +216,26 @@ function setDynamicSurchargesData(selectClass, descriptionInputClass, idInputCla
 
   i = 0;
   $(selectClass).each(function () {
-    var option = new Option(descriptions[i], ids[i], true, true);
-    $(this).append(option).trigger('change');
+    // var option = new Option(descriptions[i], ids[i], true, true);
+    // $(this).append(option).trigger('change');
 
     $(this).val(ids[i]);
     $(this).trigger('change');
     i++;
+
+    // data = $(this).select2('data')[0];
+    // rate = Number(data.rate);
+    // console.log($(this).select2('data')[0]);
+    // $(this).parent().siblings().each(function () {
+    //   if ($(this).hasClass('price-cell') || $(this).hasClass('surcharge-subtotal-cell')) {
+    //     let priceInput = $(this).children().first();
+
+    //     // cleanAllSurcharges();
+    //     //setTotal('#total', getTotal('.subtotal-cell'));
+    //     //priceInput.val(rate);
+    //     //updateAllSurcharges();
+    //     //setTotal('#total', getTotal('.subtotal-cell') + getTotal('.surcharge-subtotal-cell') + Number($('#total-rate').text()));
+    //   }
+    // });
   });
 }

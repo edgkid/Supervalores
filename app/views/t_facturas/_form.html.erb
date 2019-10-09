@@ -238,7 +238,9 @@
 
       data = $(this).select2('data')[0];
       rate = Number(data.rate);
-      // console.log(data.rate);
+      rate = $(this).find("option:selected").data('rate');
+
+      // console.log($(this).find("option:selected").data('rate'));
 
       // var surcharge = Number($(this).find("option:selected").val());
       $(this).find("option:selected").parent().parent().siblings().each(function () {
