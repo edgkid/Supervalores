@@ -2,12 +2,16 @@
   <tbody>
     <tr>
       <th width="25%">Estatus:</th>
-      <td><%= @t_cliente.t_estatus.estatus if @t_cliente %></td>
+      <td>
+        <%= @t_cliente.t_estatus.estatus if @t_cliente %>
+        <input class="dynamic-client" id="client-estatus-input" name="dynamic_attributes[t_cliente][estatus]" type="hidden" value="<%= @t_cliente.t_estatus.estatus if @t_cliente %>">
+      </td>
     </tr>
     <tr>
       <th>Cliente:</th>
       <td>
         <%= @t_cliente.codigo if @t_cliente %>
+        <input class="dynamic-client" id="client-codigo-input" name="dynamic_attributes[t_cliente][codigo]" type="hidden" value="<%= @t_cliente.codigo if @t_cliente %>">
       </td>
     </tr>
     <tr>
@@ -15,22 +19,33 @@
       <td>
         <% if @t_cliente && @t_persona && @t_persona.t_empresa %>
           <%= @t_persona.t_empresa.rif %>
+          <input class="dynamic-client" name="dynamic_attributes[t_cliente][empresa]" type="hidden" value="<%= @t_persona.t_empresa.rif %>">
         <% else %>
           <%= @t_empresa.rif if @t_empresa %>
+          <input class="dynamic-client" name="dynamic_attributes[t_cliente][empresa]" type="hidden" value="<%= @t_empresa.rif if @t_empresa %>">
         <% end %>
       </td>
     </tr>
     <tr>
       <th>Dirección:</th>
-      <td><%= @t_persona.t_empresa.direccion_empresa if @t_persona && @t_persona.t_empresa %></td>
+      <td>
+        <%= @t_persona.t_empresa.direccion_empresa if @t_persona && @t_persona.t_empresa %>
+        <input class="dynamic-client" name="dynamic_attributes[t_cliente][direccion]" type="hidden" value="<%= @t_persona.t_empresa.direccion_empresa if @t_pona && @t_persona.t_empresa %>">
+      </td>
     </tr>
     <tr>
       <th>Telf.:</th>
-      <td><%= @t_cliente.telefono if @t_cliente %></td>
+      <td>
+        <%= @t_cliente.telefono if @t_cliente %>
+        <input class="dynamic-client" name="dynamic_attributes[t_cliente][telefono]" type="hidden" value="<%= @t_cliente.telefono if @t_cliente %>">
+      </td>
     </tr>
     <tr>
       <th>E-mail:</th>
-      <td><%= @t_cliente.email if @t_cliente %></td>
+      <td>
+        <%= @t_cliente.email if @t_cliente %>
+        <input class="dynamic-client" name="dynamic_attributes[t_cliente][email]" type="hidden" value="<%= @t_cliente.email if @t_cliente %>">
+      </td>
     </tr>
   </tbody>
 </table>

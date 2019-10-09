@@ -50,6 +50,9 @@ switch(attribute) {
       $('#select2-select-cedula-container').text('');
       $('#select2-select-cedula-container').attr('title', '');
     <% end %>
+
+    $('#select-codigo-input').val($('#select-codigo').val());
+    $('#select-cedula-input').val($('#select2-select-cedula-container').text());
     break;
   case 'select-cedula':
     if (zeroLength) {
@@ -71,6 +74,9 @@ switch(attribute) {
 
     $('#select2-select-codigo-container').text(codigo);
     $('#select2-select-codigo-container').attr('title', codigo);
+
+    $('#select-codigo-input').val($('#select2-select-codigo-container').text());
+    $('#select-cedula-input').val($('#select-cedula').val());
     break;
   case 'select-resolucion':
     $('#select2-select-codigo-container').text(codigo);
@@ -101,6 +107,8 @@ switch(attribute) {
 <% else %>
   $('#input-resolucion').val($('#select-resolucion').val());
 <% end %>
+
+$('#select-resolucion-input').val($('#select-resolucion').text());
 
 // alert($('#input-resolucion').val());
 // alert(<%#= @t_resolucion.t_tipo_cliente.t_tarifa.monto %>);

@@ -33,7 +33,7 @@ class TFacturasController < ApplicationController
       @notice.messages[:t_resolucion] -= [@notice.messages[:t_resolucion].first]
       @notice.messages[:t_periodo] -= [@notice.messages[:t_periodo].first]
       @do_not_use_plain_select2 = true
-      render 'new'
+      render 'new', params[:dynamic_attributes]
     end
   end
 

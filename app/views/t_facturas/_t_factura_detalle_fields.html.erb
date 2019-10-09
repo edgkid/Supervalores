@@ -1,7 +1,9 @@
 <tr class="fields" style="background-color: #1AB394; color: aquamarine;">
   <td><input class="deletable deletable-servicio checkbox checkbox-success" type="checkbox" name="deletable"></td>
   <td>
-    <%= f.select :t_tarifa_servicio_id, options_for_select(TTarifaServicio.all.map {|s| [s.nombre, s.id, {'data-descripcion' => s.descripcion, 'data-value' => s.precio}]}), {include_blank: 'Seleccione'}, {class: 'select2 select2-dynamic select-servicio', style: 'width: 100%'} %>
+    <%= f.select :t_tarifa_servicio_id, options_for_select(TTarifaServicio.all.map {|s| [s.nombre, s.id, {'data-id': s.id, 'data-nombre': s.nombre, 'data-descripcion': s.descripcion, 'data-value': s.precio}]}), {include_blank: 'Seleccione'}, {class: 'select2 select2-dynamic select-servicio', style: 'width: 100%'} %>
+    <input class="service-descripcion" name="dynamic_attributes[t_tarifa_servicio][descripcions][]" type="hidden">
+    <input class="service-id" name="dynamic_attributes[t_tarifa_servicio][ids][]" type="hidden">
   </td>
   <td class="descripcion-cell">
     <%= f.text_field :cuenta_desc, style: 'width: 100%;' %>

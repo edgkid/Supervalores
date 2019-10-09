@@ -5,6 +5,7 @@
       <select class="search-client" id="select-codigo" tabindex="2" style="width: 100%;">
         <option></option>
       </select>
+      <input class="dynamic-client" id="select-codigo-input" name="dynamic_attributes[t_cliente][codigo_select]" type="hidden">
     </div>
   </div>
   <div class="col-md-4">
@@ -13,6 +14,7 @@
       <select class="search-client" id="select-cedula" tabindex="2" style="width: 100%;">
         <option></option>
       </select>
+      <input class="dynamic-client" id="select-cedula-input" name="dynamic_attributes[t_cliente][cedula]" type="hidden">
     </div>
   </div>
   <div class="col-md-4">
@@ -22,6 +24,7 @@
         <option></option>
       </select>
       <%= f.hidden_field :t_resolucion_id, id: 'input-resolucion', value: '' %>
+      <input class="dynamic-client" id="select-resolucion-input" name="dynamic_attributes[t_cliente][resolucion]" type="hidden">
     </div>
   </div>
 </div>

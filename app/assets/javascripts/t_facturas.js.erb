@@ -79,7 +79,7 @@ function getTotal(target, data = '', total = 0) {
 // Asigna el total al elemento HTML objetivo.
 function setTotal(target, total = 0) {
   // alert(calculateRatePrice());
-  console.log(`Total en setTotal: ${total}`);
+  // console.log(`Total en setTotal: ${total}`);
   if (isNaN(total)) {
     $(target).text(0);
   } else {
@@ -147,4 +147,56 @@ function updateAllSurcharges() {
     console.log(`Total: ${getTotal('.subtotal-cell') + getTotal('.surcharge-subtotal-cell')}`);
     setTotal('#total', getTotal('.subtotal-cell') + getTotal('.surcharge-subtotal-cell'));
   });
+}
+
+function setDynamicClientData(inputClass, dynamicData) {
+  $(inputClass).each(function () {
+    // console.log($(this).attr('id'));
+    switch($(this).attr('id')) {
+      case 'select-codigo-input':
+        // alert($(this).attr('id'));
+        console.log(dynamicData.t_cliente);
+        var data = [{ id: dynamicData.t_cliente.codigo_select, text: dynamicData.t_cliente.codigo_select},]
+
+        var option = new Option(dynamicData.t_cliente.codigo_select, dynamicData.t_cliente.codigo_select, true, true);
+        $('#select-codigo').append(option).trigger('change');
+        // $('#select-resolucion').val('1');
+        // $('#select-resolucion').trigger('change');
+
+        $('#select-codigo-input').val(dynamicData.t_cliente.codigo_select);
+        break;
+    }
+  });
+}
+
+function setDynamicServicesData(selectClass, descriptionInputClass, idInputClass, descriptions, ids) {
+  // dynamicDataToModify = dynamicData;
+  i = 0;
+  $(selectClass).each(function () {
+    $(this).val(ids[i]);
+    $(this).trigger('change');
+    i++;
+  });
+  // dynamicDataToModify = dynamicData;
+  // $(descriptionInputClass).each(function () {
+  //   // console.log(dynamicDataToModify);
+  //   $(this).val(descriptions[i]);
+  //   i++;
+  //   // dynamicDataToModify.splice(0, 1);
+  // });
+
+  // i = 0;
+  // $(idInputClass).each(function () {
+  //   $(this).val(ids[i]);
+  //   i++;
+  // });
+  // i = 0;
+
+  // $(selectClass).each(function () {
+  //   console.log(dynamicData[i]);
+  //   $(this).val(dynamicData[i]);
+  //   $(this).trigger('change');
+  //   i++;
+  //   // dynamicDataToModify.splice(0, 1);
+  // });
 }

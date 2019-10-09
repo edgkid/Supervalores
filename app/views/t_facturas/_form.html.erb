@@ -170,6 +170,29 @@
       placeholder: 'Seleccione'
     });
 
+    $("#select-cedula").select2({
+      ajax: {
+        url: '<%= "#{t_clientes_find_by_cedula_path}" %>',
+        dataType: 'json',
+        data: function (params) {
+          var query = {
+            search: params.term
+          }
+
+          return query;
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function(persona, i) {
+              return { id: persona.cedula ? persona.cedula : persona.rif, text: persona.cedula ? persona.cedula : persona.rif } 
+            })
+          };
+        },
+        delay: 250
+      },
+      placeholder: 'Seleccione'
+    });
+
     $("#select-resolucion").select2({
       ajax: {
         url: '<%= "#{t_clientes_find_by_resolucion_path}" %>',
@@ -192,29 +215,6 @@
       },
       placeholder: 'Seleccione',
       minimumInputLength: 1
-    });
-
-    $("#select-cedula").select2({
-      ajax: {
-        url: '<%= "#{t_clientes_find_by_cedula_path}" %>',
-        dataType: 'json',
-        data: function (params) {
-          var query = {
-            search: params.term
-          }
-
-          return query;
-        },
-        processResults: function (data) {
-          return {
-            results: $.map(data, function(persona, i) {
-              return { id: persona.cedula ? persona.cedula : persona.rif, text: persona.cedula ? persona.cedula : persona.rif } 
-            })
-          };
-        },
-        delay: 250
-      },
-      placeholder: 'Seleccione'
     });
 
     $('.search-client').change(function() {
@@ -253,7 +253,9 @@
 
     $(document).on('change', '.select-servicio', function(e) {
       var price = Number($(this).find("option:selected").data('value')),
-          descripcion = $(this).find("option:selected").data('descripcion');
+          descripcion = $(this).find("option:selected").data('descripcion'),
+          nombre = $(this).find("option:selected").data('nombre'),
+          id = $(this).find("option:selected").data('id');
       $(this).find("option:selected").parent().parent().siblings().each(function () {
         if ($(this).hasClass('price-cell')) {
           // alert($(this).children().first().val());
@@ -274,14 +276,30 @@
       setTotal('#total', getTotal('.subtotal-cell'));
       updateAllSurcharges();
       setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
+
+      // Se coloca el nombre de la tarifa en un input invisible, por si el formulario es inválido, cargue esta data.
+      $(this).siblings('input.service-descripcion').val(nombre);
+      $(this).siblings('input.service-id').val(id);
     });
 
     $('form').submit(function(event) {
       event.preventDefault(); //this will prevent the default submit
       //alert($('#total').text());
       $('#input-total-factura').val(Number($('#total').text()));
+      // $('#select-resolucion-input').val($('#input-resolucion').val());
       $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
     });
+
+    <% if params[:dynamic_attributes] %>
+      setDynamicClientData('.dynamic-client', JSON.parse('<%= raw params[:dynamic_attributes].to_json %>'));
+      setDynamicServicesData(
+        '.select-servicio',
+        '.service-descripcion',
+        '.service-id',
+        JSON.parse('<%= raw params[:dynamic_attributes][:t_tarifa_servicio][:descripcions].to_json %>'),
+        JSON.parse('<%= raw params[:dynamic_attributes][:t_tarifa_servicio][:ids].to_json %>')
+      );
+    <% end %>
   });
 </script>
 
