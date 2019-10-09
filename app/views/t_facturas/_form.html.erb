@@ -229,6 +229,9 @@
     });
 
     $(document).on('change', '.select-recargo', function(e) {
+      var descripcion = $(this).find("option:selected").text(),
+          id = $(this).find("option:selected").attr('value');
+      // console.log(`Descripción: ${descripcion}, id: ${id}`);
       // alert($(".select-recargo option:selected").data('value'));
       // var surcharge = Number($(this).find("option:selected").data('value'));
       // var selectRecargo = $(this);
@@ -249,6 +252,9 @@
           setTotal('#total', getTotal('.subtotal-cell') + getTotal('.surcharge-subtotal-cell') + Number($('#total-rate').text()));
         }
       });
+
+      $(this).siblings('input.recargo-descripcion').val(descripcion);
+      $(this).siblings('input.recargo-id').val(id);
     });
 
     $(document).on('change', '.select-servicio', function(e) {
@@ -291,14 +297,28 @@
     });
 
     <% if params[:dynamic_attributes] %>
-      setDynamicClientData('.dynamic-client', JSON.parse('<%= raw params[:dynamic_attributes].to_json %>'));
-      setDynamicServicesData(
-        '.select-servicio',
-        '.service-descripcion',
-        '.service-id',
-        JSON.parse('<%= raw params[:dynamic_attributes][:t_tarifa_servicio][:descripcions].to_json %>'),
-        JSON.parse('<%= raw params[:dynamic_attributes][:t_tarifa_servicio][:ids].to_json %>')
+      setDynamicClientData(
+        '.dynamic-client',
+        JSON.parse('<%= raw params[:dynamic_attributes].to_json %>')
       );
+      <% if params[:dynamic_attributes][:t_tarifa_servicio] %>
+        setDynamicServicesData(
+          '.select-servicio',
+          '.service-descripcion',
+          '.service-id',
+          JSON.parse('<%= raw params[:dynamic_attributes][:t_tarifa_servicio][:descripcions].to_json %>'),
+          JSON.parse('<%= raw params[:dynamic_attributes][:t_tarifa_servicio][:ids].to_json %>')
+        );
+      <% end %>
+      <% if params[:dynamic_attributes][:t_recargo] %>
+        setDynamicSurchargesData(
+          '.select-recargo',
+          '.recargo-descripcion',
+          '.recargo-id',
+          JSON.parse('<%= raw params[:dynamic_attributes][:t_recargo][:descripcions].to_json %>'),
+          JSON.parse('<%= raw params[:dynamic_attributes][:t_recargo][:ids].to_json %>')
+        );
+      <% end %>
     <% end %>
   });
 </script>

@@ -7,6 +7,8 @@ function addRecargoRow () {
       <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
       <td>
         <select class="select-recargo" data-first_time="true" id="t_recargo${i}" name="t_factura[t_recargo_ids][]" style="width: 100%;"></select>
+        <input class="recargo-descripcion" name="dynamic_attributes[t_recargo][descripcions][]" type="hidden">
+        <input class="recargo-id" name="dynamic_attributes[t_recargo][ids][]" type="hidden">
       </td>
       <td class="descripcion-cell"></td>
       <td class="quantity-cell"><input class="quantity" data-quantity="1" min="0" style="height: 28px; width: 100%;" type="number" value="1"></td>
@@ -143,8 +145,8 @@ function updateAllSurcharges() {
     // $(this).data('price', rate * Number($('#total').text()));
     // alert(rate * Number($('#total').text()));
     setSubTotal(this, false);
-    console.log(`Total surcharges: ${getTotal('.surcharge-subtotal-cell')}`);
-    console.log(`Total: ${getTotal('.subtotal-cell') + getTotal('.surcharge-subtotal-cell')}`);
+    // console.log(`Total surcharges: ${getTotal('.surcharge-subtotal-cell')}`);
+    // console.log(`Total: ${getTotal('.subtotal-cell') + getTotal('.surcharge-subtotal-cell')}`);
     setTotal('#total', getTotal('.subtotal-cell') + getTotal('.surcharge-subtotal-cell'));
   });
 }
@@ -199,4 +201,20 @@ function setDynamicServicesData(selectClass, descriptionInputClass, idInputClass
   //   i++;
   //   // dynamicDataToModify.splice(0, 1);
   // });
+}
+
+function setDynamicSurchargesData(selectClass, descriptionInputClass, idInputClass, descriptions, ids) {
+  for (var i = 0; i < ids.length; i++) {
+    addRecargoRow();
+  }
+
+  i = 0;
+  $(selectClass).each(function () {
+    var option = new Option(descriptions[i], ids[i], true, true);
+    $(this).append(option).trigger('change');
+
+    $(this).val(ids[i]);
+    $(this).trigger('change');
+    i++;
+  });
 }
