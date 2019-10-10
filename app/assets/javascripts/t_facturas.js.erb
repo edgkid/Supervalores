@@ -16,8 +16,14 @@ function addRecargoRow () {
         <input class="recargo-id" name="dynamic_attributes[t_recargo][ids][]" type="hidden">
       </td>
       <td class="descripcion-cell"></td>
-      <td class="quantity-cell"><input class="quantity" data-quantity="1" min="0" style="height: 28px; width: 100%;" type="number" value="1"></td>
-      <td class="price-cell"><input class="price recargo-input" min="0" step="0.01" style="height: 28px; width: 100%;" type="number"></td>
+      <td class="quantity-cell">
+        <input class="quantity quantity-input" data-quantity="1" min="0" style="height: 28px; width: 100%;" type="number" value="1">
+        <input class="recargo-quantity" name="dynamic_attributes[t_recargo][quantities][]" type="hidden" value="1">
+      </td>
+      <td class="price-cell">
+        <input class="price recargo-input" min="0" step="0.01" style="height: 28px; width: 100%;" type="number">
+        <input class="recargo-price" name="dynamic_attributes[t_recargo][prices][]" type="hidden">
+      </td>
       <td class="surcharge-subtotal-cell" style="color: aqua; text-align: center;"></td>
     </tr>
   `);
@@ -187,13 +193,18 @@ function setDynamicClientData(inputClass, dynamicData) {
 
 function setDynamicServicesData(
   selectClass,
-  descriptionInputClass, idInputClass, quantityInputClass, priceInputClass,
-  descriptions, ids, quantities, prices) {
+  nameInputClass, idInputClass, descriptionInputClass, quantityInputClass, priceInputClass,
+  names, ids, descriptions, quantities, prices) {
   // dynamicDataToModify = dynamicData;
   i = 0;
   $(selectClass).each(function () {
     $(this).val(ids[i]);
     $(this).trigger('change');
+    i++;
+  });
+  i = 0;
+  $(nameInputClass).each(function () {
+    $(this).val(names[i]);
     i++;
   });
   i = 0;
@@ -210,6 +221,12 @@ function setDynamicServicesData(
   $(priceInputClass).each(function () {
     $(this).val(prices[i]);
     i++;
+  });
+  i = 0;
+  $('.descripcion').each(function () {
+    $(this).val(descriptions[i]);
+    i++;
+    setSubTotal(this);
   });
   i = 0;
   $('.quantity').each(function () {
@@ -249,7 +266,10 @@ function setDynamicServicesData(
   // });
 }
 
-function setDynamicSurchargesData(selectClass, descriptionInputClass, idInputClass, descriptions, ids) {
+function setDynamicSurchargesData(
+  selectClass,
+  descriptionInputClass, idInputClass, quantityInputClass, priceInputClass,
+  descriptions, ids, quantities, prices) {
   for (var i = 0; i < ids.length; i++) {
     addRecargoRow();
   }
@@ -258,11 +278,9 @@ function setDynamicSurchargesData(selectClass, descriptionInputClass, idInputCla
   $(selectClass).each(function () {
     // var option = new Option(descriptions[i], ids[i], true, true);
     // $(this).append(option).trigger('change');
-
     $(this).val(ids[i]);
     $(this).trigger('change');
     i++;
-
     // data = $(this).select2('data')[0];
     // rate = Number(data.rate);
     // console.log($(this).select2('data')[0]);
@@ -278,4 +296,30 @@ function setDynamicSurchargesData(selectClass, descriptionInputClass, idInputCla
     //   }
     // });
   });
+
+  i = 0;
+  $(quantityInputClass).each(function () {
+    $(this).val(quantities[i]);
+    i++;
+  });
+  i = 0;
+  $(priceInputClass).each(function () {
+    $(this).val(prices[i]);
+    i++;
+  });
+  i = 0;
+  $('.quantity-input').each(function () {
+    $(this).val(quantities[i]);
+    i++;
+    setSubTotal(this);
+  });
+  i = 0;
+  $('.recargo-input').each(function () {
+    $(this).val(prices[i]);
+    i++;
+    setSubTotal(this, false);
+  });
+
+  setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
+  updateAllSurcharges();
 }
