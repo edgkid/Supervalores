@@ -65,6 +65,14 @@ module ApplicationHelper
     return TCliente.where(t_estatus: disponible).count == 0
   end
 
+  def number_to_balboa(number, with_unit = true)
+    if with_unit
+      number_to_currency(number, unit: 'B/.')
+    else
+      number_to_currency(number, unit: '')
+    end
+  end
+
   def opciones_de_clientes
     connection = ActiveRecord::Base.connection()
     results = connection.execute("SELECT tcl.id, (CASE WHEN tem.id IS NOT NULL THEN tem.rif || ' - ' || tem.razon_social WHEN tpe.id IS NOT NULL THEN tpe.cedula || ' - ' || tpe.nombre || ', ' || tpe.apellido ELSE COALESCE(tot.identificacion, '') || ' - ' || tot.razon_social END) as razon_social FROM t_clientes tcl LEFT JOIN t_empresas tem ON tcl.persona_type = 'TEmpresa' AND tcl.persona_id = tem.id LEFT JOIN t_personas tpe ON tcl.persona_type = 'TPersona' AND tcl.persona_id = tpe.id LEFT JOIN t_otros tot ON tcl.persona_type = 'TOtro' AND tcl.persona_id = tot.id")

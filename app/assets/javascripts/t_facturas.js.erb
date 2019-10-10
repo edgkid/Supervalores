@@ -163,21 +163,32 @@ function setDynamicClientData(inputClass, dynamicData) {
     switch($(this).attr('id')) {
       case 'select-codigo-input':
         // alert($(this).attr('id'));
-        // console.log(dynamicData.t_cliente);
+        console.log(dynamicData.t_cliente);
         var data = [{ id: dynamicData.t_cliente.codigo_select, text: dynamicData.t_cliente.codigo_select},]
 
         var option = new Option(dynamicData.t_cliente.codigo_select, dynamicData.t_cliente.codigo_select, true, true);
         $('#select-codigo').append(option).trigger('change');
-        // $('#select-resolucion').val('1');
-        // $('#select-resolucion').trigger('change');
 
         $('#select-codigo-input').val(dynamicData.t_cliente.codigo_select);
         break;
+      case 'select-resolucion-input':
+        var data = [{ id: dynamicData.t_cliente.resolucion_id, text: dynamicData.t_cliente.resolucion},]
+        // $('#select-resolucion').empty().append('<option></option>').select2({ data: data, placeholder: 'Seleccione' });
+        //$('#select-resolucion').append(option);
+        // $('#select-resolucion').val(dynamicData.t_cliente.resolucion_id);
+        // $('#select-resolucion').trigger('change');
+        console.log(dynamicData.t_cliente.resolucion);
+        break;
     }
   });
+  // var option = new Option(dynamicData.t_cliente.resolucion, dynamicData.t_cliente.resolucion_id, true, true);
+  // $('#select-resolucion').empty().append('<option></option>').append(option).select2();
 }
 
-function setDynamicServicesData(selectClass, descriptionInputClass, idInputClass, descriptions, ids) {
+function setDynamicServicesData(
+  selectClass,
+  descriptionInputClass, idInputClass, quantityInputClass, priceInputClass,
+  descriptions, ids, quantities, prices) {
   // dynamicDataToModify = dynamicData;
   i = 0;
   $(selectClass).each(function () {
@@ -185,6 +196,35 @@ function setDynamicServicesData(selectClass, descriptionInputClass, idInputClass
     $(this).trigger('change');
     i++;
   });
+  i = 0;
+  $(descriptionInputClass).each(function () {
+    $(this).val(descriptions[i]);
+    i++;
+  });
+  i = 0;
+  $(quantityInputClass).each(function () {
+    $(this).val(quantities[i]);
+    i++;
+  });
+  i = 0;
+  $(priceInputClass).each(function () {
+    $(this).val(prices[i]);
+    i++;
+  });
+  i = 0;
+  $('.quantity').each(function () {
+    $(this).val(quantities[i]);
+    i++;
+    setSubTotal(this);
+  });
+  i = 0;
+  $('.price').each(function () {
+    $(this).val(prices[i]);
+    i++;
+    setSubTotal(this, false);
+  });
+  setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
+  // updateAllSurcharges();
   // dynamicDataToModify = dynamicData;
   // $(descriptionInputClass).each(function () {
   //   // console.log(dynamicDataToModify);
