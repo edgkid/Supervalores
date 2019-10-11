@@ -8,7 +8,8 @@ class Factura < Prawn::Document
     DARK_GREEN = '00B800'
 
     # Constructor
-    def initialize        
+    def initialize 
+        super()       
         document_content
     end
 
@@ -17,7 +18,7 @@ class Factura < Prawn::Document
     end
 
     def page_one
-        text "Hello World!"
+        text "El suscrito mayor de edad,", inline_format: true, align: :justify
     end
 
 
