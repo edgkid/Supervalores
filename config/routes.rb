@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   resources :t_facturas do
     get 'preview', on: :member
     resources :t_recibos
+    get 'generar_pdf'
   end
   resources :t_conf_fac_automaticas
   resources :t_recibos, only: :index
