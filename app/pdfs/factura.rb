@@ -5,7 +5,7 @@ class Factura < Prawn::Document
     DARK_GREEN = '00B800'
 
     # Constructor
-    def initialize(request)
+    def initialize
         # Call parent constructor
         super()
 
