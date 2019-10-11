@@ -33,7 +33,7 @@ class Factura < Prawn::Document
     end
 
     def logo
-        image "#{Rails.root}/app/assets/images/smv_logo.jpg" , :fit => [130,130]
+        image "#{Rails.root}/app/assets/images/logoSMV.png" , :fit => [130,130]
     end
 
 
