@@ -14,7 +14,8 @@ class TFactura < ApplicationRecord
   has_many :t_nota_creditos, dependent: :destroy
   has_many :t_estado_cuentums, dependent: :destroy
   has_many :t_clientes, through: :t_estado_cuentum
-  has_many :t_recargos, dependent: :nullify
+  has_many :t_recargo_facturas, dependent: :destroy
+  has_many :t_recargos, through: :t_recargo_facturas
 
   validates :fecha_notificacion,
     presence: {
@@ -37,11 +38,12 @@ class TFactura < ApplicationRecord
     self.total_factura - self.t_recibos.sum(:pago_recibido)
   end
 
-  def calculate_total(services_total, surcharges, rates)
+  def calculate_total_surcharge
+    self.t_factura_detalles.sum(:precio_unitario) * self.t_recargos.sum(:tasa)
+  end
+
+  def calculate_total(services_total, rates)
     total = services_total
-    surcharges.each do |surcharge|
-      total += (total * surcharge)
-    end
     rates.each do |rate|
       total += rate
     end

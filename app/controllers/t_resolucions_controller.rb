@@ -9,7 +9,26 @@ class TResolucionsController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @registros = TResolucion.all
+    @attributes_to_display = [
+      :codigo,
+      :resolucion,
+      :descripcion,
+      :created_at,
+    ]
+    cliente = params[:cliente]
+    if cliente == nil
+      @attributes_to_display.insert 1, :t_cliente
+    end
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: TResolucionDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display,
+          cliente: cliente
+        }), view_context: view_context)
+    }
+    end
   end
 
   def show

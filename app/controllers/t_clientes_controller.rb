@@ -1,5 +1,5 @@
 class TClientesController < ApplicationController
-  include TClientesHelper
+  # include TClientesHelper
 
   respond_to :js, only: [:find]
   respond_to :json, only: [:find_by_codigo, :find_by_resolucion, :find_by_cedula]
@@ -10,25 +10,30 @@ class TClientesController < ApplicationController
   before_action :companies_with_clients_with_resolutions, only: :find_by_cedula
   # load_and_authorize_resource
 
-  def index
-    @registros = list_clientes
-    # @usar_dataTables = true
-    # @attributes_to_display = [
-    #   :codigo
-    # ]
-
-    # respond_to do |format|
-    #   format.html
-    #   format.json { render json: TClienteDatatable.new(
-    #     params.merge({
-    #       attributes_to_display: @attributes_to_display
-    #     }),
-    #     view_context: view_context)
-    #   }
-    # end
+  def index    
+    @usar_dataTables = true
+    @attributes_to_display = [
+      :codigo,
+      :identificacion,
+      :razon_social,
+      :telefono,
+      :email,
+      :es_prospecto,
+      :t_estatus,
+      :tipo_persona,
+    ]
+    respond_to do |format|
+      format.html
+      format.json { render json: TClienteDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
-  def show
+  def show    
   end
 
   def new
@@ -389,6 +394,12 @@ class TClientesController < ApplicationController
 
     def usar_dataTables_en
       @usar_dataTables = true
+      @attributes_to_display = [
+        :codigo,
+        :resolucion,
+        :descripcion,
+        :created_at,
+      ]
     end
 
     def clients_with_resolutions
@@ -398,4 +409,5 @@ class TClientesController < ApplicationController
     def companies_with_clients_with_resolutions
       @companies_with_clients_with_resolutions = TEmpresa.where(t_cliente: TCliente.joins("INNER JOIN t_resolucions ON t_resolucions.t_cliente_id = t_clientes.id")).distinct
     end
+
 end

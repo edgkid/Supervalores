@@ -15,11 +15,11 @@ class TFacturasController < ApplicationController
   def create
     @t_factura = TFactura.new(t_factura_params)
     @t_factura.user = current_user
-    @t_factura.recargo = 0
+    @t_factura.recargo = @t_factura.calculate_total_surcharge
     @t_factura.recargo_desc = '-'
     @t_factura.itbms = 0
     @t_factura.importe_total = 0
-    @t_factura.pendiente_fact = 0
+    @t_factura.pendiente_fact = @t_factura.calculate_pending_payment
     @t_factura.pendiente_ts = 0
     @t_factura.tipo = '-'
     @t_factura.next_fecha_recargo = Date.today + 1.month
@@ -33,7 +33,7 @@ class TFacturasController < ApplicationController
       @notice.messages[:t_resolucion] -= [@notice.messages[:t_resolucion].first]
       @notice.messages[:t_periodo] -= [@notice.messages[:t_periodo].first]
       @do_not_use_plain_select2 = true
-      render 'new'
+      render 'new', params[:dynamic_attributes]
     end
   end
 
@@ -75,7 +75,10 @@ class TFacturasController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: TFacturaDatatable.new(
-        params.merge({ attributes_to_display: @attributes_to_display }),
+        params.merge({
+          attributes_to_display: @attributes_to_display,
+          automatica: params[:automatica]
+        }),
         view_context: view_context)
       }
     end

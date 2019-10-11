@@ -36,68 +36,88 @@ class TConfFacAutomatica < ApplicationRecord
     return "fac_auto_#{self.id}"
   end
 
-  def schedule_invoices(current_user)
+  def schedule_invoices
     scheduler = Rufus::Scheduler.singleton
 
     if self.estatus == 1
       # scheduler.at "#{configuracion.fecha_inicio} 0000" do
       scheduler.in '2s' do
         # scheduler.schedule_every '1month' do |job|
-        $job = scheduler.schedule_every '5s', :tags => self.job_tag do |job|
-          if TConfFacAutomatica.find(self.id).estatus != 1
-            puts 'Terminating jobs!'
-            job.unschedule if job.scheduled?
-            job.kill if job.running?
-          else
-            puts 'Job is up yet!'
-            puts "Job id: #{job.id}"
-          end
-
-          t_clientes = TCliente.joins("
-            INNER JOIN t_resolucions
-            ON t_resolucions.t_cliente_id = t_clientes.id
-            AND t_resolucions.t_tipo_cliente_id = #{self.t_tipo_cliente_id}",
-          ).distinct
-
-          estatus_disponible = TEstatus.find_by(descripcion: 'Disponible')
-          t_clientes.each do |t_cliente|
-            t_factura = TFactura.new(
-              fecha_notificacion: Date.today,
-              fecha_vencimiento: Date.today + 1.month,
-              recargo: 0,
-              recargo_desc: '-',
-              itbms: 0,
-              importe_total: 0,
-              pendiente_fact: 0,
-              pendiente_ts: 0,
-              tipo: '-',
-              next_fecha_recargo: Date.today + 1.month,
-              monto_emision: 0,
-              justificacion: self.nombre_ciclo_facturacion,
-              automatica: true,
-              t_estatus: estatus_disponible,
-              t_periodo: self.t_periodo,
-              t_recargos: self.t_recargos,
-              t_resolucion: self.t_tipo_cliente.t_resolucion,
-              user: current_user
-            )
-            # El error a partir de aca...
-            #t_factura.calculate_total(
-            #  self.t_tarifa_servicios.sum(:precio),
-            #  self.t_recargos.map { |r| r.tasa },
-            #  self.t_tarifas.map { |t| t.calculate_total }
-            #)
-
-            #if t_factura.save
-            #  puts "\n" * 5 + '¡Facturas automáticas creadas!'
-            #else
-            #  puts "\n" * 5 + '¡La factura no se pudo crear!'
-            #end
-          end
-          
-          puts self.job_tag + " -> " + self.updated_at.strftime("%s") #+ " -- " + jobs.inspect()
+        scheduler.schedule_every '5s', :tags => self.job_tag do |job|
+          create_invoices(job)
         end
       end
     end
+  end
+
+  def create_invoices(user, job)
+    configuracion_actual = TConfFacAutomatica.find(self.id)
+
+    if configuracion_actual.estatus != 1
+      puts 'Terminating jobs!'
+      job.unschedule if job.scheduled?
+      job.kill if job.running?
+    else
+      puts 'Job is up yet!'
+      puts "Job id: #{job.id}"
+    end
+
+    t_clientes = TCliente.joins("
+      INNER JOIN t_resolucions
+      ON t_resolucions.t_cliente_id = t_clientes.id
+      AND t_resolucions.t_tipo_cliente_id = #{configuracion_actual.t_tipo_cliente_id}",
+    ).distinct
+
+    estatus_disponible = TEstatus.find_by(descripcion: 'Disponible')
+    t_clientes.each do |t_cliente|
+      t_factura = TFactura.new(
+        fecha_notificacion: Date.today,
+        fecha_vencimiento: Date.today + 1.month,
+        recargo: 0,
+        recargo_desc: '-',
+        itbms: 0,
+        importe_total: 0,
+        pendiente_fact: 0,
+        pendiente_ts: 0,
+        tipo: '-',
+        next_fecha_recargo: Date.today + 1.month,
+        monto_emision: 0,
+        justificacion: configuracion_actual.nombre_ciclo_facturacion,
+        automatica: true,
+        t_estatus: estatus_disponible,
+        t_periodo: configuracion_actual.t_periodo,
+        t_recargos: configuracion_actual.t_recargos,
+        t_resolucion: configuracion_actual.t_tipo_cliente.t_resolucion
+      )
+
+      configuracion_actual.t_tarifa_servicios.each do |t_tarifa_servicio|
+        t_factura.t_factura_detalles.build(
+          cantidad: 1,
+          cuenta_desc: t_tarifa_servicio.descripcion,
+          precio_unitario: t_tarifa_servicio.precio,
+          t_factura: t_factura,
+          t_tarifa_servicio: t_tarifa_servicio
+        )
+      end
+
+      t_factura.calculate_total(
+        configuracion_actual.t_tarifa_servicios.sum(:precio),
+        configuracion_actual.t_tarifas.map { |t| t.calculate_total }
+      )
+
+      # configuracion_actual.t_recargos.each do |t_recargo|
+      #   scheduler.schedule_every "#{t_recargo.t_periodo.rango_dias}d" do |recargo_job|
+      #     t_factura.t_recargos
+      #   end
+      # end
+
+      if t_factura.save!
+        puts "\n" * 5 + '¡Facturas automáticas creadas!'
+      else
+        puts "\n" * 5 + '¡La factura no se pudo crear!'
+      end
+    end
+    
+    puts self.job_tag + " -> " + self.updated_at.strftime("%s") #+ " -- " + jobs.inspect()
   end
 end

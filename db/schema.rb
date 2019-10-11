@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_18_023333) do
+ActiveRecord::Schema.define(version: 2019_10_06_074258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -407,6 +407,15 @@ ActiveRecord::Schema.define(version: 2019_09_18_023333) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "t_recargo_facturas", force: :cascade do |t|
+    t.bigint "t_recargo_id"
+    t.bigint "t_factura_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["t_factura_id"], name: "index_t_recargo_facturas_on_t_factura_id"
+    t.index ["t_recargo_id"], name: "index_t_recargo_facturas_on_t_recargo_id"
+  end
+
   create_table "t_recargo_x_clientes", force: :cascade do |t|
     t.string "monto", null: false
     t.date "fecha", null: false
@@ -425,9 +434,7 @@ ActiveRecord::Schema.define(version: 2019_09_18_023333) do
     t.integer "estatus", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "t_factura_id"
     t.bigint "t_periodo_id"
-    t.index ["t_factura_id"], name: "index_t_recargos_on_t_factura_id"
   end
 
   create_table "t_recibos", force: :cascade do |t|
@@ -644,9 +651,10 @@ ActiveRecord::Schema.define(version: 2019_09_18_023333) do
   add_foreign_key "t_permiso_modulo_rols", "t_modulo_rols"
   add_foreign_key "t_permiso_modulo_rols", "t_permisos"
   add_foreign_key "t_personas", "t_empresas"
+  add_foreign_key "t_recargo_facturas", "t_facturas"
+  add_foreign_key "t_recargo_facturas", "t_recargos"
   add_foreign_key "t_recargo_x_clientes", "t_recargos"
   add_foreign_key "t_recargo_x_clientes", "t_resolucions"
-  add_foreign_key "t_recargos", "t_facturas"
   add_foreign_key "t_recibos", "t_clientes"
   add_foreign_key "t_recibos", "t_facturas"
   add_foreign_key "t_recibos", "t_metodo_pagos"

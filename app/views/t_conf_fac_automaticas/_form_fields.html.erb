@@ -51,7 +51,7 @@
     </div>
     <div class="col-sm-4 input-value">
       <% if editable %>
-        <%= f.select :t_tarifa_servicio_ids, object_options(TTarifaServicio), {}, { class: "form-control", multiple: true } %>
+        <%= f.select :t_tarifa_servicio_ids, object_options(TTarifaServicio, 'nombre'), {}, { class: "form-control", multiple: true } %>
       <% else %>
         <% t_tarifa_servicios = @t_conf_fac_automatica.t_tarifa_servicios %>
         <% t_tarifa_servicios.each_with_index do |servicio, i| %>

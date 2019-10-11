@@ -1,3 +1,10 @@
-<% provide(:texto_boton, 'Servicio') %>
-<% @is_show = (controller.action_name == 'show') ? true : false %>
-<%= render 'form' %>
+<div class="row justify-content-md-center">
+  <div class="col-md-10 col-lg-8">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>Servicio</h5>
+      </div>
+      <%= render 'form', registro: @t_tarifa_servicio, editable: false, return_to: t_tarifa_servicios_path %>
+    </div>
+  </div>
+</div>

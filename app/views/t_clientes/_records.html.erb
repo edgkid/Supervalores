@@ -1,11 +1,10 @@
 <div class="ibox-content">
   <%= render "shared/spiner_loading" %>
-  <% if clientes != nil && clientes.count > 0 %>
   <div class="waiting-content table-responsive">
     <div class="col-12">
       <p class="text-info">Puedes hacer "click" en cualquier fila para ver el detalle del registro.</p>
     </div>
-    <table class="table table-striped table-bordered table-hover dataTables clickable">
+    <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= t_clientes_path(format: :json) %>" id="ajax-datatable">
       <thead>
         <tr>
           <th>Código</th>
@@ -19,24 +18,7 @@
         </tr>
       </thead>
       <tbody>
-        <% clientes.each do |registro| %>
-        <tr data-link="<%= t_cliente_url(id: registro["id"]) %>">
-          <td><%= registro["codigo"] %></td>
-          <td><%= registro["identificacion"] %></td>
-          <td><%= registro["razon_social"] %></td>
-          <td><%= registro["telefono"] %></td>
-          <td><%= registro["email"] %></td>
-          <td><%= registro["es_prospecto"] %></td>
-          <td><%= registro["estatus"] %></td>
-          <td><%= registro["tipo_persona"] %></td>
-        </tr>
-        <% end %>
       </tbody>
     </table>
-  </div>
-  <% else %>
-  <div>
-    <p>No se encontraron registros.</p>
-  </div>
-  <% end %>
+  </div>  
 </div>

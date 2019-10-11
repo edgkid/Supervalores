@@ -9,7 +9,21 @@ class TEstatusesController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @registros = TEstatus.all
+    @attributes_to_display = [
+      :descripcion,
+      :para,
+      :color,
+      :estatus,
+    ]
+    respond_to do |format|
+      format.html
+      format.json { render json: TEstatusDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   def show

@@ -1,20 +1,28 @@
+<% if defined? @attributes_to_display %>
 $('#ajax-datatable').DataTable({
   processing: true,
   serverSide: true,
   ajax: {
     url: $('#ajax-datatable').data('source')
   },
-  pagingType: 'full_numbers',
+  pagingType: 'full_numbers',  
   columns: [
-    // {data: 'descripcion'},
-    // {data: 'tasa'},
-    // {data: 'periodo'},
-    // {data: 'estatus'}
     <% @attributes_to_display.each do |attribute| %>
-      {data: '<%= attribute.to_s %>'},
+      { data: '<%= attribute.to_s %>' },
     <% end if @attributes_to_display %>
   ],
-
+  <% 
+  index = @attributes_to_display.index :color
+  if index != nil %>
+  "aoColumnDefs": [ {
+    "aTargets": [ <%= index %> ],
+    "mData": "color",
+    "mRender": function ( data, type, full ) {      
+      return '<span class="indicador-color" style="background-color: '+data+';"></span>';      
+    }
+  }],
+  <% end %>
+  
   pageLength: 25,
   responsive: true,
   language: {
@@ -50,3 +58,6 @@ $('.dataTables.clickable').on('click', 'tbody tr', function () {
     console.log("No se encuentra el URL.");
   }
 });
+<% else %>
+console.log("No has definido los atributos a mostrar del dataTable.")
+<% end %>
