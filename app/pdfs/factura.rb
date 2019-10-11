@@ -9,16 +9,31 @@ class Factura < Prawn::Document
 
     # Constructor
     def initialize 
-        super()       
+        super()     
+        font_size 8 
         document_content
+        
     end
 
     def document_content
+        logo
         page_one
     end
 
     def page_one
-        text "El suscrito mayor de edad,", inline_format: true, align: :justify
+        fill_color '6D5F83'
+        text_box "<b>REPÚBLICA DE PANAMÁ</b>
+        <b>SUPERINTENDENCIA DEL MERCADO DE VALORES</b>
+        <b>DEPARTAMENTO DE TESORERÍA</b>
+        <b>RECIBO DE INGRESO</b>", inline_format: true, at: [10,700], :align => :center
+
+        text_box "<b>Fecha de impresión: </b>", inline_format: true, at: [400,750]
+
+        text_box "<b>Original Cliente</b>", inline_format: true, at: [480,740]
+    end
+
+    def logo
+        image "#{Rails.root}/app/assets/images/smv_logo.jpg" , :fit => [130,130]
     end
 
 
