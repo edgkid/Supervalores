@@ -1,5 +1,5 @@
 class TFacturasController < ApplicationController
-  before_action :set_t_factura, only: [:edit, :update, :preview, :show, :destroy]
+  before_action :set_t_factura, only: [:edit, :update, :preview, :show, :destroy, :generar_pdf]
   load_and_authorize_resource
 
   def new
