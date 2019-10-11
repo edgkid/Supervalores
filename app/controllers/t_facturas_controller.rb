@@ -95,7 +95,7 @@ class TFacturasController < ApplicationController
   def generar_pdf
     filename = "recibo.pdf"
     pdf = Recibo.new
-    send_data pdf.render, :filename => filename, :type => "application/pdf", disposition: "inline" 
+    send_data pdf.render, :filename => filename, :type => "application/pdf", disposition: "inline" and return
   end
 
   private
