@@ -1,5 +1,8 @@
 class Factura < Prawn::Document
 
+    require "prawn/measurement_extensions"
+    require 'prawn/table'
+    
     # Constants
     GREEN = '00B700'
     DARK_GREEN = '00B800'
@@ -22,8 +25,7 @@ class Factura < Prawn::Document
     end
 
     def page_one
-        data = [["OFICIAL CTA:"]]
-        table(data, :cell_style => {:size => 6, :valign =>:left, :border_width => 0.1, :height => 15}, :width => 50)
+        text "Hello World!"
     end
 
 
