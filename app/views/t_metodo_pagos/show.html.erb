@@ -1,52 +1,10 @@
-<div class="wrapper wrapper-content animated fadeInRight">
-	<div class="row justify-content-md-center">
-  	<div class="col-lg-7">
-    	<div class="ibox ">
-      	<div class="ibox-title">
-        	<h5>Información de Método de Pago</h5>
-        </div>
-        <div class="ibox-content">
-        	<form class="">
-          	<div class="row"><!-- Seccion de la derecha-->
-            	<div class="col-sm-12">
-								<div class="form-group  row"><label class="col-sm-2 col-form-label">&nbsp;Método de Pago</label>
-						    	<div class="col-sm-10">
-										 <%= text_field_tag 'forma_pago', @t_metodo_pago.forma_pago,  class:"form-control", disabled: true %>
-						    	</div>
-					    	</div>
-						    <div class="form-group  row"><label class="col-sm-2 col-form-label">Descripción</label>
-						    	<div class="col-sm-10">
-										<%= text_area_tag 'descripcion', @t_metodo_pago.descripcion,  class:"form-control", disabled: true %>
-						    	</div>
-						    </div>
-						    <div class="form-group  row"><label class="col-sm-2 col-form-label">Mínimo</label>
-						    	<div class="col-sm-10">
-										<%= text_field_tag 'minimo', @t_metodo_pago.minimo,  class:"form-control", disabled: true %>
-						    	</div>
-						    </div>
-						    <div class="form-group  row"><label class="col-sm-2 col-form-label">Máximo</label>
-						    	<div class="col-sm-10">
-										<%= text_field_tag 'maximo', @t_metodo_pago.maximo,  class:"form-control", disabled: true %>
-						    	</div>
-					    	</div>
-                <div class="form-group  row"><label class="col-sm-2 col-form-label">Estatus</label>
-						    	<div class="col-sm-10">
-										<%= text_field_tag 'descripcion', @estatus.descripcion,  class:"form-control", disabled: true %>
-						    	</div>
-						    </div>
-              </div>
-          	</div>
-            <div class="form-group row">
-            	<div class="col-sm-6 col-sm-offset-2">
-								<%= link_to("Editar", {:action => 'edit'}, data: { turbolinks: false }, :class => "btn btn-primary col-4 float-right") %>
-              </div><br><br>
-              <div class="col-sm-6 col-sm-offset-2">
-								<%= link_to 'Atrás', t_metodo_pagos_path, {:class =>"btn btn-white btn-sm col-4"} %>
-              </div>
-            </div>
-					</form>
-        </div>
+<div class="row justify-content-md-center">
+  <div class="col-md-9 col-lg-7">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>Método de Pago</h5>
       </div>
+      <%= render 'form', registro: @t_metodo_pago, editable: false, return_to: t_metodo_pagos_path %>
     </div>
-	</div>
+  </div>
 </div>

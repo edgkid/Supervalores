@@ -37,12 +37,29 @@
     </div>
   </div>
 
-  <div class="form-group row justify-content-end">
-    <div class="col-sm-10 input-value">
-      <input type="checkbox" name="marcarTodo" id="marcarTodo">&nbsp;
-      <label for="marcarTodo" style="margin-bottom: 0;">Habilitar máximo y mínimo</label>
+  <% if editable %>
+    <div class="form-group row justify-content-end">
+      <div class="col-sm-10 input-value">
+        <input type="checkbox" name="marcarTodo" id="marcarTodo">&nbsp;
+        <label class="opcional" for="marcarTodo" style="margin-bottom: 0;">Habilitar máximo y mínimo</label>
+      </div>
     </div>
-  </div>
+  <% else %>
+    <div class="form-group row">
+      <div class="col-sm-2 col-form-label">
+        <%= f.label :minimo, 'Mínimo', class: "opcional text-right" %>
+      </div>
+      <div class="col-sm-4 input-value">
+        <%= registro.minimo ? registro.minimo : '-' %>
+      </div>
+      <div class="col-sm-2 col-form-label">
+        <%= f.label :maximo, 'Máximo', class: "opcional text-right" %>
+      </div>
+      <div class="col-sm-4 input-value">
+        <%= registro.maximo ? registro.maximo : '-' %>
+      </div>
+    </div>
+  <% end %>
 
   <div id="maxMinEnabled"></div>
 <% end %>
