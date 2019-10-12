@@ -92,6 +92,12 @@ class TFacturasController < ApplicationController
     redirect_to t_facturas_path, notice: 'Factura eliminada exitosamente'
   end
 
+  def generar_pdf
+    filename = "factura.pdf"
+    pdf = Factura.new
+    send_data pdf.render, :filename => filename, :type => "application/pdf", disposition: "inline" and return
+  end
+
   private
 
     def t_factura_params
