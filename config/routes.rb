@@ -40,6 +40,8 @@ Rails.application.routes.draw do
     get 'find', as: :find
   end
   get 'clientes/:id/resolucion/:resolucion' => 't_clientes#mostrar_resolucion'
+  get 'estados_de_cuenta' => 't_clientes#estado_cuenta'
+  get 'calculo_de_totales' => 't_clientes#estado_cuenta_calculo_de_totales'
   post 'clientes/:id/nueva_resolucion' => 't_clientes#nueva_resolucion'
   resources :t_estatuses, path: "estatus"
   resources :t_personas, path: "personas"

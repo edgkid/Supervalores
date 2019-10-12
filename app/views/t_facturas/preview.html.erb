@@ -34,15 +34,15 @@
   </div>
   <div class="col-md-4">
     <b>Para</b><br>
-    <b>Cliente:</b> <%= "#{@t_persona.nombre} #{@t_persona.apellido}" if @t_persona %><br>
+    <b>Cliente:</b> <%= "#{@t_cliente.razon_social}" %><br>
     <b>Resolución:</b> <%= @t_resolucion.resolucion %><br>
-    <b>CIP / RUC:</b> <%= @t_persona.cedula if @t_persona %><br>
+    <b>CIP / RUC:</b> <%= @t_cliente.identificacion %><br>
     <b>Teléfono:</b> <%= @t_cliente.telefono %><br>
     <b>Email:</b> <%= @t_cliente.email %><br>
   </div>
   <div class="col-md-4">
     <b>Factura:</b> <%= @t_factura.id %><br>
-    <b>Estado:</b> <%= @t_estatus.estatus == 1 ? 'Activo' : 'Inactivo' %><br>
+    <b>Estado:</b> <%= @t_estatus.descripcion %><br>
     <b>Importe debido:</b><br>
     <b>Fecha de vencimiento:</b> <%= @t_factura.fecha_vencimiento %><br>
     <b>Cuenta de venta:</b><br>

@@ -20,14 +20,14 @@ class TCliente < ApplicationRecord
 
   validates :codigo,
     presence: { 
-      message: "|El código no puede estar vacío."
+      message: "|El SERI no puede estar vacío."
     },
     format: { 
-      message: "|El código solo puede tener Letras, Números y Guiones(-).",
+      message: "|El SERI solo puede tener Letras, Números y Guiones(-).",
       with: /([A-Za-z0-9\-]+)/ 
     },
     uniqueness: {
-      message: "|Ya existe un cliente con este código, use otro por favor.",
+      message: "|Ya existe un cliente con este SERI, use otro por favor.",
     },
     :on => [:create, :update]
 
@@ -72,6 +72,16 @@ class TCliente < ApplicationRecord
   def email
     if persona.is_a?(TPersona) || persona.is_a?(TEmpresa) || persona.is_a?(TOtro)
       return persona.email
+    else
+      return "Indeterminado"
+    end
+  end
+
+  def direccion
+    if persona.is_a?(TPersona)
+      return persona.t_empresa.direccion_empresa
+    elsif persona.is_a?(TEmpresa)
+      return persona.direccion_empresa
     else
       return "Indeterminado"
     end

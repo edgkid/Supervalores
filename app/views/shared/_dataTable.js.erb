@@ -1,9 +1,15 @@
 <% if defined? @attributes_to_display %>
-$('#ajax-datatable').DataTable({
+
+data_tables_options = {
   processing: true,
   serverSide: true,
   ajax: {
-    url: $('#ajax-datatable').data('source')
+    url: $('#ajax-datatable').data('source'),
+    data: function ( d ) {
+      if(jQuery["useDataInAjaxCall"]) {
+        jQuery.useDataInAjaxCall(d)
+      }
+    }
   },
   pagingType: 'full_numbers',  
   columns: [
@@ -47,7 +53,21 @@ $('#ajax-datatable').DataTable({
       sortDescending: ": Activar para ordenar la columna de manera descendente"
     }
   }
-});
+}
+
+if(jQuery["useDataTableFooter"]) {
+  data_tables_options["footerCallback"] = function (row, data, start, end, display) { 
+    var api = this.api();
+    footer = $("#dataTable-footer")
+    if (footer.length == 0){
+      footer = $(this).append('<tfoot id="dataTable-footer"></tfoot>');
+    }
+    jQuery.useDataTableFooter(footer, api, row, data, start, end, display)
+ }
+}
+
+
+$('#ajax-datatable').DataTable(data_tables_options);
 
 $('.dataTables.clickable').on('click', 'tbody tr', function () {
   link = $(this).attr('id');

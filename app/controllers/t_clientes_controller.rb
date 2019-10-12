@@ -33,6 +33,61 @@ class TClientesController < ApplicationController
     end
   end
 
+  def estado_cuenta
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true   
+    
+    @attributes_to_display = [
+      :numero,
+      :fecha_notificacion,
+      :fecha_vencimiento,
+      :recargo,
+      :total_factura,
+      :pendiente_fact,
+      :tipo
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: EstadoCuentaDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display,
+          t_estatus_id: params[:t_estatus_id],
+          t_resolucion_id: params[:t_resolucion_id]
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
+  def estado_cuenta_calculo_de_totales
+    t_estatus_id = params[:t_estatus_id]
+    t_resolucion_id = params[:t_resolucion_id]
+    sum_total = TFactura
+      .where( 
+        t_estatus_id: t_estatus_id, 
+        t_resolucion_id: t_resolucion_id 
+      )
+      .sum("t_facturas.total_factura")
+    sum_pago_recibido = TFactura.left_joins(:t_recibos)
+      .where( 
+        t_estatus_id: t_estatus_id, 
+        t_resolucion_id: t_resolucion_id 
+      )
+      .sum("COALESCE(t_recibos.pago_recibido, 0)")
+    if t_estatus_id != "" && t_resolucion_id != ""
+      render json: {
+        procesado: true,
+        total: sum_total,
+        por_pagar: sum_total - sum_pago_recibido
+      }
+    else
+      render json: {
+        procesado: false
+      }
+    end
+  end
+
   def show    
   end
 

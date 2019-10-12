@@ -82,6 +82,9 @@
           <% if can? :read, TCliente %>
             <li><%= link_to 'Clientes', t_clientes_path %></li>
           <% end %>
+          <% if can? :read, TCliente %>
+            <li><%= link_to 'Estado de cuenta', :controller => :t_clientes, :action => :estado_cuenta %></li>
+          <% end %>
           <% if can? :read, TTipoCliente %>
             <li><%= link_to 'Tipos de Clientes', t_tipo_clientes_path %></li>
           <% end %>
