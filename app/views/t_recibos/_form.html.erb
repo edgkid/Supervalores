@@ -46,7 +46,7 @@
             <%= f.label :t_metodo_pago_id, 'Método de Pago', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
             <div class="col-sm-7 input-value">
               <% unless @is_show %>
-                <%= f.select :t_metodo_pago_id, payment_method_options, {}, { class: "form-control" } %>
+                <%= f.select :t_metodo_pago_id, payment_method_options, {}, { class: "form-control", id: 'metodo-pago-select' } %>
               <% else %>
                 <%= @t_recibo.t_metodo_pago.forma_pago %>
               <% end %>
@@ -61,6 +61,21 @@
                 <%= f.text_field :justificacion, class: "form-control" %>
               <% else %>
                 <%= @t_recibo.justificacion %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" id="num-cheque-container">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <%= f.label :num_cheque, 'Número de Cheque', class: "col-sm-4 col-form-label opcional" %>
+            <div class="col-sm-7 input-value">
+              <% unless @is_show %>
+                <%= f.text_field :num_cheque, class: "form-control", id: 'num-cheque' %>
+              <% else %>
+                <%= @t_recibo.num_cheque %>
               <% end %>
             </div>
           </div>
@@ -96,6 +111,11 @@
         Number($(this).val()),
         $('#pending-payment-input')
       );
+    });
+
+    showOrHideCheckNumber('#metodo-pago-select');
+    $('#metodo-pago-select').change(function () {
+      showOrHideCheckNumber(this);
     });
   });
 </script>

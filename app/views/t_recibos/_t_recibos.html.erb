@@ -1,12 +1,13 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Fecha de pago</th>
+      <th>Fecha de Pago</th>
       <th>Método de Pago</th>
+      <th># de Cheque</th>
       <th>Justificación</th>
-      <th>Monto Pagado</th>
-      <th>Monto por Pagar</th>
-      <th>Monto Acreditado</th>
+      <th>Pagado</th>
+      <th>Por Pagar</th>
+      <th>Acreditado</th>
     </tr>
   </thead>
   <tbody>
@@ -14,6 +15,7 @@
       <tr>
         <td><%= t_recibo.fecha_pago %></td>
         <td><%= t_recibo.t_metodo_pago.forma_pago %></td>
+        <td><%= t_recibo.num_cheque ? t_recibo.num_cheque : 'N/A' %></td>
         <td><%= t_recibo.justificacion %></td>
         <td><%= t_recibo.pago_recibido %></td>
         <td><%= t_recibo.pago_pendiente %></td>

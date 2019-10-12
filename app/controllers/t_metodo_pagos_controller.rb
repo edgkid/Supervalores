@@ -3,7 +3,7 @@ class TMetodoPagosController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @attributes_to_display = [:forma_pago, :minimo, :maximo, :estatus]
+    @attributes_to_display = [:forma_pago, :descripcion, :minimo, :maximo, :estatus]
 
     respond_to do |format|
       format.html
