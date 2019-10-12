@@ -46,7 +46,7 @@
                 </div>
               </div>
               <div class="col-md-6">
-                <table class="table table-bordered" id="rate-table">
+                <!-- <table class="table table-bordered" id="rate-table">
                   <thead>
                     <tr>
                       <th colspan="2" style="text-align: center;">Tarifa de la Resolución</th>
@@ -64,7 +64,7 @@
                       <td align="center" id="rate-surcharge">0</td>
                     </tr>
                   </tbody>
-                </table>
+                </table> -->
               </div>
             </div>
             <br><br>
@@ -134,7 +134,7 @@
       setTotal('#total-quantity', getTotal('.quantity'));
       setSubTotal(this);
       // cleanAllSurcharges();
-      setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
+      setTotal('#total', getTotal('.subtotal-cell') /*+ Number($('#total-rate').text())*/);
       updateAllSurcharges();
 
       $(this).siblings('.service-quantity').val($(this).val());
@@ -145,7 +145,7 @@
     $(document).on('keyup', '.price', function() {
       setSubTotal(this, false);
       // cleanAllSurcharges();
-      setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
+      setTotal('#total', getTotal('.subtotal-cell') /*+ Number($('#total-rate').text())*/);
       updateAllSurcharges();
 
       $(this).siblings('.service-price').val($(this).val());
@@ -261,7 +261,7 @@
           setTotal('#total', getTotal('.subtotal-cell'));
           priceInput.val(rate);
           updateAllSurcharges();
-          setTotal('#total', getTotal('.subtotal-cell') + getTotal('.surcharge-subtotal-cell') + Number($('#total-rate').text()));
+          setTotal('#total', getTotal('.subtotal-cell') + getTotal('.surcharge-subtotal-cell') /*+ Number($('#total-rate').text())*/);
         }
       });
 
@@ -282,7 +282,7 @@
           priceInput.val(price);
           priceInput.data('price', price);
           setSubTotal(priceInput, false);
-          setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
+          setTotal('#total', getTotal('.subtotal-cell') /*+ Number($('#total-rate').text())*/);
         }
 
         if ($(this).hasClass('descripcion-cell')) {
@@ -294,7 +294,7 @@
       // cleanAllSurcharges();
       setTotal('#total', getTotal('.subtotal-cell'));
       updateAllSurcharges();
-      setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
+      setTotal('#total', getTotal('.subtotal-cell') /*+ Number($('#total-rate').text())*/);
 
       // Se coloca el nombre de la tarifa en un input invisible, por si el formulario es inválido, cargue esta data.
       $(this).siblings('input.service-name').val(nombre);

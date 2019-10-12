@@ -31,9 +31,21 @@ class TFactura < ApplicationRecord
     self.total_factura - self.t_recibos.sum(:pago_recibido)
   end
 
-  def calculate_total_surcharge
-    self.t_factura_detalles.sum(:precio_unitario) * self.t_recargos.sum(:tasa)
+  def calculate_services_total_price
+    self.t_factura_detalles.sum(:precio_unitario)
   end
+
+  def calculate_total_surcharge
+    self.t_recargos.sum(:tasa)
+  end
+
+  def calculate_total_with_surcharge
+    calculate_services_total_price + calculate_services_total_price * calculate_total_surcharge
+  end
+
+  # def calculate_total_surcharge
+  #   self.t_factura_detalles.sum(:precio_unitario) * self.t_recargos.sum(:tasa)
+  # end
 
   def calculate_total(services_total, rates)
     total = services_total

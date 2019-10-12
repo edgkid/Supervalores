@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_11_223758) do
+ActiveRecord::Schema.define(version: 2019_10_12_051558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -451,7 +451,7 @@ ActiveRecord::Schema.define(version: 2019_10_11_223758) do
     t.datetime "updated_at", null: false
     t.bigint "t_factura_id", null: false
     t.bigint "t_cliente_id", null: false
-    t.bigint "t_periodo_id", null: false
+    t.bigint "t_periodo_id"
     t.bigint "t_metodo_pago_id", null: false
     t.bigint "user_id", null: false
     t.index ["t_cliente_id"], name: "index_t_recibos_on_t_cliente_id"

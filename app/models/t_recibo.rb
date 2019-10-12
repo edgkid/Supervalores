@@ -16,7 +16,7 @@ class TRecibo < ApplicationRecord
     message: "|El monto pagado debe ser un número válido"
   }
 
-  def calculate_default_attributes(t_factura, t_cliente, t_periodo, current_user)
+  def calculate_default_attributes(t_factura, t_cliente, current_user)
     remaining = t_factura.calculate_pending_payment - self.pago_recibido
     credited_amount = remaining < 0 ? (remaining * (-1)) : 0
     pending_payment = remaining > 0 ? remaining : 0
@@ -26,7 +26,6 @@ class TRecibo < ApplicationRecord
     self.fecha_pago = Date.today
     self.t_factura = t_factura
     self.t_cliente = t_cliente
-    self.t_periodo = t_periodo
     self.estatus = 1
     self.user = current_user
   end

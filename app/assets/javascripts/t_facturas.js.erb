@@ -240,7 +240,7 @@ function setDynamicServicesData(
     i++;
     setSubTotal(this, false);
   });
-  setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
+  setTotal('#total', getTotal('.subtotal-cell') /*+ Number($('#total-rate').text())*/);
   // updateAllSurcharges();
   // dynamicDataToModify = dynamicData;
   // $(descriptionInputClass).each(function () {
@@ -320,6 +320,6 @@ function setDynamicSurchargesData(
     setSubTotal(this, false);
   });
 
-  setTotal('#total', getTotal('.subtotal-cell') + Number($('#total-rate').text()));
+  setTotal('#total', getTotal('.subtotal-cell') /*+ Number($('#total-rate').text())*/);
   updateAllSurcharges();
 }

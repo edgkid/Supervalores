@@ -9,7 +9,7 @@ class TRecibosController < ApplicationController
 
   def create
     @t_recibo = TRecibo.new(t_recibo_params)
-    @t_recibo.calculate_default_attributes(@t_factura, @t_cliente, @t_periodo, current_user)
+    @t_recibo.calculate_default_attributes(@t_factura, @t_cliente, current_user)
 
     if @t_recibo.save
       redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Recibo Creado exitosamente'
@@ -74,7 +74,6 @@ class TRecibosController < ApplicationController
 
       @t_resolucion = @t_factura.t_resolucion
       @t_tarifa  = @t_resolucion.t_tipo_cliente.t_tarifa
-      @t_periodo = @t_factura.t_periodo
       @t_estatus = @t_factura.t_estatus
       @t_cliente = @t_resolucion.t_cliente
       @t_persona = @t_cliente.persona

@@ -31,7 +31,7 @@
             <%= f.label :pago_pendiente, 'Monto por Pagar', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
             <div class="col-sm-7 input-value">
               <% unless @is_show %>
-                <%= f.number_field :pago_pendiente, class: "form-control", id: 'pending-payment-input', readonly: 'readonly', step: 0.01, value: @pending_payment %>
+                <%= f.text_field :pago_pendiente, class: "form-control", id: 'pending-payment-input', readonly: 'readonly', step: 0.01, value: @pending_payment %>
               <% else %>
                 <%= @t_recibo.pago_pendiente %>
               <% end %>

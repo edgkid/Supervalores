@@ -29,15 +29,15 @@ switch(attribute) {
 
       <% @t_tarifa = @t_cliente.t_resolucions.first.t_tipo_cliente.t_tarifa %>
 
-      amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
-      surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
-      totalRate = amount + (amount * surcharge);
+      // amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
+      // surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
+      // totalRate = amount + (amount * surcharge);
 
-      $('#rate-amount').text(amount);
-      $('#rate-surcharge').text(surcharge);
-      $('#total-rate').text(totalRate);
+      // $('#rate-amount').text(amount);
+      // $('#rate-surcharge').text(surcharge);
+      // $('#total-rate').text(totalRate);
 
-      $('#total').text(Number($('#total').text()) + totalRate);
+      $('#total').text(Number($('#total').text()) /*+ totalRate*/);
     }
 
     <% if @t_cliente && @t_persona %>
@@ -61,15 +61,15 @@ switch(attribute) {
     } else {
       $('#select-resolucion').empty().append('<option></option>').select2({ data: data, placeholder: 'Seleccione' });
 
-      amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
-      surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
-      totalRate = amount + (amount * surcharge);
+      // amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
+      // surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
+      // totalRate = amount + (amount * surcharge);
 
-      $('#rate-amount').text(amount);
-      $('#rate-surcharge').text(surcharge);
-      $('#total-rate').text(totalRate);
+      // $('#rate-amount').text(amount);
+      // $('#rate-surcharge').text(surcharge);
+      // $('#total-rate').text(totalRate);
 
-      $('#total').text(Number($('#total').text()) + totalRate);
+      $('#total').text(Number($('#total').text()) /*+ totalRate*/);
     }
 
     $('#select2-select-codigo-container').text(codigo);
@@ -90,15 +90,15 @@ switch(attribute) {
       $('#select2-select-cedula-container').attr('title', rif);
     <% end %>
 
-    amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
-    surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
-    totalRate = amount + (amount * surcharge);
+    // amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
+    // surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
+    // totalRate = amount + (amount * surcharge);
 
-    $('#rate-amount').text(amount);
-    $('#rate-surcharge').text(surcharge);
-    $('#total-rate').text(totalRate);
+    // $('#rate-amount').text(amount);
+    // $('#rate-surcharge').text(surcharge);
+    // $('#total-rate').text(totalRate);
 
-    $('#total').text(Number($('#total').text()) + totalRate);
+    $('#total').text(Number($('#total').text()) /*+ totalRate*/);
     break;
 }
 

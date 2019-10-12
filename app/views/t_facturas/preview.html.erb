@@ -42,8 +42,8 @@
   </div>
   <div class="col-md-4">
     <b>Factura:</b> <%= @t_factura.id %><br>
-    <b>Estado:</b> <%= @t_estatus.estatus == 1 ? 'Activo' : 'Inactivo' %><br>
-    <b>Fecha de vencimiento:</b> <%= @t_factura.fecha_vencimiento %><br>
+    <b>Estatus:</b> <%= @t_estatus.estatus == 1 ? 'Activo' : 'Inactivo' %><br>
+    <b>Fecha de vencimiento:</b> <%= @t_factura.fecha_vencimiento.strftime('%d/%m/%Y') %><br>
   </div>
 </div>
 
@@ -55,33 +55,36 @@
       <th>Cantidad</th>
       <th>Ítem</th>
       <th>Descripción</th>
-      <th>Precio</th>
-      <th>Importe</th>
+      <th>Tasa (%)</th>
+      <th>Precio Unitario (B/.)</th>
+      <th>Importe (B/.)</th>
     </tr>
   </thead>
   <tbody>
+    <!-- <tr>
+      <td>1</td>
+      <td><%#= @t_tarifa.nombre %></td>
+      <td><%#= @t_tarifa.descripcion %></td>
+      <td><%#= number_to_balboa(@t_tarifa.monto, false) %></td>
+      <td><%#= number_to_balboa(@t_tarifa.monto, false) %></td>
+    </tr> -->
     <% @t_factura.t_factura_detalles.each do |fd| %>
       <tr>
         <td><%= fd.cantidad %></td>
         <td><%= fd.t_tarifa_servicio.nombre %></td>
         <td><%= fd.cuenta_desc %></td>
-        <td><%= fd.precio_unitario %></td>
-        <td><%= fd.precio_unitario * fd.cantidad %></td>
+        <td>N/A</td>
+        <td><%= number_to_balboa(fd.precio_unitario, false) %></td>
+        <td><%= number_to_balboa(fd.precio_unitario * fd.cantidad, false) %></td>
       </tr>
     <% end %>
-    <tr>
-      <td>1</td>
-      <td><%= @t_tarifa.nombre %></td>
-      <td><%= @t_tarifa.descripcion %></td>
-      <td><%= @t_tarifa.monto %></td>
-      <td><%= @t_tarifa.monto %></td>
-    </tr>
     <% @t_factura.t_recargos.each do |r| %>
       <tr>
         <td></td>
         <td>Recargo</td>
         <td><%= r.descripcion %></td>
-        <td><%= r.tasa %></td>
+        <td><%= r.tasa * 100 %></td>
+        <td><%= number_to_balboa(r.tasa * @t_factura.calculate_services_total_price, false) %></td>
         <td><%= '' %></td>
       </tr>
     <% end %>
