@@ -1,12 +1,13 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Fecha de pago</th>
+      <th>Fecha de Pago</th>
       <th>Método de Pago</th>
+      <th># de Cheque</th>
       <th>Justificación</th>
-      <th>Monto Pagado</th>
-      <th>Monto por Pagar</th>
-      <th>Monto Acreditado</th>
+      <th>Pagado (B/.)</th>
+      <th>Por Pagar (B/.)</th>
+      <th>Acreditado (B/.)</th>
     </tr>
   </thead>
   <tbody>
@@ -14,10 +15,11 @@
       <tr>
         <td><%= t_recibo.fecha_pago %></td>
         <td><%= t_recibo.t_metodo_pago.forma_pago %></td>
+        <td><%= t_recibo.num_cheque ? t_recibo.num_cheque : 'N/A' %></td>
         <td><%= t_recibo.justificacion %></td>
-        <td><%= t_recibo.pago_recibido %></td>
-        <td><%= t_recibo.pago_pendiente %></td>
-        <td><%= t_recibo.monto_acreditado %></td>
+        <td><%= number_to_balboa(t_recibo.pago_recibido, false) %></td>
+        <td><%= number_to_balboa(t_recibo.pago_pendiente, false) %></td>
+        <td><%= number_to_balboa(t_recibo.monto_acreditado, false) %></td>
       </tr>
     <% end %>
   </tbody>

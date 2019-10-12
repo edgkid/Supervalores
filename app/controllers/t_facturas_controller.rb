@@ -26,14 +26,14 @@ class TFacturasController < ApplicationController
     @t_factura.monto_emision = 0
     @t_factura.t_estatus_id = TEstatus.first.id
 
-    if @t_factura.save
-      redirect_to preview_t_factura_path(@t_factura), notice: 'Factura creada exitosamente.'
+    if @t_factura.save!
+      redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Factura creada exitosamente.'
     else
       @notice = @t_factura.errors
       @notice.messages[:t_resolucion] -= [@notice.messages[:t_resolucion].first]
       @notice.messages[:t_periodo] -= [@notice.messages[:t_periodo].first]
       @do_not_use_plain_select2 = true
-      render 'new'
+      render 'new', params[:dynamic_attributes]
     end
   end
 
@@ -90,6 +90,12 @@ class TFacturasController < ApplicationController
   def destroy
     @t_factura.destroy
     redirect_to t_facturas_path, notice: 'Factura eliminada exitosamente'
+  end
+
+  def generar_pdf
+    filename = "factura.pdf"
+    pdf = Factura.new
+    send_data pdf.render, :filename => filename, :type => "application/pdf", disposition: "inline" and return
   end
 
   private

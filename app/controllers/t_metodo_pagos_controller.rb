@@ -3,7 +3,7 @@ class TMetodoPagosController < ApplicationController
 
   def index
     @usar_dataTables = true
-    @attributes_to_display = [:forma_pago, :minimo, :maximo, :estatus]
+    @attributes_to_display = [:forma_pago, :descripcion, :minimo, :maximo, :estatus]
 
     respond_to do |format|
       format.html
@@ -23,12 +23,12 @@ class TMetodoPagosController < ApplicationController
 
   def new
     @t_metodo_pago = TMetodoPago.new
-    @estatus = TEstatus.all # where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
-    #@estatus = TEstatus.where( "id = ? OR id = ?", 1, 2 )
+    # @estatus = TEstatus.all # where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
+    # @estatus = TEstatus.where( "id = ? OR id = ?", 1, 2 )
   end
 
   def create
-    @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
+    # @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
     @t_metodo_pago = TMetodoPago.new(t_metodo_pago_params)
     # @t_metodo_pago.estatus = params[:id_estatus]
 
@@ -47,13 +47,13 @@ class TMetodoPagosController < ApplicationController
 
   def edit
     @t_metodo_pago =TMetodoPago.find(params[:id])
-    @estatus = TEstatus.all
+    # @estatus = TEstatus.all
     # @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
   end
 
   def update
     @t_metodo_pago = TMetodoPago.find(params[:id])
-    @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
+    # @estatus = TEstatus.where( "descripcion = ? OR descripcion = ?", "Activo", "Inactivo" )
 
     if params[:minimo] == nil || params[:maximo] != nil
       @t_metodo_pago.minimo = params[:minimo]
@@ -61,7 +61,7 @@ class TMetodoPagosController < ApplicationController
     end
 
     if @t_metodo_pago.update(t_metodo_pago_params)
-      redirect_to t_metodo_pagos_index_path , notice: 'Método de pago actualizado correctamente.'
+      redirect_to t_metodo_pagos_path , notice: 'Método de pago actualizado correctamente.'
     else
       @notice = @t_metodo_pago.errors
       render :action => "edit"

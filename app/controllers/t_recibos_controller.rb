@@ -9,7 +9,7 @@ class TRecibosController < ApplicationController
 
   def create
     @t_recibo = TRecibo.new(t_recibo_params)
-    @t_recibo.calculate_default_attributes(@t_factura, @t_cliente, @t_periodo, current_user)
+    @t_recibo.calculate_default_attributes(@t_factura, @t_cliente, current_user)
 
     if @t_recibo.save
       redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Recibo Creado exitosamente'
@@ -25,7 +25,7 @@ class TRecibosController < ApplicationController
   def index
     @usar_dataTables = true
     @attributes_to_display = [
-      :fecha_pago, :t_metodo_pago, :justificacion,
+      :id, :fecha_pago, :t_metodo_pago, :justificacion,
       :pago_recibido, :pago_pendiente, :monto_acreditado
     ]
 
@@ -64,7 +64,7 @@ class TRecibosController < ApplicationController
 
     def t_recibo_params
       params.require(:t_recibo).permit(
-        :pago_recibido, :pago_pendiente, :justificacion, :t_metodo_pago_id
+        :pago_recibido, :pago_pendiente, :justificacion, :num_cheque, :t_metodo_pago_id
       )
     end
 
@@ -74,7 +74,6 @@ class TRecibosController < ApplicationController
 
       @t_resolucion = @t_factura.t_resolucion
       @t_tarifa  = @t_resolucion.t_tipo_cliente.t_tarifa
-      @t_periodo = @t_factura.t_periodo
       @t_estatus = @t_factura.t_estatus
       @t_cliente = @t_resolucion.t_cliente
       @t_persona = @t_cliente.persona

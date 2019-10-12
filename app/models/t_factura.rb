@@ -1,7 +1,7 @@
 class TFactura < ApplicationRecord
 	#belongs_to :t_cliente
   belongs_to :t_resolucion
-  belongs_to :t_periodo
+  belongs_to :t_periodo, optional: true
   belongs_to :t_estatus
   # belongs_to :t_estatus_fac
   belongs_to :t_leyenda, optional: true
@@ -17,30 +17,35 @@ class TFactura < ApplicationRecord
   has_many :t_recargo_facturas, dependent: :destroy
   has_many :t_recargos, through: :t_recargo_facturas
 
-  validates :fecha_notificacion,
-    presence: {
-      message: "|La fecha de notificación no puede estar vacía"
-    }
-  validates :fecha_vencimiento,
-    presence: {
-      message: "|La fecha de vencimiento no puede estar vacía"
-    }
-  validates :t_resolucion,
-    presence: {
-      message: "|La resolución debe existir"
-    }
-  validates :t_periodo,
-    presence: {
-      message: "|Debe seleccionar un periodo"
-    }
+  validates :fecha_notificacion, presence: {
+    message: "|La fecha de notificación no puede estar vacía"
+  }
+  validates :fecha_vencimiento, presence: {
+    message: "|La fecha de vencimiento no puede estar vacía"
+  }
+  validates :t_resolucion, presence: {
+    message: "|La resolución debe existir"
+  }
 
   def calculate_pending_payment
     self.total_factura - self.t_recibos.sum(:pago_recibido)
   end
 
-  def calculate_total_surcharge
-    self.t_factura_detalles.sum(:precio_unitario) * self.t_recargos.sum(:tasa)
+  def calculate_services_total_price
+    self.t_factura_detalles.sum(:precio_unitario)
   end
+
+  def calculate_total_surcharge
+    self.t_recargos.sum(:tasa)
+  end
+
+  def calculate_total_with_surcharge
+    calculate_services_total_price + calculate_services_total_price * calculate_total_surcharge
+  end
+
+  # def calculate_total_surcharge
+  #   self.t_factura_detalles.sum(:precio_unitario) * self.t_recargos.sum(:tasa)
+  # end
 
   def calculate_total(services_total, rates)
     total = services_total
