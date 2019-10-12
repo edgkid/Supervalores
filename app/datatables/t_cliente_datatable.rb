@@ -1,4 +1,10 @@
 class TClienteDatatable < ApplicationDatatable
+  def view_columns
+    super
+    @view_columns.merge!({
+      t_estatus: { source: "TEstatus.descripcion" }
+    })
+  end
   
   def data
     records_array = super
@@ -12,6 +18,7 @@ class TClienteDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    TCliente.includes(:persona, :t_estatus).all
+    # TCliente.includes(:persona, :t_estatus).all
+    TCliente.includes(:persona).joins(:t_estatus)
   end
 end
