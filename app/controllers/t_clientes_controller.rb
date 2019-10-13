@@ -400,7 +400,7 @@ class TClientesController < ApplicationController
     end
 
     def parametros_cliente
-      params.require(:t_cliente).permit(:codigo, :t_estatus_id, :cuenta_venta, :t_tipo_persona_id, :razon_social, :telefono, :email, :es_prospecto)
+      params.require(:t_cliente).permit(:codigo, :dv, :t_estatus_id, :cuenta_venta, :t_tipo_persona_id, :razon_social, :telefono, :email, :es_prospecto)
     end
     
     def parametros_cliente_tipo_empresa
