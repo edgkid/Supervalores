@@ -24,7 +24,7 @@ class TFacturasController < ApplicationController
     @t_factura.tipo = '-'
     @t_factura.next_fecha_recargo = Date.today + 1.month
     @t_factura.monto_emision = 0
-    @t_factura.t_estatus_id = TEstatus.first.id
+    @t_factura.t_estatus_id = TEstatus.find_by(descripcion: 'Disponible') || TEstatus.first.id
 
     if @t_factura.save!
       redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Factura creada exitosamente.'

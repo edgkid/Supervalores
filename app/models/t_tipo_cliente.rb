@@ -3,7 +3,7 @@ class TTipoCliente < ApplicationRecord
 	belongs_to :t_periodo
 	belongs_to :t_tipo_cliente_tipo
 	
-	has_many :t_cliente
+	has_many :t_clientes
   has_one :t_resolucion
 	#has_and_belongs_to_many :t_tarifa
 
