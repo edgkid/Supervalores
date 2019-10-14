@@ -92,6 +92,7 @@
             %>
           <% else %>
             <%= render "shared/action_buttons",
+              list_route: t_factura_t_recibos_path(@t_factura), list_text: "Recibos",
               save_form: true,
               save_text: "Guardar" %>
           <% end %>

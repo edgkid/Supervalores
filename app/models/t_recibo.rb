@@ -1,7 +1,7 @@
 class TRecibo < ApplicationRecord
 	belongs_to :t_factura
   belongs_to :t_cliente
-  belongs_to :t_periodo
+  belongs_to :t_periodo, optional: true
   belongs_to :t_metodo_pago
   belongs_to :user
 

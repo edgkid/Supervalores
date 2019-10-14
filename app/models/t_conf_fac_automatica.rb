@@ -77,11 +77,9 @@ class TConfFacAutomatica < ApplicationRecord
       t_factura = TFactura.new(
         fecha_notificacion: Date.today,
         fecha_vencimiento: Date.today + 1.month,
-        # recargo: 0,
         recargo_desc: '-',
         itbms: 0,
         importe_total: 0,
-        # pendiente_fact: 0,
         pendiente_ts: 0,
         tipo: '-',
         next_fecha_recargo: Date.today + 1.month,
@@ -91,7 +89,6 @@ class TConfFacAutomatica < ApplicationRecord
         t_estatus: TEstatus.find_by(descripcion: 'Disponible') || TEstatus.first.id,
         t_periodo: configuracion_actual.t_periodo,
         t_recargos: configuracion_actual.t_recargos,
-        #t_resolucion: configuracion_actual.t_tipo_cliente.t_resolucion,
         t_resolucion: t_resolucion,
         user: configuracion_actual.user
       )
@@ -110,19 +107,14 @@ class TConfFacAutomatica < ApplicationRecord
       t_factura.pendiente_fact = t_factura.calculate_pending_payment(true)
       t_factura.total_factura = t_factura.calculate_total(true)
 
-      # t_factura.calculate_total(
-      #   configuracion_actual.t_tarifa_servicios.sum(:precio),
-      #   configuracion_actual.t_tarifas.map { |t| t.calculate_total }
-      # )
-
-      # configuracion_actual.t_recargos.each do |t_recargo|
-      #   scheduler.schedule_every "#{t_recargo.t_periodo.rango_dias}d" do |recargo_job|
-      #     t_factura.t_recargos
-      #   end
-      # end
-
       if t_factura.save!
-        puts "\n" * 5 + '¡Facturas automáticas creadas!'
+        puts "\n" * 5 + '¡Facturas automáticas creadas!' + "\n"
+
+        # active = (t_factura.calculate_pending_payment <= 0) ? true : false
+
+        t_factura.t_recargos.each do |t_recargo|
+          t_recargo.schedule_surcharges(t_factura, configuracion_actual.estatus)
+        end
       else
         puts "\n" * 5 + '¡La factura no se pudo crear!'
       end

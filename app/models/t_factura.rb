@@ -73,18 +73,6 @@ class TFactura < ApplicationRecord
     end
   end
 
-  # def calculate_total_surcharge
-  #   self.t_factura_detalles.sum(:precio_unitario) * self.t_recargos.sum(:tasa)
-  # end
-
-  # def calculate_total(services_total, rates)
-  #   total = 
-  #   rates.each do |rate|
-  #     total += rate
-  #   end
-  #   self.total_factura = total
-  # end
-
   def self.count_invoices_by_month(month_number)
     TFactura.where('extract(month  from created_at) = ?', month_number).count
   end
@@ -98,5 +86,14 @@ class TFactura < ApplicationRecord
     end
 
     invoices_list
+  end
+
+  def get_next_surcharge_date(due_date)
+    self.t_recargos.each_with_index do |t_recargo, i|
+      next_surcharge_date = (due_date + 1.day) if i == 0
+      next_surcharge_date = (due_date + t_recargo.t_periodo.rango_dias.days) if next_surcharge_date >
+                            (due_date + t_recargo.t_periodo.rango_dias.days)
+    end
+    next_surcharge_date
   end
 end
