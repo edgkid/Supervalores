@@ -28,7 +28,7 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group row">
-            <%= f.label :pago_pendiente, 'Monto por Pagar', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
+            <%= f.label :pago_pendiente, 'Monto por Pagar', class: "col-sm-4 col-form-label opcional" %>
             <div class="col-sm-7 input-value">
               <% unless @is_show %>
                 <%= f.text_field :pago_pendiente, class: "form-control", id: 'pending-payment-input', readonly: 'readonly', step: 0.01, value: @pending_payment %>
@@ -67,10 +67,10 @@
         </div>
       </div>
 
-      <div class="row" id="num-cheque-container">
-        <div class="col-sm-6">
+      <div class="row">
+        <div class="col-sm-6" id="num-cheque-container">
           <div class="form-group row">
-            <%= f.label :num_cheque, 'Número de Cheque', class: "col-sm-4 col-form-label opcional" %>
+            <%= f.label :num_cheque, 'Número de Cheque', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
             <div class="col-sm-7 input-value">
               <% unless @is_show %>
                 <%= f.text_field :num_cheque, class: "form-control", id: 'num-cheque' %>
@@ -79,6 +79,12 @@
               <% end %>
             </div>
           </div>
+        </div>
+        <div align="center" class="col-sm-6">
+          Servicios: <%= number_to_balboa(@t_recibo.get_services_total(@t_factura, @t_factura.t_recibos.empty?)) %><br>
+          <span style="color: red;">
+            Recargos: <%= number_to_balboa(@t_recibo.get_total_surcharge(@t_factura, @t_factura.t_recibos.empty?)) %>
+          </span>
         </div>
       </div>
 
@@ -92,6 +98,7 @@
             %>
           <% else %>
             <%= render "shared/action_buttons",
+              list_route: t_factura_t_recibos_path(@t_factura), list_text: "Recibos",
               save_form: true,
               save_text: "Guardar" %>
           <% end %>

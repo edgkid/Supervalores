@@ -1,6 +1,7 @@
 class TConfFacAutomatica < ApplicationRecord
   belongs_to :t_tipo_cliente
   belongs_to :t_periodo
+  belongs_to :user
 
   has_many :t_factura_recargos, dependent: :destroy
   has_many :t_recargos, through: :t_factura_recargos
@@ -41,16 +42,17 @@ class TConfFacAutomatica < ApplicationRecord
 
     if self.estatus == 1
       # scheduler.at "#{configuracion.fecha_inicio} 0000" do
-      scheduler.in '2s' do
+      scheduler.in '2s' do |j0b|
+        create_invoices(j0b)
         # scheduler.schedule_every '1month' do |job|
-        scheduler.schedule_every '5s', :tags => self.job_tag do |job|
-          create_invoices(job)
-        end
+        # scheduler.schedule_every '5m', :tags => self.job_tag do |job|
+        #   create_invoices(job)
+        # end
       end
     end
   end
 
-  def create_invoices(user, job)
+  def create_invoices(job)
     configuracion_actual = TConfFacAutomatica.find(self.id)
 
     if configuracion_actual.estatus != 1
@@ -62,32 +64,33 @@ class TConfFacAutomatica < ApplicationRecord
       puts "Job id: #{job.id}"
     end
 
-    t_clientes = TCliente.joins("
-      INNER JOIN t_resolucions
-      ON t_resolucions.t_cliente_id = t_clientes.id
-      AND t_resolucions.t_tipo_cliente_id = #{configuracion_actual.t_tipo_cliente_id}",
-    ).distinct
+    # t_clientes = TCliente.joins("
+    #   INNER JOIN t_resolucions
+    #   ON t_resolucions.t_cliente_id = t_clientes.id
+    #   AND t_resolucions.t_tipo_cliente_id = #{configuracion_actual.t_tipo_cliente_id}",
+    # ).distinct
 
-    estatus_disponible = TEstatus.find_by(descripcion: 'Disponible')
-    t_clientes.each do |t_cliente|
+    t_resolucions = TResolucion.where(t_tipo_cliente: configuracion_actual.t_tipo_cliente)
+
+    #t_clientes.each do |t_cliente|
+    t_resolucions.each do |t_resolucion|
       t_factura = TFactura.new(
         fecha_notificacion: Date.today,
         fecha_vencimiento: Date.today + 1.month,
-        recargo: 0,
         recargo_desc: '-',
         itbms: 0,
         importe_total: 0,
-        pendiente_fact: 0,
         pendiente_ts: 0,
         tipo: '-',
         next_fecha_recargo: Date.today + 1.month,
         monto_emision: 0,
         justificacion: configuracion_actual.nombre_ciclo_facturacion,
         automatica: true,
-        t_estatus: estatus_disponible,
+        t_estatus: TEstatus.find_by(descripcion: 'Disponible') || TEstatus.first.id,
         t_periodo: configuracion_actual.t_periodo,
         t_recargos: configuracion_actual.t_recargos,
-        t_resolucion: configuracion_actual.t_tipo_cliente.t_resolucion
+        t_resolucion: t_resolucion,
+        user: configuracion_actual.user
       )
 
       configuracion_actual.t_tarifa_servicios.each do |t_tarifa_servicio|
@@ -100,19 +103,18 @@ class TConfFacAutomatica < ApplicationRecord
         )
       end
 
-      t_factura.calculate_total(
-        configuracion_actual.t_tarifa_servicios.sum(:precio),
-        configuracion_actual.t_tarifas.map { |t| t.calculate_total }
-      )
-
-      # configuracion_actual.t_recargos.each do |t_recargo|
-      #   scheduler.schedule_every "#{t_recargo.t_periodo.rango_dias}d" do |recargo_job|
-      #     t_factura.t_recargos
-      #   end
-      # end
+      t_factura.recargo = t_factura.calculate_total_surcharge(true)
+      t_factura.pendiente_fact = t_factura.calculate_pending_payment(true)
+      t_factura.total_factura = t_factura.calculate_total(true)
 
       if t_factura.save!
-        puts "\n" * 5 + '¡Facturas automáticas creadas!'
+        puts "\n" * 5 + '¡Facturas automáticas creadas!' + "\n"
+
+        # active = (t_factura.calculate_pending_payment <= 0) ? true : false
+
+        t_factura.t_recargos.each do |t_recargo|
+          t_recargo.schedule_surcharges(t_factura, configuracion_actual.estatus)
+        end
       else
         puts "\n" * 5 + '¡La factura no se pudo crear!'
       end

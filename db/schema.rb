@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_12_051558) do
+ActiveRecord::Schema.define(version: 2019_10_15_032131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -454,6 +454,8 @@ ActiveRecord::Schema.define(version: 2019_10_12_051558) do
     t.bigint "t_periodo_id"
     t.bigint "t_metodo_pago_id", null: false
     t.bigint "user_id", null: false
+    t.decimal "recargo_x_pagar"
+    t.decimal "servicios_x_pagar"
     t.index ["t_cliente_id"], name: "index_t_recibos_on_t_cliente_id"
     t.index ["t_factura_id"], name: "index_t_recibos_on_t_factura_id"
     t.index ["t_metodo_pago_id"], name: "index_t_recibos_on_t_metodo_pago_id"

@@ -13,7 +13,6 @@ class TConfFacAutomaticasController < ApplicationController
 
     if @t_conf_fac_automatica.save
       @t_conf_fac_automatica.schedule_invoices
-
       redirect_to t_conf_fac_automaticas_path, notice: 'Configuración de Factura creada exitosamente'
     else
       @notice = @t_conf_fac_automatica.errors
