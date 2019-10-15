@@ -15,7 +15,7 @@ class EstadoCuentaDatatable < ApplicationDatatable
       debito: { source: "TRecibo.pago_recibido"},
       credito: { source: "TRecibo.monto_acreditado"},
       saldo: { source: "TRecibo.pago_pendiente"},
-      usuario: { source: "TRecibo.user.nombre_completo"}
+      usuario: { source: "User.nombre & User.apellido"}
     }
   end
 
@@ -74,8 +74,8 @@ class EstadoCuentaDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    TFactura.includes(:t_recibos)    
-    .left_joins(:t_recibos)
+    TFactura.includes({t_recibos: :user})    
+    .left_joins({t_recibos: :user})
     .where(
       t_resolucion_id: params[:t_resolucion_id]
     )
