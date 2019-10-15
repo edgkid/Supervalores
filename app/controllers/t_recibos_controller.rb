@@ -49,7 +49,7 @@ class TRecibosController < ApplicationController
   def destroy
     @t_recibo.destroy
 
-    redirect_to t_factura_t_recibos_path()
+    redirect_to t_factura_t_recibos_path(@t_factura)
   end
 
   private

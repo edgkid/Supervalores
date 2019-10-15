@@ -13,11 +13,19 @@ class TRecibo < ApplicationRecord
   has_many :t_clientes, through: :t_estado_cuentum
 
   validates :pago_recibido, numericality: {
-    message: "|El monto pagado debe ser un número válido"
+    message: "|El monto pagado debe ser un número válido."
+  }
+  validates :num_cheque, presence: {
+    message: "|El número de cheque no debe estar en blanco.",
+    if: :is_check
   }
 
+  def is_check
+    self.t_metodo_pago == TMetodoPago.find_by(forma_pago: 'Cheque') || TMetodoPago.find_by(forma_pago: 'cheque')
+  end
+
   def calculate_default_attributes(t_factura, t_cliente, current_user)
-    remaining = t_factura.calculate_pending_payment - self.pago_recibido
+    remaining = t_factura.calculate_pending_payment - (self.pago_recibido || 0)
     credited_amount = remaining < 0 ? (remaining * (-1)) : 0
     pending_payment = remaining > 0 ? remaining : 0
 
@@ -32,7 +40,7 @@ class TRecibo < ApplicationRecord
 
   def self.count_paid_receipts_by_month(month_number)
     TRecibo.where(
-      'extract(month  from created_at) = ?
+      'extract(month from created_at) = ?
       AND pago_pendiente <= ?',
       month_number,
       0

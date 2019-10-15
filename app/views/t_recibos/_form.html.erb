@@ -70,7 +70,7 @@
       <div class="row" id="num-cheque-container">
         <div class="col-sm-6">
           <div class="form-group row">
-            <%= f.label :num_cheque, 'Número de Cheque', class: "col-sm-4 col-form-label opcional" %>
+            <%= f.label :num_cheque, 'Número de Cheque', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
             <div class="col-sm-7 input-value">
               <% unless @is_show %>
                 <%= f.text_field :num_cheque, class: "form-control", id: 'num-cheque' %>
