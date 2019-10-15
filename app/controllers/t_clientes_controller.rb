@@ -88,7 +88,7 @@ class TClientesController < ApplicationController
     end
   end
 
-  def show    
+  def show
   end
 
   def new
