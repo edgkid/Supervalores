@@ -9,6 +9,7 @@ function addRecargoRow () {
         <select class="select-recargo" data-first_time="true" id="t_recargo${i}" name="t_factura[t_recargo_ids][]" style="width: 100%;">
           <option></option>
           <% TRecargo.all.each do |t_recargo| %>
+            <% puts 'updating surcharges' %>
             <option data-rate="<%= t_recargo.tasa %>" value="<%= t_recargo.id %>"><%= t_recargo.descripcion %></option>
           <% end %>
         </select>

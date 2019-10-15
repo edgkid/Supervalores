@@ -9,10 +9,11 @@ class TRecibosController < ApplicationController
 
   def create
     @t_recibo = TRecibo.new(t_recibo_params)
+    @t_recibo.set_surcharge_and_services_total(@t_recibo.pago_recibido || 0, @t_factura, @t_factura.t_recibos.empty?)
     @t_recibo.calculate_default_attributes(@t_factura, @t_cliente, current_user)
 
     if @t_recibo.save
-      redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Recibo Creado exitosamente'
+      redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Recibo creado exitosamente'
     else
       @notice = @t_recibo.errors
       render 'new'
@@ -64,7 +65,7 @@ class TRecibosController < ApplicationController
 
     def t_recibo_params
       params.require(:t_recibo).permit(
-        :pago_recibido, :pago_pendiente, :justificacion, :num_cheque, :t_metodo_pago_id
+        :pago_recibido, :justificacion, :num_cheque, :t_metodo_pago_id
       )
     end
 

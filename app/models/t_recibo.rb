@@ -13,24 +13,49 @@ class TRecibo < ApplicationRecord
   has_many :t_clientes, through: :t_estado_cuentum
 
   validates :pago_recibido, numericality: {
-    message: "|El monto pagado debe ser un número válido."
+    message: "|El monto pagado debe ser un número válido"
   }
   validates :num_cheque, presence: {
-    message: "|El número de cheque no debe estar en blanco.",
+    message: "|El número de cheque no debe estar en blanco",
     if: :is_check
   }
+  validate :received_payment_cannot_be_less_than_minimum_allowed
+  validate :received_payment_cannot_be_more_than_maximum_allowed
+
+  def received_payment_cannot_be_less_than_minimum_allowed
+    t_metodo_pago = TMetodoPago.find(t_metodo_pago_id)
+    if pago_recibido && t_metodo_pago.minimo && pago_recibido < t_metodo_pago.minimo
+      errors.add(:pago_recibido, "|El monto pagado no puede ser menor que el mínimo permitido por el método de pago seleccionado (el mínimo es #{t_metodo_pago.minimo})")
+    end
+  end
+
+  def received_payment_cannot_be_more_than_maximum_allowed
+    t_metodo_pago = TMetodoPago.find(t_metodo_pago_id)
+    if pago_recibido && t_metodo_pago.maximo && pago_recibido > t_metodo_pago.maximo
+      errors.add(:pago_recibido, "|El monto pagado no puede ser mayor que el máximo permitido por el método de pago seleccionado (el máximo es #{t_metodo_pago.maximo})")
+    end
+  end
 
   def is_check
     self.t_metodo_pago == TMetodoPago.find_by(forma_pago: 'Cheque') || TMetodoPago.find_by(forma_pago: 'cheque')
   end
 
-  def set_surcharge_and_services_total(received_payment, t_factura, no_receipts)
-    surcharge_remaining = if no_receipts
-                            t_factura.calculate_total_surcharge - received_payment
-                          else
-                            t_factura.t_recibos.last.recargo_x_pagar - received_payment
-                          end
-    services_total = no_receipts ? t_factura.calculate_services_total_price : t_factura.t_recibos.last.servicios_x_pagar
+  def get_services_total(t_factura, has_no_receipts)
+    has_no_receipts ? t_factura.calculate_services_total_price : t_factura.t_recibos.last.servicios_x_pagar
+  end
+
+  def get_total_surcharge(t_factura, has_no_receipts)
+    has_no_receipts ? t_factura.calculate_total_surcharge : t_factura.t_recibos.last.recargo_x_pagar
+  end
+
+  def set_surcharge_and_services_total(received_payment, t_factura, has_no_receipts)
+    # surcharge_remaining = if has_no_receipts
+    #                         t_factura.calculate_total_surcharge - received_payment
+    #                       else
+    #                         t_factura.t_recibos.last.recargo_x_pagar - received_payment
+    #                       end
+    surcharge_remaining = get_total_surcharge(t_factura, has_no_receipts) - received_payment
+    services_total = get_services_total(t_factura, has_no_receipts)
 
     if surcharge_remaining     > 0
       self.recargo_x_pagar     = surcharge_remaining
@@ -52,12 +77,6 @@ class TRecibo < ApplicationRecord
   end
 
   def calculate_default_attributes(t_factura, t_cliente, current_user)
-    # remaining = t_factura.calculate_pending_payment - (self.pago_recibido || 0)
-    # credited_amount = remaining < 0 ? (remaining * (-1)) : 0
-    # pending_payment = remaining > 0 ? remaining : 0
-    self.set_surcharge_and_services_total(self.pago_recibido, t_factura, t_factura.t_recibos.empty?)
-    # self.monto_acreditado = credited_amount
-    # self.pago_pendiente = pending_payment
     self.fecha_pago = Date.today
     self.t_factura = t_factura
     self.t_cliente = t_cliente
