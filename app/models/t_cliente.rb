@@ -20,14 +20,24 @@ class TCliente < ApplicationRecord
 
   validates :codigo,
     presence: { 
-      message: "|El SERI no puede estar vacío."
+      message: "|El Código SERI no puede estar vacío."
     },
     format: { 
-      message: "|El SERI solo puede tener Letras, Números y Guiones(-).",
+      message: "|El Código SERI solo puede tener Letras, Números y Guiones(-).",
       with: /([A-Za-z0-9\-]+)/ 
     },
     uniqueness: {
-      message: "|Ya existe un cliente con este SERI, use otro por favor.",
+      message: "|Ya existe un cliente con este Código SERI, use otro por favor.",
+    },
+    :on => [:create, :update]
+
+  validates :dv,
+    presence: { 
+      message: "|El dígito verificador no puede estar vacío."
+    },
+    format: { 
+      message: "|El dígito verificador solo puede tener 4 caracteres (Letras o Números).",
+      with: /([A-Za-z0-9]{4})/ 
     },
     :on => [:create, :update]
 

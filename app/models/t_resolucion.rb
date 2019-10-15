@@ -9,17 +9,7 @@ class TResolucion < ApplicationRecord
 	has_many :t_recargos, through: :t_recargo_x_cliente
 	has_many :t_cliente_tarifas, dependent: :destroy
 	has_many :t_tarifas, through: :t_cliente_tarifa
-
-	validates :descripcion,
-		presence: {
-			message: "|La descripción no puede estar vacía."
-		},
-		length: {
-			message: "|La descripción debe tener minimo 2 caracteres.",
-			minimum: 2
-		},
-		on: [:create, :update]
-
+	
 	validates :t_cliente_id,
 		presence: {
 			message: "|Debe indicar el cliente asociado a la resolución."
