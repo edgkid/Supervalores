@@ -96,4 +96,8 @@ class TFactura < ApplicationRecord
     end
     next_surcharge_date
   end
+
+  def apply_2_percent_monthly_surcharge
+    
+  end
 end

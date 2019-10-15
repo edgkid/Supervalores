@@ -27,6 +27,7 @@ class TFacturasController < ApplicationController
     @t_factura.t_estatus_id = TEstatus.find_by(descripcion: 'Disponible') || TEstatus.first.id
 
     if @t_factura.save!
+      # @t_factura.apply_2_percent_monthly_surcharge
       redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Factura creada exitosamente.'
     else
       @notice = @t_factura.errors
