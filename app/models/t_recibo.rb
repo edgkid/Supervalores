@@ -24,13 +24,40 @@ class TRecibo < ApplicationRecord
     self.t_metodo_pago == TMetodoPago.find_by(forma_pago: 'Cheque') || TMetodoPago.find_by(forma_pago: 'cheque')
   end
 
-  def calculate_default_attributes(t_factura, t_cliente, current_user)
-    remaining = t_factura.calculate_pending_payment - (self.pago_recibido || 0)
-    credited_amount = remaining < 0 ? (remaining * (-1)) : 0
-    pending_payment = remaining > 0 ? remaining : 0
+  def set_surcharge_and_services_total(received_payment, t_factura, no_receipts)
+    surcharge_remaining = if no_receipts
+                            t_factura.calculate_total_surcharge - received_payment
+                          else
+                            t_factura.t_recibos.last.recargo_x_pagar - received_payment
+                          end
+    services_total = no_receipts ? t_factura.calculate_services_total_price : t_factura.t_recibos.last.servicios_x_pagar
 
-    self.monto_acreditado = credited_amount
-    self.pago_pendiente = pending_payment
+    if surcharge_remaining     > 0
+      self.recargo_x_pagar     = surcharge_remaining
+      self.servicios_x_pagar   = t_factura.calculate_services_total_price
+      self.pago_pendiente      = self.recargo_x_pagar + self.servicios_x_pagar
+      self.monto_acreditado    = 0
+    else
+      self.recargo_x_pagar     = 0
+      if (services_remaining   = services_total + surcharge_remaining) > 0
+        self.servicios_x_pagar = services_remaining
+        self.pago_pendiente    = services_remaining
+        self.monto_acreditado  = 0
+      else
+        self.servicios_x_pagar = 0
+        self.pago_pendiente    = 0
+        self.monto_acreditado  = -services_remaining
+      end
+    end
+  end
+
+  def calculate_default_attributes(t_factura, t_cliente, current_user)
+    # remaining = t_factura.calculate_pending_payment - (self.pago_recibido || 0)
+    # credited_amount = remaining < 0 ? (remaining * (-1)) : 0
+    # pending_payment = remaining > 0 ? remaining : 0
+    self.set_surcharge_and_services_total(self.pago_recibido, t_factura, t_factura.t_recibos.empty?)
+    # self.monto_acreditado = credited_amount
+    # self.pago_pendiente = pending_payment
     self.fecha_pago = Date.today
     self.t_factura = t_factura
     self.t_cliente = t_cliente
