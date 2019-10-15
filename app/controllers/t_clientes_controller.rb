@@ -8,7 +8,6 @@ class TClientesController < ApplicationController
   before_action :seleccionar_resolucion, only: [:mostrar_resolucion]
   before_action :clients_with_resolutions, only: :find_by_codigo
   before_action :companies_with_clients_with_resolutions, only: :find_by_cedula
-  # load_and_authorize_resource
 
   def index    
     @usar_dataTables = true
@@ -44,7 +43,12 @@ class TClientesController < ApplicationController
       :recargo,
       :total_factura,
       :pendiente_fact,
-      :tipo
+      :tipo,
+      :numero_recibo,
+      :debito,
+      :credito,
+      :saldo,
+      :usuario,
     ]
 
     respond_to do |format|
@@ -52,7 +56,6 @@ class TClientesController < ApplicationController
       format.json { render json: EstadoCuentaDatatable.new(
         params.merge({
           attributes_to_display: @attributes_to_display,
-          t_estatus_id: params[:t_estatus_id],
           t_resolucion_id: params[:t_resolucion_id]
         }),
         view_context: view_context)
@@ -61,25 +64,29 @@ class TClientesController < ApplicationController
   end
 
   def estado_cuenta_calculo_de_totales
-    t_estatus_id = params[:t_estatus_id]
     t_resolucion_id = params[:t_resolucion_id]
     sum_total = TFactura
-      .where( 
-        t_estatus_id: t_estatus_id, 
+      .where(
         t_resolucion_id: t_resolucion_id 
       )
       .sum("t_facturas.total_factura")
     sum_pago_recibido = TFactura.left_joins(:t_recibos)
-      .where( 
-        t_estatus_id: t_estatus_id, 
+      .where(
         t_resolucion_id: t_resolucion_id 
       )
       .sum("COALESCE(t_recibos.pago_recibido, 0)")
-    if t_estatus_id != "" && t_resolucion_id != ""
+    sum_monto_acreditado = TFactura.left_joins(:t_recibos)
+      .where(
+        t_resolucion_id: t_resolucion_id 
+      )
+      .sum("COALESCE(t_recibos.monto_acreditado, 0)")
+    if t_resolucion_id != ""
       render json: {
         procesado: true,
         total: sum_total,
-        por_pagar: sum_total - sum_pago_recibido
+        por_pagar: sum_total - sum_pago_recibido,
+        total_pago_recibido: sum_pago_recibido,
+        total_monto_acreditado: sum_monto_acreditado
       }
     else
       render json: {

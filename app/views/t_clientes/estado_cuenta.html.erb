@@ -15,14 +15,7 @@
     <div class="ibox">
       <div class="ibox-title">
         <div class="row">
-          <h3 class="col-sm-6">Facturas Registradas</h3>
-
-          <div class="col-sm-2 col-form-label">
-            <label>Estatus:</label>
-          </div>
-          <div class="col-sm-3 input-value">
-            <%= select_tag :t_estatus_id, options_for_select(opciones_de_estatus(true, 1, true), nil), { id:"select-estatus", :class => 'form-control m-b' } %>
-          </div>
+          <h3 class="col-sm-11">Facturas y Recibos Registrados</h3>
           <div class="col-sm-1 input-value">
             <button id="btn-refresh-table" class="btn btn-default"><i class="fa fa-refresh"></i></button>
           </div>
@@ -34,14 +27,18 @@
             data-source="<%= estados_de_cuenta_path(format: :json) %>" id="ajax-datatable">
             <thead>
               <tr>
-                <th>N°</th>
+                <th>N° Factura</th>
                 <th>Fecha</th>
                 <th>F. Venc</th>
                 <th>Recargo</th>
                 <th>Total</th>
                 <th>Pendiente</th>
                 <th>Tp</th>
-                <!-- <th>Prosp.</th> -->
+                <th>N° Recibo</th>
+                <th>Débito</th>
+                <th>Crédito</th>
+                <th>Saldo</th>
+                <th>Usuario</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -57,19 +54,16 @@
 
     $.extend({
       useDataInAjaxCall: function (d) {
-        d.t_estatus_id = $('#select-estatus').val();
         d.t_resolucion_id = $('#select-resolucion').val();
       },
       useDataTableFooter: function (footer) {
         $.ajax({
           url: "<%= calculo_de_totales_path %>",
           data: {
-            t_estatus_id: $('#select-estatus').val(),
             t_resolucion_id: $('#select-resolucion').val()
           }
         })
           .done(function (data) {
-            console.log(data)
             if (data.procesado) {
               footer.empty().append($("<tr />")
                 .append($("<td />"))
@@ -78,6 +72,11 @@
                 .append($("<td />").html("Total"))
                 .append($("<td />").html(data.total))
                 .append($("<td />").html(data.por_pagar))
+                .append($("<td />"))
+                .append($("<td />"))
+                .append($("<td />").html(data.total_pago_recibido))
+                .append($("<td />").html(data.total_monto_acreditado))
+                .append($("<td />"))
                 .append($("<td />"))
               )
             }
@@ -89,7 +88,6 @@
     $("#ajax-datatable").DataTable().ajax.reload();
   }
 
-  $('#select-estatus').change(refreshTable)
   $("#btn-refresh-table").click(refreshTable)
   $('#select-resolucion').change(refreshTable)
 </script>
