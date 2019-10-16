@@ -13,7 +13,8 @@ class TRecibo < ApplicationRecord
   has_many :t_clientes, through: :t_estado_cuentum
 
   validates :pago_recibido, numericality: {
-    message: "|El monto pagado debe ser un número válido"
+    greater_than: 0,
+    message: "|El monto pagado debe ser un número válido mayor que cero"
   }
   validates :num_cheque, presence: {
     message: "|El número de cheque no debe estar en blanco",

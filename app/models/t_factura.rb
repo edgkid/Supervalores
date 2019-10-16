@@ -118,10 +118,6 @@ class TFactura < ApplicationRecord
       total_surcharge = self.recargo + surcharge_to_apply
 
       if total_surcharge < services_total_price
-        # t_recargo = TRecargo.where(
-        #   tasa: 0.02,
-        #   t_periodo: TPeriodo.where(rango_dias: 30)
-        # ).first_or_create!
         self.recargo = total_surcharge.truncate(2)
       else
         self.recargo = services_total_price
@@ -140,17 +136,21 @@ class TFactura < ApplicationRecord
     if self.t_estatus.descripcion.downcase == 'disponible'
       scheduler.schedule_every '1month' do |job|
       # scheduler.schedule_every '20s' do |job|
+        terminate = false
         t_factura = TFactura.find(self.id)
         if t_factura.t_estatus.descripcion.downcase == 'disponible'
           t_recibos = t_factura.t_recibos
           unless t_recibos.any? && t_recibos.last.pago_pendiente <= 0
             generate_surcharge
+            puts "Recargo del 2\% generado!"
           else
-            puts "Terminating 2\% surcharge jobs!"
-            job.unschedule if job.scheduled?
-            job.kill if job.running?
+            terminate = true
           end 
         else
+          terminate = true
+        end
+
+        if terminate
           puts "Terminating 2\% surcharge jobs!"
           job.unschedule if job.scheduled?
           job.kill if job.running?

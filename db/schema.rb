@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_15_032131) do
+ActiveRecord::Schema.define(version: 2019_10_15_032132) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 2019_10_15_032131) do
     t.date "prospecto_at"
     t.bigint "persona_id", null: false
     t.string "persona_type", null: false
+    t.string "dv"
     t.index ["codigo"], name: "index_t_clientes_on_codigo", unique: true
     t.index ["persona_type", "persona_id"], name: "index_persona_as_cliente"
     t.index ["t_estatus_id"], name: "index_t_clientes_on_t_estatus_id"
@@ -469,12 +470,10 @@ ActiveRecord::Schema.define(version: 2019_10_15_032131) do
     t.datetime "updated_at", null: false
     t.bigint "t_cliente_id", null: false
     t.bigint "t_estatus_id", null: false
-    t.integer "resolucion_anio"
-    t.string "resolucion_codigo"
     t.string "num_licencia"
     t.string "codigo"
     t.bigint "t_tipo_cliente_id"
-    t.index ["resolucion_anio", "resolucion_codigo"], name: "index_t_resolucions_on_resolucion_anio_and_resolucion_codigo", unique: true
+    t.string "resolucion"
     t.index ["t_cliente_id"], name: "index_t_resolucions_on_t_cliente_id"
     t.index ["t_estatus_id"], name: "index_t_resolucions_on_t_estatus_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_resolucions_on_t_tipo_cliente_id"

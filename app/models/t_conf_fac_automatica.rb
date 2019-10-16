@@ -109,12 +109,14 @@ class TConfFacAutomatica < ApplicationRecord
 
       if t_factura.save!
         puts "\n" * 5 + '¡Facturas automáticas creadas!' + "\n"
+        t_factura.apply_2_percent_monthly_surcharge
+        # t_factura.
 
         # active = (t_factura.calculate_pending_payment <= 0) ? true : false
 
-        t_factura.t_recargos.each do |t_recargo|
-          t_recargo.schedule_surcharges(t_factura, configuracion_actual.estatus)
-        end
+        # t_factura.t_recargos.each do |t_recargo|
+        #   t_recargo.schedule_surcharges(t_factura, configuracion_actual.estatus)
+        # end
       else
         puts "\n" * 5 + '¡La factura no se pudo crear!'
       end
