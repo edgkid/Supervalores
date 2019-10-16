@@ -45,33 +45,28 @@ class TRecibo < ApplicationRecord
   end
 
   def get_total_surcharge(t_factura, has_no_receipts)
-    has_no_receipts ? t_factura.calculate_total_surcharge : t_factura.t_recibos.last.recargo_x_pagar
+    has_no_receipts ? t_factura.recargo : t_factura.t_recibos.last.recargo_x_pagar
   end
 
   def set_surcharge_and_services_total(received_payment, t_factura, has_no_receipts)
-    # surcharge_remaining = if has_no_receipts
-    #                         t_factura.calculate_total_surcharge - received_payment
-    #                       else
-    #                         t_factura.t_recibos.last.recargo_x_pagar - received_payment
-    #                       end
-    surcharge_remaining = get_total_surcharge(t_factura, has_no_receipts) - received_payment
+    surcharge_remaining = (get_total_surcharge(t_factura, has_no_receipts) || 0) - (received_payment || 0)
     services_total = get_services_total(t_factura, has_no_receipts)
 
     if surcharge_remaining     > 0
-      self.recargo_x_pagar     = surcharge_remaining
-      self.servicios_x_pagar   = t_factura.calculate_services_total_price
-      self.pago_pendiente      = self.recargo_x_pagar + self.servicios_x_pagar
+      self.recargo_x_pagar     = surcharge_remaining.truncate(2)
+      self.servicios_x_pagar   = t_factura.calculate_services_total_price.truncate(2)
+      self.pago_pendiente      = (self.recargo_x_pagar + self.servicios_x_pagar).truncate(2)
       self.monto_acreditado    = 0
     else
       self.recargo_x_pagar     = 0
       if (services_remaining   = services_total + surcharge_remaining) > 0
-        self.servicios_x_pagar = services_remaining
-        self.pago_pendiente    = services_remaining
+        self.servicios_x_pagar = services_remaining.truncate(2)
+        self.pago_pendiente    = services_remaining.truncate(2)
         self.monto_acreditado  = 0
       else
         self.servicios_x_pagar = 0
         self.pago_pendiente    = 0
-        self.monto_acreditado  = -services_remaining
+        self.monto_acreditado  = (-services_remaining).truncate(2)
       end
     end
   end

@@ -18,15 +18,16 @@ class TFacturaDatatable < ApplicationDatatable
 
   def data
     records.map do |record|
+      pending_payment = record.t_recibos.any? ? record.t_recibos.last.pago_pendiente : record.calculate_pending_payment
       {
         id: record.id,
         codigo: record.t_resolucion.t_cliente.codigo,
         resolucion: record.t_resolucion.resolucion_codigo,
         fecha_notificacion: record.fecha_notificacion,
         fecha_vencimiento: record.fecha_vencimiento,
-        recargo: record.calculate_total_surcharge,
+        recargo: record.recargo,
         total_factura: record.total_factura,
-        pendiente_fact: record.calculate_pending_payment,
+        pendiente_fact: pending_payment,
         tipo: record.tipo,
         DT_RowId: url_for({
           id: record.id, controller: 't_facturas', action: 'preview', only_path: true

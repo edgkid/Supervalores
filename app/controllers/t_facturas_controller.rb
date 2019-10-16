@@ -15,7 +15,7 @@ class TFacturasController < ApplicationController
   def create
     @t_factura = TFactura.new(t_factura_params)
     @t_factura.user = current_user
-    @t_factura.recargo = @t_factura.calculate_total_surcharge
+    @t_factura.recargo = @t_factura.calculate_total_surcharge(true)
     @t_factura.recargo_desc = '-'
     @t_factura.itbms = 0
     @t_factura.importe_total = 0
@@ -27,7 +27,7 @@ class TFacturasController < ApplicationController
     @t_factura.t_estatus_id = TEstatus.find_by(descripcion: 'Disponible').id || TEstatus.first.id
 
     if @t_factura.save
-      # @t_factura.apply_2_percent_monthly_surcharge
+      @t_factura.apply_2_percent_monthly_surcharge
       redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Factura creada exitosamente.'
     else
       @notice = @t_factura.errors

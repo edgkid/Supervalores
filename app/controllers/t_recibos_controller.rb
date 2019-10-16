@@ -71,7 +71,11 @@ class TRecibosController < ApplicationController
 
     def set_necessary_objects
       @t_recibos = @t_factura.t_recibos
-      @pending_payment = @t_factura.calculate_pending_payment
+      if @t_recibos.any?
+        @pending_payment = @t_recibos.last.pago_pendiente.truncate(2)
+      else
+        @pending_payment = @t_factura.calculate_pending_payment.truncate(2)
+      end
 
       @t_resolucion = @t_factura.t_resolucion
       @t_tarifa  = @t_resolucion.t_tipo_cliente.t_tarifa
