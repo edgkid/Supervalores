@@ -1,24 +1,34 @@
 <%= fields_for registro do |form| %>
 <div class="form-group row">
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :codigo, 'SERI', class: "text-right" %>
-    </div>
-    <div class="col-sm-4 input-value">
-      <% if editable %>
-      <%= form.text_field :codigo, autofocus: true, autocomplete: "descripcion", class: "form-control" %>
-      <% else %>
-      <%= registro.codigo %>
-      <% end %>
-    </div>
-    <div class="col-sm-2 col-form-label">
-      <%= form.label :t_estatus_id, 'Estatus', class: "text-right" %>
-    </div>
-    <div class="col-sm-4 input-value">
-      <% if editable %>
-      <%= form.select :t_estatus_id, opciones_de_estatus(true, 2, true) , {}, { :class => 'form-control m-b' } %>
-      <% else %>
-      <%= registro.t_estatus.descripcion %>
-      <% end %>
-    </div>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :codigo, 'Código SERI', class: "text-right" %>
   </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.text_field :codigo, autofocus: true, autocomplete: "codigo", class: "form-control" %>
+    <% else %>
+    <%= registro.codigo %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :dv, 'Dígito Verificador', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.text_field :dv, autofocus: true, autocomplete: "dv", class: "form-control" %>
+    <% else %>
+    <%= registro.dv %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label">
+    <%= form.label :t_estatus_id, 'Estatus', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.select :t_estatus_id, opciones_de_estatus(true, 2, true) , {}, { :class => 'form-control m-b' } %>
+    <% else %>
+    <%= registro.t_estatus.descripcion %>
+    <% end %>
+  </div>
+</div>
 <% end %>

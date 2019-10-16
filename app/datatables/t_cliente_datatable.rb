@@ -2,7 +2,14 @@ class TClienteDatatable < ApplicationDatatable
   def view_columns
     super
     @view_columns.merge!({
-      t_estatus: { source: "TEstatus.descripcion" }
+      codigo: { source: "TCliente.codigo", cond: :like },
+      identificacion: { source: "TCliente.identificacion", searchable: false },
+      razon_social: { source: "TCliente.razon_social", searchable: false },
+      telefono: { source: "TCliente.telefono", searchable: false },
+      email: { source: "TCliente.email", searchable: false },
+      es_prospecto: { source: "TCliente.prospecto_at", searchable: false },
+      t_estatus: { source: "TEstatus.descripcion" },
+      tipo_persona: { source: "TCliente.tipo_persona", searchable: false }
     })
   end
   

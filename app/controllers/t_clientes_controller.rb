@@ -8,7 +8,6 @@ class TClientesController < ApplicationController
   before_action :seleccionar_resolucion, only: [:mostrar_resolucion]
   before_action :clients_with_resolutions, only: :find_by_codigo
   before_action :companies_with_clients_with_resolutions, only: :find_by_cedula
-  # load_and_authorize_resource
 
   def index    
     @usar_dataTables = true
@@ -44,7 +43,12 @@ class TClientesController < ApplicationController
       :recargo,
       :total_factura,
       :pendiente_fact,
-      :tipo
+      :tipo,
+      :numero_recibo,
+      :debito,
+      :credito,
+      :saldo,
+      :usuario,
     ]
 
     respond_to do |format|
@@ -52,7 +56,6 @@ class TClientesController < ApplicationController
       format.json { render json: EstadoCuentaDatatable.new(
         params.merge({
           attributes_to_display: @attributes_to_display,
-          t_estatus_id: params[:t_estatus_id],
           t_resolucion_id: params[:t_resolucion_id]
         }),
         view_context: view_context)
@@ -61,25 +64,29 @@ class TClientesController < ApplicationController
   end
 
   def estado_cuenta_calculo_de_totales
-    t_estatus_id = params[:t_estatus_id]
     t_resolucion_id = params[:t_resolucion_id]
     sum_total = TFactura
-      .where( 
-        t_estatus_id: t_estatus_id, 
+      .where(
         t_resolucion_id: t_resolucion_id 
       )
       .sum("t_facturas.total_factura")
     sum_pago_recibido = TFactura.left_joins(:t_recibos)
-      .where( 
-        t_estatus_id: t_estatus_id, 
+      .where(
         t_resolucion_id: t_resolucion_id 
       )
       .sum("COALESCE(t_recibos.pago_recibido, 0)")
-    if t_estatus_id != "" && t_resolucion_id != ""
+    sum_monto_acreditado = TFactura.left_joins(:t_recibos)
+      .where(
+        t_resolucion_id: t_resolucion_id 
+      )
+      .sum("COALESCE(t_recibos.monto_acreditado, 0)")
+    if t_resolucion_id != ""
       render json: {
         procesado: true,
         total: sum_total,
-        por_pagar: sum_total - sum_pago_recibido
+        por_pagar: sum_total - sum_pago_recibido,
+        total_pago_recibido: sum_pago_recibido,
+        total_monto_acreditado: sum_monto_acreditado
       }
     else
       render json: {
@@ -88,7 +95,7 @@ class TClientesController < ApplicationController
     end
   end
 
-  def show    
+  def show
   end
 
   def new
@@ -348,7 +355,7 @@ class TClientesController < ApplicationController
 
   def find_by_resolucion
     search = parametros_de_busqueda[:search]
-    respond_with TResolucion.where('resolucion_codigo ILIKE ?', "%#{search}%").first(15)
+    respond_with TResolucion.where('resolucion ILIKE ?', "%#{search}%").first(15)
     # respond_with TResolucion.where('num_licencia ILIKE ?', "%#{search}%").first(15)
   end
 
@@ -401,7 +408,7 @@ class TClientesController < ApplicationController
     end
 
     def parametros_cliente
-      params.require(:t_cliente).permit(:codigo, :t_estatus_id, :cuenta_venta, :t_tipo_persona_id, :razon_social, :telefono, :email, :es_prospecto)
+      params.require(:t_cliente).permit(:codigo, :dv, :t_estatus_id, :cuenta_venta, :t_tipo_persona_id, :razon_social, :telefono, :email, :es_prospecto)
     end
     
     def parametros_cliente_tipo_empresa
@@ -437,7 +444,9 @@ class TClientesController < ApplicationController
     end
 
     def parametros_resolucion
-      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :codigo, :num_licencia, :t_cliente_id, :t_tipo_cliente_id)
+      datos = params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :codigo, :num_licencia, :t_cliente_id, :t_tipo_cliente_id)
+      datos[:resolucion] = "SVM#{params[:resolucion_codigo]}#{params[:resolucion_anio]}"
+      return datos
     end
 
     def parametros_contacto

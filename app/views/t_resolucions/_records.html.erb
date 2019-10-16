@@ -15,11 +15,10 @@ end
     <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= t_resolucions_path(format: :json, cliente: cliente) %>" id="ajax-datatable">
       <thead>
         <tr>
-          <th>Código</th>
+          <th>Resolución</th>
           <% if mostrar_cliente %>
           <th>Cliente</th>
           <% end %>
-          <th>Resolución</th>          
           <th>Descripción</th>
           <th>Fecha</th>
         </tr>
