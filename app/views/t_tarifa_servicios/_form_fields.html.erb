@@ -47,9 +47,19 @@
 
   <div class="form-group row">
     <div class="col-sm-2 col-form-label">
+      <%= form.label :tipo, class: "text-right" %>
+    </div>
+    <div class="col-sm-2 input-value">
+      <% if editable %>
+        <%= form.select :tipo, [['TS', 'TS'], ['TR', 'TR'], ['Otro', 'Otro']], {}, { class: 'form-control m-b' } %>
+      <% else %>
+        <%= registro.tipo %>
+      <% end %>
+    </div>
+    <div class="col-sm-2 col-form-label">
       <%= form.label :precio, class: "text-right" %>
     </div>
-    <div class="col-sm-4 input-value">
+    <div class="col-sm-2 input-value">
       <% if editable %>
         <%= form.text_field :precio, class: "form-control" %>
       <% else %>
@@ -59,7 +69,7 @@
     <div class="col-sm-2 col-form-label">
       <%= form.label :estatus, class: "text-right" %>
     </div>
-    <div class="col-sm-4 input-value">
+    <div class="col-sm-2 input-value">
       <% if editable %>
         <%= form.select :estatus, opciones_de_estatus(false), {}, { class: 'form-control m-b' } %>
       <% else %>

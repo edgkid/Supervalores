@@ -35,7 +35,7 @@ class TTarifaServiciosController < ApplicationController
   def index
     @usar_dataTables = true
     @attributes_to_display = [
-      :codigo, :descripcion, :nombre,
+      :codigo, :tipo, :descripcion, :nombre,
       :clase, :precio, :estatus
     ]
 

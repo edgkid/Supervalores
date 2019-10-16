@@ -134,8 +134,7 @@ class TFactura < ApplicationRecord
     scheduler = Rufus::Scheduler.singleton
 
     if self.t_estatus.descripcion.downcase == 'disponible'
-      scheduler.schedule_every '1month' do |job|
-      # scheduler.schedule_every '20s' do |job|
+      scheduler.at "#{self.fecha_vencimiento + 1.day} 0000" do |j0b|
         terminate = false
         t_factura = TFactura.find(self.id)
         if t_factura.t_estatus.descripcion.downcase == 'disponible'
@@ -152,8 +151,31 @@ class TFactura < ApplicationRecord
 
         if terminate
           puts "Terminating 2\% surcharge jobs!"
-          job.unschedule if job.scheduled?
-          job.kill if job.running?
+          j0b.unschedule if j0b.scheduled?
+          j0b.kill if j0b.running?
+        end
+
+        scheduler.schedule_every '1month' do |job|
+        # scheduler.schedule_every '20s' do |job|
+          terminate = false
+          t_factura = TFactura.find(self.id)
+          if t_factura.t_estatus.descripcion.downcase == 'disponible'
+            t_recibos = t_factura.t_recibos
+            unless t_recibos.any? && t_recibos.last.pago_pendiente <= 0
+              generate_surcharge
+              puts "Recargo del 2\% generado!"
+            else
+              terminate = true
+            end 
+          else
+            terminate = true
+          end
+
+          if terminate
+            puts "Terminating 2\% surcharge jobs!"
+            job.unschedule if job.scheduled?
+            job.kill if job.running?
+          end
         end
       end
     end
