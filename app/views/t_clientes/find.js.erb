@@ -10,7 +10,7 @@ var data = [
   <% @t_cliente.t_resolucions.each do |t_resolucion| %>
     {
       id: <%= t_resolucion.id %>,
-      text: '<%= t_resolucion.resolucion_codigo %>'
+      text: '<%= t_resolucion.resolucion %>'
     },
   <% end if @t_cliente %>
 ]

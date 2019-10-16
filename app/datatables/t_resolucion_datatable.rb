@@ -3,7 +3,7 @@ class TResolucionDatatable < ApplicationDatatable
   def view_columns    
     @view_columns ||= {
       t_cliente: { source: "TCliente.codigo" },
-      resolucion: { source: "TResolucion.resolucion_codigo" },
+      resolucion: { source: "TResolucion.resolucion" },
       descripcion: { source: "TResolucion.descripcion" },
       created_at: { source: "TResolucion.created_at" },
       t_estatus: { source: "TEstatus.descripcion" }

@@ -475,10 +475,9 @@ FROM (
 	where ctc.resolucion ~ '^([0-9]{1,4}-[0-9]{2,4})$'
 ) dt;
 
-INSERT INTO t_resolucions (resolucion_codigo, resolucion_anio, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia)
+INSERT INTO t_resolucions (resolucion, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia)
 SELECT 	
-	  rw.code
-	, CAST(rw."year" as int) "year"
+	  CONCAT('SVM', rw.code, rw."year")
 	, CONCAT(rw."year", rw.code)
 	, 'Resolución de migración ' || string_agg(rw.original, ', ') descripcion
 	, (SELECT res[1] from array_agg(rw.fecha_resolucion) res) created_at
@@ -498,7 +497,7 @@ FROM (
 			, rns.num_licencia
 		FROM resoluciones_normalizadas rns
 	) rw
-	GROUP BY 1, 2, 3;
+	GROUP BY 1, 2;
 
 UPDATE t_clientes 
 	SET prospecto_at = CURRENT_TIMESTAMP
@@ -582,7 +581,7 @@ FROM cxc_t_facturas ctfs
 JOIN (
 	SELECT rns.client_id, array_agg(trs.id) ids
 	FROM resoluciones_normalizadas rns
-	JOIN t_resolucions trs ON CAST(rns."year" AS INTEGER) = trs.resolucion_anio AND rns.code = trs.resolucion_codigo	
+	JOIN t_resolucions trs ON CONCAT('SVM', rns.code, rns."year") = trs.resolucion
 	GROUP BY rns.client_id
 ) resoluciones ON ctfs.idt_clientes = resoluciones.client_id
 JOIN periodos_normalizados pns on ctfs.idt_periodo = pns.prev_id

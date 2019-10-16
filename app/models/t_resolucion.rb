@@ -22,38 +22,21 @@ class TResolucion < ApplicationRecord
 		},
 		on: [:create, :update]
 
-	validates :resolucion_codigo,
+	validates :resolucion,
 		presence: {
 			message: "|El codigo de la resolución no puede estar vacío."
 		},
     format: { 
       message: "|La resolución solo puede tener Letras, Números, Guiones(-).",
-      with: /([A-Za-z0-9\-]+)/ 
+      with: /SVM([A-Za-z0-9\-]+)([0-9]+)/ 
 		},
 		on: [:create, :update]
-	
-	validates :resolucion_anio,
-		presence: {
-			message: "|La resolución no puede estar vacía."
-		},
-    format: { 
-      message: "|La resolución solo puede tener Números.",
-      with: /([0-9]+)/ 
-		},
-		on: [:create, :update]
-		
-	validates :resolucion_anio, 
-		uniqueness: {
-			scope: :resolucion_codigo,
-			message: "|Ya se registró esta resolución a un cliente, use otra por favor.",
-		}
 
-		validates :num_licencia,
+	validates :num_licencia,
 		presence: {
 				message: "|El número licencia no puede estar vacía."
 		},
 		:on => [:create, :update]
-
 	
 	attr_accessor :usar_cliente
 
@@ -65,8 +48,12 @@ class TResolucion < ApplicationRecord
 		read_attribute(:resolucion_codigo)
 	end
 
-	def resolucion
-		"SMV#{resolucion_codigo}#{resolucion_anio}"# if defined?(resolucion_anio)
+	def resolucion_anio=(resolucion_anio)
+		write_attribute(:resolucion_anio, resolucion_anio)
+	end
+	
+	def resolucion_anio
+		read_attribute(:resolucion_anio)
 	end
 
 	private

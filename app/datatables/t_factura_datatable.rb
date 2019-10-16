@@ -6,7 +6,7 @@ class TFacturaDatatable < ApplicationDatatable
     @view_columns ||= {
       id: { source: "TFactura.id" },
       codigo: { source: "TCliente.codigo" },
-      resolucion: { source: "TResolucion.resolucion_codigo" },
+      resolucion: { source: "TResolucion.resolucion" },
       fecha_notificacion: { source: "TFactura.fecha_notificacion" },
       fecha_vencimiento: { source: "TFactura.fecha_vencimiento" },
       recargo: { source: "TFactura.recargo" },
@@ -21,7 +21,7 @@ class TFacturaDatatable < ApplicationDatatable
       {
         id: record.id,
         codigo: record.t_resolucion.t_cliente.codigo,
-        resolucion: record.t_resolucion.resolucion_codigo,
+        resolucion: record.t_resolucion.resolucion,
         fecha_notificacion: record.fecha_notificacion,
         fecha_vencimiento: record.fecha_vencimiento,
         recargo: record.calculate_total_surcharge,

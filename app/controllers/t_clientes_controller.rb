@@ -355,7 +355,7 @@ class TClientesController < ApplicationController
 
   def find_by_resolucion
     search = parametros_de_busqueda[:search]
-    respond_with TResolucion.where('resolucion_codigo ILIKE ?', "%#{search}%").first(15)
+    respond_with TResolucion.where('resolucion ILIKE ?', "%#{search}%").first(15)
     # respond_with TResolucion.where('num_licencia ILIKE ?', "%#{search}%").first(15)
   end
 
@@ -444,7 +444,9 @@ class TClientesController < ApplicationController
     end
 
     def parametros_resolucion
-      params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :resolucion_codigo, :resolucion_anio, :codigo, :num_licencia, :t_cliente_id, :t_tipo_cliente_id)
+      datos = params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :codigo, :num_licencia, :t_cliente_id, :t_tipo_cliente_id)
+      datos[:resolucion] = "SVM#{params[:resolucion_codigo]}#{params[:resolucion_anio]}"
+      return datos
     end
 
     def parametros_contacto

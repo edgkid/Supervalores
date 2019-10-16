@@ -20,7 +20,8 @@ class TCliente < ApplicationRecord
 
   validates :codigo,
     presence: { 
-      message: "|El Código SERI no puede estar vacío."
+      message: "|El Código SERI no puede estar vacío.",
+      if: :es_prospecto
     },
     format: { 
       message: "|El Código SERI solo puede tener Letras, Números y Guiones(-).",
