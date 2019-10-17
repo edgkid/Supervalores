@@ -51,7 +51,7 @@
 
 <script>
   <%= render partial: "t_facturas/script.js" %>
-  $.ready(function(){
+  $(document).ready(function(){
     $.extend({
       useDataInAjaxCall: function (d) {
         d.t_resolucion_id = $('#select-resolucion').val();
