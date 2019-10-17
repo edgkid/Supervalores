@@ -51,7 +51,7 @@ class TRecibo < ApplicationRecord
 
   def set_surcharge_and_services_total(received_payment, t_factura, has_no_receipts)
     surcharge_remaining = (get_total_surcharge(t_factura, has_no_receipts) || 0) - (received_payment || 0)
-    services_total = get_services_total(t_factura, has_no_receipts)
+    services_total = get_services_total(t_factura, has_no_receipts) || 0
 
     if surcharge_remaining     > 0
       self.recargo_x_pagar     = surcharge_remaining.truncate(2)
