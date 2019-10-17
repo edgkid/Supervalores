@@ -1,5 +1,6 @@
 class TFacturasController < ApplicationController
   before_action :set_t_factura, only: [:edit, :update, :preview, :show, :destroy]
+  before_action :set_dynamic_attributes, only: [:edit]
   load_and_authorize_resource
 
   def new
@@ -35,7 +36,6 @@ class TFacturasController < ApplicationController
     else
       @notice = @t_factura.errors
       @notice.messages[:t_resolucion] -= [@notice.messages[:t_resolucion].first]
-      @notice.messages[:t_periodo] -= [@notice.messages[:t_periodo].first]
       @do_not_use_plain_select2 = true
       render 'new', params[:dynamic_attributes]
     end
@@ -58,14 +58,16 @@ class TFacturasController < ApplicationController
 
   def edit
     @do_not_use_plain_select2 = true
+    @no_cache = true    
   end
 
   def update
     if @t_factura.update(t_factura_params)
       redirect_to t_facturas_path
     else
+      @notice = @t_factura.errors
       @do_not_use_plain_select2 = true
-      render 'edit'
+      render 'edit', params[:dynamic_attributes]
     end
   end
 
@@ -117,5 +119,68 @@ class TFacturasController < ApplicationController
 
     def set_t_factura
       @t_factura = TFactura.find(params[:id])
+    end
+
+    def set_dynamic_attributes
+      t_resolucion = @t_factura.t_resolucion
+      t_cliente    = t_resolucion.t_cliente
+      t_empresa    = t_cliente.try(:rif)            ? t_cliente.persona : nil
+      t_persona    = t_cliente.try(:cedula)         ? t_cliente.persona : nil
+      t_otro       = t_cliente.try(:identificacion) ? t_cliente.persona : nil
+
+      t_factura_detalles = @t_factura.t_factura_detalles
+      t_tarifa_servicios = []
+      t_tarifa_servicio_ids = []
+      t_tarifa_servicio_descripcions = []
+      t_tarifa_servicio_quantities = []
+      t_tarifa_servicio_prices = []
+      t_factura_detalles.each do |fd|
+        t_tarifa_servicios << fd.t_tarifa_servicio.nombre
+        t_tarifa_servicio_ids << fd.t_tarifa_servicio.id
+        t_tarifa_servicio_descripcions << fd.t_tarifa_servicio.descripcion
+        t_tarifa_servicio_quantities << fd.cantidad
+        t_tarifa_servicio_prices << fd.precio_unitario
+      end
+
+      t_recargos = @t_factura.t_recargos
+      t_recargo_descripcions = []
+      t_recargo_ids = []
+      t_recargo_quantities = []
+      t_recargo_prices = []
+      t_recargos.each do |r|
+        t_recargo_descripcions << r.descripcion
+        t_recargo_ids << r.id
+        t_recargo_quantities << 1
+        t_recargo_prices << r.tasa
+      end
+
+      params.merge!(ActionController::Parameters.new(
+        dynamic_attributes: {
+          t_cliente: {
+            codigo_select: t_cliente.codigo,
+            cedula: t_persona.try(:cedula) || t_empresa.try(:rif) || t_otro.try(:identificacion),
+            resolucion: t_resolucion.resolucion,
+            resolucion_id: t_resolucion.id,
+            estatus: 1,
+            codigo: t_cliente.codigo,
+            empresa: t_empresa.try(:rif),
+            direccion: t_empresa.try(:direccion_empresa),
+            telefono: t_empresa.try(:telefono)
+          },
+          t_tarifa_servicio: {
+            names: t_tarifa_servicios,
+            ids: t_tarifa_servicio_ids,
+            descripcions: t_tarifa_servicio_descripcions,
+            quantities: t_tarifa_servicio_quantities,
+            prices: t_tarifa_servicio_prices
+          },
+          t_recargo: {
+            descripcions: t_recargo_descripcions,
+            ids: t_recargo_ids,
+            quantities: t_recargo_quantities,
+            prices: t_recargo_prices
+          }
+        }
+      ).permit!)
     end
 end
