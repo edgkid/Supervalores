@@ -56,7 +56,7 @@
     <% end %>
   </div>
 </div>
-<div class="form-group row">
+<div class="form-group row opcional-prospectos">
   <div class="col-sm-3 col-form-label">
     <%= form.label :direccion_empresa, "Dirección", class: "text-right" %>
   </div>
@@ -68,7 +68,7 @@
     <% end %>
   </div>
 </div>
-<div class="form-group row">
+<div class="form-group row opcional-prospectos">
   <div class="col-sm-2 col-form-label">
     <%= form.label :telefono, "Teléfono", class: "text-right" %>
   </div>
@@ -82,7 +82,7 @@
   <div class="col-sm-2 col-form-label">
     <%= form.label :email, "Email", class: "text-right" %>
   </div>
-  <div class="col-sm-4 input-value">
+  <div class="col-sm-4 input-value opcional-prospectos">
     <% if editable %>
     <%= form.text_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
     <% else %>

@@ -51,7 +51,7 @@
 
 <script>
   <%= render partial: "t_facturas/script.js" %>
-
+  $.ready(function(){
     $.extend({
       useDataInAjaxCall: function (d) {
         d.t_resolucion_id = $('#select-resolucion').val();
@@ -84,10 +84,11 @@
       }
     });
 
-  refreshTable = function () {
-    $("#ajax-datatable").DataTable().ajax.reload();
-  }
+    refreshTable = function () {
+      $("#ajax-datatable").DataTable().ajax.reload();
+    }
 
-  $("#btn-refresh-table").click(refreshTable)
-  $('#select-resolucion').change(refreshTable)
+    $("#btn-refresh-table").click(refreshTable);
+    $('#select-resolucion').change(refreshTable);
+  })
 </script>

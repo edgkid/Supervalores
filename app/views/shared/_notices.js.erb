@@ -1,4 +1,5 @@
 <% if @notice != nil || notice != nil %>
+  console.log("Holas <%= notice %>")
   <% if notice != nil && (@notice == nil || (@notice.is_a?(Notice) && !@notice.force)) %>
     title = 'CXC'
     notice = '<%= notice %>'
