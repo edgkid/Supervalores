@@ -25,30 +25,22 @@ class TEmpresa < ApplicationRecord
             with: /([A-Za-z0-9\s\-\.,]+)/ 
         },
         :on => [:create, :update]
+    
+    validate :no_es_prospecto
 
-    validates :direccion_empresa,
-        presence: {
-            message: "|La dirección de empresa no puede estar vacía."
-        },
-        format: {
-            message: "|La dirección de empresa solo puede tener Letras, Números, Guiones(-) y espacios.",
-            with: /([A-Za-z0-9\-\s]+)/ 
-        },
-        :on => [:create, :update]
-
-    validates :telefono,
-        presence: {
-            message: "|El teléfono no puede estar vacío."
-        },
-        :on => [:create, :update]
-
-    validates :email,
-        presence: {
-            message: "|El email no puede estar vacío."
-        },
-        format: {
-            message: "|El email no tiene el formato esperado, ejemplo@dominio.com.",
-            with: /.+@.+/ 
-        },
-        :on => [:create, :update]
+    def no_es_prospecto
+        if !t_cliente.es_prospecto
+            on_assert_add_error telefono == nil || telefono == '', :telefono, '|El teléfono no puede estar vacío.'
+            if email == nil || email == ''
+                on_assert_add_error true, :email, '|El email no puede estar vacío.'
+            else
+                on_assert_add_error (email =~ /.+@.+\..+/) == nil, :email, '|El email no tiene el formato esperado, ejemplo@dominio.com.'
+            end
+            if direccion_empresa == nil || direccion_empresa == ''
+                on_assert_add_error true, :direccion_empresa, "|La dirección de empresa no puede estar vacía."
+            else
+                on_assert_add_error (direccion_empresa =~ /([A-Za-z0-9\-\s\.]+)/) == nil, :direccion_empresa, "|La dirección de empresa solo puede tener Letras, Números, Guiones(-), Puntos(.) y espacios."
+            end
+        end
+    end
 end

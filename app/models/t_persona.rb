@@ -18,7 +18,7 @@ class TPersona < ApplicationRecord
   
     validates :nombre,
         presence: {
-            message: "|El nombre no puede estar vacía."
+            message: "|El nombre no puede estar vacío."
         },
         format: {
             message: "|El nombre solo puede tener Letras y espacios.",
@@ -28,38 +28,29 @@ class TPersona < ApplicationRecord
     
     validates :apellido,
         presence: {
-            message: "|El apellido no puede estar vacía."
+            message: "|El apellido no puede estar vacío."
         },
         format: {
             message: "|El apellido solo puede tener Letras y espacios.",
             with: /([A-Za-z\s]+)/ 
         },
         :on => [:create, :update]
-    
-    validates :telefono,
-        presence: {
-            message: "|El teléfono no puede estar vacía."
-        },
-        :on => [:create, :update]
-    
-    validates :email,
-        presence: {
-            message: "|El email no puede estar vacía."
-        },
-        format: {
-            message: "|El email solo puede tener Letras, Números y Guiones(-).",
-            with: /.+@.+/  
-        },
-        :on => [:create, :update]
-    
-    validates :direccion,
-        presence: {
-            message: "|La dirección no puede estar vacía."
-        },
-        format: {
-            message: "|La dirección solo puede tener Letras, Números, Guiones(-) y espacios.",
-            with: /([A-Za-z0-9\-\s]+)/ 
-        },
-        :on => [:create, :update]
 
+    validate :no_es_prospecto
+
+    def no_es_prospecto
+        if !t_cliente.es_prospecto
+            on_assert_add_error telefono == nil || telefono == '', :telefono, '|El teléfono no puede estar vacío.'
+            if email == nil || email == ''
+                on_assert_add_error true, :email, '|El email no puede estar vacío.'
+            else
+                on_assert_add_error (email =~ /.+@.+\..+/) == nil, :email, '|El email no tiene el formato esperado, ejemplo@dominio.com.'
+            end
+            if direccion == nil || direccion == ''
+                on_assert_add_error true, :direccion, "|La dirección no puede estar vacía."
+            else
+                on_assert_add_error (direccion =~ /([A-Za-z0-9\-\s\.]+)/) == nil, :direccion, "|La dirección solo puede tener Letras, Números, Guiones(-) y espacios."
+            end
+        end
+    end
 end

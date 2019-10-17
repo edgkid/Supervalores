@@ -13,9 +13,12 @@ $(document).ready(function(){
       $(".tipo_otro_form_fields").removeClass("hide")
     }
   }
-
+  <% if @registro.es_prospecto %>
+  $(".opcional-prospectos").toggleClass("hide")
+  <% end %>
   $("#t_cliente_es_prospecto").click(function(){
     $("#ibox_resoluciones").toggleClass("hide")
+    $(".opcional-prospectos").toggleClass("hide")
   })
 
   $("#t_resolucion_usar_cliente").click(function(){
