@@ -73,7 +73,7 @@ class TFacturasController < ApplicationController
     @usar_dataTables = true
     @attributes_to_display = [
       :id, :codigo, :resolucion, :fecha_notificacion, :fecha_vencimiento,
-      :recargo, :total_factura, :pendiente_fact, :tipo
+      :recargo, :total_factura, :pendiente_fact
     ]
 
     respond_to do |format|
