@@ -28,6 +28,12 @@
     <%= render "layouts/principalbody" %>
   <%else%>
   <body class="gray-bg">
+    <script>
+      $.extend({
+        useDataInAjaxCall: null,
+        useDataTableFooter: null
+      });
+    </script>
     <%= yield %>
     <%= render "layouts/scriptsection" %>
   <%end%>

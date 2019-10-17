@@ -18,19 +18,11 @@ class TCliente < ApplicationRecord
 
 	has_and_belongs_to_many :t_tarifas
 
-  validates :codigo,
-    presence: { 
-      message: "|El Código SERI no puede estar vacío.",
-      if: :es_prospecto
-    },
-    format: { 
-      message: "|El Código SERI solo puede tener Letras, Números y Guiones(-).",
-      with: /([A-Za-z0-9\-]+)/ 
-    },
-    uniqueness: {
-      message: "|Ya existe un cliente con este Código SERI, use otro por favor.",
-    },
-    :on => [:create, :update]
+#  validates :codigo,
+#    uniqueness: {
+#      message: "|Ya existe un cliente con este Código SERI, use otro por favor.",
+#    },
+#    :on => [:create, :update]
 
   validates :dv,
     presence: { 
@@ -38,9 +30,18 @@ class TCliente < ApplicationRecord
     },
     format: { 
       message: "|El dígito verificador solo puede tener 4 caracteres (Letras o Números).",
-      with: /([A-Za-z0-9]{4})/ 
+      with: /\A([A-Za-z0-9]{4})\z/ 
     },
     :on => [:create, :update]
+
+  validate :no_es_prospecto
+
+  def no_es_prospecto
+    if !es_prospecto
+      on_assert_add_error codigo == nil || codigo == '', :codigo, "|El Código SERI no puede estar vacío."
+      on_assert_add_error (codigo =~ /([A-Za-z0-9\-]+)/) == nil, :codigo, "|El Código SERI solo puede tener Letras, Números y Guiones(-)."
+    end
+  end
 
   before_save :before_save_record
 
