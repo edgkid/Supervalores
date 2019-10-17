@@ -64,19 +64,12 @@ class TConfFacAutomatica < ApplicationRecord
       puts "Job id: #{job.id}"
     end
 
-    # t_clientes = TCliente.joins("
-    #   INNER JOIN t_resolucions
-    #   ON t_resolucions.t_cliente_id = t_clientes.id
-    #   AND t_resolucions.t_tipo_cliente_id = #{configuracion_actual.t_tipo_cliente_id}",
-    # ).distinct
-
     t_resolucions = TResolucion.where(t_tipo_cliente: configuracion_actual.t_tipo_cliente)
 
-    #t_clientes.each do |t_cliente|
     t_resolucions.each do |t_resolucion|
       t_factura = TFactura.new(
-        fecha_notificacion: Date.today,
-        fecha_vencimiento: Date.today + 1.month,
+        fecha_notificacion: configuracion_actual.fecha_inicio,
+        fecha_vencimiento: configuracion_actual.fecha_inicio + 1.month,
         recargo_desc: '-',
         itbms: 0,
         importe_total: 0,
@@ -109,14 +102,16 @@ class TConfFacAutomatica < ApplicationRecord
 
       if t_factura.save!
         puts "\n" * 5 + '¡Facturas automáticas creadas!' + "\n"
+
+        t_factura_detalles = t_factura.t_factura_detalles
+        if t_factura_detalles.any? && t_factura_detalles.first.t_tarifa_servicio.tipo.downcase == 'ts'
+          t_factura.apply_2_percent_monthly_surcharge
+        end
+
+        t_factura.t_recargos.each do |t_recargo|
+          t_factura.schedule_surcharge(t_recargo)
+        end
         t_factura.apply_2_percent_monthly_surcharge
-        # t_factura.
-
-        # active = (t_factura.calculate_pending_payment <= 0) ? true : false
-
-        # t_factura.t_recargos.each do |t_recargo|
-        #   t_recargo.schedule_surcharges(t_factura, configuracion_actual.estatus)
-        # end
       else
         puts "\n" * 5 + '¡La factura no se pudo crear!'
       end

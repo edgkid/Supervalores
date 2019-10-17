@@ -97,36 +97,77 @@ class TFactura < ApplicationRecord
     next_surcharge_date
   end
 
-  def generate_surcharge
-    t_recibos = self.t_recibos
+  def generate_surcharge(rate, job)
+    t_factura_actual = TFactura.find(self.id)
+    if t_factura_actual.t_estatus.descripcion != 'Disponible'
+      puts 'Terminating surcharge job!'
+      job.unschedule if job.scheduled?
+      job.kill if job.running?
+    else
+      puts 'Job is up yet!'
+      puts "Job id: #{job.id}"
+    end
+
+    t_recibos = t_factura_actual.t_recibos
 
     if t_recibos.any?
       t_recibo = t_recibos.last
-      surcharge_to_apply = t_recibo.servicios_x_pagar * (2.0 / 100.0)
+      surcharge_to_apply = t_recibo.servicios_x_pagar * rate
       total_surcharge = t_recibo.recargo_x_pagar + surcharge_to_apply
 
       if total_surcharge < t_recibo.servicios_x_pagar
         t_recibo.recargo_x_pagar = total_surcharge.truncate(2)
+        t_recibo.pago_pendiente += surcharge_to_apply.truncate(2)
       else
         t_recibo.recargo_x_pagar = t_recibo.servicios_x_pagar
+        t_recibo.pago_pendiente = t_recibo.servicios_x_pagar * 2
       end
 
       t_recibo.save!
+      puts 'Recibo actualizado con el nuevo recargo!'
+      puts "self.recargo: #{t_recibo.recargo_x_pagar}"
+
+      if t_recibo.pago_pendiente <= 0
+        puts 'Terminating surcharge job!'
+        job.unschedule if job.scheduled?
+        job.kill if job.running?
+      end
     else
-      services_total_price = self.calculate_services_total_price
-      surcharge_to_apply = services_total_price * (2.0 / 100.0)
-      total_surcharge = self.recargo + surcharge_to_apply
+      services_total_price = t_factura_actual.calculate_services_total_price
+      surcharge_to_apply = services_total_price * rate
+      total_surcharge = t_factura_actual.recargo + surcharge_to_apply
 
       if total_surcharge < services_total_price
-        self.recargo = total_surcharge.truncate(2)
+        t_factura_actual.recargo = total_surcharge.truncate(2)
+        t_factura_actual.total_factura = services_total_price + t_factura_actual.recargo
       else
-        self.recargo = services_total_price
+        t_factura_actual.recargo = services_total_price
+        t_factura_actual.total_factura = services_total_price * 2
       end
 
-      self.save!
+      t_factura_actual.save!
       puts 'Factura actualizada con el nuevo recargo!'
-      puts "self.recargo: #{self.recargo}"
+      puts "self.recargo: #{t_factura_actual.recargo}"
       puts "total_surcharge: #{total_surcharge}"
+    end
+  end
+
+  def schedule_surcharge(t_recargo)
+    scheduler = Rufus::Scheduler.singleton
+
+    if self.t_estatus.descripcion == 'Disponible'
+      scheduler.at "#{self.fecha_vencimiento + 1.day} 0000" do
+      # scheduler.in '10s' do |j0b|
+        t_recargo_actual = TRecargo.find(t_recargo.id)
+
+        generate_surcharge(t_recargo_actual.tasa, j0b)
+
+        period_type = TPeriodo.translate_period_type_to_cron(t_recargo_actual.t_periodo.tipo)
+        scheduler.schedule_every "#{period_type}" do |job|
+        # scheduler.schedule_every '25s' do |job|
+          generate_surcharge(t_recargo.tasa, job)
+        end
+      end
     end
   end
 
@@ -140,7 +181,7 @@ class TFactura < ApplicationRecord
         if t_factura.t_estatus.descripcion.downcase == 'disponible'
           t_recibos = t_factura.t_recibos
           unless t_recibos.any? && t_recibos.last.pago_pendiente <= 0
-            generate_surcharge
+            generate_surcharge(0.02, j0b)
             puts "Recargo del 2\% generado!"
           else
             terminate = true
@@ -162,7 +203,7 @@ class TFactura < ApplicationRecord
           if t_factura.t_estatus.descripcion.downcase == 'disponible'
             t_recibos = t_factura.t_recibos
             unless t_recibos.any? && t_recibos.last.pago_pendiente <= 0
-              generate_surcharge
+              generate_surcharge(0.02, job)
               puts "Recargo del 2\% generado!"
             else
               terminate = true

@@ -5,7 +5,7 @@ class TPeriodosController < ApplicationController
   def index
     @usar_dataTables = true
     @attributes_to_display = [
-      :descripcion, :rango_dias, :dia_tope, :mes_tope, :estatus
+      :descripcion, :tipo, :dia_tope, :mes_tope, :estatus
     ]
 
     respond_to do |format|
@@ -29,6 +29,8 @@ class TPeriodosController < ApplicationController
 
   def create
     @registro = TPeriodo.new(t_periodo_params)
+    @registro.rango_dias = TPeriodo.translate_period_type_to_days(@registro.tipo)
+    
     respond_to do |format|
       if @registro.save
         format.html { redirect_to @registro, notice: 'Período creado correctamente.' }
@@ -74,6 +76,6 @@ class TPeriodosController < ApplicationController
     end
 
     def t_periodo_params
-      params.require(:t_periodo).permit(:descripcion, :rango_dias, :dia_tope, :mes_tope, :estatus)
+      params.require(:t_periodo).permit(:descripcion, :tipo, :dia_tope, :mes_tope, :estatus)
     end
 end
