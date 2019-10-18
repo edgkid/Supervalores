@@ -477,7 +477,7 @@ FROM (
 
 INSERT INTO t_resolucions (resolucion, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia)
 SELECT 	
-	  CONCAT('SVM', rw.code, rw."year")
+	  CONCAT('SMV', rw.code, rw."year")
 	, CONCAT(rw."year", rw.code)
 	, 'Resolución de migración ' || string_agg(rw.original, ', ') descripcion
 	, (SELECT res[1] from array_agg(rw.fecha_resolucion) res) created_at
@@ -581,7 +581,7 @@ FROM cxc_t_facturas ctfs
 JOIN (
 	SELECT rns.client_id, array_agg(trs.id) ids
 	FROM resoluciones_normalizadas rns
-	JOIN t_resolucions trs ON CONCAT('SVM', rns.code, rns."year") = trs.resolucion
+	JOIN t_resolucions trs ON CONCAT('SMV', rns.code, rns."year") = trs.resolucion
 	GROUP BY rns.client_id
 ) resoluciones ON ctfs.idt_clientes = resoluciones.client_id
 JOIN periodos_normalizados pns on ctfs.idt_periodo = pns.prev_id

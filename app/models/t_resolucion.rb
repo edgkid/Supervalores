@@ -30,7 +30,7 @@ class TResolucion < ApplicationRecord
 			on_assert_add_error resolucion_codigo == nil || resolucion_codigo == '', :resolucion, '|Debe indicar el código de la resolución.'
 			on_assert_add_error resolucion_anio == nil || resolucion_anio == '', :resolucion, '|Debe indicar el año de la resolución.'
 		else
-			on_assert_add_error true, :resolucion, '|La resolución no tiene un formato valido, ej SVM{código}{año}.'
+			on_assert_add_error true, :resolucion, '|La resolución no tiene un formato valido, ej SMV{código}{año}.'
 		end
 		on_assert_add_error t_cliente_id == nil && t_cliente == nil, :t_cliente_id, '|Debe indicar el cliente asociado a la resolución.'
 		on_assert_add_error t_estatus_id == nil && t_estatus == nil, :t_estatus_id, '|Debe indicar el estatus asociado a la resolución.'
@@ -40,7 +40,7 @@ class TResolucion < ApplicationRecord
 	
 	def resolucion_codigo
 		if resolucion != nil && resolucion != ""
-			grupos = resolucion.scan(/(SVM)([A-Za-z0-9]+)([0-9]{4})/)
+			grupos = resolucion.scan(/(SMV)([A-Za-z0-9]+)([0-9]{4})/)
 			if grupos.at(0) != nil
 				return grupos.at(0).at(1)
 			end
@@ -50,7 +50,7 @@ class TResolucion < ApplicationRecord
 	
 	def resolucion_anio
 		if resolucion != nil && resolucion != ""
-			grupos = resolucion.scan(/(SVM)([A-Za-z0-9]+)([0-9]{4})/)
+			grupos = resolucion.scan(/(SMV)([A-Za-z0-9]+)([0-9]{4})/)
 			if grupos.at(0) != nil
 				return grupos.at(0).at(2)
 			end

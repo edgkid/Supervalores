@@ -17,8 +17,15 @@ class TClienteDatatable < ApplicationDatatable
     records_array = super
     records.each_with_index do |record, i|
       records_array[i].merge!({ 
-        t_estatus: record.t_estatus.descripcion, 
+        codigo: record.codigo,
+        identificacion: record.identificacion,
+        razon_social: record.razon_social,
+        telefono: record.telefono,
+        email: record.email,
         es_prospecto: record.prospecto_at == nil ? "Si" : "No",
+        t_estatus: record.t_estatus.descripcion, 
+        tipo_persona: record.tipo_persona,
+        DT_RowId: url_for(record)
       })
     end
     records_array

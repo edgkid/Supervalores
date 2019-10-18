@@ -459,7 +459,7 @@ class TClientesController < ApplicationController
         value = resolucion_codigo.strip()[0..5]
         resolucion_codigo = "#{"0"*(6-value.length)}#{value}"
       end
-      datos[:resolucion] = "SVM#{resolucion_codigo}#{params[:t_resolucion][:resolucion_anio]}"
+      datos[:resolucion] = "SMV#{resolucion_codigo}#{params[:t_resolucion][:resolucion_anio]}"
       return datos
     end
 
