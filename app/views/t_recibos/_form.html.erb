@@ -16,8 +16,10 @@
       <div class="row">
         <div class="col-sm-6">
           <div class="form-group row">
-            <%= f.label :pago_recibido, 'Monto Pagado', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
-            <div class="col-sm-7 input-value">
+            <div class="col-sm-4 col-form-label">
+              <%= f.label :pago_recibido, 'Monto Pagado', class: "text-right #{'opcional' if @is_show}" %>
+            </div>
+            <div class="col-sm-6 input-value">
               <% unless @is_show %>
                 <%= f.text_field :pago_recibido, class: "form-control", id: 'payment-received-input', min: 0, step: 0.01 %>
               <% else %>
@@ -28,8 +30,10 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group row">
-            <%= f.label :pago_pendiente, 'Monto por Pagar', class: "col-sm-4 col-form-label opcional" %>
-            <div class="col-sm-7 input-value">
+            <div class="col-sm-4 col-form-label">
+              <%= f.label :pago_pendiente, 'Monto por Pagar', class: "text-right opcional" %>
+            </div>
+            <div class="col-sm-6 input-value">
               <% unless @is_show %>
                 <%= f.text_field :pago_pendiente, class: "form-control", id: 'pending-payment-input', readonly: 'readonly', value: @pending_payment %>
               <% else %>
@@ -43,8 +47,10 @@
       <div class="row">
         <div class="col-sm-6">
           <div class="form-group row">
-            <%= f.label :t_metodo_pago_id, 'Método de Pago', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
-            <div class="col-sm-7 input-value">
+            <div class="col-sm-4 col-form-label">
+              <%= f.label :t_metodo_pago_id, 'Método de Pago', class: "text-right #{'opcional' if @is_show}" %>
+            </div>
+            <div class="col-sm-6 input-value">
               <% unless @is_show %>
                 <%= f.select :t_metodo_pago_id, payment_method_options, {}, { class: "form-control", id: 'metodo-pago-select' } %>
               <% else %>
@@ -55,8 +61,10 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group row">
-            <%= f.label :justificacion, 'Justificación', class: "col-sm-4 col-form-label opcional" %>
-            <div class="col-sm-7 input-value">
+            <div class="col-sm-4 col-form-label">
+              <%= f.label :justificacion, 'Justificación', class: "text-right opcional" %>
+            </div>
+            <div class="col-sm-6 input-value">
               <% unless @is_show %>
                 <%= f.text_field :justificacion, class: "form-control" %>
               <% else %>
@@ -70,8 +78,10 @@
       <div class="row">
         <div class="col-sm-6" id="num-cheque-container">
           <div class="form-group row">
-            <%= f.label :num_cheque, 'Número de Cheque', class: "col-sm-4 col-form-label #{'opcional' if @is_show}" %>
-            <div class="col-sm-7 input-value">
+            <div class="col-sm-4 col-form-label">
+              <%= f.label :num_cheque, 'Número de Cheque', class: "text-right #{'opcional' if @is_show}" %>
+            </div>
+            <div class="col-sm-6 input-value">
               <% unless @is_show %>
                 <%= f.text_field :num_cheque, class: "form-control", id: 'num-cheque' %>
               <% else %>

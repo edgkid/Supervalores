@@ -93,7 +93,7 @@ $(document).ready(function(){
       processResults: function (data) {
         return {
           results: $.map(data, function(t_resolucion, i) {
-            return { id: t_resolucion.id, text: t_resolucion.resolucion_codigo } 
+            return { id: t_resolucion.id, text: t_resolucion.resolucion }
           })
         };
       },

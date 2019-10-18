@@ -8,4 +8,9 @@ class TRecargo < ApplicationRecord
 	has_many :t_resolucions, through: :t_recargo_x_cliente
   has_many :t_recargo_facturas, dependent: :destroy
   has_many :t_facturas, through: :t_recargo_facturas
+
+  validates :descripcion, presence: { message: "|La descripción no debe estar vacía" }
+  validates :tasa, numericality: {
+    message: "|La tasa debe ser un número válido"
+  }
 end

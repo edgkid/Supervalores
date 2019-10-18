@@ -365,7 +365,6 @@ class TClientesController < ApplicationController
   def find_by_resolucion
     search = parametros_de_busqueda[:search]
     respond_with TResolucion.where('resolucion ILIKE ?', "%#{search}%").first(15)
-    # respond_with TResolucion.where('num_licencia ILIKE ?', "%#{search}%").first(15)
   end
 
   def find

@@ -61,7 +61,7 @@ class TReciboPdf < Prawn::Document
       text "Resolución: #{@t_resolucion.resolucion}"
       text "CIP / RUC: #{@t_persona.try(:cedula) || @t_empresa.try(:rif) || @t_otro.try(:identificacion)}"
 
-      text "Recibo: \##{@t_recibo.id}"
+      text "Recibo: \# #{@t_recibo.id}"
       text "Estado: #{(@t_recibo.pago_pendiente <= 0) ? 'Pagado' : 'Sin Pagar'}"
       text "Fecha: #{@t_factura.created_at.strftime('%d/%m/%Y %I:%M:%S %p')}"
     end
