@@ -1,5 +1,5 @@
 class TFacturasController < ApplicationController
-  before_action :set_t_factura, only: [:edit, :update, :preview, :show, :destroy]
+  before_action :set_t_factura, only: [:edit, :update, :preview, :show, :destroy, :generar_pdf]
   before_action :set_dynamic_attributes, only: [:edit]
   load_and_authorize_resource
 
@@ -49,9 +49,9 @@ class TFacturasController < ApplicationController
     @t_cliente = @t_resolucion.t_cliente
     @t_persona = @t_cliente.persona
 
-    @t_empresa = @t_cliente.try(:rif)            ? @t_cliente.persona : nil
-    @t_persona = @t_cliente.try(:cedula)         ? @t_cliente.persona : nil
-    @t_otro    = @t_cliente.try(:identificacion) ? @t_cliente.persona : nil
+    @t_empresa = @t_cliente.persona.try(:rif)            ? @t_cliente.persona : nil
+    @t_persona = @t_cliente.persona.try(:cedula)         ? @t_cliente.persona : nil
+    @t_otro    = @t_cliente.persona.try(:identificacion) ? @t_cliente.persona : nil
   end
 
   def edit
@@ -97,9 +97,13 @@ class TFacturasController < ApplicationController
   end
 
   def generar_pdf
-    filename = "factura.pdf"
-    pdf = Factura.new
-    send_data pdf.render, :filename => filename, :type => "application/pdf", disposition: "inline" and return
+    pdf = TFacturaPdf.new(@t_factura, view_context)
+    send_data(
+      pdf.render,
+      filename: "factura_nro_#{@t_factura.id}.pdf",
+      type: "application/pdf",
+      disposition: "inline"
+    ) and return
   end
 
   private
@@ -122,9 +126,9 @@ class TFacturasController < ApplicationController
     def set_dynamic_attributes
       t_resolucion = @t_factura.t_resolucion
       t_cliente    = t_resolucion.t_cliente
-      t_empresa    = t_cliente.try(:rif)            ? t_cliente.persona : nil
-      t_persona    = t_cliente.try(:cedula)         ? t_cliente.persona : nil
-      t_otro       = t_cliente.try(:identificacion) ? t_cliente.persona : nil
+      t_empresa    = t_cliente.persona.try(:rif)            ? t_cliente.persona : nil
+      t_persona    = t_cliente.persona.try(:cedula)         ? t_cliente.persona : nil
+      t_otro       = t_cliente.persona.try(:identificacion) ? t_cliente.persona : nil
 
       t_factura_detalles = @t_factura.t_factura_detalles
       t_tarifa_servicios = []

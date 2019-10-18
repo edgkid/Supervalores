@@ -96,11 +96,30 @@
               delete_route: t_factura_t_recibo_path(@t_factura, @t_recibo), delete_text: "Borrar",
               button_size: "xs"
             %>
+
+            <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf'), target: "_blank", class: 'btn btn-primary' do %>
+              <i class="fa fa-download"></i>
+              Generar PDF
+            <% end %>
           <% else %>
+            <!-- <div class="text-center justify-content-md-center">
+              <div class="btn-group" role="group">
+                <%#= link_to t_factura_t_recibos_path(@t_factura), class: "btn btn-default btn-xs", title: 'Ver registros', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
+                  <i class="glyphicon glyphicon-list-alt"></i> <%#= "Recibos" %>
+                <%# end %>
+                <a class="btn btn-primary btn-xs" href="#" onclick="">
+                  <i class="glyphicon glyphicon-floppy-saved"></i> Guardar e Imprimir
+                </a>
+              </div>
+
+              <%#= button_tag type: :submit, class: "btn btn-primary btn-xs", hidden: true, id: 'save', title: 'Guardar cambios', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
+                <i class="glyphicon glyphicon-floppy-saved"></i> <%#= "Guardar e Imprimir" %>
+              <%# end %>
+            </div> -->
             <%= render "shared/action_buttons",
               list_route: t_factura_t_recibos_path(@t_factura), list_text: "Recibos",
               save_form: true,
-              save_text: "Guardar" %>
+              save_text: "Guardar e Imprimir" %>
           <% end %>
         </div>
       </div>
@@ -124,5 +143,10 @@
     $('#metodo-pago-select').change(function () {
       showOrHideCheckNumber(this);
     });
+
+    // function preview_pdf() {
+    //   window.location.href = "<%#= generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo) %>";
+    //   $('#save').click();
+    // }
   });
 </script>

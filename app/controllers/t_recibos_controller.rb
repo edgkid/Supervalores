@@ -1,6 +1,6 @@
 class TRecibosController < ApplicationController
   before_action :set_t_factura, except: :index
-  before_action :set_t_recibo, only: :destroy
+  before_action :set_t_recibo, only: [:show, :destroy, :generar_pdf]
   before_action :set_necessary_objects, only: [:new, :create, :show]
 
   def new
@@ -13,7 +13,8 @@ class TRecibosController < ApplicationController
     @t_recibo.calculate_default_attributes(@t_factura, @t_cliente, current_user)
 
     if @t_recibo.save
-      redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Recibo creado exitosamente'
+      generar_pdf
+      # redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Recibo creado exitosamente'
     else
       @notice = @t_recibo.errors
       render 'new'
@@ -44,13 +45,22 @@ class TRecibosController < ApplicationController
 
   def show
     @is_show = true
-    @t_recibo = TRecibo.find(params[:id])
   end
 
   def destroy
     @t_recibo.destroy
 
     redirect_to t_factura_t_recibos_path(@t_factura)
+  end
+
+  def generar_pdf
+    pdf = TReciboPdf.new(@t_factura, @t_recibo, view_context)
+    send_data(
+      pdf.render,
+      filename: "recibo_nro_#{@t_recibo.id}.pdf",
+      type: "application/pdf",
+      disposition: "inline"
+    ) and return
   end
 
   private
