@@ -417,15 +417,15 @@ class TClientesController < ApplicationController
     end
 
     def parametros_cliente
-      params.require(:t_cliente).permit(:codigo, :dv, :t_estatus_id, :cuenta_venta, :t_tipo_persona_id, :razon_social, :telefono, :email, :es_prospecto)
+      params.require(:t_cliente).permit(:codigo, :t_estatus_id, :cuenta_venta, :t_tipo_persona_id, :razon_social, :telefono, :email, :es_prospecto)
     end
     
     def parametros_cliente_tipo_empresa
-      params.require(:t_empresa).permit(:rif, :razon_social, :t_empresa_tipo_valor_id, :t_empresa_sector_economico_id, :direccion_empresa, :fax, :web, :telefono, :email)
+      params.require(:t_empresa).permit(:rif, :dv, :razon_social, :t_empresa_tipo_valor_id, :t_empresa_sector_economico_id, :direccion_empresa, :fax, :web, :telefono, :email)
     end
 
     def parametros_nueva_empresa
-      params.require(:t_persona).require(:t_empresa).permit(:rif, :razon_social, :t_empresa_tipo_valor_id, :t_empresa_sector_economico_id, :direccion_empresa, :fax, :web, :telefono, :email)
+      params.require(:t_persona).require(:t_empresa).permit(:rif, :dv, :razon_social, :t_empresa_tipo_valor_id, :t_empresa_sector_economico_id, :direccion_empresa, :fax, :web, :telefono, :email)
     end
     
     def parametros_cliente_tipo_persona
@@ -459,7 +459,7 @@ class TClientesController < ApplicationController
         value = resolucion_codigo.strip()[0..5]
         resolucion_codigo = "#{"0"*(6-value.length)}#{value}"
       end
-      datos[:resolucion] = "SVM#{resolucion_codigo}#{params[:t_resolucion][:resolucion_anio]}"
+      datos[:resolucion] = "SMV#{resolucion_codigo}#{params[:t_resolucion][:resolucion_anio]}"
       return datos
     end
 

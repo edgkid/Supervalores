@@ -18,22 +18,6 @@ class TCliente < ApplicationRecord
 
 	has_and_belongs_to_many :t_tarifas
 
-#  validates :codigo,
-#    uniqueness: {
-#      message: "|Ya existe un cliente con este Código SERI, use otro por favor.",
-#    },
-#    :on => [:create, :update]
-
-  validates :dv,
-    presence: { 
-      message: "|El dígito verificador no puede estar vacío."
-    },
-    format: { 
-      message: "|El dígito verificador solo puede tener 4 caracteres (Letras o Números).",
-      with: /\A([A-Za-z0-9]{4})\z/ 
-    },
-    :on => [:create, :update]
-
   validate :no_es_prospecto
 
   def no_es_prospecto

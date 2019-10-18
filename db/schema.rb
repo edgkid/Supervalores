@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_17_021119) do
+ActiveRecord::Schema.define(version: 2019_10_17_021121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,15 +65,13 @@ ActiveRecord::Schema.define(version: 2019_10_17_021119) do
   end
 
   create_table "t_clientes", force: :cascade do |t|
-    t.string "codigo", null: false
+    t.string "codigo"
     t.integer "t_estatus_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "prospecto_at"
     t.bigint "persona_id", null: false
     t.string "persona_type", null: false
-    t.string "dv"
-    t.index ["codigo"], name: "index_t_clientes_on_codigo", unique: true
     t.index ["persona_type", "persona_id"], name: "index_persona_as_cliente"
     t.index ["t_estatus_id"], name: "index_t_clientes_on_t_estatus_id"
   end
@@ -179,6 +177,7 @@ ActiveRecord::Schema.define(version: 2019_10_17_021119) do
     t.string "email"
     t.bigint "t_empresa_tipo_valor_id", null: false
     t.bigint "t_empresa_sector_economico_id", null: false
+    t.string "dv"
     t.index ["rif"], name: "index_t_empresas_on_rif", unique: true
   end
 

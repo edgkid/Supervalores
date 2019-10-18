@@ -22,6 +22,16 @@
     <% end %>
   </div>
   <div class="col-sm-2 col-form-label">
+    <%= form.label :dv, 'Dígito Verificador', class: "text-right" %>
+  </div>
+  <div class="col-sm-4 input-value">
+    <% if editable %>
+    <%= form.text_field :dv, autofocus: true, autocomplete: "dv", class: "form-control", maxlength: 4 %>
+    <% else %>
+    <%= persona.dv %>
+    <% end %>
+  </div>
+  <div class="col-sm-2 col-form-label">
     <%= form.label :t_empresa_tipo_valor_id, "Tipo Valor", class: "text-right" %>
   </div>
   <div class="col-sm-4 input-value">    

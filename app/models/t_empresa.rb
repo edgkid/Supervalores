@@ -16,6 +16,16 @@ class TEmpresa < ApplicationRecord
         },
         :on => [:create, :update]
     
+    validates :dv,
+        presence: { 
+        message: "|El dígito verificador no puede estar vacío."
+        },
+        format: { 
+        message: "|El dígito verificador solo puede tener 4 caracteres (Letras o Números).",
+        with: /\A([A-Za-z0-9]{4})\z/ 
+        },
+        :on => [:create, :update]
+
     validates :razon_social,
         presence: {
             message: "|La razón social no puede estar vacío."
