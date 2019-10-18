@@ -25,7 +25,7 @@ class TFacturasController < ApplicationController
     @t_factura.tipo = '-'
     @t_factura.next_fecha_recargo = Date.today + 1.month
     @t_factura.monto_emision = 0
-    @t_factura.t_estatus_id = TEstatus.find_by(descripcion: 'Disponible').id || TEstatus.first.id
+    @t_factura.t_estatus = TEstatus.find_by(descripcion: 'Disponible') || TEstatus.first
 
     if @t_factura.save
       t_factura_detalles = @t_factura.t_factura_detalles
@@ -48,12 +48,10 @@ class TFacturasController < ApplicationController
     @t_estatus = @t_factura.t_estatus
     @t_cliente = @t_resolucion.t_cliente
     @t_persona = @t_cliente.persona
-    if @t_persona.class.to_s == 'TEmpresa'
-      @t_empresa = @t_persona
-      @t_persona = nil
-    else
-      @t_empresa = @t_persona.t_empresa
-    end
+
+    @t_empresa = @t_cliente.try(:rif)            ? @t_cliente.persona : nil
+    @t_persona = @t_cliente.try(:cedula)         ? @t_cliente.persona : nil
+    @t_otro    = @t_cliente.try(:identificacion) ? @t_cliente.persona : nil
   end
 
   def edit

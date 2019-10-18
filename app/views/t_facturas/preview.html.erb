@@ -3,7 +3,7 @@
     <%= image_tag "logoSMV.png", width: '200px' %>
   </div>
   <div align="right" class="col-md-6">
-    <h5><b>Fecha de impresión:</b><%#= date %><%#= time %></h5>
+    <h5><b>Fecha de impresión:</b> <%= Date.today.strftime('%d/%m/%Y') %></h5>
   </div>
 </div>
 
@@ -27,18 +27,18 @@
 
 <div class="row">
   <div class="col-md-4">
-    <b>Dirección:</b> <%= @t_empresa.direccion_empresa if @t_empresa %><br>
+    <b>Dirección:</b> <%= @t_empresa.try(:direccion_empresa) || @t_persona.try(:direccion) %><br>
     <b>Apartado Postal:</b> <%= '' %><br>
-    <b>Teléfono:</b> <%= @t_empresa.telefono if @t_empresa %><br>
-    <b>Email:</b> <%= @t_empresa.email if @t_empresa %>
+    <b>Teléfono:</b> <%= @t_empresa.try(:telefono) || @t_persona.try(:telefono) || @t_otro.try(:telefono) %><br>
+    <b>Email:</b> <%= @t_empresa.try(:email) || @t_persona.try(:email) || @t_otro.try(:email) %>
   </div>
   <div class="col-md-4">
     <b>Para</b><br>
-    <b>Cliente:</b> <%= "#{@t_cliente.razon_social}" %><br>
+    <b>Cliente:</b> <%= @t_empresa.try(:razon_social) || @t_persona.try(:full_name) || @t_otro.try(:razon_social) %><br>
     <b>Resolución:</b> <%= @t_resolucion.resolucion %><br>
-    <b>CIP / RUC:</b> <%= @t_cliente.identificacion %><br>
-    <b>Teléfono:</b> <%= @t_cliente.telefono %><br>
-    <b>Email:</b> <%= @t_cliente.email %><br>
+    <b>CIP / RUC:</b> <%= @t_empresa.try(:rif) || @t_persona.try(:cedula) || @t_otro.try(:identificacion) %><br>
+    <b>Teléfono:</b> <%= @t_empresa.try(:telefono) || @t_persona.try(:telefono) || @t_otro.try(:telefono) %><br>
+    <b>Email:</b> <%= @t_empresa.try(:email) || @t_persona.try(:email) || @t_otro.try(:email) %>
   </div>
   <div class="col-md-4">
     <b>Factura:</b> <%= @t_factura.id %><br>
