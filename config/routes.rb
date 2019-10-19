@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   scope module: 'admin' do
     resources :users
   end
+  resources :t_caja, only: :index
   resources :t_leyendas
   resources :t_periodos, path: "periodos"
   resources :t_tarifas, path: "tarifas"
