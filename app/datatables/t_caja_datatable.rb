@@ -27,6 +27,12 @@ class TCajaDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    TRecibo.joins(:t_cliente, {t_factura: [:t_resolucion]}, :user)
+    # params[:attributes_to_display].permit!
+    if params[:from] && params[:from] != '' && params[:to] && params[:to] != ''
+      TRecibo.joins(:t_cliente, {t_factura: [:t_resolucion]}, :user)
+        .where('fecha_pago BETWEEN ? AND ?', params[:from], params[:to])
+    else
+      TRecibo.joins(:t_cliente, {t_factura: [:t_resolucion]}, :user)
+    end
   end
 end

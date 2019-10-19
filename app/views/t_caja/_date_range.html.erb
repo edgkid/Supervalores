@@ -1,12 +1,14 @@
-<div class="row">
-  <div class="col-md-6">
-    <div class="form-group">
-      <input class="datepicker" type="text">
+<%= form_with(url: t_caja_index_path, method: "get", format: 'json') do %>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <%= text_field_tag 'from', nil, class: 'datepicker', placeholder: 'From', onchange: 'Rails.fire(this.form, "submit");' %>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <%= text_field_tag 'to', nil, class: 'datepicker', placeholder: 'To', onchange: 'Rails.fire(this.form, "submit");' %>
+      </div>
     </div>
   </div>
-  <div class="col-md-6">
-    <div class="form-group">
-      <input class="datepicker" type="text">
-    </div>
-  </div>
-</div>
+<% end %>

@@ -51,6 +51,66 @@
     $('.datepicker').datepicker({
       autoclose: true,
       format: "dd/mm/yyyy"
+    })/*.on('changeDate', function (e) {
+      console.log($(this).val());
+      $.ajax({
+        url: '<%#= "#{t_caja_index_path}.json" %>',
+        contentType: "application/json",
+        type: 'get',
+        data: {
+          date_range: {
+            from: $('#from').val(),
+            to: $('#to').val()
+          }
+        }
+      });
+    })*/;
+
+
+    $.extend({
+      useDataInAjaxCall: function (d) {
+        d.from = $('#from').val();
+        d.to = $('#to').val();
+      },
+      // useDataTableFooter: function (footer) {
+      //   $.ajax({
+      //     url: '<%= "#{t_caja_index_path}.json" %>',
+      //     contentType: "application/json",
+      //     type: 'get',
+      //     data: {
+      //       date_range: {
+      //         from: $('#from').val(),
+      //         to: $('#to').val()
+      //       }
+      //     }
+      //   })
+      //   .done(function (data) {
+      //     if (data.procesado) {
+      //       footer.empty().append($("<tr />")
+      //         .append($("<td />"))
+      //         .append($("<td />"))
+      //         .append($("<td />"))
+      //         .append($("<td />").html("Total"))
+      //         .append($("<td />").html(data.total))
+      //         .append($("<td />").html(data.por_pagar))
+      //         .append($("<td />"))
+      //         .append($("<td />"))
+      //         .append($("<td />").html(data.total_pago_recibido))
+      //         .append($("<td />").html(data.total_monto_acreditado))
+      //         .append($("<td />"))
+      //         .append($("<td />"))
+      //       )
+      //     }
+      //   });
+      // }
+    });
+
+    function refreshTable () {
+      $("#ajax-datatable").DataTable().ajax.reload();
+    }
+
+    $('.datepicker').on('changeDate', function (e) {
+      refreshTable();
     });
   });
 </script>
