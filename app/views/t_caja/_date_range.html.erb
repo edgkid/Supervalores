@@ -1,13 +1,18 @@
 <%= form_with(url: t_caja_index_path, method: "get", format: 'json') do %>
   <div class="row">
-    <div class="col-md-6">
+    <div align="right" class="col-md-2">
       <div class="form-group">
-        <%= text_field_tag 'from', nil, class: 'datepicker', placeholder: 'From', onchange: 'Rails.fire(this.form, "submit");' %>
+        <%= button_tag 'Limpiar', class: 'btn btn-default', id: 'clean-dates' %>
       </div>
     </div>
-    <div class="col-md-6">
+    <div align="right" class="col-md-5">
       <div class="form-group">
-        <%= text_field_tag 'to', nil, class: 'datepicker', placeholder: 'To', onchange: 'Rails.fire(this.form, "submit");' %>
+        <%= text_field_tag 'from', nil, class: 'datepicker', placeholder: 'Desde', onchange: 'Rails.fire(this.form, "submit");', readonly: true %>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <%= text_field_tag 'to', nil, class: 'datepicker', placeholder: 'Hasta', onchange: 'Rails.fire(this.form, "submit");', readonly: true %>
       </div>
     </div>
   </div>

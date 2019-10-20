@@ -51,21 +51,7 @@
     $('.datepicker').datepicker({
       autoclose: true,
       format: "dd/mm/yyyy"
-    })/*.on('changeDate', function (e) {
-      console.log($(this).val());
-      $.ajax({
-        url: '<%#= "#{t_caja_index_path}.json" %>',
-        contentType: "application/json",
-        type: 'get',
-        data: {
-          date_range: {
-            from: $('#from').val(),
-            to: $('#to').val()
-          }
-        }
-      });
-    })*/;
-
+    });
 
     $.extend({
       useDataInAjaxCall: function (d) {
@@ -74,7 +60,7 @@
       },
       // useDataTableFooter: function (footer) {
       //   $.ajax({
-      //     url: '<%= "#{t_caja_index_path}.json" %>',
+      //     url: '<%#= "#{t_caja_index_path}.json" %>',
       //     contentType: "application/json",
       //     type: 'get',
       //     data: {
@@ -112,5 +98,10 @@
     $('.datepicker').on('changeDate', function (e) {
       refreshTable();
     });
+
+    $('#clean-dates').click(function () {
+      $('.datepicker').val('');
+      refreshTable();
+    })
   });
 </script>
