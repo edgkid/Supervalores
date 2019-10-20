@@ -46,9 +46,6 @@
           <% if can? :read, TRecibo %>
             <li><%= link_to 'Recibos', t_recibos_path %></li>
           <% end %>
-          <% if can? :read, TRecibo %>
-            <li><%= link_to 'Caja', t_caja_index_path %></li>
-          <% end %>
           <% if can? :read, TRecargo %>
             <li><%= link_to 'Recargos', t_recargos_path %></li>
           <% end %>
@@ -136,6 +133,20 @@
           </ul>
         </li>
       <% end %>
+      <li>
+        <a href="#">
+          <i class="fa fa-bar-chart"></i>
+          <span class="nav-label">
+            Reportes
+          </span>
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level">
+          <% if can? :read, TRecibo %>
+            <li><%= link_to 'Caja', t_caja_index_path %></li>
+          <% end %>
+        </ul>
+      </li>
     </ul>
   </div>
 </nav>
