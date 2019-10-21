@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-body">
         <h3 class="card-title">Datos del Cliente</h3>
-        <%= render 't_facturas/search_client' %>
+        <%= render 't_facturas/search_client', hide_resolucion_filter: true %>
         <br>
         <div id="client-container">
           <%= render 't_facturas/cliente' %>
@@ -15,9 +15,10 @@
     <div class="ibox">
       <div class="ibox-title">
         <div class="row">
-          <h3 class="col-sm-11">Facturas y Recibos Registrados</h3>
-          <div class="col-sm-1 input-value">
+          <h3 class="col-sm-10">Facturas y Recibos Registrados</h3>
+          <div class="col-sm-2 input-value">
             <button id="btn-refresh-table" class="btn btn-default"><i class="fa fa-refresh"></i></button>
+            <button id="btn-paz-y-saldo" class="btn btn-default hide"><i class="fa fa-print"></i>Paz y Saldo</button>
           </div>
         </div>
       </div>
@@ -54,17 +55,22 @@
   $(document).ready(function(){
     $.extend({
       useDataInAjaxCall: function (d) {
-        d.t_resolucion_id = $('#select-resolucion').val();
+        d.t_cliente_codigo = $('#select-codigo').val();
       },
       useDataTableFooter: function (footer) {
         $.ajax({
           url: "<%= calculo_de_totales_path %>",
           data: {
-            t_resolucion_id: $('#select-resolucion').val()
+            t_cliente_codigo: $('#select-codigo').val()
           }
         })
           .done(function (data) {
             if (data.procesado) {
+              if (data.mostrar_paz_y_salvo) {
+                $("#btn-paz-y-saldo").removeClass("hide")
+              } else {
+                $("#btn-paz-y-saldo").addClass("hide")
+              }
               footer.empty().append($("<tr />")
                 .append($("<td />"))
                 .append($("<td />"))
@@ -89,6 +95,6 @@
     }
 
     $("#btn-refresh-table").click(refreshTable);
-    $('#select-resolucion').change(refreshTable);
+    $('#select-codigo').change(refreshTable);
   })
 </script>

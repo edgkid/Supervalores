@@ -23,7 +23,8 @@
   end
 
 %>
-<%= form_tag registro.id == nil ? url_for(:controller => 't_clientes', :action => 'create'): url_for(:controller => 't_clientes', :action => 'update', :id => registro.id), method: registro.id == nil ? :post : :put do %>
+
+<%= form_tag registro.id == nil ? url_for(:controller => 't_clientes', :action => 'create') : url_for(:controller => 't_clientes', :action => 'update', :id => registro.id), method: registro.id == nil ? :post : :put do %>
 <div class="row justify-content-md-center">
   <div class="col-md-5">
     <div class="ibox">
