@@ -1,4 +1,4 @@
-class TFacturaPdf < Prawn::Document
+class TFacturaPdfChangeLater < Prawn::Document
   require 'prawn/measurement_extensions'
   require 'prawn/table'
   extend Forwardable
