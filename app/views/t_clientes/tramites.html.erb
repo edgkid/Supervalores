@@ -60,37 +60,32 @@
         d.to = $('#to').val();
         d.prospecto = $('#prospecto')[0].checked;
       },
-      // useDataTableFooter: function (footer) {
-      //   $.ajax({
-      //     url: '<%#= "#{t_caja_index_path}.json" %>',
-      //     contentType: "application/json",
-      //     type: 'get',
-      //     data: {
-      //       date_range: {
-      //         from: $('#from').val(),
-      //         to: $('#to').val()
-      //       }
-      //     }
-      //   })
-      //   .done(function (data) {
-      //     if (data.procesado) {
-      //       footer.empty().append($("<tr />")
-      //         .append($("<td />"))
-      //         .append($("<td />"))
-      //         .append($("<td />"))
-      //         .append($("<td />").html("Total"))
-      //         .append($("<td />").html(data.total))
-      //         .append($("<td />").html(data.por_pagar))
-      //         .append($("<td />"))
-      //         .append($("<td />"))
-      //         .append($("<td />").html(data.total_pago_recibido))
-      //         .append($("<td />").html(data.total_monto_acreditado))
-      //         .append($("<td />"))
-      //         .append($("<td />"))
-      //       )
-      //     }
-      //   });
-      // }
+      useDataTableFooter: function (footer) {
+        $.ajax({
+          url: '<%= "#{total_t_clientes_path}" %>',
+          contentType: "application/json",
+          type: 'get',
+          data: {
+            date_range: {
+              from: $('#from').val(),
+              to: $('#to').val()
+            },
+            prospecto: $('#prospecto')[0].checked
+          }
+        })
+        .done(function (data) {
+          if (data.procesado) {
+            footer.empty().append($("<tr />")
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />").html("Total"))
+              .append($("<td />").html(data.total))
+              .append($("<td />"))
+            )
+          }
+        });
+      }
     });
 
     function refreshTable () {

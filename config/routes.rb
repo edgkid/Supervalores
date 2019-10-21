@@ -10,8 +10,10 @@ Rails.application.routes.draw do
   scope module: 'admin' do
     resources :users
   end
-  resources :t_caja, only: :index
-  get 'caja_get_total' => 't_caja#get_total'
+  resources :t_caja, only: :index do
+    get 'get_total', on: :collection
+  end
+  # get 'caja_get_total' => 't_caja#get_total'
   resources :t_leyendas
   resources :t_periodos, path: "periodos"
   resources :t_tarifas, path: "tarifas"
@@ -41,7 +43,10 @@ Rails.application.routes.draw do
   resources :t_tipo_clientes, path: "tipos_de_clientes"
   resources :t_tipo_personas, path: "tipos_de_personas"
   resources :t_clientes, path: "clientes" do
-    get 'tramites', on: :collection
+    collection do
+      get 'tramites'
+      get 'total'
+    end
   end
   namespace :t_clientes do
     get 'find_by_codigo', as: :find_by_codigo
