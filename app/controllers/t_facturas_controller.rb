@@ -108,6 +108,7 @@ class TFacturasController < ApplicationController
 
   def pagadas
     @usar_dataTables = true
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @no_cache = true
 
@@ -125,6 +126,21 @@ class TFacturasController < ApplicationController
         view_context: view_context)
       }
     end
+  end
+
+  def total_pagadas
+    dataTable =  TFacturaPagadaDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    total = dataTable.get_raw_records.count
+    results = {
+      procesado: true,
+      total: total
+    }
+    render json: results
   end
 
   private

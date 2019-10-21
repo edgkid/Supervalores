@@ -66,10 +66,8 @@
           contentType: "application/json",
           type: 'get',
           data: {
-            date_range: {
-              from: $('#from').val(),
-              to: $('#to').val()
-            },
+            from: $('#from').val(),
+            to: $('#to').val(),
             prospecto: $('#prospecto')[0].checked
           }
         })
