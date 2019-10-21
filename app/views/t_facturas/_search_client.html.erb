@@ -1,3 +1,9 @@
+<%
+  use_resolucion_filter = true
+  if defined?(hide_resolucion_filter) && hide_resolucion_filter != nil  
+    use_resolucion_filter = false
+  end
+%>
 <div class="row">
   <div class="col-md-4">
     <div class="form-group">
@@ -17,6 +23,7 @@
       <input class="dynamic-client" id="select-cedula-input" name="dynamic_attributes[t_cliente][cedula]" type="hidden">
     </div>
   </div>
+  <% if use_resolucion_filter %>
   <div class="col-md-4">
     <div class="form-group">
       <label for="select-resolucion">Resolución</label>
@@ -28,4 +35,5 @@
       <input class="dynamic-client" id="select-resolucion_id-input" name="dynamic_attributes[t_cliente][resolucion_id]" type="hidden">
     </div>
   </div>
+  <% end %>
 </div>
