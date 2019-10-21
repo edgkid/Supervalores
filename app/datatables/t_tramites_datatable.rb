@@ -33,11 +33,11 @@ class TTramitesDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    t_clientes = TCliente.joins("
+    t_clientes = TCliente.joins(:t_estatus, "
       LEFT JOIN t_empresas ON t_empresas.id = t_clientes.persona_id AND t_clientes.persona_type = 'TEmpresa'
       LEFT JOIN t_personas ON t_personas.id = t_clientes.persona_id AND t_clientes.persona_type = 'TPersona'
       LEFT JOIN t_otros    ON t_otros.id    = t_clientes.persona_id AND t_clientes.persona_type = 'TOtro'
-    ").joins(:t_estatus)
+    ")
 
     if params[:prospecto] && params[:prospecto] == 'true'
       t_clientes = t_clientes.where('prospecto_at IS NULL');
