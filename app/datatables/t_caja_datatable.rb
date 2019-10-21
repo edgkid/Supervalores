@@ -20,7 +20,7 @@ class TCajaDatatable < ApplicationDatatable
 
       {
         id: record.id,
-        t_cliente: t_empresa.razon_social || t_persona.try(:nombre_completo) || t_otro.razon_social,
+        t_cliente: t_empresa.try(:razon_social) || t_persona.try(:nombre_completo) || t_otro.try(razon_social),
         t_resolucion: record.t_factura.t_resolucion.resolucion,
         fecha_pago: record.fecha_pago,
         pago_pendiente: record.pago_pendiente,

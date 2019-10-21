@@ -21,8 +21,8 @@ class TTramitesDatatable < ApplicationDatatable
       {
         created_at: record.created_at.strftime('%d/%m/%Y'),
         codigo: record.codigo,
-        ced_pas_ruc: t_empresa.rif || t_persona.cedula || t_otro.identificacion,
-        razon_social: t_empresa.razon_social || t_persona.try(:nombre_completo) || t_otro.razon_social,
+        ced_pas_ruc: t_empresa.try(:rif) || t_persona.try(:cedula) || t_otro.try(:identificacion),
+        razon_social: t_empresa.try(:razon_social) || t_persona.try(:nombre_completo) || t_otro.try(:razon_social),
         # telefono: record.persona.telefono,
         # email: record.persona.email,
         es_prospecto: record.prospecto_at.nil? ? 'Sí' : 'No',

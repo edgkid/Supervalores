@@ -21,7 +21,7 @@ class TFacturaPagadaDatatable < ApplicationDatatable
 
       {
         id: record.id,
-        razon_social: t_empresa.razon_social || t_persona.try(:nombre_completo) || t_otro.razon_social,
+        razon_social: t_empresa.try(:razon_social) || t_persona.try(:nombre_completo) || t_otro.try(:razon_social),
         resolucion: record.t_resolucion.resolucion,
         fecha_notificacion: record.fecha_notificacion,
         fecha_vencimiento: record.fecha_vencimiento,
