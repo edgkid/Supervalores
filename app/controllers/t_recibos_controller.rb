@@ -4,6 +4,8 @@ class TRecibosController < ApplicationController
   before_action :set_necessary_objects, only: [:new, :create, :show]
 
   def new
+    @last_t_recibo = TRecibo.find(params[:recibo_id]) if params[:recibo_id]
+    # generar_pdf(target) if params[:show_pdf] == "true"
     @t_recibo = TRecibo.new
   end
 
@@ -11,10 +13,9 @@ class TRecibosController < ApplicationController
     @t_recibo = TRecibo.new(t_recibo_params)
     @t_recibo.set_surcharge_and_services_total(@t_recibo.pago_recibido || 0, @t_factura, @t_factura.t_recibos.empty?)
     @t_recibo.calculate_default_attributes(@t_factura, @t_cliente, current_user)
-
     if @t_recibo.save
-      generar_pdf
-      # redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Recibo creado exitosamente'
+      # generar_pdf
+      redirect_to new_t_factura_t_recibo_path(@t_factura, show_pdf: true, recibo_id: @t_recibo.id), notice: 'Recibo creado exitosamente'
     else
       @notice = @t_recibo.errors
       render 'new'
@@ -54,7 +55,7 @@ class TRecibosController < ApplicationController
   end
 
   def generar_pdf
-    pdf = TReciboPdf.new(@t_factura, @t_recibo, view_context)
+    pdf = TReciboPdf.new(@t_factura, @t_recibo, current_user.id)
     send_data(
       pdf.render,
       filename: "recibo_nro_#{@t_recibo.id}.pdf",

@@ -12,9 +12,9 @@ class TFacturaPdf < PdfHelper
 
   # Constructor
   # def initialize(t_factura, t_recibo, view)
-  def initialize(t_factura, t_recibo)
+  def initialize(t_factura)
     super()
-    @t_recibo     = t_recibo
+    # @t_recibo     = t_recibo
     @t_factura    = t_factura
     @t_resolucion = @t_factura.t_resolucion
     @t_cliente    = @t_resolucion.t_cliente
@@ -97,8 +97,9 @@ class TFacturaPdf < PdfHelper
     fill_color '1A135C'
     text_box "<b>REPÚBLICA DE PANAMÁ</b>
     <b>SUPERINTENDENCIA DEL MERCADO DE VALORES</b>
-    <b>DEPARTAMENTO DE TESORERÍA</b>
-    <b>FACTURA</b>", inline_format: true, at: [10,700], :align => :center
+    <b>DEPARTAMENTO DE TESORERÍA</b>", inline_format: true, at: [10,700], :align => :center
+
+    text_box "<b>FACTURA</b>", inline_format: true, at: [10,665], :align => :center
 
     stroke do
       move_down 20
@@ -108,40 +109,64 @@ class TFacturaPdf < PdfHelper
     move_down 10
 
     fill_color '000000'
+  
 
-    bounding_box([0, cursor], :width => 165, :height => 130) do
+    bounding_box([0, cursor], :width => 165, :height => 100) do
       # stroke_bounds
-      address = @t_cliente.persona_type == "TPersona" ? @t_cliente.persona.direccion : @t_cliente.persona.direccion_empresa
-      # debugger
+      
       text_box "<b>Dirección:</b>
-      #{address unless address.nil?}
-      <b>Apartado Postal:</b> INGRESE EL APARTADO POSTAL
-      <b>Teléfono:</b> #{@t_cliente.persona.telefono unless @t_cliente.persona.telefono.nil?}
-      <b>Email:</b> #{@t_cliente.persona.email unless @t_cliente.persona.email.nil?}", inline_format: true, at: [5, cursor], :align => :justify
+      #{@t_empresa.try(:direccion_empresa) || @t_persona.try(:direccion)}
+      <b>Apartado Postal:</b> ""
+      <b>Teléfono:</b> #{@t_empresa.try(:telefono) || @t_persona.try(:telefono) || @t_otro.try(:telefono)}
+      <b>Email:</b> #{@t_empresa.try(:email) || @t_persona.try(:email) || @t_otro.try(:email)}", inline_format: true, at: [5, cursor], :align => :justify
     end
 
-    bounding_box([185, 644], :width => 165, :height => 130) do
+    bounding_box([185, 644], :width => 165, :height => 100) do
       # stroke_bounds
-      text_box "<b>Para Cliente:</b> #{@t_cliente.codigo}
+      text_box "<b>Para Cliente:</b> #{@t_empresa.try(:razon_social) || @t_persona.try(:full_name) || @t_otro.try(:razon_social)}
       <b>Resolución:</b> #{@t_resolucion.resolucion}
-      <b>CIP/RUC:</b> #{@t_persona.try(:cedula) || @t_empresa.try(:rif) || @t_otro.try(:identificacion)}
-      <b>Teléfono:</b> INGRESE TELEFONO
-      <b>Email:</b> INGRESE CORREO
+      <b>CIP/RUC:</b> #{@t_empresa.try(:rif) || @t_persona.try(:cedula) || @t_otro.try(:identificacion)}
+      <b>Teléfono:</b> #{@t_empresa.try(:telefono) || @t_persona.try(:telefono) || @t_otro.try(:telefono)}
+      <b>Email:</b> #{@t_empresa.try(:email) || @t_persona.try(:email) || @t_otro.try(:email)}
       ", inline_format: true, at: [5, cursor], :align => :justify
     end
 
-    bounding_box([370, 644], :width => 165, :height => 130) do
+    bounding_box([370, 644], :width => 165, :height => 100) do
       # stroke_bounds
-      text_box "<b>Factura:</b>#INGRESE FACTURA
-      <b>Estado:</b> INGRESE ESTADO DE FACTURA
-      <b>Importe debido:</b> INGRESE IMPORTE debido
-      <b>Fecha de vencimiento:</b> INGRESE FECHA DE vencimiento
-      <b>Cuenta de venta:</b> INGRESE CUENTA DE venta
-      <b>Período:</b> INGRESE PERIODO
+      text_box "<b>Factura:</b> #{@t_factura.id}
+      <b>Estado:</b> #{@t_factura.t_estatus.descripcion}
+      <b>Importe debido:</b> #{@t_factura.created_at.strftime('%d/%m/%Y %I:%M:%S %p')}
+      <b>Fecha de vencimiento:</b> #{@t_factura.fecha_vencimiento.strftime('%d/%m/%Y')}
       ", inline_format: true, at: [5, cursor], :align => :justify
     end
 
-    big_table_for_5_with_widths_and_alignment_and_height(bold("Cantidad"), bold("Ítem"), bold("Descripción"), bold("Precio"), bold("Importe"), 60, 150, 200, 100, :center, 18)
+    big_table_for_5_with_widths_and_alignment(
+      bold("Cantidad"), 
+      bold("Ítem"), 
+      bold("Descripción"), 
+      bold("Precio"), 
+      bold("Importe"), 
+      45, 150, 200, 80, :center)
+
+    @t_factura.t_factura_detalles.each do |fd|
+      big_table_for_5_with_widths_and_alignment(
+        "#{fd.cantidad}", 
+        "#{fd.t_tarifa_servicio.nombre}", 
+        "#{fd.cuenta_desc}", 
+        "#{fd.precio_unitario}", 
+        "#{fd.precio_unitario * fd.cantidad}", 
+        45, 150, 200, 80, :center)
+    end
+
+    @t_factura.t_recargos.each do |r|
+      big_table_for_5_with_widths_and_alignment(
+        "", 
+        "Recargo", 
+        "#{r.descripcion}", 
+        "#{r.tasa * @t_factura.calculate_services_total_price}", 
+        "", 
+        45, 150, 200, 80, :center)
+    end    
     #######
     #Loop here plz
     #######
@@ -157,7 +182,7 @@ class TFacturaPdf < PdfHelper
 
     fill_color '000000'
 
-    data = [[bold("Total:"), bold("$ 175,000.00")]]
+    data = [[bold("Total:"), bold("#{@t_factura.total_factura}")]]
     table(data, :column_widths => [80, 80],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 160, :position => :right )
 
