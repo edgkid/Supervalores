@@ -47,7 +47,6 @@ class TFacturasController < ApplicationController
     @t_periodo = @t_factura.t_periodo
     @t_estatus = @t_factura.t_estatus
     @t_cliente = @t_resolucion.t_cliente
-    @t_persona = @t_cliente.persona
 
     @t_empresa = @t_cliente.persona.try(:rif)            ? @t_cliente.persona : nil
     @t_persona = @t_cliente.persona.try(:cedula)         ? @t_cliente.persona : nil

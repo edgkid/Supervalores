@@ -1,0 +1,3 @@
+<% TRecargo.all.each do |t_recargo| %>
+  <option data-rate="<%= t_recargo.tasa %>" value="<%= t_recargo.id %>"><%= t_recargo.descripcion %></option>
+<% end %>
