@@ -60,7 +60,8 @@ if(<%= @useDataTableFooter != nil ? @useDataTableFooter : false %>) {
     var api = this.api();
     footer = $("#dataTable-footer")
     if (footer.length == 0){
-      footer = $(this).append('<tfoot id="dataTable-footer"></tfoot>');
+      footer = $("<tfoot />", { id: "dataTable-footer" });
+      $(this).append(footer);
     }
     jQuery.useDataTableFooter(footer, api, row, data, start, end, display)
  }
