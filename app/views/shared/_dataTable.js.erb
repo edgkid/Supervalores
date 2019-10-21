@@ -55,18 +55,22 @@ data_tables_options = {
   }
 }
 
-if(jQuery["useDataTableFooter"]) {
+if(<%= @useDataTableFooter != nil ? @useDataTableFooter : false %>) {
   data_tables_options["footerCallback"] = function (row, data, start, end, display) { 
     var api = this.api();
     footer = $("#dataTable-footer")
     if (footer.length == 0){
-      footer = $(this).append('<tfoot id="dataTable-footer"></tfoot>');
+      footer = $("<tfoot />", { id: "dataTable-footer" });
+      $(this).append(footer);
     }
     jQuery.useDataTableFooter(footer, api, row, data, start, end, display)
  }
 }
-
-
+else{
+  data_tables_options["footerCallback"] = null;
+}
+console.log("footerCallback");
+console.log(data_tables_options["footerCallback"]);
 $('#ajax-datatable').DataTable(data_tables_options);
 
 $('.dataTables.clickable').on('click', 'tbody tr', function () {

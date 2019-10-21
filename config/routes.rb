@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :users
   end
   resources :t_caja, only: :index
+  get 'caja_get_total' => 't_caja#get_total'
   resources :t_leyendas
   resources :t_periodos, path: "periodos"
   resources :t_tarifas, path: "tarifas"

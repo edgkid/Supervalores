@@ -34,7 +34,7 @@ class TClientesController < ApplicationController
 
   def estado_cuenta
     @do_not_use_plain_select2 = true   
-    
+    @useDataTableFooter = true
     @attributes_to_display = [
       :numero,
       :fecha_notificacion,
@@ -55,7 +55,7 @@ class TClientesController < ApplicationController
       format.json { render json: EstadoCuentaDatatable.new(
         params.merge({
           attributes_to_display: @attributes_to_display,
-          t_resolucion_id: params[:t_resolucion_id]
+          t_cliente_codigo: params[:t_cliente_codigo]
         }),
         view_context: view_context)
       }
@@ -63,27 +63,35 @@ class TClientesController < ApplicationController
   end
 
   def estado_cuenta_calculo_de_totales
-    t_resolucion_id = params[:t_resolucion_id]
-    sum_total = TFactura
-      .where(
-        t_resolucion_id: t_resolucion_id 
+    t_cliente_codigo = params[:t_cliente_codigo]
+
+    sum_total = TFactura.left_joins(
+        {t_recibos: :user}, 
+        {t_resolucion: :t_cliente}
       )
+      .where('t_clientes.codigo = ?', params[:t_cliente_codigo])
       .sum("t_facturas.total_factura")
-    sum_pago_recibido = TFactura.left_joins(:t_recibos)
-      .where(
-        t_resolucion_id: t_resolucion_id 
+
+    sum_pago_recibido = TFactura.left_joins(
+        {t_recibos: :user}, 
+        {t_resolucion: :t_cliente}
       )
+      .where('t_clientes.codigo = ?', params[:t_cliente_codigo])
       .sum("COALESCE(t_recibos.pago_recibido, 0)")
-    sum_monto_acreditado = TFactura.left_joins(:t_recibos)
-      .where(
-        t_resolucion_id: t_resolucion_id 
+
+    sum_monto_acreditado = TFactura.left_joins(
+        {t_recibos: :user}, 
+        {t_resolucion: :t_cliente}
       )
+      .where('t_clientes.codigo = ?', params[:t_cliente_codigo])
       .sum("COALESCE(t_recibos.monto_acreditado, 0)")
-    if t_resolucion_id != ""
+    if t_cliente_codigo != ""
+      deuda = sum_total - sum_pago_recibido
       render json: {
         procesado: true,
         total: sum_total,
-        por_pagar: sum_total - sum_pago_recibido,
+        mostrar_paz_y_salvo: sum_total > 0 && deuda == 0,
+        por_pagar: deuda,
         total_pago_recibido: sum_pago_recibido,
         total_monto_acreditado: sum_monto_acreditado
       }
@@ -178,12 +186,8 @@ class TClientesController < ApplicationController
         @registro.persona.save
         @registro.save        
         
-        if !@registro.es_prospecto
+        if @resolucion != nil
           @resolucion.save
-          if !@resolucion.usar_cliente
-            @contacto.t_resolucion = @resolucion
-            @contacto.save
-          end          
           if @contacto != nil
             @contacto.t_resolucion = @resolucion
             @contacto.save
@@ -198,103 +202,109 @@ class TClientesController < ApplicationController
     end
   end
 
-  def update    
+  def update
     crear = false
     actualizar = false
     parametros = {}
     @nueva_empresa = nil
 
-    respond_to do |format|      
-      if es_empresa
-        if @registro.persona != nil && @registro.persona.is_a?(TEmpresa)
-          actualizar = true
-          parametros = parametros_cliente_tipo_empresa
-        else
-          crear = true
-          @registro.persona = TEmpresa.new(parametros_cliente_tipo_empresa)
-        end
-      elsif es_persona
-        if @registro.persona != nil && @registro.persona.is_a?(TPersona)
-          actualizar = true
-          parametros = parametros_cliente_tipo_persona
-        else
-          crear = true
-          @registro.persona.destroy
-          @registro.persona = TPersona.new(parametros_cliente_tipo_persona)
-        end
-        if params[:t_persona][:crear_empresa] == "1"
-          @nueva_empresa = TEmpresa.new(parametros_nueva_empresa)
-          if @nueva_empresa.save
-            if actualizar
-              parametros[:t_empresa_id] = @nueva_empresa.id
-            else
-              @registro.persona.t_empresa = @nueva_empresa
-            end
-            @nueva_empresa = nil
-          end          
-        end
+    if es_empresa
+      if @registro.persona != nil && @registro.persona.is_a?(TEmpresa)
+        actualizar = true
+        parametros = parametros_cliente_tipo_empresa
       else
-        if @registro.persona != nil && @registro.persona.is_a?(TOtro)
-          actualizar = true
-          parametros = parametros_cliente_tipo_otro
-        else
-          crear = true
-          @registro.persona.destroy
-          @registro.persona = TOtro.new(parametros_cliente_tipo_otro)
-        end
+        crear = true
+        @registro.persona = TEmpresa.new(parametros_cliente_tipo_empresa)
       end
-      
-      @registro.persona.t_cliente = @registro
-      @registro.es_prospecto = es_prospecto
+    elsif es_persona
+      if @registro.persona != nil && @registro.persona.is_a?(TPersona)
+        actualizar = true
+        parametros = parametros_cliente_tipo_persona
+      else
+        crear = true
+        @registro.persona.destroy
+        @registro.persona = TPersona.new(parametros_cliente_tipo_persona)
+      end
+      if params[:t_persona][:crear_empresa] == "1"
+        @nueva_empresa = TEmpresa.new(parametros_nueva_empresa)
+        if @nueva_empresa.save
+          if actualizar
+            parametros[:t_empresa_id] = @nueva_empresa.id
+          else
+            @registro.persona.t_empresa = @nueva_empresa
+          end
+          @nueva_empresa = nil
+        end          
+      end
+    else
+      if @registro.persona != nil && @registro.persona.is_a?(TOtro)
+        actualizar = true
+        parametros = parametros_cliente_tipo_otro
+      else
+        crear = true
+        @registro.persona.destroy
+        @registro.persona = TOtro.new(parametros_cliente_tipo_otro)
+      end
+    end
+    
+    @registro.assign_attributes(parametros_cliente)
+    if (actualizar)
+      @registro.persona.assign_attributes(parametros)
+    end      
+    @registro.persona.t_cliente = @registro
+    @registro.es_prospecto = es_prospecto
+    @resolucion = nil
+    @contacto = nil
+    
+    if (!@registro.es_prospecto && @registro.prospecto_at == nil)
+      @resolucion = TResolucion.new(parametros_resolucion)
+      @resolucion.usar_cliente = usar_cliente
+      @resolucion.t_cliente = @registro
+      @registro.prospecto_at = Time.now
+      if !@resolucion.usar_cliente
+        @contacto = TContacto.new(parametros_contacto)
+        @contacto.t_resolucion = @resolucion
+      end
+    end
 
+    respond_to do |format|
       if @nueva_empresa != nil && @nueva_empresa.errors.any?
         @notice = @nueva_empresa.errors
         format.html { render :edit }
         format.json { render json: @nueva_empresa.errors, status: :unprocessable_entity }
-      elsif (actualizar && !@registro.persona.update(parametros)) || (crear && !@registro.persona.save)
-        @notice = @registro.persona.errors
-        format.html { render :edit }
-        format.json { render json: @registro.persona.errors, status: :unprocessable_entity }
-      elsif @registro.update(parametros_cliente)
-        if (!@registro.es_prospecto && @registro.prospecto_at == nil)
-          @resolucion = TResolucion.new(parametros_resolucion)
-          @resolucion.usar_cliente = usar_cliente
-          @resolucion.t_cliente = @registro
-          
-          @contacto = nil          
-          if !usar_cliente
-            @contacto = TContacto.new(parametros_contacto)
-            @contacto.t_resolucion = @resolucion
-            @contacto.valid?
-          end
-          @resolucion.valid?
-
-          if @contacto != nil && @contacto.errors.any?
-            @notice = @contacto.errors
-            format.html { render :edit }
-            format.json { render json: @contacto.errors, status: :unprocessable_entity }
-          elsif @resolucion.errors.any?
-            @notice = @resolucion.errors
-            format.html { render :edit }
-            format.json { render json: @contacto.errors, status: :unprocessable_entity }
-          else
-            @resolucion.save
-            @registro.prospecto_at = Time.now
-            @registro.save
-            if @contacto != nil
-              @contacto.t_resolucion = @resolucion
-              @contacto.save
-            end
-            format.html { redirect_to t_cliente_path(@registro), notice: 'Cliente actualizado y resolución asociada correctamente.' }
-            format.json { render :show, status: :ok, location: @registro }
-          end
-        end
-        format.html { redirect_to t_cliente_path(@registro), notice: 'Cliente actualizado correctamente.' }
-        format.json { render :show, status: :ok, location: @registro }
-      else
+      elsif !@registro.valid?
         @notice = @registro.errors
         format.html { render :edit }
         format.json { render json: @registro.errors, status: :unprocessable_entity }
+      elsif !@registro.persona.valid?
+        @nueva_empresa = nil
+        @notice = @registro.persona.errors
+        format.html { render :edit }
+        format.json { render json: @registro.persona.errors, status: :unprocessable_entity }
+      elsif !@registro.es_prospecto && !@resolucion.valid?
+        @notice = @resolucion.errors
+        format.html { render :edit }
+        format.json { render json: @resolucion.errors, status: :unprocessable_entity }
+      elsif !@registro.es_prospecto && !@resolucion.usar_cliente && !@contacto.valid?
+        @notice = @contacto.errors
+        format.html { render :edit }
+        format.json { render json: @contacto.errors, status: :unprocessable_entity }
+      else
+        @registro.persona.save
+        @registro.save
+
+        if @resolucion != nil
+          @resolucion.save
+          if @contacto != nil
+            @contacto.t_resolucion = @resolucion
+            @contacto.save
+          end
+          format.html { redirect_to t_cliente_path(@registro), notice: 'Cliente y resolución actualizado correctamente.' }
+          format.json { render :show, status: :created, location: @registro }
+        else
+          format.html { redirect_to t_cliente_path(@registro), notice: 'Cliente actualizado correctamente.' }
+          format.json { render :show, status: :created, location: @registro }
+        end
       end
     end
   end
@@ -322,7 +332,7 @@ class TClientesController < ApplicationController
         format.json { render json: @resolucion.errors, status: :unprocessable_entity }
       else
         @resolucion.save
-        format.html { redirect_to edit_t_cliente_path(@registro), notice: 'Resolución asociada correctamente.' }
+        format.html { render :edit, notice: 'Resolución asociada correctamente.' }
         format.json { render :show, status: :ok, location: @resolucion }
       end
     end

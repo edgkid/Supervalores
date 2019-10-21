@@ -74,10 +74,13 @@ class EstadoCuentaDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    TFactura.includes({t_recibos: :user})    
-    .left_joins({t_recibos: :user})
-    .where(
-      t_resolucion_id: params[:t_resolucion_id]
+    TFactura.includes(
+      {t_recibos: :user}
     )
+    .left_joins(
+      {t_recibos: :user}, 
+      {t_resolucion: :t_cliente}
+    )
+    .where('t_clientes.codigo = ?', params[:t_cliente_codigo])
   end
 end
