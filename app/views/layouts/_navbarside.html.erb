@@ -148,6 +148,9 @@
           <% if can? :read, TCliente %>
             <li><%= link_to 'Trámites Registrados', tramites_t_clientes_path %></li>
           <% end %>
+          <% if can? :read, TFactura %>
+            <li><%= link_to 'Facturas Pagadas', pagadas_t_facturas_path %></li>
+          <% end %>
         </ul>
       </li>
     </ul>

@@ -106,6 +106,27 @@ class TFacturasController < ApplicationController
     ) and return
   end
 
+  def pagadas
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :id, :razon_social, :resolucion, :fecha_notificacion, :fecha_vencimiento,
+      :recargo, :total_factura
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: TFacturaPagadaDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
   private
 
     def t_factura_params
