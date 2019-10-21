@@ -1,5 +1,6 @@
 class TRecibosController < ApplicationController
   before_action :set_t_factura, except: :index
+  before_action :set_preview_data, only: :new
   before_action :set_t_recibo, only: [:show, :destroy, :generar_pdf]
   before_action :set_necessary_objects, only: [:new, :create, :show]
 
@@ -17,6 +18,7 @@ class TRecibosController < ApplicationController
       # redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Recibo creado exitosamente'
     else
       @notice = @t_recibo.errors
+      set_preview_data
       render 'new'
     end
   end
@@ -77,6 +79,18 @@ class TRecibosController < ApplicationController
       params.require(:t_recibo).permit(
         :pago_recibido, :justificacion, :num_cheque, :t_metodo_pago_id
       )
+    end
+
+    def set_preview_data
+      @t_resolucion = @t_factura.t_resolucion
+      @t_tarifa  = @t_resolucion.t_tipo_cliente.t_tarifa
+      @t_periodo = @t_factura.t_periodo
+      @t_estatus = @t_factura.t_estatus
+      @t_cliente = @t_resolucion.t_cliente
+
+      @t_empresa = @t_cliente.persona.try(:rif)            ? @t_cliente.persona : nil
+      @t_persona = @t_cliente.persona.try(:cedula)         ? @t_cliente.persona : nil
+      @t_otro    = @t_cliente.persona.try(:identificacion) ? @t_cliente.persona : nil
     end
 
     def set_necessary_objects
