@@ -185,6 +185,13 @@ class PdfHelper < Prawn::Document
            width: bounds.width)
     end
 
+    def table_for_2_with_widths_and_height_and_alignment_to_the_right(text1,text2,width1,width2,height1,align1)
+        fill_color '000000'
+        data = [[text1, text2]]
+        table(data, :column_widths => [width1, width2],
+          :cell_style => {:inline_format => true, :border_width => 0.1, :align => align1,:height => height1}, width: width1 + width2, :position => :right )
+    end
+
 
     def big_table_for_3_with_widths_and_alignment_and_height(text1,text2,text3,width1,width2,align1,height1)
         fill_color '000000'
@@ -222,6 +229,13 @@ class PdfHelper < Prawn::Document
            width: bounds.width )
     end
 
+    def big_table_for_5_with_widths_and_alignment(text1,text2,text3,text4,text5,width1,width2,width3,width4,align1)
+        fill_color '000000'
+        data = [[text1,text2,text3,text4,text5]]
+        table(data, :column_widths => [width1,width2,width3,width4, bounds.width-width1-width2-width3-width4],
+          :cell_style => {:inline_format => true, :border_width => 0.1, :align => align1}, width: bounds.width )
+    end
+
     def big_table_for_5_with_widths_and_alignment_and_height(text1,text2,text3,text4,text5,width1,width2,width3,width4,align1,height1)
         fill_color '000000'
         data = [[text1,text2,text3,text4,text5]]
@@ -234,6 +248,13 @@ class PdfHelper < Prawn::Document
         data = [[text1,text2,text3,text4,text5]]
         table(data, :column_widths => [width1,width2,width3,width4, bounds.width-width1-width2-width3-width4],
           :cell_style => {:inline_format => true, :border_width => 0.1, :align => align1, :height=> height1}, width: bounds.width )
+    end
+
+    def big_table_for_6_with_widths_and_alignment_and_height(text1,text2,text3,text4,text5,text6,width1,width2,width3,width4,width5,align1)
+        fill_color '000000'
+        data = [[text1,text2,text3,text4,text5,text6]]
+        table(data, :column_widths => [width1,width2,width3,width4,width5, bounds.width-width1-width2-width3-width4-width5],
+          :cell_style => {:inline_format => true, :border_width => 0.1, :align => align1}, width: bounds.width )
     end
 
     def table_inside_a_table

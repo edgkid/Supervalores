@@ -96,7 +96,7 @@ class TFacturasController < ApplicationController
   end
 
   def generar_pdf
-    pdf = TFacturaPdf.new(@t_factura, view_context)
+    pdf = TFacturaPdf.new(@t_factura)
     send_data(
       pdf.render,
       filename: "factura_nro_#{@t_factura.id}.pdf",
