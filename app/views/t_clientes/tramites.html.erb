@@ -5,7 +5,7 @@
         <div class="ibox-title">
           <div class="row">
             <div class="col-6">
-              <h5>Caja</h5>
+              <h5>Trámites</h5>
             </div>
           </div>
         </div>
@@ -13,23 +13,24 @@
           <% if TRecibo.count > 0 %>
             <div class="table-responsive">
               <div class="row">
-                <div class="col-7">
+                <div class="col-6">
                   <p class="text-info">Puedes hacer clic en cualquier fila para ver el detalle del registro.</p>
                 </div>
-                <div class="col-5">
-                  <%= render 'shared/filters', show_prospecto: false %>
+                <div class="col-6">
+                  <%= render 'shared/filters', show_prospecto: true %>
                 </div>
               </div>
-              <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= t_caja_index_path(format: :json) %>" id="ajax-datatable">
+              <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= tramites_t_clientes_path(format: :json) %>" id="ajax-datatable">
                 <thead>
                   <tr>
-                    <th>Nro. de Recibo</th>
-                    <th>Cliente</th>
-                    <th>Resolución</th>
-                    <th>Fecha</th>
-                    <th>Total</th>
-                    <th>Pagado</th>
-                    <th>Usuario</th>
+                    <th>Registrado el</th>
+                    <th>Código SERI</th>
+                    <th>Céd. / Pas. / RUC</th>
+                    <th>Razón social</th>
+                    <!-- <th>Teléfono</th>
+                    <th>Email</th> -->
+                    <th>¿Es Prospecto?</th>
+                    <th>Estatus</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -57,6 +58,7 @@
       useDataInAjaxCall: function (d) {
         d.from = $('#from').val();
         d.to = $('#to').val();
+        d.prospecto = $('#prospecto')[0].checked;
       },
       // useDataTableFooter: function (footer) {
       //   $.ajax({
@@ -102,6 +104,20 @@
     $('#clean-dates').click(function () {
       $('.datepicker').val('');
       refreshTable();
-    })
+    });
+
+    $('.i-checks').iCheck({
+      checkboxClass: 'icheckbox_square-green',
+      radioClass: 'iradio_square-green',
+    });
+
+    $('#prospecto').on('ifChanged', function () {
+      refreshTable();
+    });
+
+
+    // $('#prospecto').change(function () {
+    //   console.log(this.checked);
+    // });
   });
 </script>

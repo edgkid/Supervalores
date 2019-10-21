@@ -145,6 +145,9 @@
           <% if can? :read, TRecibo %>
             <li><%= link_to 'Caja', t_caja_index_path %></li>
           <% end %>
+          <% if can? :read, TCliente %>
+            <li><%= link_to 'Trámites Registrados', tramites_t_clientes_path %></li>
+          <% end %>
         </ul>
       </li>
     </ul>

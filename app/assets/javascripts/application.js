@@ -24,6 +24,7 @@
 //= require vendor/select2/select2.full.min.js
 //= require vendor/datapicker/bootstrap-datepicker.js
 //= require vendor/chartJs/Chart.min.js
+//= require vendor/iCheck/icheck.min.js
 //= require_tree .
 
 Number.prototype.toFixedDown = function(digits) {

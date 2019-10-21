@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col-md-2">
+    <div class="form-group">
+      <button class="btn btn-default" id="clean-dates">
+        <i class="fa fa-undo"></i>
+      </button>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <label style="margin-top: 6px;" <%= 'hidden' unless show_prospecto %>> <input type="checkbox" class="i-checks" id="prospecto"> ¿Prospecto? </label>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <input class="datepicker" id="from" name="from" placeholder="Desde" readonly style="width: 100%;" type="text">
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <input class="datepicker" id="to" name="to" placeholder="Hasta" readonly style="width: 100%;" type="text">
+    </div>
+  </div>
+</div>

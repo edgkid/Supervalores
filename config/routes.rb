@@ -38,7 +38,9 @@ Rails.application.routes.draw do
   resources :t_resolucions, path: "resoluciones"
   resources :t_tipo_clientes, path: "tipos_de_clientes"
   resources :t_tipo_personas, path: "tipos_de_personas"
-  resources :t_clientes, path: "clientes"
+  resources :t_clientes, path: "clientes" do
+    get 'tramites', on: :collection
+  end
   namespace :t_clientes do
     get 'find_by_codigo', as: :find_by_codigo
     get 'find_by_resolucion', as: :find_by_resolucion

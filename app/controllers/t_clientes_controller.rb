@@ -404,6 +404,27 @@ class TClientesController < ApplicationController
     end
   end
 
+  def tramites
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :created_at, :codigo, :ced_pas_ruc, :razon_social,# :telefono, :email,
+      :es_prospecto, :t_estatus
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: TTramitesDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
   private
     def seleccionar_cliente
       @registro = TCliente.find(params[:id])
