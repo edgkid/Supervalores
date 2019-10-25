@@ -107,6 +107,17 @@ class TResolucionsController < ApplicationController
     end
   end
 
+  def get_type_client
+    tipo_persona = params[:tipo_persona]
+    results = nil
+    if tipo_persona == "2"
+      results = TTipoCliente.where(estatus: 1, id: [9, 10, 11]).order(:descripcion).pluck :descripcion, :id
+    else
+      results = TTipoCliente.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
+    end
+    render json: results
+  end
+
   private
     def seleccionar_resolucion
       @registro = TResolucion.find(params[:id])

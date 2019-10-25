@@ -1,16 +1,15 @@
 class TClienteDatatable < ApplicationDatatable
   def view_columns
-    super
-    @view_columns.merge!({
+    @view_columns ||= {
       codigo: { source: "TCliente.codigo", cond: :like },
-      identificacion: { source: "TCliente.identificacion", searchable: false },
-      razon_social: { source: "TCliente.razon_social", searchable: false },
+      identificacion: { source: "(TEmpresa.rif | TPersona.cedula | TOtro.identificacion)", searchable: false },
+      razon_social: { source: "TEmpresa.razon_social | (TPersona.nombre & TPersona.apellido) | TOtro.razon_social" },
       telefono: { source: "TCliente.telefono", searchable: false },
       email: { source: "TCliente.email", searchable: false },
       es_prospecto: { source: "TCliente.prospecto_at", searchable: false },
       t_estatus: { source: "TEstatus.descripcion" },
       tipo_persona: { source: "TCliente.tipo_persona", searchable: false }
-    })
+    }
   end
   
   def data
@@ -32,7 +31,10 @@ class TClienteDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    # TCliente.includes(:persona, :t_estatus).all
-    TCliente.includes(:persona).joins(:t_estatus)
+    TCliente.includes(:t_estatus).joins(:t_estatus, "
+      LEFT JOIN t_empresas ON t_empresas.id = t_clientes.persona_id AND t_clientes.persona_type = 'TEmpresa'
+      LEFT JOIN t_personas ON t_personas.id = t_clientes.persona_id AND t_clientes.persona_type = 'TPersona'
+      LEFT JOIN t_otros    ON t_otros.id    = t_clientes.persona_id AND t_clientes.persona_type = 'TOtro'
+    ")
   end
 end
