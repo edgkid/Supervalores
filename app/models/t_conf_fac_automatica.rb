@@ -111,7 +111,6 @@ class TConfFacAutomatica < ApplicationRecord
         t_factura.t_recargos.each do |t_recargo|
           t_factura.schedule_surcharge(t_recargo)
         end
-        t_factura.apply_2_percent_monthly_surcharge
       else
         puts "\n" * 5 + '¡La factura no se pudo crear!'
       end
