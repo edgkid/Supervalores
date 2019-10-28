@@ -18,7 +18,7 @@ class TClientesController < ApplicationController
       :telefono,
       :email,
       :es_prospecto,
-      :t_estatus,
+      :estatus,
       :tipo_persona,
     ]
     respond_to do |format|
