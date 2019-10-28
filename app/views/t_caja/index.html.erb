@@ -75,8 +75,8 @@
               .append($("<td />"))
               .append($("<td />"))
               .append($("<td />").html("Total"))
-              .append($("<td />").html(data.total))
-              .append($("<td />").html(data.pagado))
+              .append($("<td />").html(data.total.toFixedDown(2)))
+              .append($("<td />").html(data.pagado.toFixedDown(2)))
               .append($("<td />"))
             )
           }
