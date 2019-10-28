@@ -26,7 +26,7 @@ class TFacturaPagadaDatatable < ApplicationDatatable
         fecha_notificacion: record.fecha_notificacion,
         fecha_vencimiento: record.fecha_vencimiento,
         recargo: record.recargo,
-        total_factura: record.total_factura,
+        total_factura: record.total_factura.truncate(2),
         DT_RowId: url_for({
           id: record.id, controller: 't_facturas', action: 'preview', only_path: true
         })

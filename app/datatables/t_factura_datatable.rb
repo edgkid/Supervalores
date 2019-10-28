@@ -33,8 +33,8 @@ class TFacturaDatatable < ApplicationDatatable
         fecha_notificacion: record.fecha_notificacion,
         fecha_vencimiento: record.fecha_vencimiento,
         recargo: record.recargo,
-        total_factura: record.total_factura,
-        pendiente_fact: pending_payment,
+        total_factura: record.total_factura.truncate(2),
+        pendiente_fact: pending_payment.truncate(2),
         tipo: record.tipo,
         DT_RowId: url_for({
           id: record.id, controller: 't_facturas', action: 'preview', only_path: true
