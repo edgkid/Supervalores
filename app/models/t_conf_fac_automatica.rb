@@ -41,7 +41,7 @@ class TConfFacAutomatica < ApplicationRecord
     scheduler = Rufus::Scheduler.singleton
 
     if self.estatus == 1
-      # scheduler.at "#{configuracion.fecha_inicio} 0000" do
+      # scheduler.at "#{configuracion.fecha_inicio} 0000" do |j0b|
       scheduler.in '2s' do |j0b|
         create_invoices(j0b)
         # scheduler.schedule_every '1month' do |job|
