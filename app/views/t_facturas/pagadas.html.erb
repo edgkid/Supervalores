@@ -58,30 +58,30 @@
         d.from = $('#from').val();
         d.to = $('#to').val();
       },
-      useDataTableFooter: function (footer) {
-        $.ajax({
-          url: '<%= total_pagadas_t_facturas_path %>',
-          contentType: "application/json",
-          type: 'get',
-          data: {
-            from: $('#from').val(),
-            to: $('#to').val()
-          }
-        })
-        .done(function (data) {
-          if (data.procesado) {
-            footer.empty().append($("<tr />")
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />").html("Total"))
-              .append($("<td />").html(data.total))
-              .append($("<td />"))
-            )
-          }
-        });
-      }
+      // useDataTableFooter: function (footer) {
+      //   $.ajax({
+      //     url: '<%= total_pagadas_t_facturas_path %>',
+      //     contentType: "application/json",
+      //     type: 'get',
+      //     data: {
+      //       from: $('#from').val(),
+      //       to: $('#to').val()
+      //     }
+      //   })
+      //   .done(function (data) {
+      //     if (data.procesado) {
+      //       footer.empty().append($("<tr />")
+      //         .append($("<td />"))
+      //         .append($("<td />"))
+      //         .append($("<td />"))
+      //         .append($("<td />"))
+      //         .append($("<td />").html("Total"))
+      //         .append($("<td />").html(data.total))
+      //         .append($("<td />"))
+      //       )
+      //     }
+      //   });
+      // }
     });
 
     function refreshTable () {

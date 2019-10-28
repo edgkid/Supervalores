@@ -418,7 +418,6 @@ class TClientesController < ApplicationController
 
   def tramites
     @usar_dataTables = true
-    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @no_cache = true
 

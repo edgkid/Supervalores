@@ -1,56 +1,56 @@
 class TTramitesDatatable < ApplicationDatatable
   def view_columns
     @view_columns ||= {
-      created_at: { source: "TCliente.created_at" },
-      codigo: { source: "TCliente.codigo" },
-      ced_pas_ruc: { source: "TEmpresa.rif | TPersona.cedula | TOtro.identificacion" },
-      razon_social: { source: "TEmpresa.razon_social | (TPersona.nombre & TPersona.apellido) | TOtro.razon_social" },
+      created_at: { source: "ViewClient.created_at" },
+      codigo: { source: "ViewClient.codigo", cond: :like },
+      ced_pas_ruc: { source: "ViewClient.identificacion" },
+      razon_social: { source: "ViewClient.razon_social" },
       # telefono: { source: "TEmpresa.telefono | TPersona.telefono | TOtro.telefono" },
       # email: { source: "TEmpresa.email | TPersona.email | TOtro.email" },
-      es_prospecto: { source: "TCliente.prospecto_at" },
-      t_estatus: { source: "TEstatus.descripcion" }
+      es_prospecto: { source: "ViewClient.es_prospecto" },
+      t_estatus: { source: "ViewClient.estatus" },
     }
   end
 
   def data
     records.map do |record|
-      t_empresa = record.persona.try(:rif)            ? record.persona : nil
-      t_persona = record.persona.try(:cedula)         ? record.persona : nil
-      t_otro    = record.persona.try(:identificacion) ? record.persona : nil
-
       {
         created_at: record.created_at.strftime('%d/%m/%Y'),
         codigo: record.codigo,
-        ced_pas_ruc: t_empresa.try(:rif) || t_persona.try(:cedula) || t_otro.try(:identificacion),
-        razon_social: t_empresa.try(:razon_social) || t_persona.try(:nombre_completo) || t_otro.try(:razon_social),
+        ced_pas_ruc: record.identificacion,
+        razon_social: record.razon_social,
         # telefono: record.persona.telefono,
         # email: record.persona.email,
-        es_prospecto: record.prospecto_at.nil? ? 'Sí' : 'No',
-        t_estatus: record.t_estatus.descripcion,
-        DT_RowId: url_for(record)
+        es_prospecto: record.es_prospecto == 'No' ? 'No' : 'Sí',
+        t_estatus: record.estatus,
+        DT_RowId: url_for({
+          id: record.id, controller: 't_clientes', action: 'show', only_path: true
+        })
       }
     end
   end
 
   def get_raw_records
-    t_clientes = TCliente.joins(:t_estatus, "
-      LEFT JOIN t_empresas ON t_empresas.id = t_clientes.persona_id AND t_clientes.persona_type = 'TEmpresa'
-      LEFT JOIN t_personas ON t_personas.id = t_clientes.persona_id AND t_clientes.persona_type = 'TPersona'
-      LEFT JOIN t_otros    ON t_otros.id    = t_clientes.persona_id AND t_clientes.persona_type = 'TOtro'
-    ")
+    # t_clientes = TCliente.joins(:t_estatus, "
+    #   LEFT JOIN t_empresas ON t_empresas.id = t_clientes.persona_id AND t_clientes.persona_type = 'TEmpresa'
+    #   LEFT JOIN t_personas ON t_personas.id = t_clientes.persona_id AND t_clientes.persona_type = 'TPersona'
+    #   LEFT JOIN t_otros    ON t_otros.id    = t_clientes.persona_id AND t_clientes.persona_type = 'TOtro'
+    # ")
+
+    t_clientes = ViewClient.all
 
     if params[:prospecto] && params[:prospecto] == 'true'
-      t_clientes = t_clientes.where('prospecto_at IS NULL');
+      t_clientes = t_clientes.where(es_prospecto: 'Si');
     elsif params[:prospecto] && params[:prospecto] == 'false'
-      t_clientes = t_clientes.where('prospecto_at IS NOT NULL');
+      t_clientes = t_clientes.where(es_prospecto: 'No');
     end
 
     if params[:from] && params[:from] != '' && params[:to] && params[:to] != ''
-      t_clientes.where('t_clientes.created_at BETWEEN ? AND ?', params[:from], params[:to])
+      t_clientes.where('view_client.created_at BETWEEN ? AND ?', params[:from], params[:to])
     elsif params[:from] && params[:from] != ''
-      t_clientes.where('t_clientes.created_at >= ?', params[:from])
+      t_clientes.where('view_client.created_at >= ?', params[:from])
     elsif params[:to] && params[:to] != ''
-      t_clientes.where('t_clientes.created_at <= ?', params[:to])
+      t_clientes.where('view_client.created_at <= ?', params[:to])
     else
       t_clientes
     end

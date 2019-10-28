@@ -4,6 +4,8 @@ class ViewClients < ActiveRecord::Migration[5.2]
       SELECT
         tcl.id,
         tcl.codigo,
+        tcl.created_at,
+        tcl.updated_at,
         (CASE WHEN tem.id IS NOT NULL THEN tem.rif WHEN tpe.id IS NOT NULL THEN tpe.cedula ELSE tot.identificacion END) as identificacion,
         (CASE WHEN tem.id IS NOT NULL THEN tem.razon_social WHEN tpe.id IS NOT NULL THEN tpe.nombre || ', ' || tpe.apellido ELSE tot.razon_social END) as razon_social,
         (CASE WHEN tem.id IS NOT NULL THEN tem.telefono WHEN tpe.id IS NOT NULL THEN tpe.telefono ELSE tot.telefono END) as telefono,
