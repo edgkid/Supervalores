@@ -71,7 +71,7 @@ class TFacturasController < ApplicationController
   def index
     @usar_dataTables = true
     @attributes_to_display = [
-      :id, :codigo, :resolucion, :fecha_notificacion, :fecha_vencimiento,
+      :id, :t_cliente, :resolucion, :fecha_notificacion, :fecha_vencimiento,
       :recargo, :total_factura, :pendiente_fact
     ]
 
