@@ -12,15 +12,15 @@ class TTipoClienteDatatable < ApplicationDatatable
     records_array = super
     records.each_with_index do |record, i|
       records_array[i].merge!({
-        t_tipo_cliente_tipo: record.t_tipo_cliente_tipo.descripcion,
-        t_periodo: record.t_periodo.descripcion,
-        t_tarifa: record.t_tarifa.nombre
+        t_tipo_cliente_tipo: record.t_tipo_cliente_tipo ? record.t_tipo_cliente_tipo.descripcion : "N/A",
+        t_periodo: record.t_periodo ? record.t_periodo.descripcion : "N/A",
+        t_tarifa: record.t_tarifa ? record.t_tarifa.nombre : "N/A"
       })
     end
     records_array
   end
 
   def get_raw_records
-    TTipoCliente.joins(:t_tipo_cliente_tipo, :t_periodo, :t_tarifa)
+    TTipoCliente.left_joins(:t_tipo_cliente_tipo, :t_periodo, :t_tarifa)
   end
 end
