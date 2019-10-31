@@ -127,10 +127,10 @@
       <i class="fa fa-edit"></i>
       Editar Factura
     <% end %>
-    <%#= link_to @t_factura, method: :delete, data: { confirm: '¿Está seguro de querer eliminar esta factura?' }, class: 'btn btn-danger' do %>
-      <!-- <i class="fa fa-trash"></i>
-      Eliminar Factura -->
-    <%# end %>
+    <%= link_to @t_factura, method: :delete, data: { confirm: '¿Está seguro de querer eliminar esta factura?' }, class: 'btn btn-danger' do %>
+      <i class="fa fa-trash"></i>
+      Eliminar Factura
+    <% end if current_user.is_admin? %>
     <button type="button" class="btn btn-info"><i class="fa fa-envelope"></i> Enviar al Correo</button>
     
     <%= link_to generar_pdf_t_factura_path(@t_factura, format:'pdf'), target: "_blank", class: 'btn btn-primary' do %>
