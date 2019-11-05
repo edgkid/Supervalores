@@ -7,8 +7,8 @@ class TClientesController < ApplicationController
   before_action :usar_dataTables_en, only: [:index, :show, :edit, :estado_cuenta]
   before_action :dataTables_resolucion, only: [:show, :edit]
   before_action :seleccionar_resolucion, only: [:mostrar_resolucion]
-  before_action :clients_with_resolutions, only: :find_by_codigo
-  before_action :companies_with_clients_with_resolutions, only: :find_by_cedula
+  # before_action :clients_with_resolutions, only: :find_by_codigo
+  # before_action :companies_with_clients_with_resolutions, only: :find_by_cedula
 
   def index
     @attributes_to_display = [
@@ -359,7 +359,7 @@ class TClientesController < ApplicationController
 
   def find_by_codigo
     search = parametros_de_busqueda[:search]
-    respond_with @clients_with_resolutions.where('t_clientes.codigo ILIKE ?', "%#{search}%").first(10)
+    respond_with TCliente.where('t_clientes.codigo ILIKE ?', "%#{search}%").first(10)
   end
 
   def find_by_cedula
@@ -367,7 +367,7 @@ class TClientesController < ApplicationController
 
     personas = TPersona.where('cedula ILIKE ?', "%#{search}%").first(10)
     if personas.empty?
-      personas = @companies_with_clients_with_resolutions.where('rif ILIKE ?', "%#{search}%").first(10)
+      personas = TEmpresa.where('rif ILIKE ?', "%#{search}%").first(10)
     end
 
     respond_with personas
@@ -530,12 +530,12 @@ class TClientesController < ApplicationController
       ]
     end
 
-    def clients_with_resolutions
-      @clients_with_resolutions = TCliente.joins("INNER JOIN t_resolucions ON t_resolucions.t_cliente_id = t_clientes.id").distinct
-    end
+    # def clients_with_resolutions
+    #   @clients_with_resolutions = TCliente.joins("INNER JOIN t_resolucions ON t_resolucions.t_cliente_id = t_clientes.id").distinct
+    # end
 
-    def companies_with_clients_with_resolutions
-      @companies_with_clients_with_resolutions = TEmpresa.where(t_cliente: TCliente.joins("INNER JOIN t_resolucions ON t_resolucions.t_cliente_id = t_clientes.id")).distinct
-    end
+    # def companies_with_clients_with_resolutions
+    #   @companies_with_clients_with_resolutions = TEmpresa.where(t_cliente: TCliente.joins("INNER JOIN t_resolucions ON t_resolucions.t_cliente_id = t_clientes.id")).distinct
+    # end
 
 end

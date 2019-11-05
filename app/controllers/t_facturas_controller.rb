@@ -27,6 +27,13 @@ class TFacturasController < ApplicationController
     @t_factura.monto_emision = 0
     @t_factura.t_estatus = TEstatus.find_by(descripcion: 'Disponible') || TEstatus.first
 
+    ced_pas_ruc = params[:dynamic_attributes][:t_cliente][:cedula]
+    t_empresa = TEmpresa.find_by(rif: ced_pas_ruc)
+    t_persona = TPersona.find_by(cedula: ced_pas_ruc)
+    t_otro = TOtro.find_by(identificacion: ced_pas_ruc)
+
+    @t_factura.t_cliente = t_empresa.try(:t_cliente) || t_persona.try(:t_cliente) || t_otro.try(:t_cliente)
+
     if @t_factura.save
       t_factura_detalles = @t_factura.t_factura_detalles
       if t_factura_detalles.any? && t_factura_detalles.first.t_tarifa_servicio.tipo && t_factura_detalles.first.t_tarifa_servicio.tipo.downcase == 'ts'

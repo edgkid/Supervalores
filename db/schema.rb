@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_28_175017) do
+ActiveRecord::Schema.define(version: 2019_11_05_195704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,7 +176,7 @@ ActiveRecord::Schema.define(version: 2019_10_28_175017) do
     t.string "telefono"
     t.string "email"
     t.bigint "t_empresa_tipo_valor_id", null: false
-    t.bigint "t_empresa_sector_economico_id", null: false
+    t.bigint "t_empresa_sector_economico_id"
     t.string "dv"
     t.index ["rif"], name: "index_t_empresas_on_rif", unique: true
   end
@@ -285,12 +285,14 @@ ActiveRecord::Schema.define(version: 2019_10_28_175017) do
     t.float "monto_emision", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "t_resolucion_id", null: false
+    t.bigint "t_resolucion_id"
     t.bigint "t_periodo_id"
     t.bigint "t_estatus_id", null: false
     t.bigint "t_leyenda_id"
     t.bigint "user_id", null: false
     t.boolean "automatica", default: false
+    t.bigint "t_cliente_id"
+    t.index ["t_cliente_id"], name: "index_t_facturas_on_t_cliente_id"
     t.index ["t_estatus_id"], name: "index_t_facturas_on_t_estatus_id"
     t.index ["t_leyenda_id"], name: "index_t_facturas_on_t_leyenda_id"
     t.index ["t_periodo_id"], name: "index_t_facturas_on_t_periodo_id"
@@ -638,6 +640,7 @@ ActiveRecord::Schema.define(version: 2019_10_28_175017) do
   add_foreign_key "t_factura_servicios", "t_tarifa_servicios"
   add_foreign_key "t_factura_tarifas", "t_conf_fac_automaticas"
   add_foreign_key "t_factura_tarifas", "t_tarifas"
+  add_foreign_key "t_facturas", "t_clientes"
   add_foreign_key "t_facturas", "t_estatuses"
   add_foreign_key "t_facturas", "t_leyendas"
   add_foreign_key "t_facturas", "t_periodos"

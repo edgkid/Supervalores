@@ -5,8 +5,8 @@ class TEmpresasController < ApplicationController
   def index
     @usar_dataTables = true
     @attributes_to_display = [
-      :rif, :razon_social, :t_empresa_tipo_valor,
-      :t_empresa_sector_economico, :telefono, :email
+      :rif, :razon_social, # :t_empresa_sector_economico
+      :t_empresa_tipo_valor, :telefono, :email
     ]
 
     respond_to do |format|

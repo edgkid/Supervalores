@@ -54,18 +54,18 @@
     <% end %>
   </div>
 </div>
-<div class="form-group row">
+<!-- <div class="form-group row">
   <div class="col-sm-3 col-form-label">
-    <%= form.label :t_empresa_sector_economico_id, "Sector Económico", class: "text-right" %>
+    <%#= form.label :t_empresa_sector_economico_id, "Sector Económico", class: "text-right" %>
   </div>
   <div class="col-sm-9 input-value">
-    <% if editable %>
-    <%= form.select :t_empresa_sector_economico_id, opciones_de_sectores_economicos_para_empresas , {}, { :class => 'form-control m-b' } %>
-    <% else %>
-    <%= persona.t_empresa_sector_economico != nil ? persona.t_empresa_sector_economico.descripcion : "Ninguno" %>
-    <% end %>
+    <%# if editable %>
+    <%#= form.select :t_empresa_sector_economico_id, opciones_de_sectores_economicos_para_empresas , {}, { :class => 'form-control m-b' } %>
+    <%# else %>
+    <%#= persona.t_empresa_sector_economico != nil ? persona.t_empresa_sector_economico.descripcion : "Ninguno" %>
+    <%# end %>
   </div>
-</div>
+</div> -->
 <div class="form-group row opcional-prospectos">
   <div class="col-sm-3 col-form-label">
     <%= form.label :direccion_empresa, "Dirección", class: "text-right" %>
@@ -78,9 +78,9 @@
     <% end %>
   </div>
 </div>
-<div class="form-group row opcional-prospectos">
+<div class="form-group row opcional">
   <div class="col-sm-2 col-form-label">
-    <%= form.label :telefono, "Teléfono", class: "text-right" %>
+    <%= form.label :telefono, "Teléfono", class: "text-right opcional" %>
   </div>
   <div class="col-sm-4 input-value">
     <% if editable %>
@@ -90,9 +90,9 @@
     <% end %>
   </div>
   <div class="col-sm-2 col-form-label">
-    <%= form.label :email, "Email", class: "text-right" %>
+    <%= form.label :email, "Email", class: "text-right opcional" %>
   </div>
-  <div class="col-sm-4 input-value opcional-prospectos">
+  <div class="col-sm-4 input-value opcional">
     <% if editable %>
     <%= form.text_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
     <% else %>
@@ -100,26 +100,26 @@
     <% end %>
   </div>
 </div>
-<div class="form-group row">
+<!-- <div class="form-group row">
   <div class="col-sm-2 col-form-label">
-    <%= form.label :fax, "Fax", class: "opcional text-right" %>
+    <%#= form.label :fax, "Fax", class: "opcional text-right" %>
   </div>
   <div class="col-sm-4 input-value">
-    <% if editable %>
-    <%= form.text_field :fax, autofocus: true, autocomplete: "fax", class: "form-control" %>
-    <% else %>
-    <%= persona.fax %>
-    <% end %>
+    <%# if editable %>
+    <%#= form.text_field :fax, autofocus: true, autocomplete: "fax", class: "form-control" %>
+    <%# else %>
+    <%#= persona.fax %>
+    <%# end %>
   </div>
   <div class="col-sm-2 col-form-label">
-    <%= form.label :web, "Web", class: "opcional text-right" %>
+    <%#= form.label :web, "Web", class: "opcional text-right" %>
   </div>
   <div class="col-sm-4 input-value">
-    <% if editable %>
-    <%= form.text_field :web, autofocus: true, autocomplete: "web", class: "form-control" %>
-    <% else %>
-    <%= persona.web %>
-    <% end %>
+    <%# if editable %>
+    <%#= form.text_field :web, autofocus: true, autocomplete: "web", class: "form-control" %>
+    <%# else %>
+    <%#= persona.web %>
+    <%# end %>
   </div>
-</div>
+</div> -->
 <% end %>

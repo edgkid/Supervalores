@@ -1,6 +1,6 @@
 class TFactura < ApplicationRecord
-	#belongs_to :t_cliente
-  belongs_to :t_resolucion
+	belongs_to :t_cliente
+  belongs_to :t_resolucion, optional: true
   belongs_to :t_periodo, optional: true
   belongs_to :t_estatus
   # belongs_to :t_estatus_fac
@@ -23,9 +23,9 @@ class TFactura < ApplicationRecord
   validates :fecha_vencimiento, presence: {
     message: "|La fecha de vencimiento no puede estar vacía"
   }
-  validates :t_resolucion, presence: {
-    message: "|La resolución debe existir"
-  }
+  # validates :t_resolucion, presence: {
+  #   message: "|La resolución debe existir"
+  # }
 
   def calculate_pending_payment(before_save = false)
     if before_save

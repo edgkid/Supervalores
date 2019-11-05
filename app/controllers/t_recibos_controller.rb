@@ -84,10 +84,10 @@ class TRecibosController < ApplicationController
 
     def set_preview_data
       @t_resolucion = @t_factura.t_resolucion
-      @t_tarifa  = @t_resolucion.t_tipo_cliente.t_tarifa
+      # @t_tarifa  = @t_resolucion.t_tipo_cliente.t_tarifa
       @t_periodo = @t_factura.t_periodo
       @t_estatus = @t_factura.t_estatus
-      @t_cliente = @t_resolucion.t_cliente
+      @t_cliente = @t_resolucion.try(:t_cliente) || @t_factura.try(:t_cliente)
 
       @t_empresa = @t_cliente.persona.try(:rif)            ? @t_cliente.persona : nil
       @t_persona = @t_cliente.persona.try(:cedula)         ? @t_cliente.persona : nil
@@ -103,9 +103,9 @@ class TRecibosController < ApplicationController
       end
 
       @t_resolucion = @t_factura.t_resolucion
-      @t_tarifa  = @t_resolucion.t_tipo_cliente.t_tarifa
+      # @t_tarifa  = @t_resolucion.t_tipo_cliente.t_tarifa
       @t_estatus = @t_factura.t_estatus
-      @t_cliente = @t_resolucion.t_cliente
+      @t_cliente = @t_resolucion.try(:t_cliente) || @t_factura.try(:t_cliente)
       @t_persona = @t_cliente.persona
       if @t_persona.class.to_s == 'TEmpresa'
         @t_empresa = @t_persona

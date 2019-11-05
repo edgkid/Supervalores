@@ -15,6 +15,16 @@ var data = [
   <% end if @t_cliente %>
 ]
 
+<% unless @t_cliente %>
+  @t_cliente = @t_empresa.t_cliente if @t_empresa
+  @t_cliente ||= @t_persona.t_cliente if @t_persona
+  @t_cliente ||= @t_otro.t_cliente if @t_otro
+
+  codigo = '<%= @t_cliente ? @t_cliente.codigo : "" %>';
+  cedula = '<%= @t_persona ? @t_persona.cedula : "" %>';
+  rif = '<%= @t_empresa ? @t_empresa.rif : "" %>';
+<% end %>
+
 if (data.length === 0) {
   zeroLength = true;
 }
@@ -27,7 +37,7 @@ switch(attribute) {
     } else {
       $('#select-resolucion').empty().append('<option></option>').select2({ data: data, placeholder: 'Seleccione' });
 
-      <% @t_tarifa = @t_cliente.t_resolucions.first.t_tipo_cliente.t_tarifa %>
+      <%# @t_tarifa = @t_cliente.t_resolucions.first.t_tipo_cliente.t_tarifa %>
 
       // amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
       // surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
@@ -37,7 +47,7 @@ switch(attribute) {
       // $('#rate-surcharge').text(surcharge);
       // $('#total-rate').text(totalRate);
 
-      $('#total').text(Number($('#total').text()) /*+ totalRate*/);
+      // $('#total').text(Number($('#total').text()) /*+ totalRate*/);
     }
 
     <% if @t_cliente && @t_persona %>
@@ -69,7 +79,7 @@ switch(attribute) {
       // $('#rate-surcharge').text(surcharge);
       // $('#total-rate').text(totalRate);
 
-      $('#total').text(Number($('#total').text()) /*+ totalRate*/);
+      // $('#total').text(Number($('#total').text()) /*+ totalRate*/);
     }
 
     $('#select2-select-codigo-container').text(codigo);
@@ -98,7 +108,7 @@ switch(attribute) {
     // $('#rate-surcharge').text(surcharge);
     // $('#total-rate').text(totalRate);
 
-    $('#total').text(Number($('#total').text()) /*+ totalRate*/);
+    // $('#total').text(Number($('#total').text()) /*+ totalRate*/);
     break;
 }
 

@@ -27,14 +27,14 @@
     <div class="form-group row">
         <% if editable %>
         <%= render "shared/action_buttons",
-          list_route: return_to, list_text: "Empresa - Tipo de valor",
+          list_route: return_to, list_text: "Empresa - Tipo de Instrumento",
           back_route: polymorphic_path(registro), back_text: "Cancelar",
           save_form: true, save_text: "Guardar",
           button_size: "xs"
         %>
         <% else %>
         <%= render "shared/action_buttons",
-          list_route: return_to, list_text: "Empresa - Tipo de valor",
+          list_route: return_to, list_text: "Empresa - Tipo de Instrumento",
           edit_route: edit_polymorphic_path(registro), edit_text: "Editar",
           delete_route: polymorphic_path(registro), delete_text: "Borrar",
           button_size: "xs"
