@@ -17,7 +17,7 @@ class TFacturaPdf < PdfHelper
     # @t_recibo     = t_recibo
     @t_factura    = t_factura
     @t_resolucion = @t_factura.t_resolucion
-    @t_cliente    = @t_resolucion.t_cliente
+    @t_cliente    = @t_resolucion.try(:t_cliente) || @t_factura.try(:t_cliente)
     @t_empresa    = @t_cliente.persona.try(:rif)            ? @t_cliente.persona : nil
     @t_persona    = @t_cliente.persona.try(:cedula)         ? @t_cliente.persona : nil
     @t_otro       = @t_cliente.persona.try(:identificacion) ? @t_cliente.persona : nil
@@ -124,7 +124,7 @@ class TFacturaPdf < PdfHelper
     bounding_box([185, 644], :width => 165, :height => 100) do
       # stroke_bounds
       text_box "<b>Para Cliente:</b> #{@t_empresa.try(:razon_social) || @t_persona.try(:full_name) || @t_otro.try(:razon_social)}
-      <b>Resolución:</b> #{@t_resolucion.resolucion}
+      <b>Resolución:</b> #{@t_resolucion ? @t_resolucion.resolucion : 'Sin Resolución'}
       <b>CIP/RUC:</b> #{@t_empresa.try(:rif) || @t_persona.try(:cedula) || @t_otro.try(:identificacion)}
       <b>Teléfono:</b> #{@t_empresa.try(:telefono) || @t_persona.try(:telefono) || @t_otro.try(:telefono)}
       <b>Email:</b> #{@t_empresa.try(:email) || @t_persona.try(:email) || @t_otro.try(:email)}

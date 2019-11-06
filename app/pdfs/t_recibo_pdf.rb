@@ -18,7 +18,7 @@ class TReciboPdf < PdfHelper
     @t_recibo     = t_recibo
     @t_factura    = t_factura
     @t_resolucion = @t_factura.t_resolucion
-    @t_cliente    = @t_resolucion.t_cliente
+    @t_cliente    = @t_resolucion.try(:t_cliente) || @t_factura.try(:t_cliente)
     @t_empresa    = @t_cliente.persona.try(:rif)            ? @t_cliente.persona : nil
     @t_persona    = @t_cliente.persona.try(:cedula)         ? @t_cliente.persona : nil
     @t_otro       = @t_cliente.persona.try(:identificacion) ? @t_cliente.persona : nil

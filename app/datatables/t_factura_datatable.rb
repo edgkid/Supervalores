@@ -5,7 +5,6 @@ class TFacturaDatatable < ApplicationDatatable
 
     @view_columns ||= {
       id: { source: "TFactura.id" },
-      # codigo: { source: "TCliente.codigo" },
       t_cliente: { source: "TEmpresa.razon_social | (TPersona.nombre & TPersona.apellido) | TOtro.razon_social" },
       resolucion: { source: "TResolucion.resolucion" },
       fecha_notificacion: { source: "TFactura.fecha_notificacion" },
@@ -21,15 +20,20 @@ class TFacturaDatatable < ApplicationDatatable
     records.map do |record|
       pending_payment = record.t_recibos.any? ? record.t_recibos.last.pago_pendiente : record.calculate_pending_payment
       
-      t_empresa = record.t_resolucion.t_cliente.persona.try(:rif)            ? record.t_resolucion.t_cliente.persona : nil
-      t_persona = record.t_resolucion.t_cliente.persona.try(:cedula)         ? record.t_resolucion.t_cliente.persona : nil
-      t_otro    = record.t_resolucion.t_cliente.persona.try(:identificacion) ? record.t_resolucion.t_cliente.persona : nil
+      if record.try(:t_resolucion)
+        t_empresa = record.t_resolucion.t_cliente.persona.try(:rif)            ? record.t_resolucion.t_cliente.persona : nil
+        t_persona = record.t_resolucion.t_cliente.persona.try(:cedula)         ? record.t_resolucion.t_cliente.persona : nil
+        t_otro    = record.t_resolucion.t_cliente.persona.try(:identificacion) ? record.t_resolucion.t_cliente.persona : nil
+      else
+        t_empresa = record.t_cliente.persona.try(:rif)            ? record.t_cliente.persona : nil
+        t_persona = record.t_cliente.persona.try(:cedula)         ? record.t_cliente.persona : nil
+        t_otro    = record.t_cliente.persona.try(:identificacion) ? record.t_cliente.persona : nil
+      end
 
       {
         id: record.id,
-        # codigo: record.t_resolucion.t_cliente.codigo,
         t_cliente: t_empresa.try(:razon_social) || t_persona.try(:nombre_completo) || t_otro.try(:razon_social),
-        resolucion: record.t_resolucion.resolucion,
+        resolucion: record.t_resolucion ? record.t_resolucion.resolucion : 'Sin Resolución',
         fecha_notificacion: record.fecha_notificacion,
         fecha_vencimiento: record.fecha_vencimiento,
         recargo: record.recargo,
