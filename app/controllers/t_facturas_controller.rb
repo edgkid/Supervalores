@@ -148,6 +148,27 @@ class TFacturasController < ApplicationController
     render json: results
   end
 
+  def informe_recaudacion
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :factura_id, :recibo_id, :razon_social, :res, :identificacion,
+      :fecha_notificacion, :forma_pago, :estado, :total_factura
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformeDeRecaudacionDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
   private
 
     def t_factura_params

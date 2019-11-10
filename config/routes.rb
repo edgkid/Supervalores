@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     collection do
       get 'pagadas'
       get 'total_pagadas'
+      get 'informe_recaudacion'
     end
   end
   resources :t_conf_fac_automaticas

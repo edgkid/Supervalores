@@ -151,6 +151,9 @@
           <% if can? :read, TFactura %>
             <li><%= link_to 'Facturas Pagadas', pagadas_t_facturas_path %></li>
           <% end %>
+          <% if can? :read, TFactura %>
+            <li><%= link_to 'Informe de Recaudación', informe_recaudacion_t_facturas_path %></li>
+          <% end %>
         </ul>
       </li>
     </ul>

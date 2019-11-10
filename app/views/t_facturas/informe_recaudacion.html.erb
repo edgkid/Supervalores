@@ -1,0 +1,208 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row" id="period-form-container">
+    <div class="col-md-2">
+      <select id="periodo-select" name="periodo" style="width: 100%;">
+        <option value=""></option>
+        <option value="sin_filtro">Sin Filtro</option>
+        <option value="diario">Diario</option>
+        <option value="semanal">Semanal</option>
+        <option value="mensual">Mensual</option>
+        <option value="bimestral">Bimestral</option>
+        <option value="trimestral">Trimestral</option>
+        <option value="semestral">Semestral</option>
+        <option value="anual">Anual</option>
+      </select> 
+    </div>
+    <div class="col-md-10">
+      <div class="row">
+        <div align="center" class="col" id="period-selects-container">
+          <%= render 'period_selects', periodo: nil %>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary" id="execute">Ejecutar</button>
+          <button class="btn btn-default" type="button" onclick="javascript:window.print()">Imprimir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <%= image_tag "logoSMV.png", width: '150px' %>
+    </div>
+    <div align="right" class="col-md-6">
+      <h5><b>Fecha de impresión:</b> <%= Date.today.strftime('%d/%m/%Y') %></h5>
+    </div>
+  </div>
+  <div class="row" style="margin-top: -40px;">
+    <div align="center" class="col-12">
+      <h3>REPÚBLICA DE PANAMÁ</h3>
+      <h3>SUPERINTENDENCIA DEL MERCADO DE VALORES</h3>
+      <h3>DEPARTAMENTO DE TESORERÍA</h3>
+      <hr>
+      <h3>
+        INFORME DE RECAUDACIÓN<br>
+        Correspondiente al <%= Date.today.strftime('%Y') %>
+      </h3>
+      <hr>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <% if TFactura.count > 0 %>
+        <div class="table-responsive">
+          <div class="row">
+            <div class="col-6">
+            </div>
+            <div class="col-6">
+            </div>
+          </div>
+          <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= informe_recaudacion_t_facturas_path(format: :json) %>" id="ajax-datatable">
+            <thead>
+              <tr>
+                <th>#Factura</th>
+                <th>#Recibo</th>
+                <th>Cliente</th>
+                <th>Res</th>
+                <th>Cédula</th>
+                <th>Fecha</th>
+                <th>M. Pago</th>
+                <th>Estado</th>
+                <th>Importe</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      <% else %>
+        <div>
+          <p>No se encontraron registros.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.datepicker').datepicker({
+      autoclose: true,
+      format: "dd/mm/yyyy"
+    });
+
+    $('#periodo-select').select2({ placeholder: 'Periodo' });
+
+    $('#periodo-select').on('change', function () {
+      //$("#period-selects-container").html("<%#= escape_javascript(render('period_selects', periodo: " + $(this).val() + ")) %>");
+
+      switch ($(this).val()) {
+        case 'sin_filtro':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'sin_filtro')) %>");
+          break;
+        case 'diario':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'diario')) %>");
+          break;
+        case 'semanal':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'semanal')) %>");
+          break;
+        case 'mensual':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'mensual')) %>");
+          break;
+        case 'bimestral':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'bimestral')) %>");
+          break;
+        case 'trimestral':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'trimestral')) %>");
+          break;
+        case 'semestral':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'semestral')) %>");
+          break;
+        case 'anual':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'anual')) %>");
+          break;
+      }
+      $('#day').datepicker({
+        autoclose: true,
+        format: "dd/mm/yyyy",
+        todayBtn: "linked"
+      });
+      $('.input-daterange').datepicker({
+        keyboardNavigation: false,
+        format: "dd/mm/yyyy",
+        forceParse: false,
+        startDate: 0,
+        calendarWeeks: true
+      });
+      $('.month-view').datepicker({
+        minViewMode: 1,
+        maxViewMode: 2,
+        format: "dd/mm/yyyy",
+        startDate: 0
+      });
+      $('#year').datepicker({
+        minViewMode: 2,
+        format: "dd/mm/yyyy",
+        autoclose: true
+      });
+    });
+
+    $.extend({
+      useDataInAjaxCall: function (d) {
+        d.day = $('#day').val();
+        d.start = $('#start').val();
+        d.end = $('#end').val();
+        d.month_year = $('#month-year').val();
+        d.bimonthly = $('#bimonthly').val();
+        d.quarterly = $('#quarterly').val();
+        d.biannual = $('#biannual').val();
+        d.year = $('#year').val();
+      },
+      // useDataTableFooter: function (footer) {
+      //   $.ajax({
+      //     url: '<%= total_pagadas_t_facturas_path %>',
+      //     contentType: "application/json",
+      //     type: 'get',
+      //     data: {
+      //       from: $('#from').val(),
+      //       to: $('#to').val()
+      //     }
+      //   })
+      //   .done(function (data) {
+      //     if (data.procesado) {
+      //       footer.empty().append($("<tr />")
+      //         .append($("<td />"))
+      //         .append($("<td />"))
+      //         .append($("<td />"))
+      //         .append($("<td />"))
+      //         .append($("<td />").html("Total"))
+      //         .append($("<td />").html(data.total))
+      //         .append($("<td />"))
+      //       )
+      //     }
+      //   });
+      // }
+    });
+
+    function refreshTable () {
+      $("#ajax-datatable").DataTable().ajax.reload();
+    }
+
+    $('.datepicker').on('changeDate', function (e) {
+      refreshTable();
+    });
+
+    $('#execute').click(function () {
+      refreshTable();
+    });
+  });
+</script>
+
+<style type="text/css" media="print">
+  @media print {
+    #period-form-container {display:none;}
+    #ajax-datatable_length {display:none;}
+    #ajax-datatable_filter {display:none;}
+    #ajax-datatable_paginate {display:none;}
+  }
+</style>
