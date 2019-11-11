@@ -187,6 +187,28 @@ class TFacturasController < ApplicationController
     end
   end
 
+  def informe_ingresos_presupuesto
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :enero, :febrero, :marzo, :abril, :mayo, :junio,
+      :julio, :agosto, :septiembre, :octubre, :noviembre, :diciembre,
+      :total
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformeDeIngresosPresupuestoDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
   private
 
     def t_factura_params
