@@ -1,7 +1,7 @@
 <div class="wrapper wrapper-content animated fadeInRight">
   <% subtitle = raw("
     <h3>
-      INFORME DE RECAUDACIÓN<br>
+      INFORME CONSOLIDADO DE INGRESOS DIARIOS<br>
       Correspondiente al #{Date.today.strftime('%Y')}
     </h3>
   ") %>
@@ -17,18 +17,11 @@
             <div class="col-6">
             </div>
           </div>
-          <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= informe_recaudacion_t_facturas_path(format: :json) %>" id="ajax-datatable">
+          <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= informe_ingresos_diarios_t_facturas_path(format: :json) %>" id="ajax-datatable">
             <thead>
               <tr>
-                <th>#Factura</th>
-                <th>#Recibo</th>
-                <th>Cliente</th>
-                <th>Res</th>
-                <th>Cédula</th>
-                <th>Fecha</th>
-                <th>M. Pago</th>
-                <th>Estado</th>
-                <th>Importe</th>
+                <th>Detalle</th>
+                <th>Monto</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -53,8 +46,6 @@
     $('#periodo-select').select2({ placeholder: 'Periodo' });
 
     $('#periodo-select').on('change', function () {
-      //$("#period-selects-container").html("<%#= escape_javascript(render('period_selects', periodo: " + $(this).val() + ")) %>");
-
       switch ($(this).val()) {
         case 'sin_filtro':
           $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'sin_filtro')) %>");
