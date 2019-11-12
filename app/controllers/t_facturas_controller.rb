@@ -150,6 +150,7 @@ class TFacturasController < ApplicationController
 
   def informe_recaudacion
     @usar_dataTables = true
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @no_cache = true
 
@@ -167,6 +168,21 @@ class TFacturasController < ApplicationController
         view_context: view_context)
       }
     end
+  end
+
+  def recaudacion_total
+    dataTable = InformeDeRecaudacionDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    total = dataTable.get_raw_records.sum(:total_factura).truncate(2)
+    results = {
+      procesado: true,
+      total: total
+    }
+    render json: results
   end
 
   def informe_ingresos_diarios
@@ -211,6 +227,7 @@ class TFacturasController < ApplicationController
 
   def informe_cuentas_x_cobrar
     @usar_dataTables = true
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @no_cache = true
 
@@ -228,6 +245,21 @@ class TFacturasController < ApplicationController
         view_context: view_context)
       }
     end
+  end
+
+  def total_cuentas_x_cobrar
+    dataTable = InformeDeCuentasXCobrarDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    total = dataTable.get_raw_records.sum(:total).truncate(2)
+    results = {
+      procesado: true,
+      total: total
+    }
+    render json: results
   end
 
   private

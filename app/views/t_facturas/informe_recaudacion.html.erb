@@ -5,7 +5,7 @@
       Correspondiente al #{Date.today.strftime('%Y')}
     </h3>
   ") %>
-  <%= render 'report_header', subtitle: subtitle %>
+  <%= render 'report_header', filters: true, subtitle: subtitle %>
 
   <div class="row">
     <div class="col-lg-12">
@@ -40,6 +40,16 @@
         </div>
       <% end %>
     </div>
+  </div>
+</div>
+
+<div class="row justify-content-md-center">
+  <div align="center" class="col-md-10">
+    <h5>
+      <b>Preparado por:</b> <u><%= current_user.nombre_completo %></u>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <b>Revisado por:</b> <%= '_' * 75 %>
+    </h5>
   </div>
 </div>
 
@@ -117,30 +127,32 @@
         d.biannual = $('#biannual').val();
         d.year = $('#year').val();
       },
-      // useDataTableFooter: function (footer) {
-      //   $.ajax({
-      //     url: '<%= total_pagadas_t_facturas_path %>',
-      //     contentType: "application/json",
-      //     type: 'get',
-      //     data: {
-      //       from: $('#from').val(),
-      //       to: $('#to').val()
-      //     }
-      //   })
-      //   .done(function (data) {
-      //     if (data.procesado) {
-      //       footer.empty().append($("<tr />")
-      //         .append($("<td />"))
-      //         .append($("<td />"))
-      //         .append($("<td />"))
-      //         .append($("<td />"))
-      //         .append($("<td />").html("Total"))
-      //         .append($("<td />").html(data.total))
-      //         .append($("<td />"))
-      //       )
-      //     }
-      //   });
-      // }
+      useDataTableFooter: function (footer) {
+        $.ajax({
+          url: '<%= recaudacion_total_t_facturas_path %>',
+          contentType: "application/json",
+          type: 'get',
+          data: {
+            from: $('#from').val(),
+            to: $('#to').val()
+          }
+        })
+        .done(function (data) {
+          if (data.procesado) {
+            footer.empty().append($("<tr />")
+              .append($("<td />").html("<b>Total</b>"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />").html(data.total))
+            )
+          }
+        });
+      }
     });
 
     function refreshTable () {

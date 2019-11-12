@@ -32,9 +32,11 @@ Rails.application.routes.draw do
       get 'pagadas'
       get 'total_pagadas'
       get 'informe_recaudacion'
+      get 'recaudacion_total'
       get 'informe_ingresos_diarios'
       get 'informe_ingresos_presupuesto'
       get 'informe_cuentas_x_cobrar'
+      get 'total_cuentas_x_cobrar'
     end
   end
   resources :t_conf_fac_automaticas

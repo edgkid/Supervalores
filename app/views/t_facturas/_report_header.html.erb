@@ -1,31 +1,33 @@
-<div class="row" id="period-form-container">
-  <div class="col-md-2">
-    <select id="periodo-select" name="periodo" style="width: 100%;">
-      <option value=""></option>
-      <option value="sin_filtro">Sin Filtro</option>
-      <option value="diario">Diario</option>
-      <option value="semanal">Semanal</option>
-      <option value="mensual">Mensual</option>
-      <option value="bimestral">Bimestral</option>
-      <option value="trimestral">Trimestral</option>
-      <option value="semestral">Semestral</option>
-      <option value="anual">Anual</option>
-    </select> 
-  </div>
-  <div class="col-md-10">
-    <div class="row">
-      <div align="center" class="col" id="period-selects-container">
-        <%= render 'period_selects', periodo: nil %>
-      </div>
-      <div class="col">
-        <button class="btn btn-primary" id="execute">Ejecutar</button>
-        <button class="btn btn-default" type="button" onclick="javascript:window.print()">
-          Imprimir
-        </button>
+<% if filters %>
+  <div class="row" id="period-form-container">
+    <div class="col-md-2">
+      <select id="periodo-select" name="periodo" style="width: 100%;">
+        <option value=""></option>
+        <option value="sin_filtro">Sin Filtro</option>
+        <option value="diario">Diario</option>
+        <option value="semanal">Semanal</option>
+        <option value="mensual">Mensual</option>
+        <option value="bimestral">Bimestral</option>
+        <option value="trimestral">Trimestral</option>
+        <option value="semestral">Semestral</option>
+        <option value="anual">Anual</option>
+      </select> 
+    </div>
+    <div class="col-md-10">
+      <div class="row">
+        <div align="center" class="col" id="period-selects-container">
+          <%= render 'period_selects', periodo: nil %>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary" id="execute">Ejecutar</button>
+          <button class="btn btn-default" type="button" onclick="javascript:window.print()">
+            Imprimir
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% end %>
 
 <div class="row">
   <div class="col-md-6">

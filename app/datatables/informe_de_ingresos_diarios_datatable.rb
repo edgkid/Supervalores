@@ -10,7 +10,7 @@ class InformeDeIngresosDiariosDatatable < ApplicationDatatable
     records.map do |record|
       {
         detalle: record.justificacion,
-        monto: record.pago_recibido,
+        monto: record.pago_recibido.truncate(2),
         DT_RowId: url_with_or_without_parent_resource_for(record.t_factura, record)
       }
     end

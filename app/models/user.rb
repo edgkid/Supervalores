@@ -42,7 +42,7 @@ class User < ApplicationRecord
             }
 
 	def nombre_completo
-		return "#{nombre}, #{apellido}"
+		"#{nombre} #{apellido}"
 	end
 
   def has_role?(t_rol_name)
