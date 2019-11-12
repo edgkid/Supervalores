@@ -1,5 +1,5 @@
 class TFactura < ApplicationRecord
-	belongs_to :t_cliente
+	belongs_to :t_cliente, optional: true
   belongs_to :t_resolucion, optional: true
   belongs_to :t_periodo, optional: true
   belongs_to :t_estatus

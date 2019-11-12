@@ -209,6 +209,27 @@ class TFacturasController < ApplicationController
     end
   end
 
+  def informe_cuentas_x_cobrar
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :descripcion, :cantidad_clientes, :cantidad_facturas, :dias_0_30,
+      :dias_31_60, :dias_61_90, :dias_91_120, :dias_mas_de_120, :total
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformeDeCuentasXCobrarDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
   private
 
     def t_factura_params
