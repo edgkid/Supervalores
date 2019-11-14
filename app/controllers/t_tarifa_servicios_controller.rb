@@ -60,6 +60,27 @@ class TTarifaServiciosController < ApplicationController
     redirect_to t_tarifa_servicios_path
   end
 
+  def tramites
+    @usar_dataTables = true
+    # @useDataTableFooter = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :fecha, :cantidad, :codigo, :nombre, :descripcion, :tipo
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: TramitesDeTarifasDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
   private
 
     def t_tarifa_servicio_params

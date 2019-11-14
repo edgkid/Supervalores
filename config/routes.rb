@@ -41,7 +41,9 @@ Rails.application.routes.draw do
   end
   resources :t_conf_fac_automaticas
   resources :t_recibos, only: :index
-  resources :t_tarifa_servicios
+  resources :t_tarifa_servicios do
+    get 'tramites', on: :collection
+  end
   namespace :t_recargos do
     get 'find_by_descripcion', as: :find_by_descripcion
   end

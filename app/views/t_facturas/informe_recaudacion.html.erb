@@ -43,15 +43,7 @@
   </div>
 </div>
 
-<div class="row justify-content-md-center">
-  <div align="center" class="col-md-10">
-    <h5>
-      <b>Preparado por:</b> <u><%= current_user.nombre_completo %></u>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <b>Revisado por:</b> <%= '_' * 75 %>
-    </h5>
-  </div>
-</div>
+<%= render 'report_footer' %>
 
 <script type="text/javascript">
   $(document).ready(function(){
