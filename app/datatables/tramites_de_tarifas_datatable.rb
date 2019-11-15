@@ -1,8 +1,8 @@
 class TramitesDeTarifasDatatable < ApplicationDatatable
   def view_columns
     @view_columns ||= {
-      fecha: { source: "TramitesTarifaView.fecha_notificacion" },
-      cantidad: { source: "TramitesTarifaView.cantidad" },
+      fecha: { source: "fecha_notificacion", searchable: false },
+      cantidad: { source: "cantidad", searchable: false },
       codigo: { source: "TramitesTarifaView.codigo" },
       nombre: { source: "TramitesTarifaView.nombre" },
       descripcion: { source: "TramitesTarifaView.descripcion" },
@@ -13,8 +13,8 @@ class TramitesDeTarifasDatatable < ApplicationDatatable
   def data
     records.map do |record|
       { 
-        fecha: record.fecha_notificacion,
-        cantidad: record.cantidad,
+        fecha: record[:fecha_notificacion],
+        cantidad: record[:cantidad],
         codigo: record.codigo,
         nombre: record.nombre,
         descripcion: record.descripcion,
@@ -29,33 +29,33 @@ class TramitesDeTarifasDatatable < ApplicationDatatable
   def get_raw_records
     tramites = TramitesTarifaView.all
 
-    # if params[:from] && params[:from] != '' && params[:to] && params[:to] != ''
-    #   tramites
-    #     .select(:id, 'MIN(fecha_notificacion), SUM(cantidad) cantidad, codigo, nombre, descripcion, tipo')
-    #     .where('fecha_notificacion BETWEEN ? AND ?', params[:from], params[:to])
-    #     .group(:id, :codigo, :nombre, :descripcion, :tipo)
-    # elsif params[:from] && params[:from] != ''
-    #   tramites
-    #     .select(:id, 'MIN(fecha_notificacion), SUM(cantidad) cantidad, codigo, nombre, descripcion, tipo')
-    #     .where('fecha_notificacion >= ?', params[:from])
-    #     .group(:id, :codigo, :nombre, :descripcion, :tipo)
-    # elsif params[:to] && params[:to] != ''
-    #   tramites
-    #     .select(:id, 'MIN(fecha_notificacion), SUM(cantidad) cantidad, codigo, nombre, descripcion, tipo')
-    #     .where('fecha_notificacion <= ?', params[:to])
-    #     .group(:id, :codigo, :nombre, :descripcion, :tipo)
-    # else
-    #   tramites
-    # end
-
     if params[:from] && params[:from] != '' && params[:to] && params[:to] != ''
-      tramites.where('fecha_notificacion BETWEEN ? AND ?', params[:from], params[:to])
+      tramites
+        .select(:id, 'ARRAY_AGG(fecha_notificacion) fecha_notificacion, SUM(cantidad) cantidad, codigo, nombre, descripcion, tipo')
+        .where('fecha_notificacion BETWEEN ? AND ?', params[:from], params[:to])
+        .group(:id, :codigo, :nombre, :descripcion, :tipo)
     elsif params[:from] && params[:from] != ''
-      tramites.where('fecha_notificacion >= ?', params[:from])
+      tramites
+        .select(:id, 'ARRAY_AGG(fecha_notificacion) fecha_notificacion, SUM(cantidad) cantidad, codigo, nombre, descripcion, tipo')
+        .where('fecha_notificacion >= ?', params[:from])
+        .group(:id, :codigo, :nombre, :descripcion, :tipo)
     elsif params[:to] && params[:to] != ''
-      tramites.where('fecha_notificacion <= ?', params[:to])
+      tramites
+        .select(:id, 'ARRAY_AGG(fecha_notificacion) fecha_notificacion, SUM(cantidad) cantidad, codigo, nombre, descripcion, tipo')
+        .where('fecha_notificacion <= ?', params[:to])
+        .group(:id, :codigo, :nombre, :descripcion, :tipo)
     else
       tramites
     end
+
+    # if params[:from] && params[:from] != '' && params[:to] && params[:to] != ''
+    #   tramites.where('fecha_notificacion BETWEEN ? AND ?', params[:from], params[:to])
+    # elsif params[:from] && params[:from] != ''
+    #   tramites.where('fecha_notificacion >= ?', params[:from])
+    # elsif params[:to] && params[:to] != ''
+    #   tramites.where('fecha_notificacion <= ?', params[:to])
+    # else
+    #   tramites
+    # end
   end
 end

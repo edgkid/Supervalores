@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     end
     resources :t_recibos do
       get 'generar_pdf', on: :member
+      get 'comparativa_ingresos', on: :collection
     end
     collection do
       get 'pagadas'
