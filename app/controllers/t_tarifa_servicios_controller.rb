@@ -1,7 +1,15 @@
 class TTarifaServiciosController < ApplicationController
   before_action :set_t_tarifa_servicio, only: [:edit, :update, :show, :destroy]
-
+  respond_to :json, only: [:all_services]
   load_and_authorize_resource
+
+  def all_services
+    search = parametros_de_busqueda[:search]
+    respond_with TTarifaServicio.where("
+      tipo ILIKE ? OR codigo ILIKE ? OR nombre ILIKE ? OR descripcion ILIKE ?",
+      "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%"
+    ).first(20)
+  end
 
   def new
     @t_tarifa_servicio = TTarifaServicio.new
@@ -92,5 +100,9 @@ class TTarifaServiciosController < ApplicationController
 
     def set_t_tarifa_servicio
       @t_tarifa_servicio = TTarifaServicio.find(params[:id])
+    end
+
+    def parametros_de_busqueda
+      params.permit(:attribute, :search)
     end
 end

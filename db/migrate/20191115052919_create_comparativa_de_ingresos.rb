@@ -2,7 +2,8 @@ class CreateComparativaDeIngresos < ActiveRecord::Migration[5.2]
   def self.up
     self.connection.execute %Q( CREATE OR REPLACE VIEW comparativa_ingresos_view AS
       SELECT
-        rec.id, f.id t_factura_id, fecha_pago, pago_recibido, cuenta_desc detalle_factura,
+        rec.id, f.id t_factura_id, c.id t_cliente_id, ts.id t_tarifa_servicio_id,
+        fecha_pago, pago_recibido, cuenta_desc detalle_factura,
         ts.nombre nombre_servicio, ts.descripcion descripcion_servicio,
         COALESCE(e.rif, o.identificacion, p.cedula) identificacion,
         COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido)) razon_social
