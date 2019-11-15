@@ -27,7 +27,6 @@ Rails.application.routes.draw do
     end
     resources :t_recibos do
       get 'generar_pdf', on: :member
-      get 'comparativa_ingresos', on: :collection
     end
     collection do
       get 'pagadas'
@@ -41,7 +40,9 @@ Rails.application.routes.draw do
     end
   end
   resources :t_conf_fac_automaticas
-  resources :t_recibos, only: :index
+  resources :t_recibos, only: :index do
+    get 'comparativa_ingresos', on: :collection
+  end
   resources :t_tarifa_servicios do
     get 'tramites', on: :collection
   end
