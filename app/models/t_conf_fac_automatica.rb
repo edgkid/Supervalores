@@ -104,7 +104,7 @@ class TConfFacAutomatica < ApplicationRecord
         puts "\n" * 5 + '¡Facturas automáticas creadas!' + "\n"
 
         t_factura_detalles = t_factura.t_factura_detalles
-        if t_factura_detalles.any? && t_factura_detalles.first.t_tarifa_servicio.tipo.downcase == 'ts'
+        if t_factura_detalles.any? && (t_factura_detalles.first.t_tarifa_servicio.tipo.nil ? t_factura_detalles.first.t_tarifa_servicio.tipo : t_factura_detalles.first.t_tarifa_servicio.tipo.downcase ) == 'ts'
           t_factura.apply_2_percent_monthly_surcharge
         end
 
