@@ -25,7 +25,9 @@ class ComparativaIngresosDatatable < ApplicationDatatable
         pago_recibido: record.pago_recibido.truncate(2),
         DT_RowId: url_for(
           # TFactura.find(record.t_factura_id), TRecibo.find(record.id))
-          TRecibo.find(record.id).t_factura.t_resolucion.t_cliente)
+          TRecibo.find(record.id).t_factura.try(:t_resolucion).try(:t_cliente) ||
+          TRecibo.find(record.id).t_factura.t_cliente
+        )
       }
     end
   end

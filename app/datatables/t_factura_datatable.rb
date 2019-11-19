@@ -5,41 +5,27 @@ class TFacturaDatatable < ApplicationDatatable
 
     @view_columns ||= {
       id: { source: "TFactura.id" },
-      t_cliente: { source: "TEmpresa.razon_social | (TPersona.nombre & TPersona.apellido) | TOtro.razon_social" },
-      resolucion: { source: "TResolucion.resolucion" },
+      t_cliente: { source: "razon_social" },
+      resolucion: { source: "resolucion" },
       fecha_notificacion: { source: "TFactura.fecha_notificacion" },
       fecha_vencimiento: { source: "TFactura.fecha_vencimiento" },
-      recargo: { source: "TFactura.recargo" },
+      recargo: { source: "recargo" },
       total_factura: { source: "TFactura.total_factura" },
-      pendiente_fact: { source: "TFactura.pendiente_fact" },
-      tipo: { source: "TFactura.tipo" }
+      pendiente_fact: { source: "t_recibo_id" }
     }
   end
 
   def data
     records.map do |record|
-      pending_payment = record.t_recibos.any? ? record.t_recibos.last.pago_pendiente : record.calculate_pending_payment
-      
-      if record.try(:t_resolucion)
-        t_empresa = record.t_resolucion.t_cliente.persona.try(:rif)            ? record.t_resolucion.t_cliente.persona : nil
-        t_persona = record.t_resolucion.t_cliente.persona.try(:cedula)         ? record.t_resolucion.t_cliente.persona : nil
-        t_otro    = record.t_resolucion.t_cliente.persona.try(:identificacion) ? record.t_resolucion.t_cliente.persona : nil
-      else
-        t_empresa = record.t_cliente.persona.try(:rif)            ? record.t_cliente.persona : nil
-        t_persona = record.t_cliente.persona.try(:cedula)         ? record.t_cliente.persona : nil
-        t_otro    = record.t_cliente.persona.try(:identificacion) ? record.t_cliente.persona : nil
-      end
-
       {
         id: record.id,
-        t_cliente: t_empresa.try(:razon_social) || t_persona.try(:nombre_completo) || t_otro.try(:razon_social),
-        resolucion: record.t_resolucion ? record.t_resolucion.resolucion : 'Sin Resolución',
+        t_cliente: record[:razon_social],
+        resolucion: record[:resolucion],
         fecha_notificacion: record.fecha_notificacion,
         fecha_vencimiento: record.fecha_vencimiento,
-        recargo: record.recargo,
+        recargo: record[:recargo],
         total_factura: record.total_factura.truncate(2),
-        pendiente_fact: pending_payment.truncate(2),
-        tipo: record.tipo,
+        pendiente_fact: TRecibo.find_by(id: record[:t_recibo_id]).try(:pago_pendiente) || record.total_factura.truncate(2),
         DT_RowId: url_for({
           id: record.id, controller: 't_facturas', action: 'preview', only_path: true
         })
@@ -48,21 +34,25 @@ class TFacturaDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    # TFactura.joins(:t_resolucion, { t_resolucion: [:t_cliente] }).where(
-    #   automatica: (params[:automatica] && params[:automatica] == 'true') ? true : false
-    # )
-
-    TFactura.joins("
-      LEFT JOIN t_resolucions ON t_resolucions.id = t_facturas.t_resolucion_id
-      LEFT JOIN t_clientes    ON t_clientes.id    = t_resolucions.t_cliente_id
-      LEFT JOIN t_empresas    ON t_empresas.id    = t_clientes.persona_id
-        AND t_clientes.persona_type = 'TEmpresa'
-      LEFT JOIN t_personas    ON t_personas.id    = t_clientes.persona_id
-        AND t_clientes.persona_type = 'TPersona'
-      LEFT JOIN t_otros       ON t_otros.id       = t_clientes.persona_id
-        AND t_clientes.persona_type = 'TOtro'
-    ").where(
-      automatica: (params[:automatica] && params[:automatica] == 'true') ? true : false
-    )
+    TFactura
+      .select("
+        t_facturas.id, res.resolucion resolucion, t_facturas.fecha_notificacion,
+        t_facturas.fecha_vencimiento, COALESCE(rec.recargo_x_pagar, t_facturas.recargo) recargo,
+        t_facturas.total_factura, COALESCE(e.razon_social, o.razon_social,
+        CONCAT(p.nombre, ' ', p.apellido)) razon_social, MAX(rec.id) t_recibo_id")
+      .joins("
+        LEFT JOIN t_recibos rec ON rec.t_factura_id = t_facturas.id
+        LEFT JOIN t_resolucions res ON res.id = t_facturas.t_resolucion_id
+        LEFT JOIN t_clientes c ON c.id = res.t_cliente_id OR c.id = t_facturas.t_cliente_id
+        LEFT JOIN t_empresas e ON e.id = c.persona_id AND c.persona_type = 'TEmpresa'
+        LEFT JOIN t_personas p ON p.id = c.persona_id AND c.persona_type = 'TPersona'
+        LEFT JOIN t_otros    o ON o.id = c.persona_id AND c.persona_type = 'TOtro'")
+      .where(
+        automatica: (params[:automatica] && params[:automatica] == 'true') ? true : false)
+      .group("
+        t_facturas.id, res.resolucion, t_facturas.fecha_notificacion, t_facturas.fecha_vencimiento,
+        COALESCE(rec.recargo_x_pagar, t_facturas.recargo), t_facturas.total_factura,
+        COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido))
+      ")
   end
 end

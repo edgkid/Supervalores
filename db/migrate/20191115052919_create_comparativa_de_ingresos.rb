@@ -15,8 +15,7 @@ class CreateComparativaDeIngresos < ActiveRecord::Migration[5.2]
       INNER JOIN t_clientes c ON f.t_cliente_id = c.id OR res.t_cliente_id = c.id
       LEFT OUTER JOIN t_empresas e ON e.id = c.persona_id AND c.persona_type = 'TEmpresa'
       LEFT OUTER JOIN t_personas p ON p.id = c.persona_id AND c.persona_type = 'TPersona'
-      LEFT OUTER JOIN t_otros    o ON o.id = c.persona_id AND c.persona_type = 'TOtro'
-      WHERE rec.pago_pendiente <= 0;
+      LEFT OUTER JOIN t_otros    o ON o.id = c.persona_id AND c.persona_type = 'TOtro';
     )
   end
 
