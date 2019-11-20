@@ -88,6 +88,37 @@ function setSubTotal(thys, isQuantity = true) {
   });
 }
 
+var i = 1;
+function addRecargoRowJS() {
+  $('#total-row').before(`
+    <tr id="recargo${i}" style="background-color: #1C84C6;">
+      <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
+      <td>
+        <select class="select-recargo" data-first_time="true" id="t_recargo${i}" name="t_factura[t_recargo_ids][]" style="width: 100%;">
+          <option></option>
+          <% TRecargo.all.each do |t_recargo| %>
+            <option data-rate="<%= t_recargo.tasa %>" value="<%= t_recargo.id %>"><%= t_recargo.descripcion %></option>
+          <% end %>
+        </select>
+        <input class="recargo-descripcion" name="dynamic_attributes[t_recargo][descripcions][]" type="hidden">
+        <input class="recargo-id" name="dynamic_attributes[t_recargo][ids][]" type="hidden">
+      </td>
+      <td class="descripcion-cell"></td>
+      <td class="quantity-cell">
+        <input class="quantity quantity-input" data-quantity="1" min="0" style="height: 28px; width: 100%;" type="number" value="1">
+        <input class="recargo-quantity" name="dynamic_attributes[t_recargo][quantities][]" type="hidden" value="1">
+      </td>
+      <td class="price-cell">
+        <input class="price recargo-input" min="0" step="0.01" style="height: 28px; width: 100%;" type="number">
+        <input class="recargo-price" name="dynamic_attributes[t_recargo][prices][]" type="hidden">
+      </td>
+      <td class="surcharge-subtotal-cell" style="color: aqua; text-align: center;"></td>
+    </tr>
+  `);
+  $(`#t_recargo${i}`).select2({ placeholder: 'Seleccione' });
+  i++;
+}
+
 // function cleanAllSurcharges() {
 //   $('.surcharge-subtotal-cell').each(function () {
 //     $(this).text(0);
@@ -114,22 +145,37 @@ function setDynamicClientData(inputClass, dynamicData) {
     switch($(this).attr('id')) {
       case 'select-codigo-input':
         // alert($(this).attr('id'));
+        // alert(dynamicData.t_cliente.resolucion_id);
         console.log(dynamicData.t_cliente);
         var data = [{ id: dynamicData.t_cliente.codigo_select, text: dynamicData.t_cliente.codigo_select},]
 
-        var option = new Option(dynamicData.t_cliente.codigo_select, dynamicData.t_cliente.codigo_select, true, true);
-        $('#select-codigo').append(option).trigger('change');
+        var option = new Option(dynamicData.t_cliente.cedula, dynamicData.t_cliente.cedula, true, true);
+        $('#select-cedula').append(option).trigger('change', dynamicData.t_cliente.resolucion_id);
+        $('#select-cedula-input').val(dynamicData.t_cliente.cedula);
 
-        $('#select-codigo-input').val(dynamicData.t_cliente.codigo_select);
+        // if (dynamicData.t_cliente.resolucion_id === null) {
+        //   var option = new Option(dynamicData.t_cliente.cedula, dynamicData.t_cliente.cedula, true, true);
+        //   $('#select-cedula').append(option).trigger('change', dynamicData.t_cliente.resolucion_id);
+        //   $('#select-cedula-input').val(dynamicData.t_cliente.cedula);
+        // } else {
+        //   var option = new Option(dynamicData.t_cliente.codigo_select, dynamicData.t_cliente.codigo_select, true, true);
+        //   $('#select-codigo').append(option).trigger('change', dynamicData.t_cliente.resolucion_id);
+        //   $('#select-codigo-input').val(dynamicData.t_cliente.codigo_select);
+        // }
+
+        //alert(dynamicData.t_cliente.resolucion_id);
+
+        //$('#select-resolucion').val(dynamicData.t_cliente.resolucion_id);
+        //$('#select-resolucion').change();
         break;
-      case 'select-resolucion-input':
-        var data = [{ id: dynamicData.t_cliente.resolucion_id, text: dynamicData.t_cliente.resolucion},]
-        // $('#select-resolucion').empty().append('<option></option>').select2({ data: data, placeholder: 'Seleccione' });
-        //$('#select-resolucion').append(option);
-        // $('#select-resolucion').val(dynamicData.t_cliente.resolucion_id);
-        // $('#select-resolucion').trigger('change');
-        console.log(dynamicData.t_cliente.resolucion);
-        break;
+      // case 'select-resolucion-input':
+      //   var data = [{ id: dynamicData.t_cliente.resolucion_id, text: dynamicData.t_cliente.resolucion},]
+      //   // $('#select-resolucion').empty().append('<option></option>').select2({ data: data, placeholder: 'Seleccione' });
+      //   //$('#select-resolucion').append(option);
+      //   // $('#select-resolucion').val(dynamicData.t_cliente.resolucion_id);
+      //   // $('#select-resolucion').trigger('change');
+      //   console.log(dynamicData.t_cliente.resolucion);
+      //   break;
     }
   });
   // var option = new Option(dynamicData.t_cliente.resolucion, dynamicData.t_cliente.resolucion_id, true, true);
@@ -216,7 +262,7 @@ function setDynamicSurchargesData(
   descriptionInputClass, idInputClass, quantityInputClass, priceInputClass,
   descriptions, ids, quantities, prices) {
   for (var i = 0; i < ids.length; i++) {
-    addRecargoRow();
+    addRecargoRowJS();
   }
 
   i = 0;

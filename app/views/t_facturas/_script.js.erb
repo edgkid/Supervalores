@@ -103,13 +103,18 @@ $(document).ready(function(){
     minimumInputLength: 1
   });
 
-  $('.search-client').change(function() {
+  $('.search-client').change(function(e, resolucion_id) {
     $.ajax({
       url: '<%= "#{t_clientes_find_path}" %>',
       type: 'get',
       data: {
         attribute: $(this).attr('id'),
         search: $(this).val()
+      }
+    }).done(function() {
+      if (resolucion_id !== undefined && resolucion_id !== null) {
+        $('#select-resolucion').val(resolucion_id);
+        $('#select-resolucion').change();
       }
     });
   });
@@ -208,6 +213,7 @@ $(document).ready(function(){
         JSON.parse('<%= raw params[:dynamic_attributes][:t_tarifa_servicio][:prices].to_json %>')
       );
     <% end %>
+    <% debugger %>
     <% if params[:dynamic_attributes][:t_recargo] %>
       setDynamicSurchargesData(
         '.select-recargo',

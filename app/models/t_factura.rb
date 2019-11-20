@@ -27,6 +27,12 @@ class TFactura < ApplicationRecord
   #   message: "|La resolución debe existir"
   # }
 
+  def set_recargo
+    total = 0
+    self.t_recargos.each { |r| total += r.tasa }
+    total * 100
+  end
+
   def calculate_pending_payment(before_save = false)
     if before_save
       sum = 0

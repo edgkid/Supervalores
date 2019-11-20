@@ -281,7 +281,7 @@ class TFacturasController < ApplicationController
 
     def set_dynamic_attributes
       t_resolucion = @t_factura.t_resolucion
-      t_cliente    = t_resolucion.t_cliente
+      t_cliente    = t_resolucion.try(:t_cliente) || @t_factura.t_cliente
       t_empresa    = t_cliente.persona.try(:rif)            ? t_cliente.persona : nil
       t_persona    = t_cliente.persona.try(:cedula)         ? t_cliente.persona : nil
       t_otro       = t_cliente.persona.try(:identificacion) ? t_cliente.persona : nil
@@ -317,8 +317,8 @@ class TFacturasController < ApplicationController
           t_cliente: {
             codigo_select: t_cliente.codigo,
             cedula: t_persona.try(:cedula) || t_empresa.try(:rif) || t_otro.try(:identificacion),
-            resolucion: t_resolucion.resolucion,
-            resolucion_id: t_resolucion.id,
+            resolucion: t_resolucion.try(:resolucion),
+            resolucion_id: t_resolucion.try(:id),
             estatus: 1,
             codigo: t_cliente.codigo,
             empresa: t_empresa.try(:rif),
