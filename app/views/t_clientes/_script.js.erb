@@ -32,7 +32,7 @@ $(document).ready(function(){
     mostrar_form_tipo_persona(value)
   })
 
-  <% if @resolucion != nil && @resolucion.errors.any? %>
+  <% if @resolucion != nil && @resolucion.errors.any? || @contacto != nil && @contacto.errors.any? %>
     $('#agregar_resolucion').modal('show');
   <% end %>
 

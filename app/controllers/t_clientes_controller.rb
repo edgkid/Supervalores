@@ -4,8 +4,8 @@ class TClientesController < ApplicationController
   respond_to :js, only: [:find]
   respond_to :json, only: [:all_clients, :find_by_codigo, :find_by_resolucion, :find_by_cedula]
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion, :nueva_empresa]
-  before_action :usar_dataTables_en, only: [:index, :show, :edit, :estado_cuenta]
-  before_action :dataTables_resolucion, only: [:show, :edit]
+  before_action :usar_dataTables_en, only: [:index, :show, :edit, :estado_cuenta, :nueva_resolucion]
+  before_action :dataTables_resolucion, only: [:show, :edit, :nueva_resolucion]
   before_action :seleccionar_resolucion, only: [:mostrar_resolucion]
   # before_action :clients_with_resolutions, only: :find_by_codigo
   # before_action :companies_with_clients_with_resolutions, only: :find_by_cedula
