@@ -21,7 +21,7 @@ class TEmpresa < ApplicationRecord
     message: "|El dígito verificador no puede estar vacío."
     },
     format: { 
-    message: "|El dígito verificador solo puede tener 4 caracteres (Letras o Números).",
+    message: "|El dígito verificador solo puede tener de 1 a 4 caracteres (Letras o Números).",
     with: /\A([A-Za-z0-9]{1,4})\z/ 
     },
     :on => [:create, :update]
