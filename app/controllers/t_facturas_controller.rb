@@ -67,6 +67,10 @@ class TFacturasController < ApplicationController
 
   def update
     if @t_factura.update(t_factura_params)
+      params[:services_to_destroy].each do |t_tarifa_servicio_id|
+        @t_factura.t_factura_detalles.find_by(t_tarifa_servicio_id: t_tarifa_servicio_id).try(:destroy)
+      end if !params[:services_to_destroy].blank?
+      @t_factura.t_recargo_ids - params[:surcharges_to_destroy].map {|id| id.to_i} if !params[:surcharges_to_destroy].blank?
       redirect_to t_facturas_path
     else
       @notice = @t_factura.errors
