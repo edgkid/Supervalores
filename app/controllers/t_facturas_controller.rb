@@ -98,6 +98,11 @@ class TFacturasController < ApplicationController
   end
 
   def destroy
+    #Si las facturas tienen recibos, es decir si no están vacías no se debe permitir borrar
+    unless @t_factura.t_recibos.empty?
+      redirect_to preview_t_factura_path(@t_factura), notice: 'No se puede borrar una factura que tenga recibos asociados'
+      return
+    end
     @t_factura.destroy
     redirect_to t_facturas_path, notice: 'Factura eliminada exitosamente'
   end
