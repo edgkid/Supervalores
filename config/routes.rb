@@ -48,6 +48,7 @@ Rails.application.routes.draw do
   resources :t_tipo_clientes, path: "tipos_de_clientes"
   resources :t_tipo_personas, path: "tipos_de_personas"
   resources :t_clientes, path: "clientes" do
+    get 'generar_pdf'
     collection do
       get 'tramites'
       get 'total'

@@ -15,9 +15,18 @@
     <div class="ibox">
       <div class="ibox-title">
         <div class="row">
-          <h3 class="col-sm-11">Facturas y Recibos Registrados</h3>
+          <h3 class="col-sm-6">Facturas y Recibos Registrados</h3>
+          <div class="col-md-3 offset-2">
+            <%= hidden_field_tag('client_id', '1',{:id => "client_id"})%>
+            <%= link_to t_cliente_generar_pdf_path(@t_cliente, format:'pdf', cliente_id: "#"), target: "_blank", class: 'btn btn-primary', id: "hey" do %>
+              <i class="fa fa-download"></i>
+                Generar Paz y Salvo
+
+              
+            <% end %>
+          </div>
           <div class="col-sm-1 input-value">
-            <button id="btn-refresh-table" class="btn btn-default"><i class="fa fa-refresh"></i></button>            
+            <button id="btn-refresh-table" class="btn btn-default"><i class="fa fa-refresh"></i></button>  
           </div>
         </div>
       </div>
@@ -84,6 +93,8 @@
       }
     });
 
+
+
     refreshTable = function () {
       $("#ajax-datatable").DataTable().ajax.reload();
     }
@@ -91,4 +102,12 @@
     $("#btn-refresh-table").click(refreshTable);
     $('#select-codigo').change(refreshTable);
   })
+
+  codigo = $('#client-codigo-input').val()
+  jQuery.ajax({
+        url : "/t_clientes/generar_pdf",
+        type : 'post',
+        data: 'client_id=' + codigo,
+        dataType: 'script'
+    });
 </script>

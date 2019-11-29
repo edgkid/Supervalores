@@ -33,6 +33,7 @@ class TClientesController < ApplicationController
   end
 
   def estado_cuenta
+    @t_cliente = TCliente.first
     @do_not_use_plain_select2 = true   
     @useDataTableFooter = true
     @attributes_to_display = [
@@ -450,6 +451,18 @@ class TClientesController < ApplicationController
       total: total
     }
     render json: results
+  end
+
+  def generar_pdf
+    debugger
+    @t_cliente = TCliente.find(params[:t_cliente_id])
+    pdf = TEstadoCuentaPdf.new(@t_cliente)
+    send_data(
+      pdf.render,
+      filename: "estado_cuenta.pdf",
+      type: "application/pdf",
+      disposition: "inline"
+    ) and return
   end
 
   private
