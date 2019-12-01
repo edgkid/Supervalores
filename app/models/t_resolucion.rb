@@ -10,11 +10,11 @@ class TResolucion < ApplicationRecord
 	has_many :t_cliente_tarifas, dependent: :destroy
 	has_many :t_tarifas, through: :t_cliente_tarifa
 	
-	validates :codigo,
-		presence: {
-				message: "|El código de la resolución no puede estar vacío."
-		},
-		:on => [:create, :update]
+#	validates :codigo,
+#		presence: {
+#				message: "|El código de la resolución no puede estar vacío."
+#		},
+#		:on => [:create, :update]
 
 	validates :num_licencia,
 		presence: {

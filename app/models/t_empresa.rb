@@ -39,6 +39,9 @@ class TEmpresa < ApplicationRecord
   validate :no_es_prospecto
 
   def no_es_prospecto
+    if t_empresa_sector_economico_id = nil
+      t_empresa_sector_economico_id = 1
+    end
     if !t_cliente.es_prospecto
       on_assert_add_error telefono == nil || telefono == '', :telefono, '|El teléfono no puede estar vacío.'
       if email == nil || email == ''
