@@ -10,6 +10,7 @@
   end
 %>
 <%= instance.fields_for persona do |form| %>
+<%= persona.inspect %>
 <div class="form-group row">
   <div class="col-sm-2 col-form-label">
     <%= form.label :rif, "RIF ó RUC", class: "text-right" %>

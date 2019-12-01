@@ -1,10 +1,12 @@
 $(document).ready(function(){
   mostrar_form_tipo_persona = function(value){
+    $(".opcional-persona-natural").hide();
     if (value == 2){
       $(".tipo_persona").addClass("hide")
       $(".tipo_persona_form_fields").removeClass("hide")
     }
     else if (value == 1){
+      $(".opcional-persona-natural").show();
       $(".tipo_persona").addClass("hide")
       $(".tipo_empresa_form_fields").removeClass("hide")
     }
