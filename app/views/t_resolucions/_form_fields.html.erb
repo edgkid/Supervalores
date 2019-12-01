@@ -60,7 +60,7 @@
   </div>
   <div class="col-sm-9 input-value">
     <% if editable %>
-    <%= form.select :t_tipo_cliente_id, opciones_de_tipos_de_clientes(registro.t_cliente == nil ? nil : registro.t_cliente.tipo_persona_id) , {}, { :class => 'form-control m-b' } %>
+    <%= form.select :t_tipo_cliente_id, opciones_de_tipos_de_clientes(registro.t_cliente == nil ? nil : registro.t_cliente.tipo_persona_id) , {:prompt => "Seleccione tipo de cliente"}, { :class => 'form-control m-b' } %>
     <% else %>
     <%= registro.t_tipo_cliente.descripcion %>
     <% end %>
