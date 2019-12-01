@@ -451,7 +451,7 @@ GROUP BY cedula, nombre, apellido, t_empresa_id, cargo, telefono, email, direcci
 CREATE MATERIALIZED VIEW clientes_normalizados AS
 SELECT 
 	CASE 
-		WHEN pp.type = 'TEmpresa' THEN 'CLI'|| (
+		WHEN pp.persona_type = 'TEmpresa' THEN 'CLI'|| (
 			CASE 
 				WHEN (pp.prediction_id) < 10 THEN '00000'
 				WHEN (pp.prediction_id) < 100 THEN '0000'
@@ -459,7 +459,8 @@ SELECT
 				WHEN (pp.prediction_id) < 10000 THEN '00'
 				WHEN (pp.prediction_id) < 100000 THEN '0'			
 				ELSE '' 
-			END) || pp.prediction_id
+			END
+    ) || pp.prediction_id
 		ELSE ''
 	END AS codigo
 	, pp.*

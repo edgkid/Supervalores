@@ -123,7 +123,8 @@ class TResolucionsController < ApplicationController
 
     def parametros_resolucion
       datos = params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :codigo, :num_licencia, :t_cliente_id, :t_tipo_cliente_id)
-      datos[:resolucion] = "SMV-#{params[:resolucion_codigo]}-#{params[:resolucion_anio]}"
+      byebug
+      datos[:resolucion] = "SMV-#{params[:t_resolucion][:resolucion_codigo]}-#{params[:t_resolucion][:resolucion_anio]}"
       return datos
     end
     
