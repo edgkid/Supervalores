@@ -1,4 +1,6 @@
 class TResolucionsController < ApplicationController
+  include ApplicationHelper
+  
   before_action :seleccionar_resolucion, only: [:show, :edit, :update, :destroy]
 
   load_and_authorize_resource
@@ -109,12 +111,7 @@ class TResolucionsController < ApplicationController
 
   def get_type_client
     tipo_persona = params[:tipo_persona]
-    results = nil
-    if tipo_persona == "2"
-      results = TTipoCliente.where(estatus: 1, id: [9, 10, 11]).order(:descripcion).pluck :descripcion, :id
-    else
-      results = TTipoCliente.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
-    end
+    results = opciones_de_tipos_de_clientes tipo_persona
     render json: results
   end
 

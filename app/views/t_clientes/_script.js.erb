@@ -57,26 +57,5 @@ $(document).ready(function(){
   $("#t_empresa_t_empresa_sector_economico_id").select2();
   $("#t_resolucion_resolucion_anio").select2();
   $("#t_resolucion_t_estatus_id").select2();
-
-  $("#t_resolucion_t_tipo_cliente_id").select2({
-    ajax: {
-      url: '<%= "#{get_type_client_path}" %>',
-      dataType: 'json',
-      data: function (params) {
-        var query = {
-          tipo_persona: $("#select-tipo-persona").val()
-        }
-        return query;
-      },
-      processResults: function (data) {
-        return {
-          results: $.map(data, function(tipo_persona, i) {
-            return { id: tipo_persona[1], text: tipo_persona[0] } 
-          })
-        };
-      },
-      delay: 250
-    },
-    placeholder: 'Seleccione'
-  });
+  
 })
