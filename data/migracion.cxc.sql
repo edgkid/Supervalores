@@ -507,7 +507,7 @@ from cxc_t_tarifa_servicios ctts;
 
 CREATE MATERIALIZED VIEW resoluciones_normalizadas AS
 SELECT 	
-	  CONCAT('SMV', rw.code, rw."year") resolucion
+	  CONCAT('SMV', '-', rw.code, '-', rw."year") resolucion
 	, CONCAT(rw."year", rw.code) codigo
 	, row_number() OVER (ORDER BY 1, 2) AS prediction_id
 	, 'Resolución de migración ' || string_agg(rw.original, ', ') descripcion
