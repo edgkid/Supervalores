@@ -115,6 +115,12 @@ class TResolucionsController < ApplicationController
     render json: results
   end
 
+  def cliente_saldo
+    id = params[:t_cliente_id]
+    results = ViewResolutionBalance.where("t_cliente_id = ?", id).map { |record| ["#{record.resolucion} #{record.pagos_recibidos} / #{record.total_facturado}", record.t_resolucion_id] }
+    render json: results
+  end
+
   private
     def seleccionar_resolucion
       @registro = TResolucion.find(params[:id])

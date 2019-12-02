@@ -12,6 +12,7 @@
       <td>
         <%= @t_cliente.codigo if @t_cliente %>
         <input class="dynamic-client" id="client-codigo-input" name="dynamic_attributes[t_cliente][codigo]" type="hidden" value="<%= @t_cliente.codigo if @t_cliente %>">
+        <input class="dynamic-client" id="t_cliente_id" name="dynamic_attributes[t_cliente][id]" type="hidden" value="<%= @t_cliente.id if @t_cliente %>">
       </td>
     </tr>
     <tr>
