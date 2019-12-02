@@ -12,15 +12,20 @@ class TEstadoCuentaPdf < PdfHelper
 
   # Constructor
   # def initialize(t_factura, t_recibo, view)
-  def initialize(t_factura)
+  def initialize(t_cliente, nombre_recaudador)
     super()
     # @t_recibo     = t_recibo
     # @t_factura    = t_factura
     # @t_resolucion = @t_factura.t_resolucion
-    # @t_cliente    = @t_resolucion.try(:t_cliente) || @t_factura.try(:t_cliente)
-    # @t_empresa    = @t_cliente.persona.try(:rif)            ? @t_cliente.persona : nil
-    # @t_persona    = @t_cliente.persona.try(:cedula)         ? @t_cliente.persona : nil
-    # @t_otro       = @t_cliente.persona.try(:identificacion) ? @t_cliente.persona : nil
+    @t_cliente    = t_cliente
+    @t_empresa    = @t_cliente.persona.try(:rif)            ? @t_cliente.persona : nil
+    @t_persona    = @t_cliente.persona.try(:cedula)         ? @t_cliente.persona : nil
+    @t_otro       = @t_cliente.persona.try(:identificacion) ? @t_cliente.persona : nil
+    ##################################################################################
+    @nombre_recaudador = nombre_recaudador
+    # 1 = Natural
+    # 2 = Juridico
+    @tipo_de_entidad = @t_cliente.persona_type.upcase == "TPERSONA" ? 1 : 2
     # @view = view
     @meses = [1 => "Enero", 2 => "Febrero", 3 => "Marzo", 4 => "Abril", 5 => "Mayo", 6 => "Junio", 7 => "Julio", 8 => "Agosto", 9 => "Septiembre", 10 => "Octubre", 11 => "Noviembre", 12 => "Diciembre"]
     font_size 10
@@ -97,7 +102,7 @@ class TEstadoCuentaPdf < PdfHelper
     <b>SUPERINTENDENCIA DEL MERCADO DE VALORES</b>
     <b>DEPARTAMENTO DE TESORERÍA</b>", inline_format: true, at: [10,700], :align => :center
 
-    text_box "<b>CERTIFICADO DE PAZ Y SALVO</b>", inline_format: true, at: [10,665], :align => :center
+    text_box "<b>CERTIFICADO DE PAZ Y SALVO</b>", inline_format: true, at: [10,663], :align => :center
 
     stroke do
       move_down 40
@@ -109,8 +114,16 @@ class TEstadoCuentaPdf < PdfHelper
     text "<b>Certifica que:</b>", inline_format: true
   
     move_down 15
+    if @tipo_de_entidad == 1
+      nombre = @t_cliente.persona.nombre
+      cip_ruc = @t_cliente.persona.cedula
+    else
+      nombre = @t_cliente.persona.razon_social
+      cip_ruc = @t_cliente.persona.rif
+    end
 
-    text "Nuestro cliente <b>#{} CLIENTE</b> con C.I.P/R.U.C. <b>#{} RUC</b> y número de resolución <b>#{} N_RESOLUCION</b>, se mantiene paz y salvo hasta la fecha, con respecto a las cuentas que mantiene en la <b>Superintendencia del Mercado de Valores de la República de Panamá.</b>", inline_format: true
+
+    text "Nuestro cliente <b>#{nombre}</b> con C.I.P/R.U.C. <b>#{cip_ruc} RUC</b> y número de resolución <b>#{} N_RESOLUCION</b>, se mantiene paz y salvo hasta la fecha, con respecto a las cuentas que mantiene en la <b>Superintendencia del Mercado de Valores de la República de Panamá.</b>", inline_format: true
 
     move_down 15
     text "Dado a los #{DateTime.now.strftime('%d')} dia(s) del mes de #{@meses.first[DateTime.now.strftime('%m').to_i]} de #{DateTime.now.strftime('%Y')}."
@@ -119,7 +132,7 @@ class TEstadoCuentaPdf < PdfHelper
 
     fill_color '000000'
 
-    text "<b>Recaudador(a):</b> Persona A", inline_format: true
+    text "<b>Recaudador(a):</b> <u>#{@nombre_recaudador}</u>", inline_format: true
     move_down 10
     text "<b>IMPORTANTE:</b> No es legalmente válido sin los sellos de caja", inline_format: true
 

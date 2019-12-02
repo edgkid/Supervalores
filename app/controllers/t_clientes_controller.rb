@@ -33,6 +33,7 @@ class TClientesController < ApplicationController
   end
 
   def estado_cuenta
+    #Ignorar @t_cliente, es necesario solamente para que el pdf abra, despues de que abra el pdf, se utiliza javascript para pasar el cliente seleccionado y dentro de la accion del pdf buscamos al cliente correspondiente
     @t_cliente = TCliente.first
     @do_not_use_plain_select2 = true   
     @useDataTableFooter = true
@@ -454,9 +455,9 @@ class TClientesController < ApplicationController
   end
 
   def generar_pdf
-    debugger
-    @t_cliente = TCliente.find(params[:t_cliente_id])
-    pdf = TEstadoCuentaPdf.new(@t_cliente)
+    current_user_full_name = "#{current_user.nombre} #{current_user.apellido}" 
+    @t_cliente = TCliente.find_by_codigo(params[:client_code])
+    pdf = TEstadoCuentaPdf.new(@t_cliente, current_user_full_name)
     send_data(
       pdf.render,
       filename: "estado_cuenta.pdf",
