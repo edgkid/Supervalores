@@ -2,13 +2,23 @@ class TClientesController < ApplicationController
   # include TClientesHelper
 
   respond_to :js, only: [:find]
-  respond_to :json, only: [:find_by_codigo, :find_by_resolucion, :find_by_cedula]
+  respond_to :json, only: [:all_clients, :find_by_codigo, :find_by_resolucion, :find_by_cedula]
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion, :nueva_empresa]
   before_action :usar_dataTables_en, only: [:index, :show, :edit, :estado_cuenta]
   before_action :dataTables_resolucion, only: [:show, :edit]
   before_action :seleccionar_resolucion, only: [:mostrar_resolucion]
   # before_action :clients_with_resolutions, only: :find_by_codigo
   # before_action :companies_with_clients_with_resolutions, only: :find_by_cedula
+
+  def all_clients
+    search = parametros_de_busqueda[:search]
+    respond_with TCliente.all_clients.where("
+      codigo ILIKE ?
+      OR COALESCE(e.rif, o.identificacion, p.cedula) ILIKE ?
+      OR COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido)) ILIKE ?
+      ", "%#{search}%", "%#{search}%", "%#{search}%"
+    ).first(20)
+  end
 
   def index
     @attributes_to_display = [
@@ -361,15 +371,15 @@ class TClientesController < ApplicationController
 
   def find_by_codigo
     search = parametros_de_busqueda[:search]
-    respond_with TCliente.where('t_clientes.codigo ILIKE ?', "%#{search}%").first(10)
+    respond_with TCliente.where('t_clientes.codigo ILIKE ?', "%#{search}%").first(15)
   end
 
   def find_by_cedula
     search = parametros_de_busqueda[:search]
 
-    personas = TPersona.where('cedula ILIKE ?', "%#{search}%").first(10)
+    personas = TPersona.where('cedula ILIKE ?', "%#{search}%").first(15)
     if personas.empty?
-      personas = TEmpresa.where('rif ILIKE ?', "%#{search}%").first(10)
+      personas = TEmpresa.where('rif ILIKE ?', "%#{search}%").first(15)
     end
 
     respond_with personas

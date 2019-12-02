@@ -98,6 +98,11 @@ class TFacturasController < ApplicationController
   end
 
   def destroy
+    #Si las facturas tienen recibos, es decir si no están vacías no se debe permitir borrar
+    unless @t_factura.t_recibos.empty?
+      redirect_to preview_t_factura_path(@t_factura), notice: 'No se puede borrar una factura que tenga recibos asociados'
+      return
+    end
     @t_factura.destroy
     redirect_to t_facturas_path, notice: 'Factura eliminada exitosamente'
   end
@@ -148,6 +153,120 @@ class TFacturasController < ApplicationController
     render json: results
   end
 
+  def informe_recaudacion
+    @usar_dataTables = true
+    @useDataTableFooter = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :factura_id, :recibo_id, :razon_social, :res, :identificacion,
+      :fecha_notificacion, :forma_pago, :estado, :total_factura
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformeDeRecaudacionDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
+  def recaudacion_total
+    dataTable = InformeDeRecaudacionDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    total = dataTable.get_raw_records.sum(:total_factura).truncate(2)
+    results = {
+      procesado: true,
+      total: total
+    }
+    render json: results
+  end
+
+  def informe_ingresos_diarios
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [:detalle, :monto]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformeDeIngresosDiariosDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
+  def informe_ingresos_presupuesto
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :enero, :febrero, :marzo, :abril, :mayo, :junio,
+      :julio, :agosto, :septiembre, :octubre, :noviembre, :diciembre,
+      :total
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformeDeIngresosPresupuestoDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
+  def informe_cuentas_x_cobrar
+    @usar_dataTables = true
+    @useDataTableFooter = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :descripcion, :cantidad_clientes, :cantidad_facturas, :dias_0_30,
+      :dias_31_60, :dias_61_90, :dias_91_120, :dias_mas_de_120, :total
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformeDeCuentasXCobrarDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
+  def total_cuentas_x_cobrar
+    dataTable = InformeDeCuentasXCobrarDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    total = dataTable.get_raw_records.sum(:total).truncate(2)
+    results = {
+      procesado: true,
+      total: total
+    }
+    render json: results
+  end
+
   private
 
     def t_factura_params
@@ -167,7 +286,7 @@ class TFacturasController < ApplicationController
 
     def set_dynamic_attributes
       t_resolucion = @t_factura.t_resolucion
-      t_cliente    = t_resolucion.t_cliente
+      t_cliente    = t_resolucion.try(:t_cliente) || @t_factura.t_cliente
       t_empresa    = t_cliente.persona.try(:rif)            ? t_cliente.persona : nil
       t_persona    = t_cliente.persona.try(:cedula)         ? t_cliente.persona : nil
       t_otro       = t_cliente.persona.try(:identificacion) ? t_cliente.persona : nil
@@ -203,8 +322,8 @@ class TFacturasController < ApplicationController
           t_cliente: {
             codigo_select: t_cliente.codigo,
             cedula: t_persona.try(:cedula) || t_empresa.try(:rif) || t_otro.try(:identificacion),
-            resolucion: t_resolucion.resolucion,
-            resolucion_id: t_resolucion.id,
+            resolucion: t_resolucion.try(:resolucion),
+            resolucion_id: t_resolucion.try(:id),
             estatus: 1,
             codigo: t_cliente.codigo,
             empresa: t_empresa.try(:rif),

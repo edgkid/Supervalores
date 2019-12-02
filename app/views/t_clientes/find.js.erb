@@ -32,12 +32,12 @@ if (data.length === 0) {
 switch(attribute) {
   case 'select-codigo':
     if (zeroLength) {
-      $('#select2-select-resolucion-container').text('');
-      $('#select2-select-resolucion-container').attr('title', '');
+      //$('#select2-select-resolucion-container').text('');
+      //$('#select2-select-resolucion-container').attr('title', '');
+      $('#select-resolucion').empty();
+      $('#select-resolucion').change();
     } else {
       $('#select-resolucion').empty().append('<option></option>').select2({ data: data, placeholder: 'Seleccione' });
-
-      <%# @t_tarifa = @t_cliente.t_resolucions.first.t_tipo_cliente.t_tarifa %>
 
       // amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
       // surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
@@ -66,8 +66,10 @@ switch(attribute) {
     break;
   case 'select-cedula':
     if (zeroLength) {
-      $('#select2-select-resolucion-container').text('');
-      $('#select2-select-resolucion-container').attr('title', '');
+      //$('#select2-select-resolucion-container').text('');
+      //$('#select2-select-resolucion-container').attr('title', '');
+      $('#select-resolucion').empty();
+      $('#select-resolucion').change();
     } else {
       $('#select-resolucion').empty().append('<option></option>').select2({ data: data, placeholder: 'Seleccione' });
 

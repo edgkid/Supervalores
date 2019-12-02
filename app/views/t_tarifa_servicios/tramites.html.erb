@@ -5,12 +5,12 @@
         <div class="ibox-title">
           <div class="row">
             <div class="col-6">
-              <h5>Facturas Pagadas</h5>
+              <h5>Trámites</h5>
             </div>
           </div>
         </div>
         <div class="ibox-content">
-          <% if TFactura.count > 0 %>
+          <% if TRecibo.count > 0 %>
             <div class="table-responsive">
               <div class="row">
                 <div class="col-6">
@@ -20,16 +20,15 @@
                   <%= render 'shared/filters', show_prospecto: false %>
                 </div>
               </div>
-              <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= pagadas_t_facturas_path(format: :json) %>" id="ajax-datatable">
+              <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= tramites_t_tarifa_servicios_path(format: :json) %>" id="ajax-datatable">
                 <thead>
                   <tr>
-                    <th>No.</th>
-                    <th>Cliente</th>
-                    <th>Res / CIP</th>
                     <th>Fecha</th>
-                    <th>F. Venc</th>
-                    <th>Recargo</th>
-                    <th>Total</th>
+                    <th>Cantidad</th>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Tipo</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -60,18 +59,18 @@
       },
       // useDataTableFooter: function (footer) {
       //   $.ajax({
-      //     url: '<%= total_pagadas_t_facturas_path %>',
+      //     url: '<%#= "#{total_t_clientes_path}" %>',
       //     contentType: "application/json",
       //     type: 'get',
       //     data: {
       //       from: $('#from').val(),
-      //       to: $('#to').val()
+      //       to: $('#to').val(),
+      //       prospecto: $('#prospecto')[0].checked
       //     }
       //   })
       //   .done(function (data) {
       //     if (data.procesado) {
       //       footer.empty().append($("<tr />")
-      //         .append($("<td />"))
       //         .append($("<td />"))
       //         .append($("<td />"))
       //         .append($("<td />"))

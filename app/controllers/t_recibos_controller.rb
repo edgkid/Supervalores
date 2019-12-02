@@ -1,5 +1,5 @@
 class TRecibosController < ApplicationController
-  before_action :set_t_factura, except: :index
+  before_action :set_t_factura, except: [:index, :comparativa_ingresos, :pago_recibido_total]
   before_action :set_preview_data, only: :new
   before_action :set_t_recibo, only: [:show, :destroy, :generar_pdf]
   before_action :set_necessary_objects, only: [:new, :create, :show]
@@ -54,6 +54,43 @@ class TRecibosController < ApplicationController
     @t_recibo.destroy
 
     redirect_to t_factura_t_recibos_path(@t_factura)
+  end
+
+  def comparativa_ingresos
+    @usar_dataTables = true
+    @useDataTableFooter = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :id, :fecha_pago, :detalle_factura, :nombre_servicio,
+      :descripcion_servicio, :identificacion, :razon_social, :pago_recibido
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: ComparativaIngresosDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
+  def pago_recibido_total
+    dataTable = ComparativaIngresosDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    total = dataTable.get_raw_records.sum(:pago_recibido).truncate(2)
+    results = {
+      procesado: true,
+      total: total
+    }
+    render json: results
   end
 
   def generar_pdf

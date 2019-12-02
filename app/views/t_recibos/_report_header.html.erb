@@ -1,0 +1,44 @@
+<% if filters %>
+  <div class="row" id="period-form-container">
+    <div class="col-md-5">
+      <select id="client-select" name="client" style="width: 100%;">
+        <option value=""></option>
+      </select> 
+    </div>
+    <div class="col-md-5">
+      <select id="tariff-select" name="tariff" style="width: 100%;">
+        <option value=""></option>
+      </select> 
+    </div>
+
+    <div class="col-md-2">
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-primary" id="execute">Ejecutar</button>
+          <button class="btn btn-default" type="button" onclick="javascript:window.print()">
+            Imprimir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="row">
+  <div class="col-md-6">
+    <%= image_tag "logoSMV.png", width: '150px' %>
+  </div>
+  <div align="right" class="col-md-6">
+    <h5><b>Fecha de impresión:</b> <%= Date.today.strftime('%d/%m/%Y') %></h5>
+  </div>
+</div>
+<div class="row" style="margin-top: -40px;">
+  <div align="center" class="col-12">
+    <h3>REPÚBLICA DE PANAMÁ</h3>
+    <h3>SUPERINTENDENCIA DEL MERCADO DE VALORES</h3>
+    <h3>DEPARTAMENTO DE TESORERÍA</h3>
+    <hr>
+    <%= subtitle %>
+    <hr>
+  </div>
+</div>

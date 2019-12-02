@@ -31,11 +31,27 @@ Rails.application.routes.draw do
     collection do
       get 'pagadas'
       get 'total_pagadas'
+      get 'informe_recaudacion'
+      get 'recaudacion_total'
+      get 'informe_ingresos_diarios'
+      get 'informe_ingresos_presupuesto'
+      get 'informe_cuentas_x_cobrar'
+      get 'total_cuentas_x_cobrar'
     end
   end
   resources :t_conf_fac_automaticas
-  resources :t_recibos, only: :index
-  resources :t_tarifa_servicios
+  resources :t_recibos, only: :index do
+    collection do
+      get 'comparativa_ingresos'
+      get 'pago_recibido_total'
+    end
+  end
+  resources :t_tarifa_servicios do
+    collection do
+      get 'all_services'
+      get 'tramites'
+    end
+  end
   namespace :t_recargos do
     get 'find_by_descripcion', as: :find_by_descripcion
   end
@@ -55,6 +71,7 @@ Rails.application.routes.draw do
     end
   end
   namespace :t_clientes do
+    get 'all_clients'
     get 'find_by_codigo', as: :find_by_codigo
     get 'find_by_resolucion', as: :find_by_resolucion
     get 'find_by_cedula', as: :find_by_cedula

@@ -35,6 +35,17 @@ class TCliente < ApplicationRecord
 
   attr_accessor :es_prospecto
 
+  def self.all_clients
+    TCliente
+      .select(:id, :codigo, "
+        COALESCE(e.rif, o.identificacion, p.cedula) ide,
+        COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido)) rs")
+      .joins("
+        LEFT OUTER JOIN t_empresas e ON e.id = t_clientes.persona_id AND t_clientes.persona_type = 'TEmpresa'
+        LEFT OUTER JOIN t_personas p ON p.id = t_clientes.persona_id AND t_clientes.persona_type = 'TPersona'
+        LEFT OUTER JOIN t_otros    o ON o.id = t_clientes.persona_id AND t_clientes.persona_type = 'TOtro'")
+  end
+
   def identificacion
     if persona.is_a?(TPersona)
       return persona.cedula

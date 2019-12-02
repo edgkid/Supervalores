@@ -128,7 +128,7 @@
     var i = 1;
 
     // Añade una fila a la tabla con un select que contiene una lista de los recargos
-    $('#add-recargo-row').click(function () {
+    function addRecargoRow() {
       $('#total-row').before(`
         <tr id="recargo${i}" style="background-color: #1C84C6;">
           <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
@@ -179,6 +179,9 @@
       //   placeholder: 'Seleccione'
       // });
       i++;
+    }
+    $('#add-recargo-row').click(function () {
+      addRecargoRow();
     });
   });
 </script>

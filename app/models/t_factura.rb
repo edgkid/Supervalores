@@ -1,5 +1,5 @@
 class TFactura < ApplicationRecord
-	belongs_to :t_cliente
+	belongs_to :t_cliente, optional: true
   belongs_to :t_resolucion, optional: true
   belongs_to :t_periodo, optional: true
   belongs_to :t_estatus
@@ -26,6 +26,12 @@ class TFactura < ApplicationRecord
   # validates :t_resolucion, presence: {
   #   message: "|La resolución debe existir"
   # }
+
+  def set_recargo
+    total = 0
+    self.t_recargos.each { |r| total += r.tasa }
+    total * 100
+  end
 
   def calculate_pending_payment(before_save = false)
     if before_save

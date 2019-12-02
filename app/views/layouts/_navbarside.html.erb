@@ -144,13 +144,22 @@
         <ul class="nav nav-second-level">
           <% if can? :read, TRecibo %>
             <li><%= link_to 'Caja', t_caja_index_path %></li>
+            <li><%= link_to 'Comparativa de Ingresos por Tarifas y Clientes', comparativa_ingresos_t_recibos_path %></li>
           <% end %>
           <% if can? :read, TCliente %>
-            <li><%= link_to 'Trámites Registrados', tramites_t_clientes_path %></li>
+            <li><%= link_to 'Trámites de Clientes Registrados', tramites_t_clientes_path %></li>
+          <% end %>
+          <% if can? :read, TTarifaServicio %>
+            <li><%= link_to 'Trámites de Tarifas Registradas', tramites_t_tarifa_servicios_path %></li>
           <% end %>
           <% if can? :read, TFactura %>
             <li><%= link_to 'Facturas Pagadas', pagadas_t_facturas_path %></li>
+            <li><%= link_to 'Informe de Recaudación', informe_recaudacion_t_facturas_path %></li>
+            <li><%= link_to 'Informe Consolidado de Ingresos Diarios', informe_ingresos_diarios_t_facturas_path %></li>
+            <li><%= link_to 'Informe de Ingresos de Presupuesto por Cuenta', informe_ingresos_presupuesto_t_facturas_path %></li>
+            <li><%= link_to 'Informe de Cuentas por Cobrar', informe_cuentas_x_cobrar_t_facturas_path %></li>
           <% end %>
+
         </ul>
       </li>
     </ul>
