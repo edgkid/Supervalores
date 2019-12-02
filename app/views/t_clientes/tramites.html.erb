@@ -1,4 +1,10 @@
 <div class="wrapper wrapper-content animated fadeInRight">
+  <% subtitle = raw("
+    <h3>
+      Tramites de clientes
+    </h3>
+  ") %>
+  <%= render 'shared/report_header', filters: true, subtitle: subtitle %>
   <div class="row">
     <div class="col-lg-12">
       <div class="ibox ">

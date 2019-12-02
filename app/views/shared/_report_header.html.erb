@@ -1,0 +1,35 @@
+<% if filters %>
+  <div class="row" id="period-form-container">
+    <div class="col-md-2">
+      <div class="row">
+        <div class="col">
+          <div id="print-hide">
+            <button class="btn btn-default" type="button" onclick="this.style.display='none';javascript:window.print();window.location.reload();">
+              Imprimir
+           </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr/>
+<% end %>
+
+<div class="row">
+  <div class="col-md-6">
+    <%= image_tag "logoSMV.png", width: '150px' %>
+  </div>
+  <div align="right" class="col-md-6">
+    <h5><b>Fecha de impresión:</b> <%= Date.today.strftime('%d/%m/%Y') %></h5>
+  </div>
+</div>
+<div class="row" style="margin-top: -40px;">
+  <div align="center" class="col-12">
+    <h3>REPÚBLICA DE PANAMÁ</h3>
+    <h3>SUPERINTENDENCIA DEL MERCADO DE VALORES</h3>
+    <h3>DEPARTAMENTO DE TESORERÍA</h3>
+    <hr>
+    <%= subtitle %>
+    <hr>
+  </div>
+</div>
