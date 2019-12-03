@@ -3,7 +3,7 @@
 %>
 <%= fields_for registro do |form| %>
 <div class="form-group row">
-  <div class="col-sm-2 col-form-label">
+  <!-- <div class="col-sm-2 col-form-label">
     <%= form.label :codigo, "Código", class: "text-right" %>
   </div>
   <div class="col-sm-3 input-value">
@@ -12,7 +12,7 @@
     <% else %>
     <%= registro.codigo %>
     <% end %>
-  </div>
+  </div> -->
   <div class="col-sm-2 col-form-label">
     <%= form.label :resolucion_codigo, 'Resolución', class: "text-right" %>
   </div>
@@ -60,7 +60,7 @@
   </div>
   <div class="col-sm-9 input-value">
     <% if editable %>
-    <%= form.select :t_tipo_cliente_id, opciones_de_tipos_de_clientes , {}, { :class => 'form-control m-b' } %>
+    <%= form.select :t_tipo_cliente_id, opciones_de_tipos_de_clientes(registro.t_cliente == nil ? nil : registro.t_cliente.tipo_persona_id) , {:prompt => "Seleccione tipo de cliente"}, { :class => 'form-control m-b' } %>
     <% else %>
     <%= registro.t_tipo_cliente.descripcion %>
     <% end %>
@@ -109,4 +109,31 @@
   </div>
   <% end %>
 </div>
+<script>
+  $(document).ready(function(){
+    $("#t_resolucion_t_tipo_cliente_id").select2({
+      ajax: {
+        url: '<%= "#{get_type_client_path}" %>',
+        dataType: 'json',
+        data: function (params) {
+          var query = {
+            tipo_persona: <%= registro.t_cliente == nil ? '$("#select-tipo-persona").val()'.html_safe  : "\"#{registro.t_cliente.tipo_persona_id}\"".html_safe %>
+          }
+          return query;
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function(tipo_persona, i) {
+              return { id: tipo_persona[1], text: tipo_persona[0] } 
+            })
+          };
+        },
+        delay: 250
+      },
+      placeholder: 'Seleccione'
+    });
+    $("#t_resolucion_t_tipo_cliente_id").trigger('change.select2');
+    console.log("resoluciones!");
+  });
+</script>
 <% end %>

@@ -10,11 +10,11 @@ class TResolucion < ApplicationRecord
 	has_many :t_cliente_tarifas, dependent: :destroy
 	has_many :t_tarifas, through: :t_cliente_tarifa
 	
-	validates :codigo,
-		presence: {
-				message: "|El código de la resolución no puede estar vacío."
-		},
-		:on => [:create, :update]
+#	validates :codigo,
+#		presence: {
+#				message: "|El código de la resolución no puede estar vacío."
+#		},
+#		:on => [:create, :update]
 
 	validates :num_licencia,
 		presence: {
@@ -40,7 +40,7 @@ class TResolucion < ApplicationRecord
 	
 	def resolucion_codigo
 		if resolucion != nil && resolucion != ""
-			grupos = resolucion.scan(/(SMV)([A-Za-z0-9]+)([0-9]{4})/)
+			grupos = resolucion.scan(/(SMV)\-([A-Za-z0-9]+)\-([0-9]{4})/)
 			if grupos.at(0) != nil
 				return grupos.at(0).at(1)
 			end
@@ -50,7 +50,7 @@ class TResolucion < ApplicationRecord
 	
 	def resolucion_anio
 		if resolucion != nil && resolucion != ""
-			grupos = resolucion.scan(/(SMV)([A-Za-z0-9]+)([0-9]{4})/)
+			grupos = resolucion.scan(/(SMV)\-([A-Za-z0-9]+)\-([0-9]{4})/)
 			if grupos.at(0) != nil
 				return grupos.at(0).at(2)
 			end

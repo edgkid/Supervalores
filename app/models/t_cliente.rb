@@ -22,8 +22,8 @@ class TCliente < ApplicationRecord
 
   def no_es_prospecto
     if !es_prospecto
-      on_assert_add_error codigo == nil || codigo == '', :codigo, "|El Código SERI no puede estar vacío."
-      on_assert_add_error (codigo =~ /([A-Za-z0-9\-]+)/) == nil, :codigo, "|El Código SERI solo puede tener Letras, Números y Guiones(-)."
+      on_assert_add_error tipo_persona_id == 1 && (codigo == nil || codigo == ''), :codigo, "|El Código SERI no puede estar vacío."
+      on_assert_add_error tipo_persona_id == 1 && (codigo =~ /([A-Za-z0-9\-]+)/) == nil, :codigo, "|El Código SERI solo puede tener Letras, Números y Guiones(-)."
     end
   end
 

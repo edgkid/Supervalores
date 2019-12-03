@@ -74,6 +74,7 @@ class EstadoCuentaDatatable < ApplicationDatatable
   end
 
   def get_raw_records
+    t_resolucion_id = params[:t_resolucion_id] == nil || params[:t_resolucion_id] == "" ? nil : params[:t_resolucion_id]
     TFactura.includes(
       {t_recibos: :user}
     )
@@ -81,6 +82,6 @@ class EstadoCuentaDatatable < ApplicationDatatable
       {t_recibos: :user}, 
       {t_resolucion: :t_cliente}
     )
-    .where('t_clientes.codigo = ?', params[:t_cliente_codigo])
+    .where('t_resolucions.id = ?', t_resolucion_id)
   end
 end

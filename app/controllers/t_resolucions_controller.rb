@@ -1,4 +1,6 @@
 class TResolucionsController < ApplicationController
+  include ApplicationHelper
+  
   before_action :seleccionar_resolucion, only: [:show, :edit, :update, :destroy]
 
   load_and_authorize_resource
@@ -109,12 +111,13 @@ class TResolucionsController < ApplicationController
 
   def get_type_client
     tipo_persona = params[:tipo_persona]
-    results = nil
-    if tipo_persona == "2"
-      results = TTipoCliente.where(estatus: 1, id: [9, 10, 11]).order(:descripcion).pluck :descripcion, :id
-    else
-      results = TTipoCliente.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
-    end
+    results = opciones_de_tipos_de_clientes tipo_persona
+    render json: results
+  end
+
+  def cliente_saldo
+    id = params[:t_cliente_id]
+    results = ViewResolutionBalance.where("t_cliente_id = ?", id).map { |record| ["#{record.resolucion} #{record.pagos_recibidos} / #{record.total_facturado}", record.t_resolucion_id] }
     render json: results
   end
 
@@ -126,7 +129,7 @@ class TResolucionsController < ApplicationController
 
     def parametros_resolucion
       datos = params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :codigo, :num_licencia, :t_cliente_id, :t_tipo_cliente_id)
-      datos[:resolucion] = "SMV#{params[:resolucion_codigo]}#{params[:resolucion_anio]}"
+      datos[:resolucion] = "SMV-#{params[:t_resolucion][:resolucion_codigo]}-#{params[:t_resolucion][:resolucion_anio]}"
       return datos
     end
     
