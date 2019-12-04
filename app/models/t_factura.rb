@@ -227,4 +227,14 @@ class TFactura < ApplicationRecord
       end
     end
   end
+
+  def calculate_credit_balance
+    credit = 0
+    facturas = self.t_resolucion.t_facturas
+    facturas.each do |factura|
+      credit = credit + (factura.total_factura - factura.t_recibos.sum(:pago_recibido))
+    end
+    credit.abs
+  end
+
 end
