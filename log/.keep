@@ -9,3 +9,24 @@
     </div>
   </div>
 </div>
+
+if (document.getElementById("select2-client-select-container").firstChild.nextSibling == null) && (document.getElementById("select2-tariff-select-container").firstChild.nextSibling == null){
+        window.location.reload();
+      }
+      else if (document.getElementById("select2-client-select-container").firstChild.nextSibling == null) && (document.getElementById("select2-tariff-select-container").firstChild.nextSibling != null){
+        var service = document.getElementById("select2-tariff-select-container").firstChild.nextSibling.textContent;
+        $('#selected_service').val( service );
+        window.location.reload();
+      }
+      else if (document.getElementById("select2-client-select-container").firstChild.nextSibling != null) && (document.getElementById("select2-tariff-select-container").firstChild.nextSibling == null){
+        var client = document.getElementById("select2-client-select-container").firstChild.nextSibling.textContent; 
+        $('#selected_client').val( client );
+        window.location.reload();
+      }
+      else {
+        var service = document.getElementById("select2-tariff-select-container").firstChild.nextSibling.textContent;
+        var client = document.getElementById("select2-client-select-container").firstChild.nextSibling.textContent; 
+        $('#selected_client').val( client );
+        $('#selected_service').val( service );
+        window.location.reload();
+      }

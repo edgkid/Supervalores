@@ -57,6 +57,8 @@ class TRecibosController < ApplicationController
   end
 
   def comparativa_ingresos
+    @recibos = TRecibo.all
+    @recibos = @recibos.paginate(page: params[:page], per_page: 100)
     @usar_dataTables = true
     @useDataTableFooter = true
     @do_not_use_plain_select2 = true
@@ -98,6 +100,18 @@ class TRecibosController < ApplicationController
     send_data(
       pdf.render,
       filename: "recibo_nro_#{@t_recibo.id}.pdf",
+      type: "application/pdf",
+      disposition: "inline"
+    ) and return
+  end
+
+  def generar_reporte_pdf
+    cliente_ruc_o_cedula = params[:selected_client].split(" - ").first.strip unless params[:selected_client].blank?
+    tarifa_servicio_codigo = params[:selected_service].split(" - ").second.strip unless params[:selected_service].blank?
+    pdf = TReporteComparativaIngresosXTarifaClientePdf.new(cliente_ruc_o_cedula, tarifa_servicio_codigo)
+    send_data(
+      pdf.render,
+      filename: "test_reporte.pdf",
       type: "application/pdf",
       disposition: "inline"
     ) and return

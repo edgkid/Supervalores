@@ -39,6 +39,9 @@ gem 'rufus-scheduler', '~> 3.6'
 
 gem 'prawn-table'
 gem 'prawn'
+
+gem 'will_paginate', '~> 3.1.1'
+gem 'will_paginate-bootstrap' 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
