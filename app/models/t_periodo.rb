@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: t_periodos
+#
+#  id          :bigint           not null, primary key
+#  descripcion :string           not null
+#  rango_dias  :integer          not null
+#  dia_tope    :integer          not null
+#  mes_tope    :integer          not null
+#  estatus     :integer          not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  tipo        :string
+#
+
 class TPeriodo < ApplicationRecord
 	has_many :t_facturas, dependent: :destroy
 	has_many :t_recibos, dependent: :destroy

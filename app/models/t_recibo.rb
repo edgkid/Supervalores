@@ -1,3 +1,28 @@
+# == Schema Information
+#
+# Table name: t_recibos
+#
+#  id                :bigint           not null, primary key
+#  fecha_pago        :date             not null
+#  num_cheque        :string
+#  pago_recibido     :float            not null
+#  monto_acreditado  :float            not null
+#  cuenta_deposito   :integer
+#  pago_pendiente    :float            not null
+#  estatus           :integer          not null
+#  justificacion     :string
+#  fecha_erroneo     :datetime
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  t_factura_id      :bigint           not null
+#  t_cliente_id      :bigint           not null
+#  t_periodo_id      :bigint
+#  t_metodo_pago_id  :bigint           not null
+#  user_id           :bigint           not null
+#  recargo_x_pagar   :decimal(, )
+#  servicios_x_pagar :decimal(, )
+#
+
 class TRecibo < ApplicationRecord
 	belongs_to :t_factura
   belongs_to :t_cliente

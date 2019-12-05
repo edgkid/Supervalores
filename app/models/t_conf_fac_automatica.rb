@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: t_conf_fac_automaticas
+#
+#  id                       :bigint           not null, primary key
+#  nombre_ciclo_facturacion :string
+#  fecha_inicio             :date
+#  t_tipo_cliente_id        :bigint
+#  t_periodo_id             :bigint
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  estatus                  :integer
+#  user_id                  :bigint
+#
+
 class TConfFacAutomatica < ApplicationRecord
   belongs_to :t_tipo_cliente
   belongs_to :t_periodo

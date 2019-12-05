@@ -1,3 +1,34 @@
+# == Schema Information
+#
+# Table name: t_facturas
+#
+#  id                 :bigint           not null, primary key
+#  fecha_notificacion :date             not null
+#  fecha_vencimiento  :date             not null
+#  recargo            :float            not null
+#  recargo_desc       :string           not null
+#  itbms              :float            not null
+#  cantidad_total     :integer
+#  importe_total      :float            not null
+#  total_factura      :float            not null
+#  pendiente_fact     :float            not null
+#  pendiente_ts       :float            not null
+#  tipo               :string           not null
+#  justificacion      :string
+#  fecha_erroneo      :datetime
+#  next_fecha_recargo :date             not null
+#  monto_emision      :float            not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  t_resolucion_id    :bigint
+#  t_periodo_id       :bigint
+#  t_estatus_id       :bigint           not null
+#  t_leyenda_id       :bigint
+#  user_id            :bigint           not null
+#  automatica         :boolean          default(FALSE)
+#  t_cliente_id       :bigint
+#
+
 class TFactura < ApplicationRecord
 	belongs_to :t_cliente, optional: true
   belongs_to :t_resolucion, optional: true

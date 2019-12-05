@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: t_clientes
+#
+#  id           :bigint           not null, primary key
+#  codigo       :string
+#  t_estatus_id :integer          not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  prospecto_at :date
+#  persona_id   :bigint           not null
+#  persona_type :string           not null
+#
+
 class TCliente < ApplicationRecord
   belongs_to :persona, polymorphic: true
   # belongs_to :t_tipo_cliente

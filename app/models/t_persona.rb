@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: t_personas
+#
+#  id           :bigint           not null, primary key
+#  cedula       :string           not null
+#  nombre       :string           not null
+#  apellido     :string           not null
+#  t_empresa_id :bigint
+#  cargo        :string
+#  telefono     :string
+#  email        :string
+#  direccion    :string
+#
+
 class TPersona < ApplicationRecord
 
   belongs_to :t_empresa, optional: true

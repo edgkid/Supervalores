@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: t_metodo_pagos
+#
+#  id          :bigint           not null, primary key
+#  forma_pago  :string           not null
+#  descripcion :string           not null
+#  minimo      :decimal(, )
+#  maximo      :decimal(, )
+#  estatus     :integer          not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class TMetodoPago < ApplicationRecord
 	has_many :t_recibos, dependent: :destroy
 

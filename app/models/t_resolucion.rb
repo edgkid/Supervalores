@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: t_resolucions
+#
+#  id                :bigint           not null, primary key
+#  descripcion       :string           not null
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  t_cliente_id      :bigint           not null
+#  t_estatus_id      :bigint           not null
+#  num_licencia      :string
+#  codigo            :string
+#  t_tipo_cliente_id :bigint
+#  resolucion        :string
+#
+
 class TResolucion < ApplicationRecord
 	belongs_to :t_cliente	
 	belongs_to :t_estatus
