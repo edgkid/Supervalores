@@ -63,6 +63,7 @@ group :development do
   gem "binding_of_caller"
   gem "better_errors"
   gem 'annotate'
+  gem "rails-erd"
   # Use postgresql as the database for Active Record
   gem 'pg', '>= 0.18', '< 2.0'
 end
