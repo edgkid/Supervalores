@@ -16,11 +16,17 @@
       <div class="ibox-title">
         <div class="row">
           <h3 class="col-sm-4">Facturas y Recibos Registrados</h3>
-          <div class="offset-5 col-md-2">
+          <div class="col-md-1">
             <%= form_tag t_cliente_generar_pdf_path(@t_cliente, format:'pdf'), method: "get", target: "_blank" do %>
               <%= hidden_field_tag :client_code, '', :id => "cliente_code" %>
               <%= submit_tag("Generar Paz y Salvo", :id => "force_client_code", class: "fa fa-download btn btn-primary") %>
             <% end %>
+          </div>
+          <div class="col-sm-2 col-form-label">
+            <%= label_tag("Resolución:", nil, class: "text-right") %>
+          </div>
+          <div class="col-sm-4 input-value">
+            <%= select_tag(:option, options_for_select([], params[:option] ), id:"select-cliente-resolucion") %>
           </div>
           <div class="col-sm-1 input-value">
             <button id="btn-refresh-table" class="btn btn-default"><i class="fa fa-refresh"></i></button>  
@@ -64,13 +70,13 @@
     });
     $.extend({
       useDataInAjaxCall: function (d) {
-        d.t_cliente_codigo = $('#select-codigo').val();
+        d.t_resolucion_id = $('#select-cliente-resolucion').val();
       },
       useDataTableFooter: function (footer) {
         $.ajax({
           url: "<%= calculo_de_totales_path %>",
           data: {
-            t_cliente_codigo: $('#select-codigo').val()
+            t_resolucion_id: $('#select-cliente-resolucion').val()
           }
         })
           .done(function (data) {
@@ -94,7 +100,27 @@
       }
     });
 
-
+    $("#select-cliente-resolucion").select2({
+      ajax: {
+        url: '<%= "#{get_cliente_saldo_url}" %>',
+        dataType: 'json',
+        data: function (params) {
+          var query = {
+            t_cliente_id: $("#t_cliente_id").val()
+          }
+          return query;
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function(resolucion, i) {
+              return { id: resolucion[1], text: resolucion[0] } 
+            })
+          };
+        },
+        delay: 250
+      },
+      placeholder: 'Seleccione'
+    });
 
     refreshTable = function () {
       $("#ajax-datatable").DataTable().ajax.reload();
@@ -102,7 +128,9 @@
 
     $("#btn-refresh-table").click(refreshTable);
     $('#select-codigo').change(refreshTable);
+    $('#select-cliente-resolucion').change(refreshTable);
   
 });
+
 
 </script>

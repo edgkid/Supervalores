@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: t_contactos
+#
+#  id              :bigint           not null, primary key
+#  nombre          :string
+#  apellido        :string
+#  telefono        :string
+#  direccion       :string
+#  email           :string
+#  empresa         :string
+#  t_resolucion_id :bigint
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+
 class TContacto < ApplicationRecord
   belongs_to :t_resolucion
     

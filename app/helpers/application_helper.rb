@@ -56,7 +56,10 @@ module ApplicationHelper
     return TTipoPersona.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
   end  
 
-  def opciones_de_tipos_de_clientes
+  def opciones_de_tipos_de_clientes tipo_persona_id = nil
+    if tipo_persona_id.to_s == "2"
+      return TTipoCliente.where(estatus: 1, id: [9, 10, 11]).order(:descripcion).pluck :descripcion, :id
+    end
     return TTipoCliente.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
   end
 

@@ -70,8 +70,7 @@ if(<%= @useDataTableFooter != nil ? @useDataTableFooter : false %>) {
 else{
   data_tables_options["footerCallback"] = null;
 }
-console.log("footerCallback");
-console.log(data_tables_options["footerCallback"]);
+
 $('#ajax-datatable').DataTable(data_tables_options);
 
 $('.dataTables.clickable').on('click', 'tbody tr', function () {

@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   resources :t_recargos, path: "recargos"
   resources :t_resolucions, path: "resoluciones"
   get 'get_type_client' => 't_resolucions#get_type_client'
+  get 'get_cliente_saldo' => 't_resolucions#cliente_saldo'
   
   resources :t_tipo_clientes, path: "tipos_de_clientes"
   resources :t_tipo_personas, path: "tipos_de_personas"

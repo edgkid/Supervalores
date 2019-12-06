@@ -5,13 +5,13 @@ class TFacturaDatatable < ApplicationDatatable
 
     @view_columns ||= {
       id: { source: "TFactura.id" },
-      t_cliente: { source: "razon_social" },
-      resolucion: { source: "resolucion" },
+      t_cliente: { source: "razon_social", searchable: false },
+      resolucion: { source: "resolucion", searchable: false },
       fecha_notificacion: { source: "TFactura.fecha_notificacion" },
       fecha_vencimiento: { source: "TFactura.fecha_vencimiento" },
-      recargo: { source: "recargo" },
+      recargo: { source: "recargo", searchable: false },
       total_factura: { source: "TFactura.total_factura" },
-      pendiente_fact: { source: "t_recibo_id" }
+      pendiente_fact: { source: "t_recibo_id", searchable: false }
     }
   end
 

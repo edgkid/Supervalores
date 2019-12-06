@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: view_client
+#
+#  id             :bigint
+#  codigo         :string
+#  created_at     :datetime
+#  updated_at     :datetime
+#  identificacion :string
+#  razon_social   :string
+#  telefono       :string
+#  email          :string
+#  es_prospecto   :text
+#  estatus        :string
+#  tipo_persona   :string
+#
+
 class ViewClient < ApplicationRecord
   self.table_name = 'view_client'
   

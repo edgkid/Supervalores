@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: t_estatuses
+#
+#  id          :bigint           not null, primary key
+#  estatus     :integer          not null
+#  para        :integer          default(0), not null
+#  descripcion :string           not null
+#  color       :string           not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class TEstatus < ApplicationRecord
 
 	has_many :t_facturas

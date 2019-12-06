@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: t_modulo_rols
+#
+#  id          :bigint           not null, primary key
+#  t_rol_id    :bigint
+#  t_modulo_id :bigint
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class TModuloRol < ApplicationRecord
   belongs_to :t_rol
   belongs_to :t_modulo

@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: t_empresas
+#
+#  id                            :bigint           not null, primary key
+#  rif                           :string           not null
+#  razon_social                  :string           not null
+#  direccion_empresa             :string
+#  fax                           :string
+#  web                           :string
+#  telefono                      :string
+#  email                         :string
+#  t_empresa_tipo_valor_id       :bigint           not null
+#  t_empresa_sector_economico_id :bigint
+#  dv                            :string
+#
+
 class TEmpresa < ApplicationRecord
   has_one :t_cliente, as: :persona
   belongs_to :t_empresa_tipo_valor
@@ -21,8 +38,8 @@ class TEmpresa < ApplicationRecord
     message: "|El dígito verificador no puede estar vacío."
     },
     format: { 
-    message: "|El dígito verificador solo puede tener 2 caracteres (Letras o Números).",
-    with: /\A([A-Za-z0-9]{2})\z/ 
+    message: "|El dígito verificador solo puede tener de 1 a 4 caracteres (Letras o Números).",
+    with: /\A([A-Za-z0-9]{1,4})\z/ 
     },
     :on => [:create, :update]
 
@@ -37,7 +54,7 @@ class TEmpresa < ApplicationRecord
     :on => [:create, :update]
   
   validate :no_es_prospecto
-
+  
   def no_es_prospecto
     if !t_cliente.es_prospecto
       on_assert_add_error telefono == nil || telefono == '', :telefono, '|El teléfono no puede estar vacío.'
@@ -53,4 +70,10 @@ class TEmpresa < ApplicationRecord
       end
     end
   end
+
+  before_validation :default_values
+  def default_values
+    self.t_empresa_sector_economico_id ||= 1
+  end
+  
 end
