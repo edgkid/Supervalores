@@ -100,46 +100,81 @@ class TRecibosController < ApplicationController
   def comparativa_ingresos_test
     # params[:print] = "not_true"
     @tarifas_servicios = TTarifaServicio.all
-    @servicio_mes_monto = [
-      "SERVICIO" => "",
-      "ENERO" => "",
-      "FEBRERO" => "",
-      "MARZO" => "",
-      "ABRIL" => "",
-      "MAYO" => "",
-      "JUNIO" => "",
-      "JULIO" => "",
-      "AGOSTO" => "",
-      "SEPTIEMBRE" => "",
-      "OCTUBRE" => "",
-      "NOVIEMBRE" => "",
-      "DICIEMBRE" => "",
-      "TOTAL" => ""]
-    @tarifa_servicios.each do |tarifa_servicio|
-      @servicio_mes_monto.push()
+    @servicio_mes_monto = []
+    montos = []
+    @tarifas_servicios.each do |tarifa_servicio|
+      @servicio_mes_monto.push(
+          "SERVICIO" => "#{tarifa_servicio.descripcion}",
+          "ENERO" => 0,
+          "FEBRERO" => 0,
+          "MARZO" => 0,
+          "ABRIL" => 0,
+          "MAYO" => 0,
+          "JUNIO" => 0,
+          "JULIO" => 0,
+          "AGOSTO" => 0,
+          "SEPTIEMBRE" => 0,
+          "OCTUBRE" => 0,
+          "NOVIEMBRE" => 0,
+          "DICIEMBRE" => 0,
+          "TOTAL" => 0)
     end 
-    @resoluciones = TResolucion.all
+    # @resoluciones = TResolucion.all
+    @resoluciones = TResolucion.includes(t_facturas: [:total_factura] :t_factura_detalles)
+
+    @company = Company.where(whatever)
+      .includes(recipients: [:recipients_events, :contact])
+      .where(contacts: { user_id: user_id })
+      .take
+    events = @company.recipients_events
+
+
+
     @resoluciones.each do |resolucion|
+      next if resolucion.t_facturas.count == 0
       resolucion.t_facturas.each do |factura|
-        factura.t_factura_detalles.each do |factura_detalle|
-          precio_unitario = factura_detalle.precio_unitario
-          factura_detalle.t_tarifa_servicio
-          @servicio_mes_monto = 
-          ["SERVICIO" => "",
-          "ENERO" => "",
-          "FEBRERO" => "",
-          "MARZO" => "",
-          "ABRIL" => "",
-          "MAYO" => "",
-          "JUNIO" => "",
-          "JULIO" => "",
-          "AGOSTO" => "",
-          "SEPTIEMBRE" => "",
-          "OCTUBRE" => "",
-          "NOVIEMBRE" => "",
-          "DICIEMBRE" => "",
-          "TOTAL" => ""]
+        next if factura.t_recibos.count == 0
+        push_to_hash = false
+        result = factura.total_factura - factura.t_recibos.sum(:pago_recibido)
+        if result >= 0 
+          push_to_hash = true if factura.t_factura_detalles.sum(:precio_unitario) <= factura.total_factura 
         end
+
+        if push_to_hash
+          factura.t_factura_detalles.each do |factura_detalle|
+            mes = factura.t_recibos.last.fecha_pago.strftime("%m")
+            @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == factura_detalle.t_tarifa_servicio.descripcion}.first
+
+            case mes
+              when "1"
+                @selected_mes_monto["ENERO"] += factura_detalle.precio_unitario
+              when "2"
+                @selected_mes_monto["FEBRERO"] += factura_detalle.precio_unitario
+              when "3"
+                @selected_mes_monto["MARZO"] += factura_detalle.precio_unitario
+              when "4"
+                @selected_mes_monto["ABRIL"] += factura_detalle.precio_unitario
+              when "5"
+                @selected_mes_monto["MAYO"] += factura_detalle.precio_unitario
+              when "6"
+                @selected_mes_monto["JUNIO"] += factura_detalle.precio_unitario
+              when "7"
+                @selected_mes_monto["JULIO"] += factura_detalle.precio_unitario
+              when "8"
+                @selected_mes_monto["AGOSTO"] += factura_detalle.precio_unitario
+              when "9"
+                @selected_mes_monto["SEPTIEMBRE"] += factura_detalle.precio_unitario
+              when "10"
+                @selected_mes_monto["OCTUBRE"] += factura_detalle.precio_unitario
+              when "11"
+                @selected_mes_monto["NOVIEMBRE"] += factura_detalle.precio_unitario
+              when "12"
+                @selected_mes_monto["DICIEMBRE"] += factura_detalle.precio_unitario
+            end
+    
+          end
+        end 
+
       end
     end
     # per_page = params[:print] == "true" ? (TRecibo.all.count) / 1000 : 5
