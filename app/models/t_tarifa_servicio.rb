@@ -5,8 +5,6 @@ class TTarifaServicio < ApplicationRecord
   has_many :t_estado_cuenta_conts, dependent: :destroy
 
   def self.group_by_budget_code(path)
-    # path = '/home/jesus/Escritorio/work/ms/material/' + file + '.csv'
-
     CSV.foreach(path, headers: true) do |row|
       hash_row = row.to_hash
 
@@ -31,12 +29,7 @@ class TTarifaServicio < ApplicationRecord
             # t_tarifa_servicio.update_attribute(:t_presupuesto_id, t_presupuesto.id)
             t_tarifa_servicio.t_presupuesto = t_presupuesto
             t_tarifa_servicio.save!
-          else
-            debugger
-            puts 'Ajá!'
           end
-        else
-          #puts 'Else!'
         end
       end
     end
