@@ -60,7 +60,7 @@ class TCliente < ApplicationRecord
   
   def razon_social
     if persona.is_a?(TPersona)
-      return "#{persona.nombre}, #{persona.apellido}"
+      return "#{persona.nombre} #{persona.apellido}"
     elsif persona.is_a?(TEmpresa) || persona.is_a?(TOtro)
       return persona.razon_social
     else
