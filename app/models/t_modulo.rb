@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: t_modulos
+#
+#  id          :bigint           not null, primary key
+#  nombre      :string
+#  descripcion :text
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  alias       :string
+#
+
 class TModulo < ApplicationRecord
   has_many :t_modulo_rols, dependent: :destroy
 

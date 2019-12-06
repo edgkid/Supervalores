@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: t_empresas
+#
+#  id                            :bigint           not null, primary key
+#  rif                           :string           not null
+#  razon_social                  :string           not null
+#  direccion_empresa             :string
+#  fax                           :string
+#  web                           :string
+#  telefono                      :string
+#  email                         :string
+#  t_empresa_tipo_valor_id       :bigint           not null
+#  t_empresa_sector_economico_id :bigint
+#  dv                            :string
+#
+
 class TEmpresa < ApplicationRecord
   has_one :t_cliente, as: :persona
   belongs_to :t_empresa_tipo_valor

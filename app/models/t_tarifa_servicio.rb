@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: t_tarifa_servicios
+#
+#  id          :bigint           not null, primary key
+#  codigo      :string           not null
+#  descripcion :string           not null
+#  nombre      :string           not null
+#  clase       :string           not null
+#  precio      :float            not null
+#  estatus     :integer          not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  tipo        :string
+#
+
 class TTarifaServicio < ApplicationRecord
   require 'csv'
   belongs_to :t_presupuesto

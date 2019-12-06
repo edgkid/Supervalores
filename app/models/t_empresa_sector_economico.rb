@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: t_empresa_sector_economicos
+#
+#  id          :bigint           not null, primary key
+#  descripcion :string
+#  estatus     :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class TEmpresaSectorEconomico < ApplicationRecord
   
   validates :descripcion, 
