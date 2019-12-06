@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: view_resolution_balance
+#
+#  t_cliente_id    :bigint
+#  t_resolucion_id :bigint
+#  resolucion      :string
+#  pagos_recibidos :float
+#  total_facturado :float
+#
+
 class ViewResolutionBalance < ApplicationRecord
   self.table_name = 'view_resolution_balance'
   
