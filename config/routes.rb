@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   resources :t_recibos, only: :index do
     collection do
       get 'comparativa_ingresos'
+      get 'comparativa_ingresos_test'
       get 'pago_recibido_total'
     end
   end

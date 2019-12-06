@@ -1,5 +1,5 @@
 class TRecibosController < ApplicationController
-  before_action :set_t_factura, except: [:index, :comparativa_ingresos, :pago_recibido_total]
+  before_action :set_t_factura, except: [:index, :comparativa_ingresos, :comparativa_ingresos_test, :pago_recibido_total]
   before_action :set_preview_data, only: :new
   before_action :set_t_recibo, only: [:show, :destroy, :generar_pdf]
   before_action :set_necessary_objects, only: [:new, :create, :show]
@@ -57,8 +57,109 @@ class TRecibosController < ApplicationController
   end
 
   def comparativa_ingresos
-    @recibos = TRecibo.all
-    @recibos = @recibos.paginate(page: params[:page], per_page: 100)
+    # params[:print] = "not_true"
+    per_page = params[:print] == "true" ? (TRecibo.all.count) / 10 : 5
+    # per_page = params[:print] == "true" ? TRecibo.all.count : 5
+    @print = params[:print] unless params[:print].blank?
+    # @recibos = TRecibo.all
+    # @recibos = TRecibo.all#.joins(:t_factura).where("t_facturas.t_cliente_id = ?", null)
+    @recibos = TRecibo.includes(t_factura: :t_factura_detalles)
+    unless params[:search_client].blank? && params[:search_client].blank?
+      personas = TPersona.where("cedula like ?", "%#{params[:search_client]}%")
+      clientes_naturales = TCliente.where(persona_id: personas.ids, persona_type: "TPersona")
+
+      empresas = TEmpresa.where("rif like ?", "%#{params[:search_client]}%")
+      clientes_juridicos = TCliente.where(persona_id: empresas.ids, persona_type: "TEmpresa")
+
+      @recibos = TRecibo.where(t_cliente_id: clientes_naturales.ids + clientes_juridicos.ids)
+    end
+    # resolucion.t_facturas.joins(:t_factura_detalles).order("t_factura_detalles.cuenta_desc").each do |factura|
+
+    @recibos = @recibos.paginate(page: params[:page], per_page: per_page)
+    @usar_dataTables = true
+    @useDataTableFooter = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :id, :fecha_pago, :detalle_factura, :nombre_servicio,
+      :descripcion_servicio, :identificacion, :razon_social, :pago_recibido
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: ComparativaIngresosDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
+  def comparativa_ingresos_test
+    # params[:print] = "not_true"
+    @tarifas_servicios = TTarifaServicio.all
+    @servicio_mes_monto = [
+      "SERVICIO" => "",
+      "ENERO" => "",
+      "FEBRERO" => "",
+      "MARZO" => "",
+      "ABRIL" => "",
+      "MAYO" => "",
+      "JUNIO" => "",
+      "JULIO" => "",
+      "AGOSTO" => "",
+      "SEPTIEMBRE" => "",
+      "OCTUBRE" => "",
+      "NOVIEMBRE" => "",
+      "DICIEMBRE" => "",
+      "TOTAL" => ""]
+    @tarifa_servicios.each do |tarifa_servicio|
+      @servicio_mes_monto.push()
+    end 
+    @resoluciones = TResolucion.all
+    @resoluciones.each do |resolucion|
+      resolucion.t_facturas.each do |factura|
+        factura.t_factura_detalles.each do |factura_detalle|
+          precio_unitario = factura_detalle.precio_unitario
+          factura_detalle.t_tarifa_servicio
+          @servicio_mes_monto = 
+          ["SERVICIO" => "",
+          "ENERO" => "",
+          "FEBRERO" => "",
+          "MARZO" => "",
+          "ABRIL" => "",
+          "MAYO" => "",
+          "JUNIO" => "",
+          "JULIO" => "",
+          "AGOSTO" => "",
+          "SEPTIEMBRE" => "",
+          "OCTUBRE" => "",
+          "NOVIEMBRE" => "",
+          "DICIEMBRE" => "",
+          "TOTAL" => ""]
+        end
+      end
+    end
+    # per_page = params[:print] == "true" ? (TRecibo.all.count) / 1000 : 5
+    # per_page = params[:print] == "true" ? TRecibo.all.count : 5
+    # @print = params[:print] unless params[:print].blank?
+    # @recibos = TRecibo.all
+    # @recibos = TRecibo.all#.joins(:t_factura).where("t_facturas.t_cliente_id = ?", null)
+    # @recibos = TRecibo.includes(t_factura: :t_factura_detalles)
+    # unless params[:search_client].blank? && params[:search_client].blank?
+    #   personas = TPersona.where("cedula like ?", "%#{params[:search_client]}%")
+    #   clientes_naturales = TCliente.where(persona_id: personas.ids, persona_type: "TPersona")
+
+    #   empresas = TEmpresa.where("rif like ?", "%#{params[:search_client]}%")
+    #   clientes_juridicos = TCliente.where(persona_id: empresas.ids, persona_type: "TEmpresa")
+
+    #   @recibos = TRecibo.where(t_cliente_id: clientes_naturales.ids + clientes_juridicos.ids)
+    # end
+    # resolucion.t_facturas.joins(:t_factura_detalles).order("t_factura_detalles.cuenta_desc").each do |factura|
+
+    # @recibos = @recibos.paginate(page: params[:page], per_page: 10)
     @usar_dataTables = true
     @useDataTableFooter = true
     @do_not_use_plain_select2 = true

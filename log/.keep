@@ -30,3 +30,57 @@ if (document.getElementById("select2-client-select-container").firstChild.nextSi
         $('#selected_service').val( service );
         window.location.reload();
       }
+
+
+      34+45+90+80+80+70+90
+
+
+      TCliente id: 3351, codigo: "CLI3351", t_estatus_id: 2, created_at: "2019-11-18 06:45:29", updated_at: "2019-11-18 06:45:29", prospecto_at: nil, persona_id: 2662, persona_type: "TPersona">
+>> recibo.t_cliente.t_persona
+
+
+$(document).on('click', '#pass_client_and_service', function() {
+      var service = ""
+      var client = ""
+      if (document.getElementById("select2-tariff-select-container").firstChild.nextSibling != null){
+        var service = document.getElementById("select2-tariff-select-container").firstChild.nextSibling.textContent;
+      }
+      else if (document.getElementById("select2-client-select-container").firstChild.nextSibling != null){
+        var client = document.getElementById("select2-client-select-container").firstChild.nextSibling.textContent; 
+      }
+      $('#selected_client').val( client );
+      $('#selected_service').val( service );
+      window.location.reload();
+    });
+
+
+
+
+
+= form_tag generar_reporte_pdf_t_factura_t_recibo_path(1, 1, format:'pdf'), method: "get", target: "_blank" do
+      = hidden_field_tag :selected_client, ''
+      = hidden_field_tag :selected_service, ''
+      = submit_tag("Generar PDF", :id => "pass_client_and_service", class: "fa fa-download btn btn-primary")
+
+
+
+
+- if @last_t_recibo != nil
+  = link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @last_t_recibo, format:'pdf'), id: "generated_pdf", target: "_blank", class: 'btn btn-primary' do
+    %i.fa.fa-download
+    Generar PDF
+:javascript
+  ready = function() {
+    document.getElementById('generated_pdf').style.display = "none"
+    document.getElementById('generated_pdf').click();
+  };
+
+  $(document).ready(ready);
+  $(document).on('page:load', ready);
+
+
+
+  document.getElementById('print_all').click();
+
+
+  :style => "display: none" ,
