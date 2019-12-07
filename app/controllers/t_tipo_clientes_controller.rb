@@ -2,6 +2,45 @@ class TTipoClientesController < ApplicationController
   before_action :seleccionar_tipo_cliente, only: [:show, :edit, :update, :destroy]
   load_and_authorize_resource
 
+  def informe
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true
+    @attributes_to_display = [
+      :tipo_cliente, :resolucion, :fecha_notificacion,
+      :fecha_vencimiento, :recargo, :total_factura
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformeTTipoClienteDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
+  def clients_index
+    @t_tipo_cliente = TTipoCliente.find(params[:id])
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true
+    @attributes_to_display = [
+      :identificacion, :razon_social, :resolucion, :fecha_notificacion,
+      :fecha_vencimiento, :recargo, :total_factura
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformeTClienteDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
   def index
     @usar_dataTables = true
     @attributes_to_display = [
