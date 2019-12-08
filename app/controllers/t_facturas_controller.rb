@@ -199,7 +199,10 @@ class TFacturasController < ApplicationController
     @do_not_use_plain_select2 = true
     @no_cache = true
 
-    @attributes_to_display = [:detalle, :monto]
+    @attributes_to_display = [
+      :id, :fecha_notificacion, :fecha_vencimiento, :fecha_pago, :identificacion,
+      :razon_social, :tipo_cliente, :detalle, :monto
+    ]
 
     respond_to do |format|
       format.html
