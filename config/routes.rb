@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :t_nota_creditos
   root to: 'dashboard#index'
   get 'dashboard/access_denied' => 'dashboard#access_denied'
 
