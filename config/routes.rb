@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       get 'informe_ingresos_presupuesto'
       get 'informe_cuentas_x_cobrar'
       get 'total_cuentas_x_cobrar'
+      get 'informe_presupuestario'
     end
   end
   resources :t_conf_fac_automaticas

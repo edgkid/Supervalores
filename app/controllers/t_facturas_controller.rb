@@ -274,6 +274,25 @@ class TFacturasController < ApplicationController
     render json: results
   end
 
+  def informe_presupuestario
+    @usar_dataTables = true
+    # @useDataTableFooter = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [:codigo, :descripcion, :pago_pendiente]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformePresupuestarioDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
   private
 
     def t_factura_params
