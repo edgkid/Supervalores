@@ -293,6 +293,28 @@ class TFacturasController < ApplicationController
     end
   end
 
+  def informe_por_tipos_de_ingreso
+    @usar_dataTables = true
+    # @useDataTableFooter = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :t_factura_id, :t_recibo_id, :fecha_pago, :codigo,
+      :cliente, :metodo_pago, :estado, :importe
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformePorTiposDeIngresoDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
   private
 
     def t_factura_params
