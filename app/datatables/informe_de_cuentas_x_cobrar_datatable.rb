@@ -25,7 +25,10 @@ class InformeDeCuentasXCobrarDatatable < ApplicationDatatable
         dias_91_120: record.dias_91_120.truncate(2),
         dias_mas_de_120: record.dias_mas_de_120.truncate(2),
         total: record.total.truncate(2),
-        DT_RowId: url_for(TTipoCliente.find(record.id))
+        DT_RowId: url_for({
+          id: record.id, controller: 't_tipo_clientes', action: 'clients_index', only_path: true
+        })
+        #DT_RowId: url_for(TTipoCliente.find(record.id))
       }
     end
   end
