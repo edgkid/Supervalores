@@ -34,7 +34,8 @@ class TTipoClientesController < ApplicationController
       format.html
       format.json { render json: InformeTClienteDatatable.new(
         params.merge({
-          attributes_to_display: @attributes_to_display
+          attributes_to_display: @attributes_to_display,
+          t_tipo_cliente_id: @t_tipo_cliente.id
         }),
         view_context: view_context)
       }
