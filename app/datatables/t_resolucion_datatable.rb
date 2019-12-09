@@ -2,33 +2,34 @@ class TResolucionDatatable < ApplicationDatatable
 
   def view_columns    
     @view_columns ||= {
-      t_cliente: { source: "TCliente.codigo" },
-      resolucion: { source: "TResolucion.resolucion" },
-      descripcion: { source: "TResolucion.descripcion" },
-      created_at: { source: "TResolucion.created_at" },
-      t_estatus: { source: "TEstatus.descripcion" }
+      t_cliente: { source: "ViewResolution.cliente_razon_social" },
+      resolucion: { source: "ViewResolution.resolucion" },
+      descripcion: { source: "ViewResolution.resolucion_descripcion" },
+      created_at: { source: "ViewResolution.resolucion_created_at" },
+      t_estatus: { source: "ViewResolution.estatus_descripcion" }
     }
   end
 
   def data
     records.map do |record|
       {
-        t_cliente: record.t_cliente.razon_social,
+        t_cliente: record.cliente_razon_social,
         resolucion: record.resolucion,
-        descripcion: record.descripcion,
-        created_at: record.created_at.strftime("%d/%m/%Y"),
-        t_estatus: record.t_estatus.descripcion,
-        DT_RowId: url_for(record)
+        descripcion: record.resolucion_descripcion,
+        created_at: record.resolucion_created_at.strftime("%d/%m/%Y"),
+        t_estatus: record.estatus_descripcion,
+        DT_RowId: url_for({
+          id: record.t_resolucion_id, controller: 't_resolucions', action: 'show', only_path: true
+        })
       }
     end
   end  
 
-  def get_raw_records
-    records = TResolucion.includes({t_cliente: :persona}, :t_estatus)
+  def get_raw_records    
     if params[:cliente]
-      return records.where(t_cliente_id: params[:cliente])
+      return ViewResolution.where(t_cliente_id: params[:cliente])
     else
-      return records.all
+      return ViewResolution.all
     end
   end
 end
