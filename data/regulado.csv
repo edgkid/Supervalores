@@ -1,0 +1,127 @@
+REGULADO,,CODIGO,NOMBRE,DESCRIPCION,CUENTA FINANCIERA,PARTIDA PRESUPUESTARIA
+PERSONA NATURAL,CORREDOR DE VALORES,TARIFA S-002-09,Tarifa de Supervisión-Corredor An,Tarifa de Supervisión,42010810-02-09,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,TARIFA R-001-16-02,tarifa de Registro- Cancelacion de Licencia de Corredor de Valores y Analista,Tarifa de Registro,42010808-01-16-02,365.1.2.4.2.60
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,EJECUTIVO PRINCIPAL,TARIFA S-002-07,Tarifa de Supervisión-Ejecutivo,Tarifa de Supervisión,42010810-02-07,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,TARIFA R-001-16-03,tarifa de Registro- Cancelacion de Licencia de Ejecutivo Principal,Tarifa de Registro,42010808-01-16-03,365.1.2.4.2.60
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,EJECUTIVO PRINCIPAL DE ADMINISTRACION DE INVERSION,TARIFA S-002-08,Tarifa de Supervisión-Ejec. Pal.,Tarifa de Supervisión,42010810-02-08,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,TARIFA R-001-16-04,tarifa de Registro- Cancelacion de Licencia de EPAI,Tarifa de Registro,42010808-01-16-04,365.1.2.4.2.60
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+PERSONA JURIDICA,ASESOR DE INVERSION,TARIFA S-002-05,Tarifa de Supervisión-Asesor,Tarifa de Supervisión,42010810-02-05,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,CAMBIO ACCIONARIO,Tarifa de Registro-Cambio Acc,Tarifa de registro,42010808-01-17,365.1.2.4.2.60
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,TARIFA R-001-16-11,tarifa de Registro- Cancelacion de Licencia de Asesor de Inversiones,Tarifa de Registro,42010808-01-16-11,365.1.2.4.2.60
+,,CALCOMANIA, RENOVACIÓN DE CALCOMANIA,Tarifa de Supervisión,42010810-12-16 ,365.1.2.4.2.60
+,,,,,,
+,ADMINISTRADOR DE INVERSIONES,TARIFA S-002-06,Tarifa de Supervisión-Adm. Inv.,Tarifa de Supervisión,42010810-02-06,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,CAMBIO ACCIONARIO,Tarifa de Registro-Cambio Acc,Tarifa de registro,42010808-01-17,365.1.2.4.2.60
+,,TARIFA R-001-16-10,tarifa de Registro- Cancelacion de Licencia de Administrador de Inversiones,Tarifa de Registro,42010808-01-16-10,365.1.2.4.2.60
+,,CALCOMANIA, RENOVACIÓN DE CALCOMANIA,Tarifa de Supervisión,42010810-12-16 ,365.1.2.4.2.60
+,,TARIFA R-001-16-02,tarifa de Registro- Cancelacion de Licencia de Corredor de Valores y Analista,Tarifa de Registro,42010808-01-16-02,365.1.2.4.2.60
+,ENTIDADES CALIFICADORAS DE RIESGO,TARIFA S-002-11,Tarifa de Supervisión-Calif.Riesg,Tarifa de Supervisión,42010810-02-11,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,CAMBIO ACCIONARIO,Tarifa de Registro-Cambio Acc,Tarifa de registro,42010808-01-17,365.1.2.4.2.60
+,,CALCOMANIA, RENOVACIÓN DE CALCOMANIA,Tarifa de Supervisión,42010810-12-16 ,365.1.2.4.2.60
+,,TARIFA R-001-16-12,tarifa de Registro- Cancelacion de Licencia de Calificadora de Riesgo,Tarifa de Registro,42010808-01-16-12,365.1.2.4.2.60
+,ENTIDADES PROVEEDORAS DE PRECIO,TARIFA S-002-15,Tarifa de SupervisiónEnti. Prov.,Tarifa de Supervisión,42010810-02-15,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,CAMBIO ACCIONARIO,Tarifa de Registro-Cambio Acc,Tarifa de registro,42010808-01-17,365.1.2.4.2.60
+,,CALCOMANIA, RENOVACIÓN DE CALCOMANIA,Tarifa de Supervisión,42010810-12-16 ,365.1.2.4.2.60
+,,TARIFA R-001-16-12,tarifa de Registro- Cancelacion de Licencia de Entidades Proveedora de Precio,Tarifa de Registro,42010808-01-16-12,365.1.2.4.2.60
+,PROVEEDORES DE SERVICIOS ADM. DE MERCADO DE VALORES,TARIFA S-002-14,Tarifa de Supervisión-Prove. Serv,Tarifa de Supervisión,42010810-02-14,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,CAMBIO ACCIONARIO,Tarifa de Registro-Cambio Acc,Tarifa de registro,42010808-01-17,365.1.2.4.2.60
+,,CALCOMANIA, RENOVACIÓN DE CALCOMANIA,Tarifa de Supervisión,42010810-12-16 ,365.1.2.4.2.60
+,,TARIFA R-001-16-13,tarifa de Registro- Cancelacion de Licencia de Prov. Serv. Adm.,Tarifa de Registro,42010808-01-16-13,365.1.2.4.2.60
+,CENTRAL DE VALORES,TARIFA S-002-03,Tarifa de Supervisión-Central,Tarifa de Supervisión,42010810-02-03,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,CAMBIO ACCIONARIO,Tarifa de Registro-Cambio Acc,Tarifa de registro,42010808-01-17,365.1.2.4.2.60
+,,CALCOMANIA, RENOVACIÓN DE CALCOMANIA,Tarifa de Supervisión,42010810-12-16 ,365.1.2.4.2.60
+,,TARIFA R-001-16-06,tarifa de Registro- Cancelacion de Licencia de Central de Valores,Tarifa de Registro,42010808-01-16-06,365.1.2.4.2.60
+,BOLSA DE VALORES,TARIFA S-002-02,Tarifa de Registro-Bolsa,Tarifa de Supervisión,42010810-02-02,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,CALCOMANIA, RENOVACIÓN DE CALCOMANIA,Tarifa de Supervisión,42010810-12-16 ,365.1.2.4.2.60
+,,CAMBIO ACCIONARIO,Tarifa de Registro-Cambio Acc,Tarifa de registro,42010808-01-17,365.1.2.4.2.60
+,,TARIFA R-001-16-05,tarifa de Registro- Cancelacion de Licencia de Bolsa de Valores,Tarifa de Registro,42010808-01-16-05,365.1.2.4.2.60
+,CASA DE VALORES,TARIFA S-002-04,Tarifa de Supervisión-Casas,Tarifa de Supervisión,42010810-02-04,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,CAMBIO ACCIONARIO,Tarifa de Registro-Cambio Acc,Tarifa de registro,42010808-01-17,365.1.2.4.2.60
+,,CALCOMANIA, RENOVACIÓN DE CALCOMANIA,Tarifa de Supervisión,42010810-12-16 ,365.1.2.4.2.60
+,,TARIFA R-001-16-07,tarifa de Registro- Cancelacion de Licencia de Casa de Valores,Tarifa de Registro,42010808-01-16-07,365.1.2.4.2.60
+,PROVEEDOR DE INFRAESTRUCTURA,,,,,
+,SOCIEDADES DE INVERSION,TARIFA S-002-13,Tarifa de Supervisión-Soc.Acc.Ex.,Tarifa de Supervisión,42010810-02-10,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,CAMBIO ACCIONARIO,Tarifa de Registro-Cambio Acc,Tarifa de registro,42010808-01-17,365.1.2.4.2.60
+,,TARIFA R-001-16-01,Tarifa de Registro-Terminicacion de Registro de Valores y SI,Tarifa de Registro,42010808-01-16-01,365.1.2.4.2.60
+,EMISORES-VALORES REGISTRADOS,TARIFA S-002-01,Tarifa de Supervisión-Valores,Tarifa de Supervisión,42010810-02-01,365.1.2.4.2.60
+,,RECARGOS,Otros Ingresos Varios,Otros Ingresos Varios,41020402,365.1.2.6.0.99
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,CAMBIO ACCIONARIO,Tarifa de Registro-Cambio Acc,Tarifa de Registro,42010808-01-17,365.1.2.4.2.60
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,MODIFICACION DE TERMINOS Y CONDICIONES,Tarifa de Registro Modificación de términos y Condiciones de una emisión,Tarifa de Registro,42010808-01-12,365.1.2.4.2.60
+,,TARIFA R-001-16-01,Tarifa de Registro-Terminicacion de Registro de Valores y SI,Tarifa de Registro,42010808-01-16-01,365.1.2.4.2.60
