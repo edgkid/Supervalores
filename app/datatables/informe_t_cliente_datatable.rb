@@ -22,7 +22,7 @@ class InformeTClienteDatatable < ApplicationDatatable
         recargo: record.recargo,
         total_factura: record.total_factura,
         DT_RowId: url_for({
-          id: record.id, controller: 't_clientes', action: 'show', only_path: true
+          id: record.t_factura_id, controller: 't_facturas', action: 'preview', only_path: true
         })
       }
     end

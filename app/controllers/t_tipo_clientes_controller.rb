@@ -6,8 +6,9 @@ class TTipoClientesController < ApplicationController
     @usar_dataTables = true
     @do_not_use_plain_select2 = true
     @attributes_to_display = [
-      :tipo_cliente, :resolucion, :fecha_notificacion,
-      :fecha_vencimiento, :recargo, :total_factura
+      :tipo_cliente, :anio_pago, :pago_enero, :pago_febrero, :pago_marzo,
+      :pago_abril, :pago_mayo, :pago_junio, :pago_julio, :pago_agosto,
+      :pago_septiembre, :pago_octubre, :pago_noviembre, :pago_diciembre, :total
     ]
 
     respond_to do |format|

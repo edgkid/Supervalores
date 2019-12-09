@@ -5,7 +5,7 @@ class CreateInformeDeClientes < ActiveRecord::Migration[5.2]
         c.id, COALESCE(e.rif, o.identificacion, p.cedula) identificacion,
         COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido)) razon_social,
         f.fecha_notificacion, f.fecha_vencimiento, r.id t_resolucion_id, r.resolucion,
-        f.recargo, f.total_factura, tc.id t_tipo_cliente_id
+        f.id t_factura_id, f.recargo, f.total_factura, tc.id t_tipo_cliente_id
       FROM t_clientes c
       LEFT OUTER JOIN t_resolucions r ON r.t_cliente_id = c.id
       INNER JOIN t_tipo_clientes tc ON r.t_tipo_cliente_id = tc.id
