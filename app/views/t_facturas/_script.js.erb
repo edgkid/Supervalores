@@ -70,7 +70,7 @@ $(document).ready(function(){
       processResults: function (data) {
         return {
           results: $.map(data, function(persona, i) {
-            return { id: persona.cedula ? persona.cedula : persona.rif, text: persona.cedula ? persona.cedula : persona.rif } 
+            return { id: persona.identificacion, text: persona.identificacion } 
           })
         };
       },
