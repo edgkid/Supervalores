@@ -35,8 +35,8 @@ class InformeDeIngresosDiariosDatatable < ApplicationDatatable
   def get_raw_records
     if params[:day]
       InformeDeIngresosDiariosView.where(fecha_pago: params[:day])
-    elsif params[:start] && params[:end]
-      InformeDeIngresosDiariosView.where('fecha_pago BETWEEN ? AND ?', params[:start], params[:end])
+    elsif params[:ztart] && params[:end]
+      InformeDeIngresosDiariosView.where('fecha_pago BETWEEN ? AND ?', params[:ztart], params[:end])
     elsif params[:month_year]
       InformeDeIngresosDiariosView.where('fecha_pago BETWEEN ? AND ?',
         params[:month_year], params[:month_year].to_date.at_end_of_month.strftime('%d/%m/%Y'))

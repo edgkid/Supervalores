@@ -113,38 +113,14 @@
     $.extend({
       useDataInAjaxCall: function (d) {
         d.day = $('#day').val();
-        d.start = $('#start').val();
+        d.ztart = $('#start').val();
         d.end = $('#end').val();
         d.month_year = $('#month-year').val();
         d.bimonthly = $('#bimonthly').val();
         d.quarterly = $('#quarterly').val();
         d.biannual = $('#biannual').val();
         d.year = $('#year').val();
-      },
-      // useDataTableFooter: function (footer) {
-      //   $.ajax({
-      //     url: '<%= total_pagadas_t_facturas_path %>',
-      //     contentType: "application/json",
-      //     type: 'get',
-      //     data: {
-      //       from: $('#from').val(),
-      //       to: $('#to').val()
-      //     }
-      //   })
-      //   .done(function (data) {
-      //     if (data.procesado) {
-      //       footer.empty().append($("<tr />")
-      //         .append($("<td />"))
-      //         .append($("<td />"))
-      //         .append($("<td />"))
-      //         .append($("<td />"))
-      //         .append($("<td />").html("Total"))
-      //         .append($("<td />").html(data.total))
-      //         .append($("<td />"))
-      //       )
-      //     }
-      //   });
-      // }
+      }
     });
 
     function refreshTable () {

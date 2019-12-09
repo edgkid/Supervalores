@@ -101,7 +101,7 @@
     $.extend({
       useDataInAjaxCall: function (d) {
         d.day = $('#day').val();
-        d.start = $('#start').val();
+        d.ztart = $('#start').val();
         d.end = $('#end').val();
         d.month_year = $('#month-year').val();
         d.bimonthly = $('#bimonthly').val();
@@ -121,6 +121,10 @@
 
     $('#execute').click(function () {
       refreshTable();
+    });
+
+    $('#ajax-datatable_info').ready(function () {
+      $('#ajax-datatable_info').parent().parent().css('display', 'none');
     });
   });
 </script>

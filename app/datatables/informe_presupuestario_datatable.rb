@@ -21,8 +21,8 @@ class InformePresupuestarioDatatable < ApplicationDatatable
     t_presupuestos =
       if !params[:day].blank?
         InformePresupuestarioView.where('fecha_notificacion = ?', params[:day])
-      elsif !params[:start].blank? && !params[:end].blank?
-        InformePresupuestarioView.where('fecha_notificacion BETWEEN ? AND ?', params[:start], params[:end])
+      elsif !params[:ztart].blank? && !params[:end].blank?
+        InformePresupuestarioView.where('fecha_notificacion BETWEEN ? AND ?', params[:ztart], params[:end])
       elsif !params[:month_year].blank?
         InformePresupuestarioView.where('fecha_notificacion BETWEEN ? AND ?',
           params[:month_year], params[:month_year].to_date.at_end_of_month.strftime('%d/%m/%Y'))
