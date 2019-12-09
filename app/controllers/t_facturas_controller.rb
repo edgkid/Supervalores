@@ -221,9 +221,9 @@ class TFacturasController < ApplicationController
     @no_cache = true
 
     @attributes_to_display = [
-      :enero, :febrero, :marzo, :abril, :mayo, :junio,
-      :julio, :agosto, :septiembre, :octubre, :noviembre, :diciembre,
-      :total
+      :codigo, :anio_pago, :pago_enero, :pago_febrero, :pago_marzo,
+      :pago_abril, :pago_mayo, :pago_junio, :pago_julio, :pago_agosto,
+      :pago_septiembre, :pago_octubre, :pago_noviembre, :pago_diciembre, :total
     ]
 
     respond_to do |format|
