@@ -2,16 +2,16 @@
   = hidden_field_tag :print_condition, @print
   .row
     .col-md-12
-      = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do
+      = form_tag(comparativa_ingresos_test_t_recibos_path, class: "", method: :get) do
         .form-group
           .input-group.search
-            = text_field_tag :search_client, params[:search_client], placeholder: 'Nombre del cliente', class: 'form-control mr-3'
-            = text_field_tag :search_service, params[:search_service], placeholder: 'Nombre del servicio', class: 'form-control'
+            = select_tag :from, options_for_select(TRecibo.years_options, params[:from]), class: 'form-control mr-3'
+            = select_tag :to, options_for_select(TRecibo.years_options, params[:to]), class: 'form-control mr-3'
             .input-group-btn
-              %button.btn.btn-secondary{:type => "submit"}
+              %button.btn.btn-secondary.disabled{:type => "submit", :disabled => true, :id => "search_with_years"}
                 %i.fa.fa-search{"aria-hidden" => "true"}
               %button.btn.btn-default{:onclick => "javascript:window.print()", :type => "button", :id => "print_all"} Imprimir
-              = form_tag comparativa_ingresos_t_recibos_path, target: "_blank" do
+              = form_tag comparativa_ingresos_test_t_recibos_path, target: "_blank" do
                 = hidden_field_tag :print, false
                 = submit_tag("Mostrar Todo", :id => "print_every_page", class: "fa fa-download btn btn-primary")
   .row
@@ -49,45 +49,54 @@
             %th Diciembre
             %th Total
         %tbody
-          - @tarifas_servicios.each do |recibo|
+          - @tarifas_servicios.each do |tarifa_servicio|
+            - selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == tarifa_servicio.descripcion}.first
             %tr
               %td
-                
+                = tarifa_servicio.descripcion
               %td
-                
+                = selected_mes_monto["ENERO"].round(2)
               %td
-                
+                = selected_mes_monto["FEBRERO"].round(2)
               %td
-                
+                = selected_mes_monto["MARZO"].round(2)
               %td
-                
+                = selected_mes_monto["ABRIL"].round(2)
+              %td
+                = selected_mes_monto["MAYO"].round(2)
+              %td
+                = selected_mes_monto["JUNIO"].round(2)
+              %td
+                = selected_mes_monto["JULIO"].round(2)
+              %td
+                = selected_mes_monto["AGOSTO"].round(2)
+              %td
+                = selected_mes_monto["SEPTIEMBRE"].round(2)
+              %td
+                = selected_mes_monto["OCTUBRE"].round(2)
+              %td
+                = selected_mes_monto["NOVIEMBRE"].round(2)
+              %td
+                = selected_mes_monto["DICIEMBRE"].round(2)
+              %td
+                = selected_mes_monto["TOTAL"].round(2)
 
-              %td
-                
-              %td
-                
-              %td
-
-              %td
-
-              %td
-
-              %td
-
-              %td
-
-              %td
-
-              %td
-               
-.row.no-gutters.mt-20
-  .col-md-12
-    %nav.text-center{"aria-label" => "Page navigation "}
-      - unless @recibos.first.nil?
-        = will_paginate @recibos
 :javascript
   $(document).ready(function(){
-  
+    $('#from').change(value_changed);
+    $('#to').change(value_changed);
+
+    function value_changed(){
+      if ($('#from').val() != "" && $('#to').val() != ""){
+        document.getElementById('search_with_years').disabled = false;
+        $('#search_with_years').removeClass('disabled')
+      }
+      else{
+        document.getElementById('search_with_years').disabled = true;
+        $('#search_with_years').addClass('disabled')
+      }
+    }
+
     $(document).on('click', '#print_every_page', function() {
       $('#print').val("true")
     });

@@ -84,3 +84,31 @@ $(document).on('click', '#pass_client_and_service', function() {
 
 
   :style => "display: none" ,
+
+
+  <h3 class="col-sm-4">Facturas y Recibos Registrados</h3>
+          
+
+.row
+	%h3.col-sm-5 Facturas y Recibos Registrados
+	.col-sm-2.col-form-label
+	  = label_tag(Resolución:, nil, class: text-right)
+	.col-sm-4.input-value
+	  = select_tag(:option, options_for_select([], params[:option] ), id:select-cliente-resolucion)
+
+	.col-sm-1.input-value
+	  %button#btn-refresh-table.btn.btn-default
+	    %i.fa.fa-refresh
+
+
+
+.row.no-gutters.mt-20
+  .col-md-12
+    %nav.text-center{"aria-label" => "Page navigation "}
+      - unless @tarifas_servicios.first.nil?
+        = will_paginate @recibos
+
+//= text_field_tag :search_client, params[:search_client], placeholder: 'Nombre del cliente', class: 'form-control mr-3'
+//= text_field_tag :search_service, params[:search_service], placeholder: 'Nombre del servicio', class: 'form-control'
+
+ :disabled => true

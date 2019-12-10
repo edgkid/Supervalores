@@ -124,4 +124,17 @@ class TRecibo < ApplicationRecord
 
     paid_receipts_list
   end
+
+  def self.years_options
+    first_year = TRecibo.first.fecha_pago.strftime("%Y").to_i
+    years_select = [["- Seleccione -", ""]]
+    while first_year <= Date.today.strftime("%Y").to_i
+      years_select << [first_year, first_year]
+      first_year += 1
+    end
+
+    return years_select
+    
+    # order("name_#{I18n.locale}").pluck(:id, "name_#{I18n.locale}", :value).map{ |e| [e[1], e[0], {"data-value" => e[2]} ] }
+  end
 end
