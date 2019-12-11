@@ -98,9 +98,9 @@ class TRecibosController < ApplicationController
   end
 
   def comparativa_ingresos_test
-    # params[:print] = "not_true"
-    # debugger
     @tarifas_servicios = TTarifaServicio.where.not(estatus: 0)
+    # @tarifas_servicios = TTarifaServicio.where(descripcion: ["Multas Supervision"])
+    # @tarifas_servicios = TTarifaServicio.all
     @servicio_mes_monto = []
     montos = []
     @tarifas_servicios.each do |tarifa_servicio|
@@ -120,11 +120,9 @@ class TRecibosController < ApplicationController
           "DICIEMBRE" => 0,
           "TOTAL" => 0)
     end 
-    @resoluciones = TResolucion.where("id < 0")
-
-
+    
     query_years = []
-    query_years << Date.today.strftime("%Y").to_i if params[:from].blank? && params[:to].blank?
+    query_years << Date.today.strftime("%Y").to_i if (params[:from].blank? && params[:to].blank?)
     starting_year = params[:from].to_i
     finishing_year = params[:to].to_i
 
@@ -133,47 +131,24 @@ class TRecibosController < ApplicationController
       starting_year += 1
     end
     
-    # @resoluciones = TResolucion.joins(t_facturas: [:t_recibos])
-    # @resoluciones = TResolucion.where("id < 1000")
-    # @resoluciones = TResolucion.where("t_resolucions.id < 1000").joins(t_facturas: :t_recibos).includes(t_facturas: :t_recibos)
-
-    # @resoluciones = TResolucion.joins(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).includes(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos])
-
-    # @resoluciones = TResolucion.joins(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).includes(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos])
-
-    # @resoluciones = TResolucion.where("t_resolucions.id < 1000").joins(t_facturas: [:t_factura_detalles, :t_recibos]).includes(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos])
-
-    # @resoluciones = TResolucion.joins(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).includes(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).where("extract(year from Date(t_recibos.fecha_pago)) = ?", '2019')
-
-    # @resoluciones = TResolucion.joins(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).includes(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).where("extract(year from Date(t_recibos.fecha_pago)) = ?", 2019)
-    
     @resoluciones = TResolucion.joins(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).includes(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')})")
-    debugger
-
 
     @resoluciones.each do |resolucion|
       next if resolucion.t_facturas.count == 0
       resolucion.t_facturas.each do |factura|
-        years_to_display = Date.today.strftime("%Y")
-        next if factura.t_recibos.count == 0 || factura.pendiente_fact != 0 || factura.t_recibos.last.fecha_pago.strftime("%Y") != years_to_display
-        
-        # next if factura.t_recibos.last.fecha_pago.strftime("%m")
-        # push_to_hash = false
-        # result = factura.total_factura - factura.t_recibos.sum(:pago_recibido)
-        # if result >= 0 
-          # push_to_hash = true if factura.t_factura_detalles.sum(:precio_unitario) <= factura.total_factura 
-        # push_to_hash = true if factura.t_factura_detalles.sum(:precio_unitario) <= factura.total_factura 
+        next if (factura.t_recibos.count == 0 || factura.pendiente_fact > 0)
 
-        # end
-
-        # if push_to_hash
+        next unless query_years.include?(factura.t_recibos.order(:fecha_pago).last.fecha_pago.strftime("%Y").to_i)
 
         factura.t_factura_detalles.each do |factura_detalle|
-          # years_to_display = Date.today.strftime("%Y")
 
-          mes = factura.t_recibos.last.fecha_pago.strftime("%m")
+          next if factura_detalle.t_tarifa_servicio.estatus == 0
 
+          mes = factura.t_recibos.order(:fecha_pago).last.fecha_pago.strftime("%m")
+          @selected_mes_monto = nil
           @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == factura_detalle.t_tarifa_servicio.descripcion}.first
+          # debugger if @selected_mes_monto.nil?
+          next if @selected_mes_monto.blank?
 
           case mes
             when "01"
@@ -202,29 +177,17 @@ class TRecibosController < ApplicationController
               @selected_mes_monto["DICIEMBRE"] += factura_detalle.precio_unitario
           end
 
-          # @selected_mes_monto["TOTAL"] += factura_detalle.precio_unitario
+          @selected_mes_monto["TOTAL"] += factura_detalle.precio_unitario
+
+          # debugger
+          # ap @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == factura_detalle.t_tarifa_servicio.descripcion}.first
 
         end 
       end
     end
-    # per_page = params[:print] == "true" ? (TRecibo.all.count) / 1000 : 5
-    # per_page = params[:print] == "true" ? TRecibo.all.count : 5
-    # @print = params[:print] unless params[:print].blank?
-    @recibos = TRecibo.all
-    # @recibos = TRecibo.all#.joins(:t_factura).where("t_facturas.t_cliente_id = ?", null)
-    # @recibos = TRecibo.includes(t_factura: :t_factura_detalles)
-    # unless params[:search_client].blank? && params[:search_client].blank?
-    #   personas = TPersona.where("cedula like ?", "%#{params[:search_client]}%")
-    #   clientes_naturales = TCliente.where(persona_id: personas.ids, persona_type: "TPersona")
-
-    #   empresas = TEmpresa.where("rif like ?", "%#{params[:search_client]}%")
-    #   clientes_juridicos = TCliente.where(persona_id: empresas.ids, persona_type: "TEmpresa")
-
-    #   @recibos = TRecibo.where(t_cliente_id: clientes_naturales.ids + clientes_juridicos.ids)
-    # end
-    # resolucion.t_facturas.joins(:t_factura_detalles).order("t_factura_detalles.cuenta_desc").each do |factura|
-
-    @recibos = @recibos.paginate(page: params[:page], per_page: @tarifas_servicios.count)
+    
+    @monto_final = 0
+    @servicio_mes_monto.each{|e| @monto_final += e["TOTAL"]}
     @usar_dataTables = true
     @useDataTableFooter = true
     @do_not_use_plain_select2 = true

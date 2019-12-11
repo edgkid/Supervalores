@@ -112,3 +112,98 @@ $(document).on('click', '#pass_client_and_service', function() {
 //= text_field_tag :search_service, params[:search_service], placeholder: 'Nombre del servicio', class: 'form-control'
 
  :disabled => true
+
+
+ 2182
+ 2947
+
+
+ = form_tag comparativa_ingresos_test_t_recibos_path, target: "_blank" do
+                = hidden_field_tag :print, false
+                = submit_tag("Mostrar Todo", :id => "print_every_page", class: "fa fa-download btn btn-primary")
+
+
+5000,0
+5000,0
+31500,0
+20000,0
+
+61500,0
+6022112,92
+6398484,98
+
+6229724,98
+
+146796,17
+6229724,98
+6398484,98
+12583843,46
+
+
+12730639,63
+12411593,68
+
+6376521,15111
+
+
+3989
+145
+3832
+3316
+
+6601783,96
+7083017,31999998
+13684801,28
+
+
+161796,17
+6250679,05
+6402531,25
+6029352,92
+
+
+
+161796,17
+6250679,05
+6402531,25
+6029352,92
+
+18789669,17
+
+
+
+pre-change 6250679.05
+
+2017       6250479.05
+facturas_detalles
+1.- 200
+changed to 6250279.05
+
+
+2018       6402531.25
+facturas_detalles
+1.- 100
+changed to 6402431.25
+
+6250279.05 + 6402431.25 = 12652710.3 
+
+2017 - 2018   12608643.8
+should be 300 below
+			  12608343.8	
+
+
+3000.0	50.0	800.0	2400.0	9900.0	7475.0	0	6000.0	6000.0	1950.0	6450.0	0		44025.0
+800.0	7000.0	0		0		3000.0	1950.0	0	0		3000.0	3300.0	13800.0	8400.0	41250.0
+3800.0	7050.0	800.0	0		12900.0	9425.0	0	6000.0	9000.0	5250.0	20250.0	8400.0	
+
+
+factura detalle id 3003
+factura.id 11
+
+
+162161,17
+6204728,05
+6393427,03
+6029352,92
+
+18789669,17

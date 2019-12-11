@@ -1,19 +1,18 @@
 .wrapper.wrapper-content.animated.fadeInRight
-  = hidden_field_tag :print_condition, @print
-  .row
+  .row.d-print-none
     .col-md-12
       = form_tag(comparativa_ingresos_test_t_recibos_path, class: "", method: :get) do
         .form-group
           .input-group.search
+            = label_tag "desde"
             = select_tag :from, options_for_select(TRecibo.years_options, params[:from]), class: 'form-control mr-3'
+            = label_tag "hasta"
             = select_tag :to, options_for_select(TRecibo.years_options, params[:to]), class: 'form-control mr-3'
             .input-group-btn
               %button.btn.btn-secondary.disabled{:type => "submit", :disabled => true, :id => "search_with_years"}
                 %i.fa.fa-search{"aria-hidden" => "true"}
               %button.btn.btn-default{:onclick => "javascript:window.print()", :type => "button", :id => "print_all"} Imprimir
-              = form_tag comparativa_ingresos_test_t_recibos_path, target: "_blank" do
-                = hidden_field_tag :print, false
-                = submit_tag("Mostrar Todo", :id => "print_every_page", class: "fa fa-download btn btn-primary")
+              
   .row
     .col-md-6
       = image_tag "logoSMV.png", width: '150px'
@@ -27,13 +26,22 @@
       %h3 SUPERINTENDENCIA DEL MERCADO DE VALORES
       %h3 DEPARTAMENTO DE TESORERÍA
       %hr/
-      %h3 COMPARATIVA DE INGRESOS POR TARIFAS Y CLIENTES
+      - if params[:from] && params[:to]
+        - if params[:from] == params[:to]
+          %h3
+            = "COMPARATIVA DE INGRESOS POR TARIFAS Y CLIENTES #{params[:from]}"
+        - else
+          %h3 
+            = "COMPARATIVA DE INGRESOS POR TARIFAS Y CLIENTES #{params[:from]} - #{params[:to]}"
+      - else
+        %h3 
+          = "COMPARATIVA DE INGRESOS POR TARIFAS Y CLIENTES #{Date.today.strftime("%Y")}"
       %hr/
   .row
     .col-lg-12
       %table.table.table-striped.table-bordered.table-hover
         %thead
-          %tr
+          %tr{:style => "font-size: x-small"}
             %th Tarifa de servicio  
             %th Enero
             %th Febrero
@@ -51,7 +59,7 @@
         %tbody
           - @tarifas_servicios.each do |tarifa_servicio|
             - selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == tarifa_servicio.descripcion}.first
-            %tr
+            %tr{:style => "font-size: x-small"}
               %td
                 = tarifa_servicio.descripcion
               %td
@@ -80,6 +88,11 @@
                 = selected_mes_monto["DICIEMBRE"].round(2)
               %td
                 = selected_mes_monto["TOTAL"].round(2)
+          %tr{:style => "font-size: x-small"}
+            %td{:colspan => "12"}
+              = "Total acumulado"
+            %td{:colspan => "2"} 
+              = @monto_final.round(2)
 
 :javascript
   $(document).ready(function(){
@@ -87,11 +100,11 @@
     $('#to').change(value_changed);
 
     function value_changed(){
-      if ($('#from').val() != "" && $('#to').val() != ""){
+      if ( ( $('#from').val() != "" && $('#to').val() != "" ) && ( ($('#from').val() < $('#to').val()) || ($('#from').val() == $('#to').val()) ) ){
         document.getElementById('search_with_years').disabled = false;
         $('#search_with_years').removeClass('disabled')
       }
-      else{
+      else if ( $('#from').val() > $('#to').val() ){
         document.getElementById('search_with_years').disabled = true;
         $('#search_with_years').addClass('disabled')
       }

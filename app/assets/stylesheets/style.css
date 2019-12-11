@@ -9543,6 +9543,8 @@ body.md-skin {
   }
 }
 @media print {
+  @page { margin: 0; }
+  body { margin: 1.6cm; }
 
   nav.navbar-static-side {
     display: none;
