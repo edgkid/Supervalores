@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>T cliente:</strong>
+  <%= @t_nota_credito.t_cliente_id %>
+</p>
+
+<p>
+  <strong>T recibo:</strong>
+  <%= @t_nota_credito.t_recibo_id %>
+</p>
+
+<p>
+  <strong>Monto:</strong>
+  <%= @t_nota_credito.monto %>
+</p>
+
+<p>
+  <strong>Usada:</strong>
+  <%= @t_nota_credito.usada %>
+</p>
+
+<p>
+  <strong>Factura redimida:</strong>
+  <%= @t_nota_credito.factura_redimida %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @t_nota_credito.descripcion %>
+</p>
+
+<%= link_to 'Edit', edit_t_nota_credito_path(@t_nota_credito) %> |
+<%= link_to 'Back', t_nota_creditos_path %>

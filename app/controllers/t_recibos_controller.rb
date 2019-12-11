@@ -15,6 +15,14 @@ class TRecibosController < ApplicationController
     @t_recibo.set_surcharge_and_services_total(@t_recibo.pago_recibido || 0, @t_factura, @t_factura.t_recibos.empty?)
     @t_recibo.calculate_default_attributes(@t_factura, @t_cliente, current_user)
     if @t_recibo.save
+      if @t_recibo.monto_acreditado > 0
+        t_nota_credito = TNotaCredito.new
+        t_nota_credito.t_cliente_id = @t_recibo.t_cliente_id
+        t_nota_credito.t_recibo_id = @t_recibo.id
+        t_nota_credito.monto = @t_recibo.monto_acreditado
+        t_nota_credito.usada = false
+        t_nota_credito.save!
+      end
       # generar_pdf
       redirect_to new_t_factura_t_recibo_path(@t_factura, show_pdf: true, recibo_id: @t_recibo.id), notice: 'Recibo creado exitosamente'
     else

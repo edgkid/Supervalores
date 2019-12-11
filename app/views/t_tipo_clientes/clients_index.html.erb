@@ -1,50 +1,52 @@
 <div class="wrapper wrapper-content animated fadeInRight">
-  <% years = [] %>
-  <% Date.today.year.downto(2000) do |i| %>
-    <% years << i.to_s %>
-    <% break if i == 2000 %>
-    <% years[-1] += ',' %>
-  <% end %>
   <% subtitle = raw("
     <h3>
-      INFORME GENERAL DE CUENTAS POR COBRAR SEGÚN TIPO DE CLIENTE<br>
-      Correspondiente al #{years.join}
+      INFORME DE CLIENTES
     </h3>
   ") %>
-  <%= render 'shared/report_header', filters: true, subtitle: subtitle %>
+  <%= render 'report_header', filters: true, subtitle: subtitle %>
 
   <div class="row">
     <div class="col-lg-12">
-      <% if TFactura.count > 0 %>
-        <div class="table-responsive">
+      <div class="ibox ">
+        <div class="ibox-title">
           <div class="row">
-            <div class="col-6">
+            <div class="col-8">
+              <h5>Clientes de tipo <%= @t_tipo_cliente.descripcion %></h5>
             </div>
-            <div class="col-6">
+            <div class="col-4">
             </div>
           </div>
-          <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= informe_cuentas_x_cobrar_t_facturas_path(format: :json) %>" id="ajax-datatable">
-            <thead>
-              <tr>
-                <th>Tipo de Cliente</th>
-                <th>Cantidad de Clientes</th>
-                <th>Cantidad de Facturas</th>
-                <th>0-30 días</th>
-                <th>31-60 días</th>
-                <th>61-90 días</th>
-                <th>91-120 días</th>
-                <th>120+ días</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
         </div>
-      <% else %>
-        <div>
-          <p>No se encontraron registros.</p>
+        <div class="ibox-content">
+          <% if TCliente.count > 0 %>
+          <div class="table-responsive">
+            <div class="col-12">
+              <p class="text-info">Puedes hacer "click" en cualquier fila para ver el detalle del registro.</p>
+            </div>
+            <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= clients_index_t_tipo_cliente_path(format: :json) %>" id="ajax-datatable">
+              <thead>
+                <tr>
+                  <th>Identificación</th>
+                  <th>Razón Social</th>
+                  <th>Resolución</th>
+                  <th>Fecha Notificación</th>
+                  <th>Fecha de Vencimiento</th>
+                  <th>Recargo</th>
+                  <th>Total Factura</th>
+                </tr>
+              </thead>
+
+              <tbody></tbody>
+            </table>
+          </div>
+          <% else %>
+          <div>
+            <p>No se encontraron registros.</p>
+          </div>
+          <% end %>
         </div>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>
@@ -120,32 +122,6 @@
         d.quarterly = $('#quarterly').val();
         d.biannual = $('#biannual').val();
         d.year = $('#year').val();
-      },
-      useDataTableFooter: function (footer) {
-        $.ajax({
-          url: '<%= total_cuentas_x_cobrar_t_facturas_path %>',
-          contentType: "application/json",
-          type: 'get',
-          data: {
-            from: $('#from').val(),
-            to: $('#to').val()
-          }
-        })
-        .done(function (data) {
-          if (data.procesado) {
-            footer.empty().append($("<tr />")
-              .append($("<td />").html("<b>Gran Total</b>"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />").html(data.total))
-            )
-          }
-        });
       }
     });
 
