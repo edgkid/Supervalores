@@ -1,0 +1,156 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <% subtitle = raw("
+    <h3>
+      INFORME DE TIPOS DE CLIENTES
+    </h3>
+  ") %>
+  <%= render 'report_header', filters: true, subtitle: subtitle %>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox ">
+        <div class="ibox-title">
+          <div class="row">
+            <div class="col-8">
+              <h5>Tipos de Cliente</h5>
+            </div>
+            <div class="col-4">
+            </div>
+          </div>
+        </div>
+        <div class="ibox-content">
+          <% if TTipoCliente.count > 0 %>
+          <div class="table-responsive">
+            <div class="col-12">
+              <p class="text-info">Puedes hacer "click" en cualquier fila para ver el detalle del registro.</p>
+            </div>
+            <table class="table table-striped table-bordered table-hover dataTables clickable" data-source="<%= informe_t_tipo_clientes_path(format: :json) %>" id="ajax-datatable">
+              <thead>
+                <tr>
+                  <th>Tipo de Cliente</th>
+                  <th>Año de Pagos</th>
+                  <th>Enero</th>
+                  <th>Febrero</th>
+                  <th>Marzo</th>
+                  <th>Abril</th>
+                  <th>Mayo</th>
+                  <th>Junio</th>
+                  <th>Julio</th>
+                  <th>Agosto</th>
+                  <th>Septiembre</th>
+                  <th>Octubre</th>
+                  <th>Noviembre</th>
+                  <th>Diciembre</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <% else %>
+          <div>
+            <p>No se encontraron registros.</p>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.datepicker').datepicker({
+      autoclose: true,
+      format: "dd/mm/yyyy"
+    });
+
+    $('#periodo-select').select2({ placeholder: 'Periodo' });
+
+    $('#periodo-select').on('change', function () {
+      switch ($(this).val()) {
+        case 'sin_filtro':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'sin_filtro')) %>");
+          break;
+        case 'diario':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'diario')) %>");
+          break;
+        case 'semanal':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'semanal')) %>");
+          break;
+        case 'mensual':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'mensual')) %>");
+          break;
+        case 'bimestral':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'bimestral')) %>");
+          break;
+        case 'trimestral':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'trimestral')) %>");
+          break;
+        case 'semestral':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'semestral')) %>");
+          break;
+        case 'anual':
+          $("#period-selects-container").html("<%= escape_javascript(render('period_selects', periodo: 'anual')) %>");
+          break;
+      }
+      $('#day').datepicker({
+        autoclose: true,
+        format: "dd/mm/yyyy",
+        todayBtn: "linked"
+      });
+      $('.input-daterange').datepicker({
+        keyboardNavigation: false,
+        format: "dd/mm/yyyy",
+        forceParse: false,
+        startDate: 0,
+        calendarWeeks: true
+      });
+      $('.month-view').datepicker({
+        minViewMode: 1,
+        maxViewMode: 2,
+        format: "dd/mm/yyyy",
+        startDate: 0
+      });
+      $('#year').datepicker({
+        minViewMode: 2,
+        format: "dd/mm/yyyy",
+        autoclose: true
+      });
+    });
+
+    $.extend({
+      useDataInAjaxCall: function (d) {
+        d.day = $('#day').val();
+        d.ztart = $('#start').val();
+        d.end = $('#end').val();
+        d.month_year = $('#month-year').val();
+        d.bimonthly = $('#bimonthly').val();
+        d.quarterly = $('#quarterly').val();
+        d.biannual = $('#biannual').val();
+        d.year = $('#year').val();
+      }
+    });
+
+    function refreshTable () {
+      $("#ajax-datatable").DataTable().ajax.reload();
+    }
+
+    $('.datepicker').on('changeDate', function (e) {
+      refreshTable();
+    });
+
+    $('#execute').click(function () {
+      refreshTable();
+    });
+  });
+</script>
+
+<style type="text/css" media="print">
+  @media print {
+    #period-form-container {display:none;}
+    #ajax-datatable_length {display:none;}
+    #ajax-datatable_filter {display:none;}
+    #ajax-datatable_paginate {display:none;}
+  }
+</style>

@@ -5,12 +5,16 @@
 function deleteCheckedRows() {
   $('.deletable:checked').each(function() {
     if ($(this).hasClass('deletable-servicio')) {
-      // Si es servicio, simulará un click al botón (link) correspondiente generado por el
-      // helper de rails: link_to_remove_fields (está en _t_factura_detalle_fields.html.erb).
-      // $(this).parent().siblings().last().children().last().click();
+      serviceId = $(this).parent().siblings('.select-cell').children('select').val();
+      $('#services-to-destroy').append(`
+        <input type="text" name="services_to_destroy[]" value="${serviceId}">
+      `);
       $(this).parent().parent().remove();
     } else {
-      // Si es un recargo, simplemente removerá el elemento HTML que es la fila de la tabla.
+      surchargeId = $(this).parent().siblings('.select-surcharge-cell').children('select').val();
+      $('#surcharges-to-destroy').append(`
+        <input type="text" name="surcharges_to_destroy[]" value="${surchargeId}">
+      `);
       $(this).parent().parent().remove();
     }
 
@@ -93,7 +97,7 @@ function addRecargoRowJS() {
   $('#total-row').before(`
     <tr id="recargo${i}" style="background-color: #1C84C6;">
       <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
-      <td>
+      <td class="select-surcharge-cell">
         <select class="select-recargo" data-first_time="true" id="t_recargo${i}" name="t_factura[t_recargo_ids][]" style="width: 100%;">
           <option></option>
           <% TRecargo.all.each do |t_recargo| %>

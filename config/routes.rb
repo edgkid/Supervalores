@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :t_nota_creditos
   root to: 'dashboard#index'
   get 'dashboard/access_denied' => 'dashboard#access_denied'
 
@@ -37,6 +38,8 @@ Rails.application.routes.draw do
       get 'informe_ingresos_presupuesto'
       get 'informe_cuentas_x_cobrar'
       get 'total_cuentas_x_cobrar'
+      get 'informe_presupuestario'
+      get 'informe_por_tipos_de_ingreso'
     end
   end
   resources :t_conf_fac_automaticas
@@ -60,8 +63,12 @@ Rails.application.routes.draw do
   resources :t_recargos, path: "recargos"
   resources :t_resolucions, path: "resoluciones"
   get 'get_type_client' => 't_resolucions#get_type_client'
+  get 'get_cliente_saldo' => 't_resolucions#cliente_saldo'
   
-  resources :t_tipo_clientes, path: "tipos_de_clientes"
+  resources :t_tipo_clientes, path: "tipos_de_clientes" do
+    get 'informe', on: :collection
+    get 'clients_index', on: :member
+  end
   resources :t_tipo_personas, path: "tipos_de_personas"
   resources :t_clientes, path: "clientes" do
     collection do

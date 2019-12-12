@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_15_052919) do
+ActiveRecord::Schema.define(version: 2019_12_09_030950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -336,19 +336,14 @@ ActiveRecord::Schema.define(version: 2019_11_15_052919) do
   end
 
   create_table "t_nota_creditos", force: :cascade do |t|
-    t.float "monto", null: false
-    t.string "detalle", null: false
-    t.datetime "fecha_sistema", null: false
+    t.integer "t_cliente_id"
+    t.integer "t_recibo_id"
+    t.float "monto"
+    t.boolean "usada"
+    t.integer "factura_redimida"
+    t.string "descripcion"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "t_cliente_id", null: false
-    t.bigint "t_recibo_id", null: false
-    t.bigint "t_factura_id", null: false
-    t.bigint "user_id", null: false
-    t.index ["t_cliente_id"], name: "index_t_nota_creditos_on_t_cliente_id"
-    t.index ["t_factura_id"], name: "index_t_nota_creditos_on_t_factura_id"
-    t.index ["t_recibo_id"], name: "index_t_nota_creditos_on_t_recibo_id"
-    t.index ["user_id"], name: "index_t_nota_creditos_on_user_id"
   end
 
   create_table "t_otros", force: :cascade do |t|
@@ -517,6 +512,8 @@ ActiveRecord::Schema.define(version: 2019_11_15_052919) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "tipo"
+    t.bigint "t_presupuesto_id"
+    t.index ["t_presupuesto_id"], name: "index_t_tarifa_servicios_on_t_presupuesto_id"
   end
 
   create_table "t_tarifas", force: :cascade do |t|
@@ -648,10 +645,6 @@ ActiveRecord::Schema.define(version: 2019_11_15_052919) do
   add_foreign_key "t_facturas", "users"
   add_foreign_key "t_modulo_rols", "t_modulos"
   add_foreign_key "t_modulo_rols", "t_rols"
-  add_foreign_key "t_nota_creditos", "t_clientes"
-  add_foreign_key "t_nota_creditos", "t_facturas"
-  add_foreign_key "t_nota_creditos", "t_recibos"
-  add_foreign_key "t_nota_creditos", "users"
   add_foreign_key "t_otros", "t_tipo_personas"
   add_foreign_key "t_permiso_modulo_rols", "t_modulo_rols"
   add_foreign_key "t_permiso_modulo_rols", "t_permisos"
@@ -671,6 +664,7 @@ ActiveRecord::Schema.define(version: 2019_11_15_052919) do
   add_foreign_key "t_rol_usuarios", "t_rols"
   add_foreign_key "t_rol_usuarios", "users"
   add_foreign_key "t_tarifa_servicio_groups", "t_presupuestos"
+  add_foreign_key "t_tarifa_servicios", "t_presupuestos"
   add_foreign_key "t_tarifas_periodos", "t_periodos"
   add_foreign_key "t_tarifas_periodos", "t_tarifas"
   add_foreign_key "t_tipo_clientes", "t_tarifas"

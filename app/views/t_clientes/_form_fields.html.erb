@@ -1,9 +1,9 @@
 <%= fields_for registro do |form| %>
 <div class="form-group row">
-  <div class="col-sm-2 col-form-label opcional-prospectos">
+  <div class="col-sm-2 col-form-label opcional-prospectos opcional-persona-natural">
     <%= form.label :codigo, 'Código SERI', class: "text-right" %>
   </div>
-  <div class="col-sm-4 input-value opcional-prospectos">
+  <div class="col-sm-4 input-value opcional-prospectos opcional-persona-natural">
     <% if editable %>
     <%= form.text_field :codigo, autofocus: true, autocomplete: "codigo", class: "form-control" %>
     <% else %>

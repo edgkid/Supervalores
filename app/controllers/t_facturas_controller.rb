@@ -67,6 +67,10 @@ class TFacturasController < ApplicationController
 
   def update
     if @t_factura.update(t_factura_params)
+      params[:services_to_destroy].each do |t_tarifa_servicio_id|
+        @t_factura.t_factura_detalles.find_by(t_tarifa_servicio_id: t_tarifa_servicio_id).try(:destroy)
+      end if !params[:services_to_destroy].blank?
+      @t_factura.t_recargo_ids - params[:surcharges_to_destroy].map {|id| id.to_i} if !params[:surcharges_to_destroy].blank?
       redirect_to t_facturas_path
     else
       @notice = @t_factura.errors
@@ -195,7 +199,10 @@ class TFacturasController < ApplicationController
     @do_not_use_plain_select2 = true
     @no_cache = true
 
-    @attributes_to_display = [:detalle, :monto]
+    @attributes_to_display = [
+      :id, :fecha_notificacion, :fecha_vencimiento, :fecha_pago, :identificacion,
+      :razon_social, :tipo_cliente, :detalle, :monto
+    ]
 
     respond_to do |format|
       format.html
@@ -214,9 +221,9 @@ class TFacturasController < ApplicationController
     @no_cache = true
 
     @attributes_to_display = [
-      :enero, :febrero, :marzo, :abril, :mayo, :junio,
-      :julio, :agosto, :septiembre, :octubre, :noviembre, :diciembre,
-      :total
+      :codigo, :anio_pago, :pago_enero, :pago_febrero, :pago_marzo,
+      :pago_abril, :pago_mayo, :pago_junio, :pago_julio, :pago_agosto,
+      :pago_septiembre, :pago_octubre, :pago_noviembre, :pago_diciembre, :total
     ]
 
     respond_to do |format|
@@ -265,6 +272,47 @@ class TFacturasController < ApplicationController
       total: total
     }
     render json: results
+  end
+
+  def informe_presupuestario
+    @usar_dataTables = true
+    # @useDataTableFooter = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [:codigo, :descripcion, :pago_pendiente]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformePresupuestarioDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
+  def informe_por_tipos_de_ingreso
+    @usar_dataTables = true
+    # @useDataTableFooter = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :t_factura_id, :t_recibo_id, :fecha_pago, :codigo,
+      :cliente, :metodo_pago, :estado, :importe
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformePorTiposDeIngresoDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
   end
 
   private
