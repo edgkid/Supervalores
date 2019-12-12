@@ -14,4 +14,7 @@
 #
 
 class TNotaCredito < ApplicationRecord
+	belongs_to :t_cliente, optional: true
+	has_one :t_recibo
+	
 end

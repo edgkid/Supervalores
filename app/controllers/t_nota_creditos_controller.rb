@@ -4,7 +4,30 @@ class TNotaCreditosController < ApplicationController
   # GET /t_nota_creditos
   # GET /t_nota_creditos.json
   def index
-    @t_nota_creditos = TNotaCredito.all
+
+    @usar_dataTables = true
+    @attributes_to_display = [
+      :id, :t_cliente, :t_recibo, :monto]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: TNotaCreditoDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display,
+          automatica: params[:automatica]
+        }),
+        view_context: view_context)
+      }
+    end
+
+    #  id               :bigint           not null, primary key
+#  t_cliente_id     :integer
+#  t_recibo_id |     :integer
+#  monto            :float
+#  usada            :boolean
+#  factura_redimida :integer
+#  descripcion      :string
+    #@t_nota_creditos = TNotaCredito.all
   end
 
   # GET /t_nota_creditos/1
