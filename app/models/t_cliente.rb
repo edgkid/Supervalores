@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: t_clientes
+#
+#  id           :bigint           not null, primary key
+#  codigo       :string
+#  t_estatus_id :integer          not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  prospecto_at :date
+#  persona_id   :bigint           not null
+#  persona_type :string           not null
+#
+
 class TCliente < ApplicationRecord
   belongs_to :persona, polymorphic: true
   # belongs_to :t_tipo_cliente
@@ -22,8 +36,8 @@ class TCliente < ApplicationRecord
 
   def no_es_prospecto
     if !es_prospecto
-      on_assert_add_error codigo == nil || codigo == '', :codigo, "|El Código SERI no puede estar vacío."
-      on_assert_add_error (codigo =~ /([A-Za-z0-9\-]+)/) == nil, :codigo, "|El Código SERI solo puede tener Letras, Números y Guiones(-)."
+      on_assert_add_error tipo_persona_id == 1 && (codigo == nil || codigo == ''), :codigo, "|El Código SERI no puede estar vacío."
+      on_assert_add_error tipo_persona_id == 1 && (codigo =~ /([A-Za-z0-9\-]+)/) == nil, :codigo, "|El Código SERI solo puede tener Letras, Números y Guiones(-)."
     end
   end
 
@@ -60,7 +74,7 @@ class TCliente < ApplicationRecord
   
   def razon_social
     if persona.is_a?(TPersona)
-      return "#{persona.nombre}, #{persona.apellido}"
+      return "#{persona.nombre} #{persona.apellido}"
     elsif persona.is_a?(TEmpresa) || persona.is_a?(TOtro)
       return persona.razon_social
     else

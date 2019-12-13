@@ -1,0 +1,24 @@
+<% case periodo %>
+<% when nil %>
+  Seleccione un periodo
+<% when 'sin_filtro' %>
+  Sin Filtro
+<% when 'diario' %>
+  <input class="datepicker" id="day" type="text" name="day" placeholder="Seleccione el día" readonly>
+<% when 'semanal' %>
+  <div class="input-daterange input-group" id="datepicker">
+    <input type="text" class="form-control-sm form-control" id="start" name="start" value="<%= Date.today.strftime('%d/%m/%Y') %>" readonly>
+    <span class="input-group-addon">al</span>
+    <input type="text" class="form-control-sm form-control" id="end" name="end" value="<%= (Date.today + 6.days).strftime('%d/%m/%Y') %>" readonly>
+  </div>
+<% when 'mensual' %>
+  <input class="datepicker month-view" id="month-year" type="text" name="month-year" placeholder="Seleccione el mes y año" readonly>
+<% when 'bimestral'%>
+  <input class="datepicker month-view" id="bimonthly" type="text" name="bimonthly" placeholder="Seleccione el mes y año" readonly>
+<% when 'trimestral'%>
+  <input class="datepicker month-view" id="quarterly" type="text" name="quarterly" placeholder="Seleccione el mes y año" readonly>
+<% when 'semestral'%>
+  <input class="datepicker month-view" id="biannual" type="text" name="biannual" placeholder="Seleccione el mes y año" readonly>
+<% when 'anual' %>
+  <input class="datepicker" id="year" type="text" name="year" placeholder="Seleccione el año" readonly>
+<% end %>

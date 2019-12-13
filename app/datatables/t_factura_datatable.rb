@@ -5,13 +5,13 @@ class TFacturaDatatable < ApplicationDatatable
 
     @view_columns ||= {
       id: { source: "TFactura.id" },
-      t_cliente: { source: "razon_social" },
-      resolucion: { source: "resolucion" },
-      fecha_notificacion: { source: "TFactura.fecha_notificacion" },
+      t_cliente: { source: "razon_social", searchable: false },
+      resolucion: { source: "resolucion", searchable: false },
+      fecha_notificacion: { source: "TFactura.created_at" },
       fecha_vencimiento: { source: "TFactura.fecha_vencimiento" },
-      recargo: { source: "recargo" },
+      recargo: { source: "recargo", searchable: false },
       total_factura: { source: "TFactura.total_factura" },
-      pendiente_fact: { source: "t_recibo_id" }
+      pendiente_fact: { source: "t_recibo_id", searchable: false }
     }
   end
 
@@ -21,8 +21,8 @@ class TFacturaDatatable < ApplicationDatatable
         id: record.id,
         t_cliente: record[:razon_social],
         resolucion: record[:resolucion],
-        fecha_notificacion: record.fecha_notificacion,
-        fecha_vencimiento: record.fecha_vencimiento,
+        fecha_notificacion: record.created_at.strftime("%d/%m/%Y"),
+        fecha_vencimiento: record.fecha_vencimiento.strftime("%d/%m/%Y"),
         recargo: record[:recargo],
         total_factura: record.total_factura.truncate(2),
         pendiente_fact: TRecibo.find_by(id: record[:t_recibo_id]).try(:pago_pendiente) || record.total_factura.truncate(2),
@@ -36,7 +36,7 @@ class TFacturaDatatable < ApplicationDatatable
   def get_raw_records
     TFactura
       .select("
-        t_facturas.id, res.resolucion resolucion, t_facturas.fecha_notificacion,
+        t_facturas.id, t_facturas.created_at, res.resolucion resolucion, t_facturas.fecha_notificacion,
         t_facturas.fecha_vencimiento, COALESCE(rec.recargo_x_pagar, t_facturas.recargo) recargo,
         t_facturas.total_factura, COALESCE(e.razon_social, o.razon_social,
         CONCAT(p.nombre, ' ', p.apellido)) razon_social, MAX(rec.id) t_recibo_id")

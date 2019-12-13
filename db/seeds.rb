@@ -19,7 +19,8 @@ end
 print "Usuario común #{email} - #{pass}\n"
 
 TRol.create(nombre: "Administrador", descripcion:"Rol de usuario con acceso a todos los módulos del sistema", estatus: 1)
-
+# Backup de db
+#  pg_dump -Fc --no-acl --no-owner -h localhost -U postgres supervalores_development > ./data/supervalores_db.dump
 # Requisitos de migracion
 #  sudo -u postgres psql -U postgres -c 'CREATE DATABASE cxc';
 #  sudo -u postgres psql -U postgres cxc < data/cxc_db_export.pgsql
@@ -159,5 +160,8 @@ else
     end
   end
 end
-
 # Los delete, update e insert mediante SQL, agregarlos en /data/migracion.cxc.sql
+
+TTarifaServicio.group_by_budget_code(File.dirname(__FILE__) + "/../data/prospecto.csv")
+TTarifaServicio.group_by_budget_code(File.dirname(__FILE__) + "/../data/regulado.csv")
+

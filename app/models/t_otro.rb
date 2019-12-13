@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: t_otros
+#
+#  id                :bigint           not null, primary key
+#  identificacion    :string
+#  razon_social      :string
+#  telefono          :string
+#  email             :string
+#  t_tipo_persona_id :bigint
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+
 class TOtro < ApplicationRecord
   belongs_to :t_tipo_persona
   has_one :t_cliente, as: :persona

@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: t_tipo_cliente_tipos
+#
+#  id          :bigint           not null, primary key
+#  descripcion :string
+#  estatus     :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class TTipoClienteTipo < ApplicationRecord
   
   validates :descripcion, 

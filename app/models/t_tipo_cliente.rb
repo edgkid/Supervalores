@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: t_tipo_clientes
+#
+#  id                     :bigint           not null, primary key
+#  codigo                 :string           not null
+#  descripcion            :string           not null
+#  estatus                :integer          not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  t_tarifa_id            :bigint           not null
+#  t_tipo_cliente_tipo_id :bigint           not null
+#  t_periodo_id           :bigint
+#
+
 class TTipoCliente < ApplicationRecord
 	belongs_to :t_tarifa
 	belongs_to :t_periodo

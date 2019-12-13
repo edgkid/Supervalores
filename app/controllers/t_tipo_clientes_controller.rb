@@ -2,6 +2,47 @@ class TTipoClientesController < ApplicationController
   before_action :seleccionar_tipo_cliente, only: [:show, :edit, :update, :destroy]
   load_and_authorize_resource
 
+  def informe
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true
+    @attributes_to_display = [
+      :tipo_cliente, :anio_pago, :pago_enero, :pago_febrero, :pago_marzo,
+      :pago_abril, :pago_mayo, :pago_junio, :pago_julio, :pago_agosto,
+      :pago_septiembre, :pago_octubre, :pago_noviembre, :pago_diciembre, :total
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformeTTipoClienteDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
+  def clients_index
+    @t_tipo_cliente = TTipoCliente.find(params[:id])
+    @usar_dataTables = true
+    @do_not_use_plain_select2 = true
+    @attributes_to_display = [
+      :identificacion, :razon_social, :resolucion, :fecha_notificacion,
+      :fecha_vencimiento, :recargo, :total_factura
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: InformeTClienteDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display,
+          t_tipo_cliente_id: @t_tipo_cliente.id
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
   def index
     @usar_dataTables = true
     @attributes_to_display = [

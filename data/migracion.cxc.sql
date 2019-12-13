@@ -12,6 +12,7 @@ CREATE MATERIALIZED VIEW cxc_t_catalogo_cuentas_sub_old AS SELECT dt.* FROM dbli
 CREATE MATERIALIZED VIEW cxc_t_categoria AS SELECT dt.* FROM dblink('cxc_server', 'SELECT "idt_categoria", "descripcion", "formulario", "estatus" FROM "public"."t_categoria"') as dt( "idt_categoria" int4, "descripcion" varchar(50), "formulario" varchar(25), "estatus" int4);
 CREATE MATERIALIZED VIEW cxc_t_cliente_x_tarifa AS SELECT dt.* FROM dblink('cxc_server', 'SELECT "idt_cliente_x_tarifa", "idt_cliente", "idt_periodo", "idt_tarifa", "monto", "fecha", "fecha_registro", "hora_registro", "estatus" FROM "public"."t_cliente_x_tarifa"') as dt( "idt_cliente_x_tarifa" int4, "idt_cliente" int4, "idt_periodo" int4, "idt_tarifa" int4, "monto" numeric(16,2),"fecha" date, "fecha_registro" date, "hora_registro" time(6), "estatus" int4);
 CREATE MATERIALIZED VIEW cxc_t_clientes AS SELECT dt.* FROM dblink('cxc_server', 'SELECT "idt_clientes", "idt_tipo_cliente", "idt_tipo_emision", "cuenta_venta", "idt_cliente_padre", "idt_catalogo_cuentas", "codigo", "prospecto", "prospecto_date_in", "prospecto_date_out", "resolucion", "nombre", "apellido", "cedula", "empresa", "cargo", "direccion_empresa", "telefono", "fax", "email", "web", "num_licencia", "fecha_resolucion", "fecha_notificacion", "fecha_vencimiento", "fecha_vencimiento_fact", "monto_emision1", "idt_usuario", "fecha_registro", "hora_registro", "estatus" FROM "public"."t_clientes"') as dt( "idt_clientes" int4, "idt_tipo_cliente" int4, "idt_tipo_emision" int4, "cuenta_venta" int4, "idt_cliente_padre" int4, "idt_catalogo_cuentas" int4, "codigo" varchar(45),"prospecto" int4,"prospecto_date_in" date, "prospecto_date_out" date, "resolucion" varchar(100), "nombre" varchar(200), "apellido" varchar(50), "cedula" varchar(25), "empresa" varchar(60), "cargo" varchar(30), "direccion_empresa" varchar(75), "telefono" varchar(15), "fax" varchar(15), "email" varchar(200), "web" varchar(65), "num_licencia" int4,"fecha_resolucion" date,"fecha_notificacion" date, "fecha_vencimiento" date, "fecha_vencimiento_fact" date, "monto_emision1" numeric(16,2), "idt_usuario" int4, "fecha_registro" date, "hora_registro" time(6), "estatus" int4);
+CREATE MATERIALIZED VIEW cxc_t_cliente_matsh AS SELECT dt.* FROM dblink('cxc_server', 'SELECT "idt_clientes", "ID_CASA_VALOR" FROM "public"."t_cliente_matsh"') as dt( "idt_clientes" int4, "ID_CASA_VALOR" int4);
 CREATE MATERIALIZED VIEW cxc_t_clientes_padre AS SELECT dt.* FROM dblink('cxc_server', 'SELECT "idt_clientes_padre", "idt_tipo_cliente", "tipo_persona", "codigo", "razon_social", "tipo_valor", "sector_economico", "estatus" FROM "public"."t_clientes_padre"') as dt( "idt_clientes_padre" int4, "idt_tipo_cliente" int4, "tipo_persona" int4, "codigo" varchar(25), "razon_social" varchar(150), "tipo_valor" varchar(100), "sector_economico" varchar(25), "estatus" int4);
 CREATE MATERIALIZED VIEW cxc_t_cuenta_financiera AS SELECT dt.* FROM dblink('cxc_server', 'SELECT "idt_cuenta_financiera", "idt_tarifa_servicios_group", "idt_presupuesto", "codigo_presupuesto", "codigo_financiero", "descripcion_financiera", "descripcion_presupuestaria" FROM "public"."t_cuenta_financiera"') as dt( "idt_cuenta_financiera" int4, "idt_tarifa_servicios_group" int4, "idt_presupuesto" int4, "codigo_presupuesto" varchar(6), "codigo_financiero" varchar(8), "descripcion_financiera" varchar(100), "descripcion_presupuestaria" varchar(100));
 CREATE MATERIALIZED VIEW cxc_t_email_masivos AS SELECT dt.* FROM dblink('cxc_server', 'SELECT "idt_email_masivos", "idt_clientes", "idt_facturas", "idt_usuario", "email", "detalle_envio", "fecha_ejecucion" FROM "public"."t_email_masivos"') as dt( "idt_email_masivos" int4, "idt_clientes" int4, "idt_facturas" int4, "idt_usuario" int4, "email" varchar(200), "detalle_envio" varchar(250), "fecha_ejecucion" timestamp(6));
@@ -88,17 +89,30 @@ SELECT codigo, descripcion, t_tipo_cliente_tipo_id, estatus, created_at, updated
 FROM tipo_clientes_normalizados;
 
 CREATE MATERIALIZED VIEW estatuses_normalizados AS
-SELECT 1 estatus, 0 para, 'Inactivo' descripcion, '#FF0000FF' color, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id
-UNION ALL SELECT 1, 0, 'Disponible', '#00FF00FF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
-UNION ALL SELECT 1, 2, 'Con Factura', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
-UNION ALL SELECT 1, 2, 'Con Recibo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
-UNION ALL SELECT 1, 2, 'Pago Pendiente', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
-UNION ALL SELECT 1, 2, 'Paz y Salvo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
-UNION ALL (SELECT 1, 1, descripcion, '#00000000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, id FROM cxc_t_estatus_fac);
+SELECT
+	row_number() OVER (ORDER BY 1, 2) AS prediction_id
+	, dt.estatus
+	, dt.para
+	, dt.descripcion
+	, dt.color
+	, dt.created_at
+	, dt.updated_at
+	, dt.prev_id
+FROM (
+	SELECT 1 estatus, 0 para, 'Inactivo' descripcion, '#FF0000FF' color, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id
+	UNION ALL SELECT 1, 0, 'Disponible', '#00FF00FF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
+	UNION ALL SELECT 1, 2, 'Con Factura', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
+	UNION ALL SELECT 1, 2, 'Con Recibo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
+	UNION ALL SELECT 1, 2, 'Pago Pendiente', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
+	UNION ALL SELECT 1, 2, 'Paz y Salvo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
+	UNION ALL (SELECT 1, 1, descripcion, '#00000000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, id FROM cxc_t_estatus_fac)
+) dt;
 
 INSERT INTO t_estatuses (estatus, para, descripcion, color, created_at, updated_at)
 SELECT estatus, para, descripcion, color, created_at, updated_at
-FROM estatuses_normalizados;
+FROM estatuses_normalizados
+GROUP BY prediction_id, estatus, para, descripcion, color, created_at, updated_at
+ORDER BY prediction_id;
 
 CREATE MATERIALIZED VIEW tipo_personas_normalizados AS
 SELECT descripcion, estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
@@ -143,132 +157,220 @@ SELECT descripcion, estatus, created_at, updated_at
 FROM tipo_emisions_normalizados;
 
 CREATE MATERIALIZED VIEW periodos_normalizados AS
-SELECT 'Desconocido' descripcion, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, '0' rango_dias, 1 dia_tope, 1 mes_tope, 0 prev_id
-UNION ALL (select descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, rango_dias, dia_tope, mes_tope, idt_periodo
-from cxc_t_periodo
-ORDER BY 1);
+SELECT 
+	row_number() OVER (ORDER BY dt.prev_id) prediction_id
+	, dt.descripcion
+	, dt.estatus
+	, dt.created_at
+	, dt.updated_at
+	, dt.rango_dias
+	, dt.dia_tope
+	, dt.mes_tope
+	, dt.prev_id
+FROM (
+	SELECT 'Desconocido' descripcion, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, '0' rango_dias, 1 dia_tope, 1 mes_tope, 0 prev_id
+	UNION ALL (select descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, rango_dias, dia_tope, mes_tope, idt_periodo
+		from cxc_t_periodo
+		ORDER BY 1)
+) dt;
 
 INSERT INTO t_periodos (descripcion, estatus, created_at, updated_at, rango_dias, dia_tope, mes_tope)
 SELECT descripcion, estatus, created_at, updated_at, rango_dias, dia_tope, mes_tope
 FROM periodos_normalizados;
 
 CREATE MATERIALIZED VIEW recargos_normalizados AS
-SELECT 'Desconocido' descripcion, 0 tasa, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
-UNION ALL (select descripcion, tasa, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-from cxc_t_recargo
-ORDER BY 1);
+SELECT 
+	row_number() OVER (ORDER BY dt.prev_id) prediction_id
+	, dt.descripcion
+	, dt.tasa
+	, dt.estatus
+	, dt.created_at
+	, dt.updated_at	
+	, dt.prev_id
+FROM (
+	SELECT 'Desconocido' descripcion, 0 tasa, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id
+	UNION ALL (select descripcion, tasa, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, idt_recargo prev_id
+	from cxc_t_recargo
+	ORDER BY 1)
+) dt;
 
 INSERT INTO t_recargos (descripcion, tasa, estatus, created_at, updated_at, t_periodo_id)
 SELECT descripcion, tasa, estatus, created_at, updated_at, 2
 FROM recargos_normalizados;
 
-CREATE MATERIALIZED VIEW empresas_normalizadas AS
-SELECT 
-  rw.razon_social
-, rw.sector_economico
-, rw.tipo_valor
-, rw.telefono
-, rw.email
-, rw.direccion
-, rw.fax
-, rw.web
-, rw.sector_economico_id
-, rw.tipo_valor_id
-, rw.prev_id
-FROM (SELECT 
-    UPPER(dt.nombre) || ' ' || UPPER(dt.apellido) razon_social
-	, UPPER(TRIM(dt.sector_economico)) sector_economico
-	, UPPER(TRIM(dt.tipo_valor)) tipo_valor
-	, COALESCE(dt.telefono, '0') telefono
-	, COALESCE(dt.email, 'desconocido@svm.com') email
-	, COALESCE(dt.direccion_empresa, 'Desconocida') direccion
-	, COALESCE(dt.fax, null) fax
-	, COALESCE(dt.web, null) web
-	, COALESCE(tetv.id, 1) tipo_valor_id
-	, COALESCE(tese.id, 1) sector_economico_id
-	, dt.prev_id
-FROM (
-  SELECT
-	  CASE 
-			WHEN TRIM(ctcs.nombre) = '' OR TRIM(ctcs.nombre) = '0' THEN '' 
-			ELSE TRIM(ctcs.nombre) 
-		END nombre
-	, CASE 
-			WHEN TRIM(ctcs.apellido) = '' OR TRIM(ctcs.apellido) = '0' THEN '' 
-			ELSE TRIM(ctcs.apellido) 
-		END apellido
-  , CASE 
-			WHEN TRIM(ctcs.telefono) = '' OR TRIM(ctcs.telefono) = '0' THEN '0' 
-			ELSE TRIM(ctcs.telefono) 
-		END telefono
-  , CASE 
-			WHEN TRIM(ctcs.email) = '' OR TRIM(ctcs.email) = '0' THEN 'desconocido@svm.com' 
-			ELSE TRIM(ctcs.email) 
-		END email
-	, CASE 
-			WHEN TRIM(ctcs.direccion_empresa) = '' OR TRIM(ctcs.direccion_empresa) = '0' THEN 'Desconocida' 
-			ELSE TRIM(ctcs.direccion_empresa) 
-		END direccion_empresa
-	, CASE 
-			WHEN TRIM(ctcp.sector_economico) = '' OR TRIM(ctcp.sector_economico) = '0' THEN NULL 
-			ELSE TRIM(ctcp.sector_economico) 
-		END sector_economico
-	, CASE 
-			WHEN TRIM(ctcp.tipo_valor) = '' OR TRIM(ctcp.tipo_valor) = '0' THEN NULL 
-			ELSE TRIM(ctcp.tipo_valor) 
-		END tipo_valor
-	, ctcs.fax as fax
-	, ctcs.web as web
-	, ctcs.idt_clientes as prev_id
-	FROM cxc_t_clientes ctcs
-	LEFT JOIN cxc_t_clientes_padre ctcp ON ctcp.idt_clientes_padre = ctcs.idt_cliente_padre
-	WHERE (
-		   ctcs.nombre ~ '(INC\.{0,1}|Inc\.|S\.\s{0,1}A\.{0,1}|Corp|[0-9]|S\.R\.L\.)' 
-		OR ctcs.apellido ~ '(CORP\.{0,1}|S\.A\.{0,1})'
-	) AND ctcs.idt_cliente_padre <> 360
-		AND ctcp.tipo_persona = 1
-) dt
-LEFT JOIN t_empresa_sector_economicos tese on upper(dt.sector_economico) = tese.descripcion
-LEFT JOIN t_empresa_tipo_valors tetv on upper(dt.tipo_valor) = tetv.descripcion
-) rw;
 
-INSERT INTO t_empresas (rif, razon_social, direccion_empresa, fax, web, telefono, email, t_empresa_tipo_valor_id, t_empresa_sector_economico_id)
+CREATE MATERIALIZED VIEW empresas_normalizadas AS
 SELECT
-  'RUC'|| (
-		CASE 
-			WHEN (rw.row_num) < 10 THEN '00000'
-			WHEN (rw.row_num) < 100 THEN '0000'
-			WHEN (rw.row_num) < 1000 THEN '000'
-			WHEN (rw.row_num) < 10000 THEN '00'
-			WHEN (rw.row_num) < 100000 THEN '0'			
-			ELSE '' 
-	END ) || rw.row_num AS rif	
-	, rw.razon_social
-	, trim(replace(rw.direccion, 'Desconocida,', '')) direccion
-	, trim(replace(rw.fax, '0, ', '')) fax
-	, trim(replace(rw.web, '0, ', '')) web
-	, trim(replace(rw.telefono, '0, ', '')) telefono
-	, trim(replace(rw.email, 'desconocido@svm.com,', '')) email
-	, tipo_valor_id[1]
-	, sector_economico_id[1]
+	s.prev_client_id, pp.* 
 FROM (
-SELECT	
-		row_number() OVER (ORDER BY ens.razon_social) AS row_num
-		, ens.razon_social
-		, string_agg(ens.direccion, ', ') direccion
-		, string_agg(ens.fax, ', ') as fax
-		, string_agg(ens.web, ', ') as web
-		, string_agg(ens.telefono, ', ') as telefono
-		, string_agg(ens.email, ', ') as email
-		, array_agg(ens.tipo_valor_id) as tipo_valor_id
-		, array_agg(ens.sector_economico_id) as sector_economico_id
-FROM empresas_normalizadas ens
-GROUP BY 2
-) rw;
+	SELECT
+		row_num AS prediction_id,
+		rw.codigo,
+		rw.rif,
+		rw.dv,
+		rw.razon_social,
+		TRIM (REPLACE ( rw.direccion, 'Desconocida,', '' )) direccion,
+		TRIM (REPLACE ( rw.fax, '0, ', '' )) fax,
+		TRIM (REPLACE ( rw.web, '0, ', '' )) web,
+		TRIM (REPLACE ( rw.telefono, '0, ', '' )) telefono,
+		TRIM (REPLACE ( rw.email, 'desconocido@svm.com,', '' )) email,
+		tipo_valor_id [ 1 ] tipo_valor_id,
+		sector_economico_id [ 1 ] sector_economico_id,
+		fecha_registro [ 1 ] fecha_registro,
+		rw.prev_ids 
+	FROM (
+		SELECT 
+			ROW_NUMBER() OVER ( ORDER BY ens.razon_social ) AS row_num,
+			ens.razon_social,
+			string_agg (DISTINCT ens.codigo, '|' ) AS codigo,
+			string_agg (DISTINCT ens.rif, '|' ) AS rif,
+			string_agg (DISTINCT CAST ( ens.dv AS VARCHAR ), '|' ) AS dv,
+			string_agg (DISTINCT CAST ( ens.prev_id AS VARCHAR ), '|' ) AS prev_ids,
+			string_agg (DISTINCT ens.resolucion, '|' ) AS resoluciones,
+			string_agg (DISTINCT ens.direccion, ', ' ) direccion,
+			string_agg (DISTINCT ens.fax, ', ' ) AS fax,
+			string_agg (DISTINCT ens.web, ', ' ) AS web,
+			string_agg (DISTINCT ens.telefono, ', ' ) AS telefono,
+			string_agg (DISTINCT ens.email, ', ' ) AS email,
+			ARRAY_AGG (DISTINCT ens.tipo_valor_id ) AS tipo_valor_id,
+			ARRAY_AGG (DISTINCT ens.sector_economico_id ) AS sector_economico_id,
+			ARRAY_AGG (DISTINCT ens.fecha_registro ) AS fecha_registro 			
+		FROM (
+			SELECT
+				dt.codigo,
+				dt.rif,
+				CASE
+					WHEN dt.count_res = 1 THEN CAST(dt.res[1] as integer)
+					ELSE 0
+				END dv,
+				CASE
+					WHEN UPPER ( dt.apellido ) ~ '(D[.]*V[.]*)' THEN UPPER ( dt.nombre )
+					ELSE UPPER( dt.nombre ) || ' ' || UPPER ( dt.apellido )
+				END razon_social,
+				UPPER (TRIM ( dt.sector_economico )) sector_economico,
+				UPPER (TRIM ( dt.tipo_valor )) tipo_valor,
+				COALESCE ( dt.telefono, '0' ) telefono,
+				COALESCE ( dt.email, 'desconocido@svm.com' ) email,
+				COALESCE ( dt.direccion_empresa, 'Desconocida' ) direccion,
+				COALESCE ( dt.fax, NULL ) fax,
+				COALESCE ( dt.web, NULL ) web,
+				COALESCE ( tetv.ID, 1 ) tipo_valor_id,
+				COALESCE ( tese.ID, 1 ) sector_economico_id,
+				dt.prev_id,
+				dt.resolucion,
+				dt.fecha_registro
+			FROM (
+				SELECT
+					ctcs.codigo,
+					CASE WHEN TRIM
+							( ctcs.cedula ) = '' 
+							OR TRIM ( ctcs.cedula ) = '0'
+							OR TRIM ( ctcs.cedula ) = '000' THEN
+								'NF'||ctcs.idt_clientes ELSE TRIM ( ctcs.cedula ) 
+							END rif,
+					CASE WHEN TRIM
+							( ctcs.nombre ) = '' 
+							OR TRIM ( ctcs.nombre ) = '0' THEN
+								'' ELSE TRIM ( ctcs.nombre ) 
+							END nombre,
+					CASE WHEN TRIM ( ctcs.apellido ) = '' 
+							OR TRIM ( ctcs.apellido ) = '0' THEN ''
+						ELSE TRIM ( ctcs.apellido ) 
+						END apellido,
+					CASE WHEN TRIM ( ctcs.telefono ) = '' 
+						OR TRIM ( ctcs.telefono ) = '0' THEN
+						'0' ELSE TRIM ( ctcs.telefono ) 
+						END telefono,
+					CASE WHEN TRIM ( ctcs.email ) = '' 
+						OR TRIM ( ctcs.email ) = '0' THEN
+						'desconocido@svm.com' ELSE TRIM ( ctcs.email ) 
+						END email,
+					CASE WHEN TRIM ( ctcs.direccion_empresa ) = '' 
+						OR TRIM ( ctcs.direccion_empresa ) = '0' THEN
+						'Desconocida' ELSE TRIM ( ctcs.direccion_empresa ) 
+						END direccion_empresa,
+					CASE WHEN TRIM ( ctcp.sector_economico ) = '' 
+						OR TRIM ( ctcp.sector_economico ) = '0' THEN
+						NULL ELSE TRIM ( ctcp.sector_economico ) 
+						END sector_economico,
+					CASE WHEN TRIM ( ctcp.tipo_valor ) = '' 
+						OR TRIM ( ctcp.tipo_valor ) = '0' THEN
+						NULL ELSE TRIM ( ctcp.tipo_valor ) 
+						END tipo_valor,
+					ctcs.fax AS fax,
+					ctcs.web AS web,
+					ctcs.fecha_registro AS fecha_registro,
+					ctcs.idt_clientes AS prev_id
+					, ctcs.resolucion
+					, NOT ( ctcs.idt_tipo_cliente IN ( 1, 2, 3, 13, 16, 21 ) ) es_empresa
+					, res
+					, array_length(res, 1) count_res
+				FROM cxc_t_clientes ctcs
+				LEFT JOIN cxc_t_clientes_padre ctcp ON ctcp.idt_clientes_padre = ctcs.idt_cliente_padre 
+				LEFT JOIN regexp_matches(ctcs.apellido, '([0-9]+)') res ON 1 = 1
+			) dt			
+			LEFT JOIN t_empresa_sector_economicos tese ON UPPER ( dt.sector_economico ) = tese.descripcion
+			LEFT JOIN t_empresa_tipo_valors tetv ON UPPER ( dt.tipo_valor ) = tetv.descripcion 
+		WHERE
+			dt.es_empresa = TRUE 
+		) ens 
+		GROUP BY 2 
+		) rw 
+	) pp,
+	UNNEST (string_to_array( pp.prev_ids, '|' )) s ( prev_client_id );
+
+INSERT INTO t_empresas (rif, dv, razon_social, direccion_empresa, fax, web, telefono, email, t_empresa_tipo_valor_id, t_empresa_sector_economico_id)
+SELECT rif, dv, razon_social, direccion, fax, web, telefono, email, tipo_valor_id, sector_economico_id
+FROM empresas_normalizadas
+GROUP BY prediction_id, rif, dv, razon_social, direccion, fax, web, telefono, email, tipo_valor_id, sector_economico_id
+ORDER BY prediction_id;
 
 CREATE MATERIALIZED VIEW personas_normalizados AS
-SELECT 
-	CASE
+SELECT pp.*, s.prev_client_id
+FROM (
+SELECT
+	rww.prediction_id,
+	rww.codigo,
+	rww.cedula,
+	rww.nombre,
+	rww.apellido,	
+	cast(rww.empresa as BIGINT) t_empresa_id,
+	rww.cargo,
+	rww.telefono,
+	rww.email,
+	rww.direccion,
+	rww.fecha_registro,
+	rww.prev_ids
+FROM (
+	SELECT 
+		dtt.prediction_id,
+		dtt.prev_ids,
+		dtt.nombre,
+		dtt.codigo,
+		dtt.cedula,
+		dtt.apellido,		
+		null empresa,
+		dtt.cargo,
+		trim(replace(dtt.telefono, '0,', '')) telefono,
+		trim(replace(dtt.email, 'desconocido@svm.com,', '')) email,
+		trim(replace(dtt.direccion, 'Desconocida,', '')) direccion,
+		fecha_registro [ 1 ] fecha_registro
+	FROM (
+SELECT
+	row_number() OVER (ORDER BY pns.nombre, pns.apellido) AS prediction_id
+	, pns.nombre	
+	, pns.apellido
+	, string_agg(distinct pns.codigo, ', ') as codigo
+	, string_agg(distinct pns.cedula, ', ') as cedula
+	, string_agg(distinct pns.cargo, ', ') as cargo
+	, string_agg(distinct pns.telefono, ', ') as telefono
+	, string_agg(distinct pns.email, ', ') as email
+	, string_agg(distinct pns.direccion, ', ') as direccion
+	, ARRAY_AGG(distinct pns.fecha_registro) as fecha_registro
+	, string_agg(distinct CAST(pns.prev_id as VARCHAR), '|') as prev_ids
+FROM (
+SELECT
+	 CASE
 		WHEN rw.apellido IS NOT NULL THEN rw.nombre
 		WHEN rw.count_res = 3 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[3]
 		WHEN rw.count_res = 1 
@@ -306,198 +408,224 @@ SELECT
 		WHEN rw.count_res = 8 THEN rw.res[5] || ' ' || rw.res[6] || ' ' || rw.res[7] || ' ' || rw.res[8]
 		ELSE null 
 	END apellido
+, rw.cedula
+, rw.codigo
 , rw.cargo
 , rw.telefono
 , rw.email
 , rw.direccion
+, rw.fecha_registro
 , rw.prev_id
-FROM (SELECT 
-  row_number() OVER (ORDER BY dt.nombre) AS row_num
-	, dt.nombre
-	, REGEXP_REPLACE(dt.apellido, '\s*-.+', '') as apellido
-	, UPPER(TRIM(dt.cargo)) cargo
-	, COALESCE(dt.telefono, '0') telefono
-	, COALESCE(dt.email, 'desconocido@svm.com') email
-	, COALESCE(dt.direccion_empresa, 'Desconocida') direccion
-	, res
-	, array_length(res, 1) count_res
-	, dt.prev_id
-FROM (
-  SELECT 
-	  CASE 
-			WHEN TRIM(ctcs.nombre) = '' OR TRIM(ctcs.nombre) = '0' THEN NULL 
-			ELSE UPPER(TRIM(REPLACE(ctcs.nombre, '-', ' '))) 
-		END nombre		
-	, CASE 
-			WHEN TRIM(ctcs.apellido) = '' OR TRIM(ctcs.apellido) = '0' THEN NULL 
-			ELSE UPPER(TRIM(ctcs.apellido)) 
-		END apellido
-	, CASE 
-			WHEN TRIM(ctcs.telefono) = '' OR TRIM(ctcs.telefono) = '0' THEN NULL 
-			ELSE TRIM(ctcs.telefono) 
-		END telefono
-  , CASE 
-			WHEN TRIM(ctcs.email) = '' OR TRIM(ctcs.email) = '0' THEN NULL ELSE TRIM(ctcs.email) END email
-	, CASE 
-			WHEN TRIM(ctcs.direccion_empresa) = '' OR TRIM(ctcs.direccion_empresa) = '0' THEN NULL 
-			ELSE TRIM(ctcs.direccion_empresa) 
-		END direccion_empresa
-	, CASE 
-			WHEN array_length(crg, 1) = 2 THEN crg[2] 
-			WHEN array_length(crg, 1) = 3 THEN crg[2] || '' || crg[3] 
-			WHEN array_length(crg, 1) = 4 THEN crg[2] || '' || crg[3]  || '' || crg[4] 
-			WHEN TRIM(ctcs.cargo) = '' OR TRIM(ctcs.cargo) = '0' THEN NULL 
-			ELSE TRIM(ctcs.cargo)
-		END cargo
-	, ctcs.idt_clientes as prev_id
-	FROM cxc_t_clientes ctcs
-	LEFT JOIN regexp_split_to_array(trim(ctcs.apellido), '(?:[-]+)') crg ON 1 = 1
-	WHERE NOT (ctcs.nombre ~ '(INC\.{0,1}|Inc\.|S\.\s{0,1}A\.{0,1}|Corp|[0-9]|\*|S\.R\.L\.)' OR ctcs.apellido ~ '(CORP\.{0,1}|S\.A\.{0,1})') AND ctcs.idt_cliente_padre = 360
-) dt
-LEFT JOIN regexp_split_to_array(trim(dt.nombre, ' .'), '(?:[\s,\.]+)') res ON 1 = 1
-) rw;
-
-INSERT INTO t_personas (cedula, nombre, apellido, t_empresa_id, cargo, telefono, email, direccion)
-SELECT
-	'CED'|| (
-		CASE 
-			WHEN (rw.row_num) < 10 THEN '00000'
-			WHEN (rw.row_num) < 100 THEN '0000'
-			WHEN (rw.row_num) < 1000 THEN '000'
-			WHEN (rw.row_num) < 10000 THEN '00'
-			WHEN (rw.row_num) < 100000 THEN '0'			
-			ELSE '' 
-		END) || rw.row_num AS cedula,
-	rw.nombre,
-	rw.apellido,	
-	cast(rw.empresa as BIGINT),
-	rw.cargo,
-	rw.telefono,
-	rw.email,
-	rw.direccion
-FROM (
-	SELECT 
-		row_number() OVER (ORDER BY dt.nombre) AS row_num,
-		dt.nombre,
-		dt.apellido,		
-		null empresa,
-		dt.cargo,
-		trim(replace(dt.telefono, '0,', '')) telefono,
-		trim(replace(dt.email, 'desconocido@svm.com,', '')) email,
-		trim(replace(dt.direccion, 'Desconocida,', '')) direccion
-	FROM (
-		SELECT
-			pns.nombre
-			, pns.apellido
-			, string_agg(pns.cargo, ', ') as cargo
-			, string_agg(pns.telefono, ', ') as telefono
-			, string_agg(pns.email, ', ') as email
-			, string_agg(pns.direccion, ', ') as direccion
-		FROM personas_normalizados pns
-		GROUP BY 1,2
-	) dt
-) rw;
-
-INSERT INTO t_clientes (codigo, t_estatus_id, created_at, updated_at, persona_id, persona_type)
-SELECT 
-	'CLI'||row_number() OVER (ORDER BY dt.status) AS codigo
-	, dt.status, dt.created_at, dt.updated_at, dt."id", dt."type"
-FROM (
-  SELECT 2 status, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, rw."id", 'TEmpresa' "type" FROM t_empresas rw
-	UNION ALL SELECT 2 status, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, rw."id", 'TPersona' "type" FROM t_personas rw
-)	dt;
-
-INSERT INTO t_tarifa_servicios (codigo, descripcion, nombre, clase, precio, estatus, created_at, updated_at)
-select ctts.codigo, ctts.descripcion, ctts.nombre, ctts.clase, ctts.precio, ctts.estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-from cxc_t_tarifa_servicios ctts;
-
-CREATE MATERIALIZED VIEW resoluciones_normalizadas AS
-SELECT
-	( CASE WHEN LENGTH(dt.code) = 1 THEN '00000'||dt.code
-		WHEN LENGTH(dt.code) = 2 THEN '0000'||dt.code
-		WHEN LENGTH(dt.code) = 3 THEN '000'||dt.code
-		WHEN LENGTH(dt.code) = 4 THEN '00'||dt.code
-		WHEN LENGTH(dt.code) = 5 THEN '0'||dt.code
-		ELSE dt.code
-		END ) code
-,	( CASE WHEN LENGTH(dt.year) = 1 THEN '200'||dt.year
-		WHEN LENGTH(dt.year) = 2 AND CAST(dt.year as int) < 20 THEN '20'||dt.year
-		WHEN LENGTH(dt.year) = 2 AND CAST(dt.year as int) >= 20 THEN '19'||dt.year
-		WHEN LENGTH(dt.year) = 3 THEN '2'||dt.year
-		ELSE dt.year
-		END ) "year"
-, dt.client_id		
-, dt.original
-, '' || dt.num_licencia num_licencia
-, COALESCE(dt.fecha_resolucion, CURRENT_DATE) fecha_resolucion
-, dt.tipo_client_id
 FROM (
 	SELECT
-		ctc.id client_id
-		, ctc.resolucion
-		, ctc.num_licencia
-		, ctc.fecha_resolucion
-		, ctc.original
-		, SUBSTRING (ctc.resolucion FROM 1 FOR POSITION('-' in ctc.resolucion)-1) as code
-		, SUBSTRING (ctc.resolucion FROM POSITION('-' in ctc.resolucion)+1 FOR LENGTH(ctc.resolucion)) as "year"
-		, ctc.tipo_client_id
+		dt.codigo
+		, dt.cedula
+		, dt.nombre
+		, REGEXP_REPLACE(dt.apellido, '\s*-.+', '') as apellido
+		, UPPER(TRIM(dt.cargo)) cargo
+		, COALESCE(dt.telefono, '0') telefono
+		, COALESCE(dt.email, 'desconocido@svm.com') email
+		, COALESCE(dt.direccion_empresa, 'Desconocida') direccion
+		, dt.fecha_registro
+		, res
+		, array_length(res, 1) count_res
+		, dt.prev_id
 	FROM (
 		SELECT 
-				cli.id				
-			, cli.resolucion as original
-			, cli.num_licencia
-			, COALESCE(
-						COALESCE(
-							COALESCE(
-								(SELECT res[1] from regexp_matches(trim(cli.resolucion), '(?:(?:SMV[\sNo\.]*)|(?:\s))*([0-9]{1,4}-[0-9]{1,4})(?:[\s\w\.]*)') res)
-							, (SELECT res[1]||'-'||res[2] from regexp_matches(trim(cli.resolucion), '([0-9]{1,4})\?([0-9]{1,4})') res))
-						, (SELECT res[1]||'-'||res[2] from regexp_matches(trim(cli.resolucion), '([0-9]{1,4})\s.+\s([0-9]{1,4})') res))
-				, cli.resolucion
-			) resolucion
-			, cli.fecha_resolucion
-			, ttcs.id tipo_client_id
+			ctcs.codigo
+		, CASE 
+				WHEN TRIM(ctcs.cedula) = '' OR TRIM(ctcs.cedula) = '0' THEN 'NF'||ctcs.idt_clientes
+				ELSE TRIM(ctcs.cedula) 
+			END cedula
+		, CASE 
+				WHEN TRIM(ctcs.nombre) = '' OR TRIM(ctcs.nombre) = '0' THEN NULL 
+				ELSE UPPER(TRIM(REPLACE(ctcs.nombre, '-', ' '))) 
+			END nombre		
+		, CASE 
+				WHEN TRIM(ctcs.apellido) = '' OR TRIM(ctcs.apellido) = '0' THEN NULL 
+				ELSE UPPER(TRIM(ctcs.apellido)) 
+			END apellido
+		, CASE 
+				WHEN TRIM(ctcs.telefono) = '' OR TRIM(ctcs.telefono) = '0' THEN NULL 
+				ELSE TRIM(ctcs.telefono) 
+			END telefono
+		, CASE 
+				WHEN TRIM(ctcs.email) = '' OR TRIM(ctcs.email) = '0' THEN NULL 
+				ELSE TRIM(ctcs.email) 
+			END email
+		, CASE 
+				WHEN TRIM(ctcs.direccion_empresa) = '' OR TRIM(ctcs.direccion_empresa) = '0' THEN NULL 
+				ELSE TRIM(ctcs.direccion_empresa) 
+			END direccion_empresa
+		, CASE 
+				WHEN array_length(crg, 1) = 2 THEN crg[2] 
+				WHEN array_length(crg, 1) = 3 THEN crg[2] || '' || crg[3] 
+				WHEN array_length(crg, 1) = 4 THEN crg[2] || '' || crg[3]  || '' || crg[4] 
+				WHEN TRIM(ctcs.cargo) = '' OR TRIM(ctcs.cargo) = '0' THEN NULL 
+				ELSE TRIM(ctcs.cargo)
+			END cargo
+		, ctcs.fecha_registro as fecha_registro
+		, ctcs.idt_clientes as prev_id
+		, NOT ( ctcs.idt_tipo_cliente IN ( 1, 2, 3, 13, 16, 21 ) ) es_empresa 
+		FROM cxc_t_clientes ctcs
+		LEFT JOIN regexp_split_to_array(trim(ctcs.apellido), '(?:[-]+)') crg ON 1 = 1
+	) dt
+	LEFT JOIN regexp_split_to_array(trim(dt.nombre, ' .'), '(?:[\s,\.]+)') res ON 1 = 1
+	WHERE
+		dt.es_empresa = FALSE 
+) rw
+		) pns
+GROUP BY 2, 3, pns.fecha_registro
+ORDER BY pns.fecha_registro asc
+) dtt
+) rww
+) pp
+, UNNEST (string_to_array( pp.prev_ids, '|' )) s ( prev_client_id );
+
+INSERT INTO t_personas (cedula, nombre, apellido, t_empresa_id, cargo, telefono, email, direccion)
+SELECT cedula, nombre, apellido, t_empresa_id, cargo, telefono, email, direccion
+FROM personas_normalizados
+GROUP BY prediction_id, cedula, nombre, apellido, t_empresa_id, cargo, telefono, email, direccion
+ORDER BY prediction_id;
+
+CREATE MATERIALIZED VIEW clientes_normalizados AS
+SELECT 
+	pp.*
+	, CAST(s.prev_client_id as INT) prev_client_id
+FROM (
+	SELECT 
+		row_number() OVER (ORDER BY dt.t_estatus_id) AS prediction_id
+		, dt.t_estatus_id
+		, dt.created_at
+		, dt.updated_at
+		, dt."id" persona_id
+		, dt.codigo
+		, dt."type" persona_type
+		, dt.client_ids
+	FROM (
+		SELECT 2 "t_estatus_id"
+		, rw.fecha_registro created_at
+		, rw.fecha_registro updated_at
+		, rw.prediction_id "id"
+		, rw.codigo
+		, 'TEmpresa' "type"
+		, rw.prev_ids "client_ids"
+		FROM empresas_normalizadas rw
+		GROUP BY rw.prediction_id, rw.codigo, rw.fecha_registro, rw.prev_ids
+		UNION ALL (
+			SELECT 2 "t_estatus_id"
+			, rw.fecha_registro created_at
+			, rw.fecha_registro updated_at
+			, rw.prediction_id "id"
+			, rw.codigo
+			, 'TPersona' "type"
+			, rw.prev_ids "client_ids"
+			FROM personas_normalizados rw
+			GROUP BY rw.prediction_id, rw.codigo, rw.fecha_registro, rw.prev_ids
+		)
+	)	dt
+) pp
+, UNNEST (string_to_array( pp.client_ids, '|' )) s ( prev_client_id );
+
+INSERT INTO t_clientes (codigo, t_estatus_id, created_at, updated_at, persona_id, persona_type)
+SELECT codigo, t_estatus_id, created_at, updated_at, persona_id, persona_type
+FROM clientes_normalizados
+GROUP BY prediction_id, codigo, t_estatus_id, created_at, updated_at, persona_id, persona_type
+ORDER BY prediction_id;
+
+CREATE MATERIALIZED VIEW resoluciones_normalizadas AS
+SELECT 	
+	  rw.client_id t_cliente_id
+	, CONCAT('SMV', '-', rw.code, '-', rw."year") resolucion
+	, CONCAT(rw."year", rw.code) codigo
+	, rw.prediction_id
+	, ('Resolución de migración ' || rw.original) descripcion
+	, COALESCE(rw.fecha_resolucion, '1971-01-01') created_at
+	, COALESCE(rw.fecha_resolucion, '1971-01-01') updated_at
+	, rw.prev_client_id
+	, 2 t_estatus_id
+	, rw.tipo_client_id t_tipo_cliente_id
+	, rw.num_licencia
+FROM (
+	SELECT 
+		row_number() OVER (ORDER BY 1, 2) AS prediction_id
+		, rns.code
+		, rns.year
+		, rns.original
+		, rns.client_id
+		, rns.tipo_client_id
+		, rns.fecha_resolucion
+		, rns.num_licencia
+		, rns.prev_client_id
 		FROM (
-			SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, ctcs.fecha_resolucion, tcs.id, ctcs.num_licencia
-				FROM personas_normalizados pns
-				JOIN cxc_t_clientes ctcs ON ctcs.idt_clientes = pns.prev_id
-				JOIN  t_personas tpa ON tpa.nombre = pns.nombre AND tpa.apellido = pns.apellido
-				JOIN t_clientes tcs ON tpa.id = tcs.persona_id AND tcs.persona_type = 'TPersona'
-			UNION ALL SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, ctcs.fecha_resolucion, tcs.id, ctcs.num_licencia
-				FROM empresas_normalizadas ens
-				JOIN cxc_t_clientes ctcs ON ctcs.idt_clientes = ens.prev_id
-				JOIN  t_empresas tes ON ens.razon_social = tes.razon_social
-				JOIN t_clientes tcs ON tes.id = tcs.persona_id and tcs.persona_type = 'TEmpresa'
-		) cli
-		LEFT JOIN cxc_t_tipo_cliente cttc ON cli.idt_tipo_cliente = cttc.idt_tipo_cliente
-		JOIN t_tipo_clientes ttcs on TRIM(UPPER(cttc.descripcion)) = ttcs.descripcion
-		where cli.resolucion <> '0'
-	) ctc
-	where ctc.resolucion ~ '^([0-9]{1,4}-[0-9]{2,4})$'
-) dt;
+			SELECT
+			( CASE WHEN LENGTH(dt.code) = 1 THEN '00000'||dt.code
+				WHEN LENGTH(dt.code) = 2 THEN '0000'||dt.code
+				WHEN LENGTH(dt.code) = 3 THEN '000'||dt.code
+				WHEN LENGTH(dt.code) = 4 THEN '00'||dt.code
+				WHEN LENGTH(dt.code) = 5 THEN '0'||dt.code
+				ELSE dt.code
+				END ) code
+		,	( CASE WHEN LENGTH(dt.year) = 1 THEN '200'||dt.year
+				WHEN LENGTH(dt.year) = 2 AND CAST(dt.year as int) < 20 THEN '20'||dt.year
+				WHEN LENGTH(dt.year) = 2 AND CAST(dt.year as int) >= 20 THEN '19'||dt.year
+				WHEN LENGTH(dt.year) = 3 THEN '2'||dt.year
+				ELSE dt.year
+				END ) "year"
+		, dt.client_id		
+		, dt.original
+		, '' || dt.num_licencia num_licencia
+		, COALESCE(dt.fecha_resolucion, CURRENT_DATE) fecha_resolucion
+		, dt.tipo_client_id
+		, dt.prev_client_id
+
+		FROM (
+			SELECT
+				ctc.client_id
+				, CASE WHEN ctc.resolucion = '0' THEN '000-0000' ELSE ctc.resolucion END resolucion
+				, ctc.num_licencia
+				, ctc.fecha_resolucion
+				, ctc.original
+				, SUBSTRING (ctc.resolucion FROM 1 FOR POSITION('-' in ctc.resolucion)-1) as code
+				, SUBSTRING (ctc.resolucion FROM POSITION('-' in ctc.resolucion)+1 FOR LENGTH(ctc.resolucion)) as "year"
+				, ctc.tipo_client_id
+				, ctc.prev_client_id
+			FROM (	
+				SELECT 
+						cli.client_id				
+					, cli.resolucion as original
+					, cli.num_licencia
+					, COALESCE(				  
+								COALESCE(
+									COALESCE(
+										COALESCE(
+											(SELECT res[1] from regexp_matches(trim(cli.resolucion), '(?:(?:SMV[\sNo\.]*)|(?:\s))*([0-9]{1,4}-[0-9]{1,4})(?:[\s\w\.]*)') res)
+										, (SELECT res[1]||'-'||res[2] from regexp_matches(trim(cli.resolucion), '([0-9]{1,4})\?([0-9]{1,4})') res))
+									, (SELECT res[1]||'-'||res[2] from regexp_matches(trim(cli.resolucion), '([0-9]{1,4})\s.+\s([0-9]{1,4})') res))
+								, (SELECT res[1]||'-0000' from regexp_matches(trim(cli.resolucion), '-([0-9]{1,4})') res))
+							, cli.client_id || '-0000'
+					) resolucion
+					, cli.fecha_resolucion
+					, ttcs.id tipo_client_id
+					, cli.prev_client_id
+				FROM (
+					SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, ctcs.fecha_resolucion, cns.prediction_id as "client_id", ctcs.num_licencia, cns.prev_client_id
+					FROM clientes_normalizados cns
+					JOIN cxc_t_clientes ctcs ON ctcs.idt_clientes = cns.prev_client_id
+				) cli
+				LEFT JOIN cxc_t_tipo_cliente cttc ON cli.idt_tipo_cliente = cttc.idt_tipo_cliente
+				JOIN t_tipo_clientes ttcs on TRIM(UPPER(cttc.descripcion)) = ttcs.descripcion
+			) ctc
+		) dt
+	) rns
+	GROUP BY rns.client_id, rns.code, rns.year, rns.original, rns.tipo_client_id, rns.fecha_resolucion, rns.num_licencia, rns.prev_client_id
+) rw;
 
 INSERT INTO t_resolucions (resolucion, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia)
-SELECT 	
-	  CONCAT('SMV', rw.code, rw."year")
-	, CONCAT(rw."year", rw.code)
-	, 'Resolución de migración ' || string_agg(rw.original, ', ') descripcion
-	, (SELECT res[1] from array_agg(rw.fecha_resolucion) res) created_at
-	, CURRENT_TIMESTAMP updated_at
-	, (SELECT res[1] from array_agg(rw.client_id) res) client_id
-	, 2 estatus
-	, (SELECT res[1] from array_agg(rw.tipo_client_id) res) tipo_client_id
-	, string_agg(rw.num_licencia, ', ') num_licencia
-FROM (
-		SELECT 
-			rns.code
-			, rns.year
-			, rns.original
-			, rns.client_id
-			, rns.tipo_client_id
-			, rns.fecha_resolucion
-			, rns.num_licencia
-		FROM resoluciones_normalizadas rns
-	) rw
-	GROUP BY 1, 2;
+SELECT resolucion, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia
+FROM resoluciones_normalizadas
+GROUP by prediction_id, resolucion, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia
+ORDER BY prediction_id;
 
 UPDATE t_clientes 
 	SET prospecto_at = CURRENT_TIMESTAMP
@@ -523,12 +651,35 @@ WHERE trs.t_cliente_id = t_clientes."id";
 --FROM rols_desc_normalizados;
 
 CREATE MATERIALIZED VIEW usuarios_normalizados AS
-SELECT ctus.nombre nombre, ctus.apellido apellido, 1 estatus, null avatar, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, ctus.email email, '$2a$11$2QPwHf1tjsRuGKQpk.eOxu4LyJbMwrxwHwnooWhU6a1IptooFo4O6' encrypted_password, null reset_password_token, null reset_password_sent_at, null remember_created_at, 0 sign_in_count, null current_sign_in_at, null last_sign_in_at, null current_sign_in_ip, null last_sign_in_ip, null picture, 'SuperAdmin' "role", ctus.idt_usuario prev_id, ctus.idt_rol prev_rol_id
+SELECT 
+	row_number() OVER (ORDER BY 1, 2) AS prediction_id
+	, ctus.nombre nombre
+	, ctus.apellido apellido
+	, 1 estatus
+	, null avatar
+	, CURRENT_TIMESTAMP created_at
+	, CURRENT_TIMESTAMP updated_at
+	, ctus.email email
+	, '$2a$11$2QPwHf1tjsRuGKQpk.eOxu4LyJbMwrxwHwnooWhU6a1IptooFo4O6' encrypted_password
+	, null reset_password_token
+	, null reset_password_sent_at
+	, null remember_created_at
+	, 0 sign_in_count
+	, null current_sign_in_at
+	, null last_sign_in_at
+	, null current_sign_in_ip
+	, null last_sign_in_ip
+	, null picture
+	, 'SuperAdmin' "role"
+	, ctus.idt_usuario prev_id
+	, ctus.idt_rol prev_rol_id
 FROM cxc_t_usuario ctus;
 
 INSERT INTO users (nombre, apellido, estatus, avatar, created_at, updated_at, email, encrypted_password, picture, "role")
 SELECT nombre, apellido, estatus, avatar, created_at, updated_at, email, encrypted_password, picture, "role"
-FROM usuarios_normalizados;
+FROM usuarios_normalizados
+GROUP by prediction_id, nombre, apellido, estatus, avatar, created_at, updated_at, email, encrypted_password, picture, "role"
+ORDER BY prediction_id;
 
 INSERT INTO t_rol_usuarios(user_id, t_rol_id, created_at, updated_at) VALUES (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
@@ -551,7 +702,30 @@ FROM leyendas_normalizadas;
 CREATE MATERIALIZED VIEW facturas_normalizadas AS
 SELECT 
 	row_number() OVER (ORDER BY dt.prev_id, dt.fecha_notificacion, dt.fecha_vencimiento, dt.recargo, dt.recargo_desc, dt.itbms, dt.cantidad_total, dt.importe_total, dt.total_factura, dt.pendiente_fact, dt.pendiente_ts, dt.tipo, dt.justificacion, dt.fecha_erroneo, dt.next_fecha_recargo, dt.monto_emision, dt.created_at, dt.updated_at, dt.t_resolucion_id, dt.t_periodo_id, dt.t_estatus_id, dt.t_leyenda_id, dt.user_id, dt.automatica) AS prediction_id
-	, dt.fecha_notificacion, dt.fecha_vencimiento, dt.recargo, dt.recargo_desc, dt.itbms, dt.cantidad_total, dt.importe_total, dt.total_factura, dt.pendiente_fact, dt.pendiente_ts, dt.tipo, dt.justificacion, dt.fecha_erroneo, dt.next_fecha_recargo, dt.monto_emision, dt.created_at, dt.updated_at, dt.t_resolucion_id, dt.t_periodo_id, dt.t_estatus_id, dt.t_leyenda_id, dt.user_id, dt.automatica, dt.prev_id
+	, dt.fecha_notificacion
+	, dt.fecha_vencimiento
+	, dt.recargo
+	, dt.recargo_desc
+	, dt.itbms
+	, dt.cantidad_total
+	, dt.importe_total
+	, dt.total_factura
+	, dt.pendiente_fact
+	, dt.pendiente_ts
+	, dt.tipo
+	, dt.justificacion
+	, dt.fecha_erroneo
+	, dt.next_fecha_recargo
+	, dt.monto_emision
+	, dt.created_at
+	, dt.updated_at
+	, dt.t_resolucion_id
+	, dt.t_periodo_id
+	, COALESCE(dt.t_estatus_id, 2) t_estatus_id
+	, dt.t_leyenda_id
+	, dt.user_id
+	, dt.automatica
+	, dt.prev_id
 FROM ( SELECT
 	CURRENT_TIMESTAMP fecha_notificacion
 	, ctfs.fecha_vencimiento fecha_vencimiento
@@ -566,35 +740,29 @@ FROM ( SELECT
 	, ctfs.tipo tipo
 	, ctfs.justificacion justificacion
 	, ctfs.fecha_erroneo fecha_erroneo
-	, COALESCE(ctfs.next_fecha_recargo, CURRENT_TIMESTAMP) next_fecha_recargo
+	, COALESCE(ctfs.next_fecha_recargo, '1971-01-01') next_fecha_recargo
 	, 0 monto_emision
-	, COALESCE(ctfs.fecha_factura, CURRENT_TIMESTAMP) created_at
-	, COALESCE(ctfs.fecha_factura, CURRENT_TIMESTAMP) updated_at
-	, resoluciones.ids[1] t_resolucion_id
-	, tps.id t_periodo_id
-	, tes.id t_estatus_id
+	, COALESCE(ctfs.fecha_factura, '1971-01-01') created_at
+	, COALESCE(ctfs.fecha_factura, '1971-01-01') updated_at
+	, resoluciones.prediction_id t_resolucion_id
+	, pns.prediction_id t_periodo_id
+	, ens.prediction_id t_estatus_id
 	, 1 t_leyenda_id
-	, COALESCE(us.id, 1) user_id
+	, COALESCE(uns.prediction_id, 1) user_id
 	, false automatica
 	, ctfs.idt_facturas prev_id
 FROM cxc_t_facturas ctfs
-JOIN (
-	SELECT rns.client_id, array_agg(trs.id) ids
-	FROM resoluciones_normalizadas rns
-	JOIN t_resolucions trs ON CONCAT('SMV', rns.code, rns."year") = trs.resolucion
-	GROUP BY rns.client_id
-) resoluciones ON ctfs.idt_clientes = resoluciones.client_id
-JOIN periodos_normalizados pns on ctfs.idt_periodo = pns.prev_id
-JOIN t_periodos tps ON pns.descripcion = tps.descripcion
-JOIN estatuses_normalizados ens ON ctfs.estatus = ens.prev_id
-JOIN t_estatuses tes ON ens.para = 1 AND ens.descripcion = tes.descripcion
-LEFT JOIN usuarios_normalizados uns ON ctfs.id_usuario = uns.prev_id
-LEFT JOIN users us ON uns.email = us.email
+LEFT JOIN resoluciones_normalizadas resoluciones ON ctfs.idt_clientes = resoluciones.prev_client_id
+LEFT JOIN periodos_normalizados pns on ctfs.idt_periodo = pns.prev_id
+LEFT JOIN estatuses_normalizados ens ON ctfs.estatus = ens.prev_id AND ens.prev_id != 0
+LEFT JOIN usuarios_normalizados uns ON ctfs.id_usuario = uns.prev_id 
 )	dt; 
 
 INSERT INTO t_facturas (fecha_notificacion, fecha_vencimiento, recargo, recargo_desc, itbms, cantidad_total, importe_total, total_factura, pendiente_fact, pendiente_ts, tipo, justificacion, fecha_erroneo, next_fecha_recargo, monto_emision, created_at, updated_at, t_resolucion_id, t_periodo_id, t_estatus_id, t_leyenda_id, user_id, automatica)
 SELECT fecha_notificacion, fecha_vencimiento, recargo, recargo_desc, itbms, cantidad_total, importe_total, total_factura, pendiente_fact, pendiente_ts, tipo, justificacion, fecha_erroneo, next_fecha_recargo, monto_emision, created_at, updated_at, t_resolucion_id, t_periodo_id, t_estatus_id, t_leyenda_id, user_id, automatica
-FROM facturas_normalizadas;
+FROM facturas_normalizadas
+GROUP by prediction_id, fecha_notificacion, fecha_vencimiento, recargo, recargo_desc, itbms, cantidad_total, importe_total, total_factura, pendiente_fact, pendiente_ts, tipo, justificacion, fecha_erroneo, next_fecha_recargo, monto_emision, created_at, updated_at, t_resolucion_id, t_periodo_id, t_estatus_id, t_leyenda_id, user_id, automatica
+ORDER BY prediction_id;
 
 CREATE MATERIALIZED VIEW tarifa_servicios_normalizados AS
 SELECT 
@@ -605,7 +773,9 @@ UNION ALL (SELECT ctts.codigo codigo, TRIM(ctts.descripcion) descripcion, TRIM(c
 
 INSERT INTO t_tarifa_servicios (codigo, descripcion, nombre, clase, precio, estatus, created_at, updated_at)
 SELECT codigo, descripcion, nombre, clase, precio, estatus, created_at, updated_at
-FROM tarifa_servicios_normalizados;
+FROM tarifa_servicios_normalizados
+GROUP by prediction_id, codigo, descripcion, nombre, clase, precio, estatus, created_at, updated_at
+ORDER BY prediction_id;
 
 CREATE MATERIALIZED VIEW factura_detalle_normalizado AS
 SELECT ctfd.cantidad, ctfd.cuenta_desc, ctfd.precio_unitario, tfs.id t_factura_id, tts.id t_tarifa_servicio_id, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, ctfd.idt_factura_detalle prev_id
@@ -627,6 +797,116 @@ FROM (
 	GROUP BY tfds.t_factura_id) dt
 WHERE dt.t_factura_id = t_facturas.id;
 
+CREATE MATERIALIZED VIEW metodos_pago_normalizado AS
+SELECT 
+	row_number() OVER (ORDER BY dt.metodo_pago) AS prediction_id
+	, dt.metodo_pago forma_pago
+	, 'Deribado de la migración de recibos' descripcion
+	, CAST(null as numeric) minimo
+	, CAST(null as numeric) maximo
+	, 1 estatus
+	, CURRENT_TIMESTAMP created_at
+  , CURRENT_TIMESTAMP updated_at
+	
+FROM (
+	SELECT DISTINCT metodo_pago
+	FROM cxc_t_recibos
+	ORDER BY 1
+) dt;
+
+INSERT INTO t_metodo_pagos (forma_pago, descripcion, minimo, maximo, estatus, created_at, updated_at)
+SELECT forma_pago, descripcion, minimo, maximo, estatus, created_at, updated_at
+FROM metodos_pago_normalizado
+GROUP by prediction_id, forma_pago, descripcion, minimo, maximo, estatus, created_at, updated_at
+ORDER BY prediction_id;
+
+
+CREATE MATERIALIZED VIEW recibos_normalizado AS
+SELECT  
+  	ctre.fecha_pago
+  , ctre.num_cheque
+  , ctre.pago_recibido
+  , ctre.monto_acreditado
+  , ctre.cuenta_deposito
+  , ctre.pago_pendiente
+  , ctre.estatus
+  , ctre.justificacion
+  , ctre.fecha_erroneo
+  , COALESCE(ctre.fecha_registro, '1971-01-01') created_at
+	, COALESCE(ctre.fecha_registro, '1971-01-01') updated_at
+  , fns.prediction_id t_factura_id
+  , cns.prediction_id t_cliente_id
+  , pns.prediction_id t_periodo_id
+	, mpns.prediction_id t_metodo_pago_id
+	, 1 user_id
+	, CAST(null as numeric) recargo_x_pagar
+	, CAST(null as numeric) servicios_x_pagar
+FROM cxc_t_recibos ctre
+LEFT JOIN facturas_normalizadas fns ON ctre.idt_facturas = fns.prev_id
+JOIN clientes_normalizados cns ON ctre.idt_clientes = cns.prev_client_id
+JOIN periodos_normalizados pns ON ctre.idt_periodo = pns.prev_id
+JOIN metodos_pago_normalizado mpns ON ctre.metodo_pago = mpns.forma_pago;
+
+INSERT INTO t_recibos (fecha_pago, num_cheque, pago_recibido, monto_acreditado, cuenta_deposito, pago_pendiente, estatus, justificacion, fecha_erroneo, created_at, updated_at, t_factura_id, t_cliente_id, t_periodo_id, t_metodo_pago_id, user_id, recargo_x_pagar, servicios_x_pagar)
+SELECT fecha_pago, num_cheque, pago_recibido, monto_acreditado, cuenta_deposito, pago_pendiente, estatus, justificacion, fecha_erroneo, created_at, updated_at, t_factura_id, t_cliente_id, t_periodo_id, t_metodo_pago_id, user_id, recargo_x_pagar, servicios_x_pagar
+FROM recibos_normalizado;
+
+CREATE MATERIALIZED VIEW presupuesto_normalizados AS
+SELECT
+	row_number() OVER (ORDER BY ctp.idt_presupuesto) AS prediction_id
+	, ctp.idt_presupuesto prev_id
+	, ctp.codigo
+	, ctp.descripcion
+	, ctp.estatus
+	, CURRENT_TIMESTAMP created_at
+	, CURRENT_TIMESTAMP updated_at
+FROM cxc_t_presupuesto ctp;
+
+INSERT INTO t_presupuestos (codigo, descripcion, estatus, created_at, updated_at)
+SELECT codigo, descripcion, estatus, created_at, updated_at
+FROM presupuesto_normalizados
+GROUP BY prediction_id, codigo, descripcion, estatus, created_at, updated_at
+ORDER BY prediction_id;
+
+CREATE MATERIALIZED VIEW tarifa_servicios_group_normalizadas AS
+SELECT
+	row_number() OVER (ORDER BY cttsg.idt_tarifa_servicios_group) AS prediction_id
+	, cttsg.idt_tarifa_servicios_group prev_id
+	, pns.prediction_id t_presupuesto_id
+	, cttsg.nombre
+	, cttsg.estatus
+	, CURRENT_TIMESTAMP created_at
+	, CURRENT_TIMESTAMP updated_at
+FROM cxc_t_tarifa_servicios_group cttsg
+JOIN presupuesto_normalizados pns ON cttsg.idt_presupuesto = pns.prev_id;
+
+INSERT INTO t_tarifa_servicio_groups (nombre, estatus, created_at, updated_at, t_presupuesto_id)
+SELECT nombre, estatus, created_at, updated_at, t_presupuesto_id
+FROM tarifa_servicios_group_normalizadas
+GROUP BY prediction_id, nombre, estatus, created_at, updated_at, t_presupuesto_id
+ORDER BY prediction_id;
+
+CREATE MATERIALIZED VIEW cuentas_financieras_normalizadas AS
+SELECT
+ row_number() OVER (ORDER BY ctcf.idt_cuenta_financiera) AS prediction_id
+ , ctcf.idt_cuenta_financiera prev_id
+ , tsgns.prediction_id t_tarifa_servicio_group_id
+ , pns.prediction_id t_presupuesto_id
+ , ctcf.codigo_presupuesto
+ , ctcf.codigo_financiero
+ , ctcf.descripcion_financiera
+ , ctcf.descripcion_presupuestaria
+ , CURRENT_TIMESTAMP created_at
+ , CURRENT_TIMESTAMP updated_at
+FROM cxc_t_cuenta_financiera ctcf
+JOIN tarifa_servicios_group_normalizadas tsgns ON ctcf.idt_tarifa_servicios_group = tsgns.prev_id
+JOIN presupuesto_normalizados pns ON ctcf.idt_presupuesto = pns.prev_id;
+
+INSERT INTO t_cuenta_financieras (codigo_presupuesto, codigo_financiero, descripcion_financiera, descripcion_presupuestaria, created_at, updated_at, t_tarifa_servicio_group_id, t_presupuesto_id)
+SELECT codigo_presupuesto, codigo_financiero, descripcion_financiera, descripcion_presupuestaria, created_at, updated_at, t_tarifa_servicio_group_id, t_presupuesto_id
+FROM cuentas_financieras_normalizadas
+GROUP BY prediction_id, codigo_presupuesto, codigo_financiero, descripcion_financiera, descripcion_presupuestaria, created_at, updated_at, t_tarifa_servicio_group_id, t_presupuesto_id
+ORDER BY prediction_id;
 
 -- Ultimo registro
 INSERT INTO schema_migrations VALUES('0');

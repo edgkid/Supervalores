@@ -1,0 +1,42 @@
+<%= form_with(model: t_nota_credito, local: true) do |form| %>
+  <% if t_nota_credito.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(t_nota_credito.errors.count, "error") %> prohibited this t_nota_credito from being saved:</h2>
+
+      <ul>
+      <% t_nota_credito.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :t_cliente_id %>
+    <%= form.number_field :t_cliente_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :t_recibo_id %>
+    <%= form.number_field :t_recibo_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :monto %>
+    <%= form.text_field :monto %>
+  </div>
+
+  <div class="field">
+    <%= form.label :t_factura_id %>
+    <%= form.number_field :t_factura_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :descripcion %>
+    <%= form.text_field :descripcion %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

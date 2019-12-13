@@ -1,6 +1,7 @@
 <table class="table">
   <thead>
     <tr>
+      <th>#</th>
       <th>Fecha de Pago</th>
       <th>Método de Pago</th>
       <th>Nro. de Cheque</th>
@@ -13,6 +14,7 @@
   <tbody>
     <% @t_recibos.each do |t_recibo| %>
       <tr>
+        <td><%= t_recibo.id %></td>
         <td><%= t_recibo.fecha_pago.strftime('%d/%m/%Y') %></td>
         <td><%= t_recibo.t_metodo_pago.forma_pago %></td>
         <td><%= t_recibo.num_cheque ? t_recibo.num_cheque : 'N/A' %></td>

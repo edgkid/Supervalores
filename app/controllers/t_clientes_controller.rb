@@ -4,8 +4,8 @@ class TClientesController < ApplicationController
   respond_to :js, only: [:find]
   respond_to :json, only: [:all_clients, :find_by_codigo, :find_by_resolucion, :find_by_cedula]
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion, :nueva_empresa]
-  before_action :usar_dataTables_en, only: [:index, :show, :edit, :estado_cuenta]
-  before_action :dataTables_resolucion, only: [:show, :edit]
+  before_action :usar_dataTables_en, only: [:index, :show, :edit, :estado_cuenta, :nueva_resolucion]
+  before_action :dataTables_resolucion, only: [:show, :edit, :nueva_resolucion]
   before_action :seleccionar_resolucion, only: [:mostrar_resolucion]
   # before_action :clients_with_resolutions, only: :find_by_codigo
   # before_action :companies_with_clients_with_resolutions, only: :find_by_cedula
@@ -67,7 +67,7 @@ class TClientesController < ApplicationController
       format.json { render json: EstadoCuentaDatatable.new(
         params.merge({
           attributes_to_display: @attributes_to_display,
-          t_cliente_codigo: params[:t_cliente_codigo]
+          t_resolucion_id: params[:t_resolucion_id]
         }),
         view_context: view_context)
       }
@@ -75,29 +75,29 @@ class TClientesController < ApplicationController
   end
 
   def estado_cuenta_calculo_de_totales
-    t_cliente_codigo = params[:t_cliente_codigo]
+    t_resolucion_id = params[:t_resolucion_id]
+    if t_resolucion_id != ""
+      sum_total = TFactura.left_joins(
+          {t_recibos: :user}, 
+          {t_resolucion: :t_cliente}
+        )
+        .where('t_resolucions.id = ?', params[:t_resolucion_id])
+        .sum("t_facturas.total_factura")
 
-    sum_total = TFactura.left_joins(
-        {t_recibos: :user}, 
-        {t_resolucion: :t_cliente}
-      )
-      .where('t_clientes.codigo = ?', params[:t_cliente_codigo])
-      .sum("t_facturas.total_factura")
+      sum_pago_recibido = TFactura.left_joins(
+          {t_recibos: :user}, 
+          {t_resolucion: :t_cliente}
+        )
+        .where('t_resolucions.id = ?', params[:t_resolucion_id])
+        .sum("COALESCE(t_recibos.pago_recibido, 0)")
 
-    sum_pago_recibido = TFactura.left_joins(
-        {t_recibos: :user}, 
-        {t_resolucion: :t_cliente}
-      )
-      .where('t_clientes.codigo = ?', params[:t_cliente_codigo])
-      .sum("COALESCE(t_recibos.pago_recibido, 0)")
-
-    sum_monto_acreditado = TFactura.left_joins(
-        {t_recibos: :user}, 
-        {t_resolucion: :t_cliente}
-      )
-      .where('t_clientes.codigo = ?', params[:t_cliente_codigo])
-      .sum("COALESCE(t_recibos.monto_acreditado, 0)")
-    if t_cliente_codigo != ""
+      sum_monto_acreditado = TFactura.left_joins(
+          {t_recibos: :user}, 
+          {t_resolucion: :t_cliente}
+        )
+        .where('t_resolucions.id = ?', params[:t_resolucion_id])
+        .sum("COALESCE(t_recibos.monto_acreditado, 0)")
+    
       deuda = sum_total - sum_pago_recibido
       render json: {
         procesado: true,
@@ -371,17 +371,14 @@ class TClientesController < ApplicationController
 
   def find_by_codigo
     search = parametros_de_busqueda[:search]
-    respond_with TCliente.where('t_clientes.codigo ILIKE ?', "%#{search}%").first(15)
+    respond_with ViewClient.where('codigo ILIKE ?', "%#{search}%").first(15)
   end
 
   def find_by_cedula
     search = parametros_de_busqueda[:search]
 
-    personas = TPersona.where('cedula ILIKE ?', "%#{search}%").first(15)
-    if personas.empty?
-      personas = TEmpresa.where('rif ILIKE ?', "%#{search}%").first(15)
-    end
-
+    personas = ViewClient.where('identificacion ILIKE ?', "%#{search}%").first(15)
+    
     respond_with personas
     # respond_with TCliente.where('razon_social LIKE ?', "%#{search}%").first(10)
   end
@@ -397,7 +394,7 @@ class TClientesController < ApplicationController
 
     case @attribute
     when 'select-codigo'
-      @t_cliente = TCliente.find_by(codigo: search)
+      @t_cliente = TCliente.where('codigo = ?', search).take
 
       persona = @t_cliente.persona
       case persona.class.to_s
@@ -412,12 +409,13 @@ class TClientesController < ApplicationController
       @t_cliente = @t_resolucion.t_cliente
       @t_persona = @t_cliente.persona
     when 'select-cedula'
-      @t_persona = TPersona.find_by(cedula: search)
-      if @t_persona
-        @t_cliente = @t_persona.t_cliente
-      else
-        @t_empresa = TEmpresa.find_by(rif: search)
-        @t_cliente = @t_empresa.t_cliente
+      view = ViewClient.where('identificacion = ?', search).take
+      @t_cliente = TCliente.find(view.id)
+      case @t_cliente.persona.class.to_s
+      when 'TPersona'
+        @t_persona = persona
+      when 'TEmpresa'
+        @t_empresa = persona
         @without_client = true unless @t_cliente
       end
     end if search != ''
@@ -530,7 +528,7 @@ class TClientesController < ApplicationController
         value = resolucion_codigo.strip()[0..5]
         resolucion_codigo = "#{"0"*(6-value.length)}#{value}"
       end
-      datos[:resolucion] = "SMV#{resolucion_codigo}#{params[:t_resolucion][:resolucion_anio]}"
+      datos[:resolucion] = "SMV-#{resolucion_codigo}-#{params[:t_resolucion][:resolucion_anio]}"
       return datos
     end
 

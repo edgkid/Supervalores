@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: t_tipo_personas
+#
+#  id          :bigint           not null, primary key
+#  descripcion :string
+#  estatus     :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class TTipoPersona < ApplicationRecord
   
   validates :descripcion, 

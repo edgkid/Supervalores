@@ -3,15 +3,16 @@
     <tr>
       <th width="25%">Estatus:</th>
       <td>
-        <%= @t_cliente.t_estatus.estatus if @t_cliente %>
+        <%= @t_cliente.t_estatus.descripcion if @t_cliente %>
         <input class="dynamic-client" id="client-estatus-input" name="dynamic_attributes[t_cliente][estatus]" type="hidden" value="<%= @t_cliente.t_estatus.estatus if @t_cliente %>">
       </td>
     </tr>
     <tr>
       <th>Cliente:</th>
       <td>
-        <%= @t_cliente.codigo if @t_cliente %>
+        <%= @t_cliente.razon_social if @t_cliente %>
         <input class="dynamic-client" id="client-codigo-input" name="dynamic_attributes[t_cliente][codigo]" type="hidden" value="<%= @t_cliente.codigo if @t_cliente %>">
+        <input class="dynamic-client" id="t_cliente_id" name="dynamic_attributes[t_cliente][id]" type="hidden" value="<%= @t_cliente.id if @t_cliente %>">
       </td>
     </tr>
     <tr>
@@ -30,6 +31,7 @@
       <th>Dirección:</th>
       <td>
         <%= @t_persona.t_empresa.direccion_empresa if @t_persona && @t_persona.t_empresa %>
+        <%#= @t_cliente.direccion if @t_cliente %>
         <input class="dynamic-client" name="dynamic_attributes[t_cliente][direccion]" type="hidden" value="<%= @t_persona.t_empresa.direccion_empresa if @t_pona && @t_persona.t_empresa %>">
       </td>
     </tr>

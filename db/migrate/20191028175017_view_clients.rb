@@ -18,7 +18,8 @@ class ViewClients < ActiveRecord::Migration[5.2]
       LEFT JOIN t_personas tpe ON tcl.persona_type = 'TPersona' AND tcl.persona_id = tpe.id 
       LEFT JOIN t_otros tot ON tcl.persona_type = 'TOtro' AND tcl.persona_id = tot.id
       LEFT JOIN t_estatuses tes on tcl.t_estatus_id = tes.id
-      LEFT JOIN t_tipo_personas ttp on (tcl.persona_type = 'TEmpresa' AND 1 = ttp.id) OR (tcl.persona_type = 'TPersona' AND 2 = ttp.id) OR tot.t_tipo_persona_id = ttp.id;
+      LEFT JOIN t_tipo_personas ttp on (tcl.persona_type = 'TEmpresa' AND 1 = ttp.id) OR (tcl.persona_type = 'TPersona' AND 2 = ttp.id) OR tot.t_tipo_persona_id = ttp.id
+      ORDER BY tcl.created_at DESC;
     )
   end
 
