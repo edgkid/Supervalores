@@ -10,16 +10,19 @@
 
 <%= render 't_recibos' if !@is_show && @t_recibos.any? %>
 
+<% if !@is_show && @t_nota_creditos.any? %>
+<h3 align="center">NOTAS DE CRÉDITO</h3>
+<hr>
+<%= render 't_nota_creditos/t_nota_creditos'%>
+<% end %>
+
+
 <div class="ibox">
   <div class="ibox-content">
     <%= form_for [:t_factura, @t_recibo] do |f| %>
       <div class="row">
         <div class="col-sm-6">
-          <div align="center">
-            <span style="color: green;">
-              Monto Excedente: <%= number_to_balboa(@t_factura.calculate_credit_balance) %>
-            </span>
-          </div>
+
           <br>
           <div class="form-group row">
             <div class="col-sm-4 col-form-label">

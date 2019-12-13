@@ -39,6 +39,14 @@ class TFacturasController < ApplicationController
       if t_factura_detalles.any? && t_factura_detalles.first.t_tarifa_servicio.tipo && t_factura_detalles.first.t_tarifa_servicio.tipo.downcase == 'ts'
         @t_factura.apply_2_percent_monthly_surcharge
       end
+      #Condicion para aplicar nota de  crédito
+      if true
+        @t_nota_credito = @t_factura.t_cliente.t_nota_creditos.where(status:"Sin Usar").first
+        @t_nota_credito.t_factura_id = @t_factura.id
+        @t_nota_credito.status = "Usada"
+        #@t_nota_credito.monto = Aqui debe ir el monto que se le asigna a la factura
+        @t_nota_credito.save!
+      end
       redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Factura creada exitosamente.'
     else
       @notice = @t_factura.errors

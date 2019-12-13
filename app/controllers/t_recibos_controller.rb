@@ -141,6 +141,7 @@ class TRecibosController < ApplicationController
 
     def set_necessary_objects
       @t_recibos = @t_factura.t_recibos
+      @t_nota_creditos = @t_factura.t_nota_creditos
       if @t_recibos.any?
         @pending_payment = @t_recibos.last.pago_pendiente.truncate(2)
       else
