@@ -536,8 +536,8 @@ ORDER BY prediction_id;
 CREATE MATERIALIZED VIEW resoluciones_normalizadas AS
 SELECT 	
 	  rw.client_id t_cliente_id
-	, CONCAT('SMV', '-', rw.code, '-', rw."year") resolucion
-	, CONCAT(rw."year", rw.code) codigo
+	, rw.resolucion
+	, CONCAT('CxC-', rw.prev_client_id) codigo
 	, rw.prediction_id
 	, ('Resolución de migración ' || rw.original) descripcion
 	, COALESCE(rw.fecha_resolucion, '1971-01-01') created_at
@@ -549,8 +549,7 @@ SELECT
 FROM (
 	SELECT 
 		row_number() OVER (ORDER BY 1, 2) AS prediction_id
-		, rns.code
-		, rns.year
+		, rns.resolucion
 		, rns.original
 		, rns.client_id
 		, rns.tipo_client_id
@@ -559,35 +558,20 @@ FROM (
 		, rns.prev_client_id
 		FROM (
 			SELECT
-			( CASE WHEN LENGTH(dt.code) = 1 THEN '00000'||dt.code
-				WHEN LENGTH(dt.code) = 2 THEN '0000'||dt.code
-				WHEN LENGTH(dt.code) = 3 THEN '000'||dt.code
-				WHEN LENGTH(dt.code) = 4 THEN '00'||dt.code
-				WHEN LENGTH(dt.code) = 5 THEN '0'||dt.code
-				ELSE dt.code
-				END ) code
-		,	( CASE WHEN LENGTH(dt.year) = 1 THEN '200'||dt.year
-				WHEN LENGTH(dt.year) = 2 AND CAST(dt.year as int) < 20 THEN '20'||dt.year
-				WHEN LENGTH(dt.year) = 2 AND CAST(dt.year as int) >= 20 THEN '19'||dt.year
-				WHEN LENGTH(dt.year) = 3 THEN '2'||dt.year
-				ELSE dt.year
-				END ) "year"
+			dt.resolucion
 		, dt.client_id		
 		, dt.original
 		, '' || dt.num_licencia num_licencia
 		, COALESCE(dt.fecha_resolucion, CURRENT_DATE) fecha_resolucion
 		, dt.tipo_client_id
 		, dt.prev_client_id
-
 		FROM (
 			SELECT
 				ctc.client_id
-				, CASE WHEN ctc.resolucion = '0' THEN '000-0000' ELSE ctc.resolucion END resolucion
+				, ctc.resolucion
 				, ctc.num_licencia
 				, ctc.fecha_resolucion
 				, ctc.original
-				, SUBSTRING (ctc.resolucion FROM 1 FOR POSITION('-' in ctc.resolucion)-1) as code
-				, SUBSTRING (ctc.resolucion FROM POSITION('-' in ctc.resolucion)+1 FOR LENGTH(ctc.resolucion)) as "year"
 				, ctc.tipo_client_id
 				, ctc.prev_client_id
 			FROM (	
@@ -595,16 +579,7 @@ FROM (
 						cli.client_id				
 					, cli.resolucion as original
 					, cli.num_licencia
-					, COALESCE(				  
-								COALESCE(
-									COALESCE(
-										COALESCE(
-											(SELECT res[1] from regexp_matches(trim(cli.resolucion), '(?:(?:SMV[\sNo\.]*)|(?:\s))*([0-9]{1,4}-[0-9]{1,4})(?:[\s\w\.]*)') res)
-										, (SELECT res[1]||'-'||res[2] from regexp_matches(trim(cli.resolucion), '([0-9]{1,4})\?([0-9]{1,4})') res))
-									, (SELECT res[1]||'-'||res[2] from regexp_matches(trim(cli.resolucion), '([0-9]{1,4})\s.+\s([0-9]{1,4})') res))
-								, (SELECT res[1]||'-0000' from regexp_matches(trim(cli.resolucion), '-([0-9]{1,4})') res))
-							, cli.client_id || '-0000'
-					) resolucion
+					, trim(cli.resolucion) resolucion
 					, cli.fecha_resolucion
 					, ttcs.id tipo_client_id
 					, cli.prev_client_id
@@ -618,7 +593,7 @@ FROM (
 			) ctc
 		) dt
 	) rns
-	GROUP BY rns.client_id, rns.code, rns.year, rns.original, rns.tipo_client_id, rns.fecha_resolucion, rns.num_licencia, rns.prev_client_id
+	GROUP BY rns.client_id, rns.resolucion, rns.original, rns.tipo_client_id, rns.fecha_resolucion, rns.num_licencia, rns.prev_client_id
 ) rw;
 
 INSERT INTO t_resolucions (resolucion, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia)
