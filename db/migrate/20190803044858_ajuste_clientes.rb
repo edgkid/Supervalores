@@ -4,7 +4,7 @@ class AjusteClientes < ActiveRecord::Migration[5.2]
       change.up do
         remove_foreign_key "t_email_masivos", "t_clientes"
         remove_foreign_key "t_estado_cuenta", "t_clientes"
-        remove_foreign_key "t_nota_creditos", "t_clientes"        
+        #remove_foreign_key "t_nota_creditos", "t_clientes"        
         remove_foreign_key "t_recibos", "t_clientes"
         remove_foreign_key "t_resolucions", "t_clientes"
         remove_foreign_key "t_clientes", "t_cliente_padres"
@@ -53,7 +53,7 @@ class AjusteClientes < ActiveRecord::Migration[5.2]
 
         add_foreign_key "t_email_masivos", "t_clientes"
         add_foreign_key "t_estado_cuenta", "t_clientes"
-        add_foreign_key "t_nota_creditos", "t_clientes"        
+        #add_foreign_key "t_nota_creditos", "t_clientes"        
         add_foreign_key "t_recibos", "t_clientes"
         add_foreign_key "t_resolucions", "t_clientes"
 

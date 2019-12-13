@@ -74,28 +74,28 @@ class TClientesController < ApplicationController
 
   def estado_cuenta_calculo_de_totales
     t_resolucion_id = params[:t_resolucion_id]
-
-    sum_total = TFactura.left_joins(
-        {t_recibos: :user}, 
-        {t_resolucion: :t_cliente}
-      )
-      .where('t_resolucions.id = ?', params[:t_resolucion_id])
-      .sum("t_facturas.total_factura")
-
-    sum_pago_recibido = TFactura.left_joins(
-        {t_recibos: :user}, 
-        {t_resolucion: :t_cliente}
-      )
-      .where('t_resolucions.id = ?', params[:t_resolucion_id])
-      .sum("COALESCE(t_recibos.pago_recibido, 0)")
-
-    sum_monto_acreditado = TFactura.left_joins(
-        {t_recibos: :user}, 
-        {t_resolucion: :t_cliente}
-      )
-      .where('t_resolucions.id = ?', params[:t_resolucion_id])
-      .sum("COALESCE(t_recibos.monto_acreditado, 0)")
     if t_resolucion_id != ""
+      sum_total = TFactura.left_joins(
+          {t_recibos: :user}, 
+          {t_resolucion: :t_cliente}
+        )
+        .where('t_resolucions.id = ?', params[:t_resolucion_id])
+        .sum("t_facturas.total_factura")
+
+      sum_pago_recibido = TFactura.left_joins(
+          {t_recibos: :user}, 
+          {t_resolucion: :t_cliente}
+        )
+        .where('t_resolucions.id = ?', params[:t_resolucion_id])
+        .sum("COALESCE(t_recibos.pago_recibido, 0)")
+
+      sum_monto_acreditado = TFactura.left_joins(
+          {t_recibos: :user}, 
+          {t_resolucion: :t_cliente}
+        )
+        .where('t_resolucions.id = ?', params[:t_resolucion_id])
+        .sum("COALESCE(t_recibos.monto_acreditado, 0)")
+    
       deuda = sum_total - sum_pago_recibido
       render json: {
         procesado: true,
@@ -369,17 +369,14 @@ class TClientesController < ApplicationController
 
   def find_by_codigo
     search = parametros_de_busqueda[:search]
-    respond_with TCliente.where('t_clientes.codigo ILIKE ?', "%#{search}%").first(15)
+    respond_with ViewClient.where('codigo ILIKE ?', "%#{search}%").first(15)
   end
 
   def find_by_cedula
     search = parametros_de_busqueda[:search]
 
-    personas = TPersona.where('cedula ILIKE ?', "%#{search}%").first(15)
-    if personas.empty?
-      personas = TEmpresa.where('rif ILIKE ?', "%#{search}%").first(15)
-    end
-
+    personas = ViewClient.where('identificacion ILIKE ?', "%#{search}%").first(15)
+    
     respond_with personas
     # respond_with TCliente.where('razon_social LIKE ?', "%#{search}%").first(10)
   end
@@ -395,7 +392,7 @@ class TClientesController < ApplicationController
 
     case @attribute
     when 'select-codigo'
-      @t_cliente = TCliente.find_by(codigo: search)
+      @t_cliente = TCliente.where('codigo = ?', search).take
 
       persona = @t_cliente.persona
       case persona.class.to_s
@@ -410,12 +407,13 @@ class TClientesController < ApplicationController
       @t_cliente = @t_resolucion.t_cliente
       @t_persona = @t_cliente.persona
     when 'select-cedula'
-      @t_persona = TPersona.find_by(cedula: search)
-      if @t_persona
-        @t_cliente = @t_persona.t_cliente
-      else
-        @t_empresa = TEmpresa.find_by(rif: search)
-        @t_cliente = @t_empresa.t_cliente
+      view = ViewClient.where('identificacion = ?', search).take
+      @t_cliente = TCliente.find(view.id)
+      case @t_cliente.persona.class.to_s
+      when 'TPersona'
+        @t_persona = persona
+      when 'TEmpresa'
+        @t_empresa = persona
         @without_client = true unless @t_cliente
       end
     end if search != ''

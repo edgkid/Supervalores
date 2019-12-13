@@ -1,0 +1,104 @@
+CLIENTE PROSPECTO,,CODIGO,NOMBRE,DESCRIPCION,CUENTA FINANCIERA,PARTIDA PRESUPUESTARIA
+PERSONA NATURAL,CORREDOR DE VALORES,TARIFA R-001-09,Tarifa de Registro-Corredor An,Tarifa de registro,42010804-01-09,365.1.2.4.2.60
+,,TARIFA R-001-19,Tarifa de Registro-Derecho Exa,Tarifa de registro,42010804-01-19,365.1.2.4.2.60
+,,TARIFA R-001-19-01,TR-Der. Exa. Corredor,TR - DERECHO EXAMEN CORREDOR,42010804-01-19-01,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,EJECUTIVO PRINCIPAL,TARIFA R-001-07,Tarifa de Registro-Ejecutivo,Tarifa de registro,42010804-01-07,365.1.2.4.2.60
+,,TARIFA R-001-19,Tarifa de Registro-Derecho Exa,Derecho a Examen,42010804-01-19,365.1.2.4.2.60
+,,TARIFA R-001-19-02,TR-Der. Exa. Ejecutivo,TR - DERECHO EXAMEN EJECUTIVO,42010804-01-19-02,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,EJECUTIVO PRINCIPAL DE ADMINISTRACION DE INVERSION,TARIFA R-001-08,Tarifa de Registro-Ejec. Pal.,Tarifa de registro,42010804-01-08,365.1.2.4.2.60
+,,TARIFA R-001-19,Tarifa de Registro-Derecho Exa,Derecho a Examen,42010804-01-19,365.1.2.4.2.60
+,,TARIFA R-001-19-03,TR-Der. Exa. EPAI,TR - DERECHO A EXAMEN Â EPAI,42010804-01-19-03,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+PERSONA JURIDICA,ASESOR DE INVERSION,TARIFA R-001-05,Tarifa de Registro-Asesor,Tarifa de registro,42010804-01-05,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,,,,,
+,,,,,,
+,ADMINISTRADOR DE INVERSIONES,TARIFA R-001-06,Tarifa de Registro-Adm. Inv.,Tarifa de registro,42010804-01-06,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,,,,,
+,,,,,,
+,ENTIDADES CALIFICADORAS DE RIESGO,TARIFA R-001-11,Tarifa de Registro-Calif.Riesg,Tarifa de registro,42010808-01-11,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,,,,,
+,,,,,,
+,ENTIDADES PROVEEDORAS DE PRECIO,TARIFA R-001-15,Tarifa de Registro-Enti. Prov.,Tarifa de registro,42010808-01-15,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,,,,,
+,,,,,,
+,PROVEEDRORS DE SERVICIOS ADM. DE MERCADO DE VALORES,TARIFA R-001-14,Tarifa de Registro-Prove. Serv,Tarifa de registro,42010804-01-14,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,,,,,
+,,,,,,
+,CENTRAL DE VALORES,TARIFA R-001-03,Tarifa de Registro-Central,Tarifa de registro,42010804-01-14,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,,,,,
+,,,,,,
+,BOLSA DE VALORES,TARIFA R-001-02,Tarifa de Registro-Bolsa,Tarifa de registro,42010804-01-02,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,,,,,
+,,,,,,
+,CASA DE VALORES,TARIFA R-001-04,Tarifa de Registro-Casas,Tarifa de registro,42010804-01-04,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,,,,,
+,,,,,,
+,PROVEEDOR DE INFRAESTRUCTURA,,,,,
+,SOCIEDADES DE INVERSION,TARIFA R-001-13,Tarifa de Registro-Soc.Acc.Ex.,Tarifa de registro,42010804-01-13,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99
+,,,,,,
+,,,,,,
+,EMISORES-VALORES REGISTRADOS,TARIFA R-001-01,Tarifa de Registro-Valores,Tarifa de registro,42010804-01-01,365.1.2.4.2.60
+,,TARIFA R-001-20-01,Certificaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,TARIFA R-001-20-02,Autenticaciones,Otros Ingresos,42010803-01-20,365.1.2.6.0.3.99
+,,MULTAS SMV,Multas,Multas,41020401,365.1.2.6.0.01
+,,ATA SMV,Acuerdo de Terminacion Anticipada,Multas,41020401,365.1.2.6.0.01
+,,COPIAS,Copias,Otros Ingresos,42010805,365.1.2.6.0.3.99

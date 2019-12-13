@@ -29,7 +29,7 @@ class ClientePolymorphic < ActiveRecord::Migration[5.2]
     add_index :t_clientes, [:persona_type, :persona_id], name: "index_persona_as_cliente"
     add_index :t_otros, :t_tipo_persona_id, name: "index_t_otros_on_t_tipo_persona_id"
     add_foreign_key :t_otros, :t_tipo_personas
-    add_index :t_personas, :cedula, unique: true
-    add_index :t_empresas, :rif, unique: true
+    #add_index :t_personas, :cedula, unique: true
+    #add_index :t_empresas, :rif, unique: true
   end
 end
