@@ -508,13 +508,15 @@ class TClientesController < ApplicationController
     end
 
     def parametros_resolucion
-      datos = params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :codigo, :num_licencia, :t_cliente_id, :t_tipo_cliente_id)
-      resolucion_codigo = params[:t_resolucion][:resolucion_codigo]
-      if resolucion_codigo
-        value = resolucion_codigo.strip()[0..5]
-        resolucion_codigo = "#{"0"*(6-value.length)}#{value}"
+      datos = params.require(:t_resolucion).permit(:descripcion, :t_estatus_id, :codigo, :num_licencia, :t_cliente_id, :t_tipo_cliente_id, :resolucion)
+      if (params[:t_resolucion][:resolucion] == nil)
+        resolucion_codigo = params[:t_resolucion][:resolucion_codigo]
+        if resolucion_codigo
+          value = resolucion_codigo.strip()[0..5]
+          resolucion_codigo = "#{"0"*(6-value.length)}#{value}"
+        end
+        datos[:resolucion] = "SMV-#{resolucion_codigo}-#{params[:t_resolucion][:resolucion_anio]}"
       end
-      datos[:resolucion] = "SMV-#{resolucion_codigo}-#{params[:t_resolucion][:resolucion_anio]}"
       return datos
     end
 
