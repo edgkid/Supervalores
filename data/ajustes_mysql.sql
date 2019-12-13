@@ -39,7 +39,7 @@ update temp_analisis_est_cta set fecha_generacion = '1971-01-01' where fecha_gen
 update temp_analisis_est_cta set fecha_vencimiento = '1971-01-01' where fecha_vencimiento = '0000-00-00 00:00:00';
 
 INSERT t_clientes (idt_clientes, codigo)
-SELECT cli.idt_clientes, (CASE WHEN matsh.`ID_CASA_VALOR` = 0 THEN cli.codigo ELSE matsh.`ID_CASA_VALOR` END) AS codigo 
+SELECT cli.idt_clientes, matsh.`ID_CASA_VALOR` AS codigo 
 FROM t_clientes cli
 JOIN t_cliente_matsh matsh ON cli.idt_clientes = matsh.idt_clientes
 ON DUPLICATE KEY UPDATE t_clientes.codigo = VALUES(codigo);

@@ -2,6 +2,7 @@
   bloquear_cliente = registro.t_cliente != nil
 %>
 <%= fields_for registro do |form| %>
+
 <div class="form-group row">
   <!-- <div class="col-sm-2 col-form-label">
     <%= form.label :codigo, "Código", class: "text-right" %>
@@ -18,15 +19,19 @@
   </div>
   <div class="col-sm-5 input-value">
     <% if defined?(editable) && editable %>
-    <div class="input-group input-group-sm mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="basic-addon1">SMV</span>
+      <% if registro.resolucion_nuevo_formato? %>
+      <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">SMV</span>
+        </div>
+        <%= form.text_field :resolucion_codigo, autofocus: true, class: "form-control", placeholder: "Ej. 00120M", maxlength: 6 %>
+        <div class="input-group-append">
+          <%= form.select :resolucion_anio, opciones_de_anios_para_resolucion , {}, { :class => 'input-group-text form-control m-b' } %>
+        </div>
       </div>
-      <%= form.text_field :resolucion_codigo, autofocus: true, class: "form-control", placeholder: "Ej. 00120M", maxlength: 6 %>
-      <div class="input-group-append">
-        <%= form.select :resolucion_anio, opciones_de_anios_para_resolucion , {}, { :class => 'input-group-text form-control m-b' } %>
-      </div>
-    </div>
+      <% else %>
+        <%= form.text_field :resolucion, autofocus: true, class: "form-control", placeholder: "Ej. SMV-000000-0000" %>        
+      <% end %>
     <% else %>
     <%= registro.resolucion %>
     <% end %>

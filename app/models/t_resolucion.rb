@@ -42,11 +42,13 @@ class TResolucion < ApplicationRecord
 	
 	validate :validando_dependencias
 	def validando_dependencias
-		if resolucion != nil && resolucion != ""
-			on_assert_add_error resolucion_codigo == nil || resolucion_codigo == '', :resolucion, '|Debe indicar el código de la resolución.'
-			on_assert_add_error resolucion_anio == nil || resolucion_anio == '', :resolucion, '|Debe indicar el año de la resolución.'
-		else
-			on_assert_add_error true, :resolucion, '|La resolución no tiene un formato valido, ej SMV{código}{año}.'
+		if self.resolucion_nuevo_formato?
+			if resolucion != nil && resolucion != ""
+				on_assert_add_error resolucion_codigo == nil || resolucion_codigo == '', :resolucion, '|Debe indicar el código de la resolución.'
+				on_assert_add_error resolucion_anio == nil || resolucion_anio == '', :resolucion, '|Debe indicar el año de la resolución.'
+			else
+				on_assert_add_error true, :resolucion, '|La resolución no tiene un formato valido, ej SMV{código}{año}.'
+			end
 		end
 		on_assert_add_error t_cliente_id == nil && t_cliente == nil, :t_cliente_id, '|Debe indicar el cliente asociado a la resolución.'
 		on_assert_add_error t_estatus_id == nil && t_estatus == nil, :t_estatus_id, '|Debe indicar el estatus asociado a la resolución.'
@@ -74,6 +76,10 @@ class TResolucion < ApplicationRecord
 		return ""
 	end
 
+	def resolucion_nuevo_formato?
+		return resolucion==nil || resolucion=='' || (resolucion =~ (/(SMV)\-([A-Za-z0-9]+)\-([0-9]{4})/)) != nil
+	end
+
 	private
 	
 	def normalizar(codigo)
@@ -83,5 +89,4 @@ class TResolucion < ApplicationRecord
 		end
 		return nil
 	end
-
 end
