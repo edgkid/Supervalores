@@ -20,7 +20,8 @@ class TRecibosController < ApplicationController
         t_nota_credito.t_cliente_id = @t_recibo.t_cliente_id
         t_nota_credito.t_recibo_id = @t_recibo.id
         t_nota_credito.monto = @t_recibo.monto_acreditado
-        t_nota_credito.usada = false
+        t_nota_credito.status = "Sin Usar"
+        t_nota_credito.monto_original =  @t_recibo.monto_acreditado
         t_nota_credito.save!
       end
       # generar_pdf
