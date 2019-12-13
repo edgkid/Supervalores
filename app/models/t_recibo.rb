@@ -48,6 +48,8 @@ class TRecibo < ApplicationRecord
   validate :received_payment_cannot_be_less_than_minimum_allowed
   validate :received_payment_cannot_be_more_than_maximum_allowed
 
+  default_scope { order("t_recibos.fecha_pago desc") }
+
   def received_payment_cannot_be_less_than_minimum_allowed
     t_metodo_pago = TMetodoPago.find(t_metodo_pago_id)
     if pago_recibido && t_metodo_pago.minimo && pago_recibido < t_metodo_pago.minimo
