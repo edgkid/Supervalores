@@ -6,7 +6,6 @@ class TRecibosController < ApplicationController
 
   def new
     @last_t_recibo = TRecibo.find(params[:recibo_id]) if params[:recibo_id]
-    # generar_pdf(target) if params[:show_pdf] == "true"
     @t_recibo = TRecibo.new
   end
 
@@ -105,13 +104,26 @@ class TRecibosController < ApplicationController
   end
 
   def generar_pdf
-    pdf = TReciboPdf.new(@t_factura, @t_recibo, current_user.id)
+    # debugger
+    if params[:notas_credito] == "true"
+      # debugger
+      pdf = TNotasCreditoPdf.new(@t_factura, @t_recibo, current_user.id)
+      send_data(
+        pdf.render,
+        filename: "recibo_nro_#{@t_recibo.id}.pdf",
+        type: "application/pdf",
+        disposition: "inline"
+      ) and return
+    else
+      pdf = TReciboPdf.new(@t_factura, @t_recibo, current_user.id)
     send_data(
       pdf.render,
       filename: "recibo_nro_#{@t_recibo.id}.pdf",
       type: "application/pdf",
       disposition: "inline"
     ) and return
+    end
+    
   end
 
   def generar_reporte_pdf
