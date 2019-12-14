@@ -11,7 +11,7 @@ class TFacturaDatatable < ApplicationDatatable
       fecha_vencimiento: { source: "TFactura.fecha_vencimiento" },
       recargo: { source: "recargo", searchable: false },
       total_factura: { source: "TFactura.total_factura" },
-      pendiente_fact: { source: "t_recibo_id", searchable: false }
+      pendiente_fact: { source: "TFactura.pendiente_total", searchable: false }
     }
   end
 
@@ -25,7 +25,7 @@ class TFacturaDatatable < ApplicationDatatable
         fecha_vencimiento: record.fecha_vencimiento.strftime("%d/%m/%Y"),
         recargo: record[:recargo],
         total_factura: record.total_factura.truncate(2),
-        pendiente_fact: TRecibo.find_by(id: record[:t_recibo_id]).try(:pago_pendiente) || record.total_factura.truncate(2),
+        pendiente_fact: record.pendiente_total, #TRecibo.find_by(id: record[:t_recibo_id]).try(:pago_pendiente) || record.total_factura.truncate(2),
         DT_RowId: url_for({
           id: record.id, controller: 't_facturas', action: 'preview', only_path: true
         })
