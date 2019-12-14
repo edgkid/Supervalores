@@ -69,7 +69,9 @@ class TRecibo < ApplicationRecord
   end
 
   def get_services_total(t_factura, has_no_receipts)
-    has_no_receipts ? t_factura.calculate_services_total_price : t_factura.t_recibos.last.servicios_x_pagar
+    ammount = has_no_receipts ? t_factura.calculate_services_total_price : t_factura.t_recibos.last.servicios_x_pagar
+    credit = t_factura.t_nota_creditos.last.nil? ? 0 :  t_factura.t_nota_creditos.last.monto
+    (ammount - credit)
   end
 
   def get_total_surcharge(t_factura, has_no_receipts)
