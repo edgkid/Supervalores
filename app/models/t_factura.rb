@@ -268,4 +268,10 @@ class TFactura < ApplicationRecord
     credit.abs
   end
 
+  def pendiente_total
+    total_recibos = self.t_recibos.sum(:pago_recibido) - self.t_recibos.sum(:monto_acreditado)
+    total_nota_credito = self.t_nota_creditos.last.nil? ? 0 : self.t_nota_creditos.last.monto
+    self.total_factura - (total_recibos + total_nota_credito)
+  end
+
 end
