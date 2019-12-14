@@ -175,92 +175,113 @@ class TFacturaPdf < PdfHelper
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 160, :position => :right )
 
     move_down 20
-
-    stroke do
-      move_down 20
-      horizontal_rule
-    end
-
-    fill_color '1A135C'
-
-    text_box "<b>NOTAS DE CRÉDITO</b>", inline_format: true, at: [10,455], :align => :center
-
-    fill_color '000000'
-
-    stroke do
-      move_down 20
-      horizontal_rule
-    end
-
-    big_table_for_5_with_widths_and_alignment(
-      bold("Cantidad"), 
-      bold("Ítem"), 
-      bold("Descripción"), 
-      bold("Precio"), 
-      bold("Saldo"),
-      45, 150, 200, 80, :center)
-
-    @t_factura.t_nota_creditos.each do |nota_credito|
-      big_table_for_5_with_widths_and_alignment(
-          "1", 
-          "Nota de Crédito", 
-          "Saldo a favor", 
-          "#{nota_credito.monto}", 
-          "", 
-          45, 150, 200, 80, :center)
-    end
-
-    data = [[bold("Total Crédito a Favor:"), bold("#{@t_factura.t_nota_creditos.sum(:monto)}")]]
-    table(data, :column_widths => [200, 160],
-      :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
-
-    move_down 20
-
-    stroke do
-      move_down 20
-      horizontal_rule
-    end
-
-    fill_color '1A135C'
-
-    text_box "<b>RECIBOS</b>", inline_format: true, at: [10,cursor + 9], :align => :center
-
-    fill_color '000000'
-
-    move_down 20
-    # stroke do
-    #   move_down 20
-    #   horizontal_rule
-    # end
-
-    big_table_for_3_with_widths_and_alignment_and_height(
-      bold("Número de recibo"), 
-      bold("Fecha"), 
-      bold("Monto"),
-      195, 200, :center, 20)
-
-    recibos_monto_total = 0
-
+    # debugger
+    i = 0
     @t_factura.t_recibos.each do |recibo|
-      big_table_for_3_with_widths_and_alignment_and_height(
-      "#{recibo.id}", 
-      "#{recibo.created_at}", 
-      "#{recibo.pago_recibido}",
-      195, 200, :center, 20)
-
-      recibos_monto_total += recibo.pago_recibido
+      i += recibo.t_nota_creditos.count
     end
+
+    monto_credito = 0.0
+    # unless @t_factura.t_nota_creditos.count == 0
+    unless i == 0
+
+      stroke do
+        move_down 20
+        horizontal_rule
+      end
+
+      fill_color '1A135C'
+      text_box "<b>NOTAS DE CRÉDITO</b>", inline_format: true, at: [10,455], :align => :center
+
+      fill_color '000000'
+
+      stroke do
+        move_down 20
+        horizontal_rule
+      end
+
+      big_table_for_5_with_widths_and_alignment(
+        bold("Cantidad"), 
+        bold("Ítem"), 
+        bold("Descripción"), 
+        bold("Precio"), 
+        bold("Saldo"),
+        45, 150, 200, 80, :center)
+
+      @t_factura.t_recibos.each do |recibo|
+        recibo.t_nota_creditos.each do |nota_credito|
+          monto_credito += nota_credito.monto
+          big_table_for_5_with_widths_and_alignment(
+            "1", 
+            "Nota de Crédito", 
+            "Saldo a favor", 
+            "#{nota_credito.monto}", 
+            "", 
+            45, 150, 200, 80, :center)
+        end
+      end
+      # @t_factura.t_nota_creditos.each do |nota_credito|
+        
+      # end
+
+      data = [[bold("Total Crédito a Favor:"), bold("#{monto_credito}")]]
+      table(data, :column_widths => [200, 160],
+        :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
+
+      move_down 20
+    end
+
+    recibos_monto_total = 0.0 
+    # debugger
+    unless @t_factura.t_recibos.count == 0
+
+      stroke do
+        move_down 20
+        horizontal_rule
+      end
+      fill_color '1A135C'
+
+      text_box "<b>RECIBOS</b>", inline_format: true, at: [10,cursor + 9], :align => :center
+
+      fill_color '000000'
+
+      move_down 20
+      # stroke do
+      #   move_down 20
+      #   horizontal_rule
+      # end
+
+      big_table_for_3_with_widths_and_alignment_and_height(
+        bold("Número de recibo"), 
+        bold("Fecha"), 
+        bold("Monto"),
+        195, 200, :center, 20)
+
+      
+
+      @t_factura.t_recibos.each do |recibo|
+        big_table_for_3_with_widths_and_alignment_and_height(
+        "#{recibo.id}", 
+        "#{recibo.created_at.strftime("%d-%m-%Y")}", 
+        "#{recibo.pago_recibido}",
+        195, 200, :center, 20)
+
+        recibos_monto_total += recibo.pago_recibido
+      end
+    end
+
+    # move_down 20
 
     data = [[bold("Total Recibos:"), bold("#{recibos_monto_total}")]]
     table(data, :column_widths => [200, 160],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
-    data = [[bold("Total Crédito a Favor:"), bold("#{@t_factura.t_nota_creditos.sum(:monto)}")]]
+    data = [[bold("Total Crédito a Favor:"), bold("#{monto_credito}")]]
     table(data, :column_widths => [200, 160],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
     data = [[bold("Total Factura:"), bold("#{@t_factura.total_factura}")]]
     table(data, :column_widths => [200, 160],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
-    data = [[bold("Total:"), bold("#{@t_factura.total_factura - recibos_monto_total - @t_factura.t_nota_creditos.sum(:monto)}")]]
+    data = [[bold("Pendiente:"), bold("#{@t_factura.total_factura - recibos_monto_total - @t_factura.t_nota_creditos.sum(:monto)}")]]
     table(data, :column_widths => [200, 160],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
 
