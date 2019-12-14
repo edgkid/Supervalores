@@ -1888,3 +1888,55 @@ configuracion_actual.schedule_invoices
 
 
 
+- unless @t_factura.t_notas_credito.count == 0
+  = link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do
+    %i.fa.fa-download
+      Generar Notas de Credito
+
+
+SMV-140-2016
+
+SMV-140-2016
+
+
+- if params["show_pdf"] == "true"
+  = link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do
+    %i.fa.fa-download
+      Generar Nota de Crédito
+- else
+  - unless @t_recibo.t_nota_creditos.where.not(status: "Usada").count == 0
+    = link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do
+      %i.fa.fa-download
+        Generar Nota de Crédito
+
+
+
+<% if params["show_pdf"] == "true" %>
+  <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do %>
+    <i class="fa fa-download">
+      Generar Notas de Credito
+    </i>
+  <% end %>
+<% else %>
+  <% unless @t_recibo.t_nota_creditos.where.not(status: "Usada").count == 0 %>
+    <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do %>
+      <i class="fa fa-download">
+        Generar Notas de Credito
+      </i>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf'), target: "_blank", class: 'btn btn-primary' do %>
+  <i class="fa fa-download"></i>
+  Generar Recibo
+<% end %>
+
+
+
+
+<%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do %>
+  <i class="fa fa-download">
+    Generar Notas de Credito
+  </i>
+<% end %>
