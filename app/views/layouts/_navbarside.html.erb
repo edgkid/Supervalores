@@ -46,6 +46,12 @@
           <% if can? :read, TCliente %>
             <li><%= link_to 'Estados de cuenta', estados_de_cuenta_path %></li>
           <% end %>
+          <% if can? :read, TRecibo %>
+            <li><%= link_to 'Recibos', t_recibos_path %></li>
+          <% end %>
+          
+            <li><%= link_to 'Notas de Crédito', t_nota_creditos_path %></li>
+          
           <% if can? :read, TResolucion %>
             <li><%= link_to 'Resoluciones', t_resolucions_path %></li>
           <% end %>
@@ -84,9 +90,6 @@
           <% end %>
           <% if can? :read, TConfFacAutomatica %>
             <li><%= link_to 'Factura Automática', t_conf_fac_automaticas_path %></li>
-          <% end %>
-          <% if can? :read, TRecibo %>
-            <li><%= link_to 'Recibos', t_recibos_path %></li>
           <% end %>
           <% if can? :read, TRecargo %>
             <li><%= link_to 'Recargos', t_recargos_path %></li>
