@@ -42,10 +42,23 @@ class TFacturasController < ApplicationController
       #Condicion para aplicar nota de  crédito
       if true
         @t_nota_credito = @t_factura.t_cliente.t_nota_creditos.where(status:"Sin Usar").first
-        @t_nota_credito.t_factura_id = @t_factura.id
-        @t_nota_credito.status = "Usada"
-        #@t_nota_credito.monto = Aqui debe ir el monto que se le asigna a la factura
-        @t_nota_credito.save!
+        unless @t_nota_credito.nil?
+          @t_nota_credito.t_factura_id = @t_factura.id
+          @t_nota_credito.status = "Usada"
+          #Si la nota de crédito excede la factura se crea una nueva nota de crédito con la diferencia
+          if @t_factura.total_factura - @t_nota_credito.monto < 0
+              new_nota_credito = TNotaCredito.new
+              new_nota_credito.t_cliente_id = @t_nota_credito.t_cliente_id
+              new_nota_credito.t_recibo_id = @t_nota_credito.t_recibo_id
+              new_nota_credito.monto = (@t_factura.total_factura - @t_nota_credito.monto).abs
+              new_nota_credito.monto_original = @t_nota_credito.monto_original
+              new_nota_credito.status = "Sin Usar"
+              new_nota_credito.save!
+              #Si la factura fue pagada en su totalidad con la nota de crédito, se actualiza el valor de la nota de crédito actual para que el excente quede reflejado en la nueva
+              @t_nota_credito.monto = @t_factura.total_factura
+          end
+          @t_nota_credito.save!
+        end
       end
       redirect_to new_t_factura_t_recibo_path(@t_factura), notice: 'Factura creada exitosamente.'
     else

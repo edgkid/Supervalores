@@ -32,13 +32,55 @@
         <a href="#">
           <i class="fa fa-file-text"></i>
           <span class="nav-label">
-            Facturación
+            Operación
           </span>
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level collapse">
           <% if can? :read, TFactura %>
             <li><%= link_to 'Factura Manual', t_facturas_path %></li>
+          <% end %>
+          <% if can? :read, TCliente %>
+            <li><%= link_to 'Clientes', t_clientes_path %></li>
+          <% end %>
+          <% if can? :read, TCliente %>
+            <li><%= link_to 'Estados de cuenta', estados_de_cuenta_path %></li>
+          <% end %>
+          <% if can? :read, TResolucion %>
+            <li><%= link_to 'Resoluciones', t_resolucions_path %></li>
+          <% end %>
+        </ul>
+      </li>
+
+      <li>
+        <a href="#">
+          <i class="fa fa-edit"></i>
+          <span class="nav-label">
+            Gestión
+          </span>
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level">
+          <% if can? :read, TTipoCliente %>
+            <li><%= link_to 'Tipos de Clientes', t_tipo_clientes_path %></li>
+          <% end %>
+          <% if can? :read, TTipoClienteTipo %>
+            <li><%= link_to 'Tipos de Clientes - Tipos', t_tipo_cliente_tipos_path %></li>
+          <% end %>
+          <% if can? :read, TTipoPersona %>
+            <li><%= link_to 'Tipos de Personas', t_tipo_personas_path %></li>
+          <% end %>
+          <% if can? :read, TEstatus %>
+            <li><%= link_to 'Estatus', t_estatuses_path %></li>
+          <% end %>
+          <% if can? :read, TEmpresa %>
+            <li><%= link_to 'Empresas', t_empresas_path %></li>
+          <% end %>
+          <% if can? :read, TEmpresaTipoValor %>
+            <li><%= link_to 'Empresas - Tipos de Instrumento', t_empresa_tipo_valors_path %></li>
+          <% end %>
+          <% if can? :read, TEmpresaSectorEconomico %>
+            <li><%= link_to 'Empresas - Sectores económicos', t_empresa_sector_economicos_path %></li>
           <% end %>
           <% if can? :read, TConfFacAutomatica %>
             <li><%= link_to 'Factura Automática', t_conf_fac_automaticas_path %></li>
@@ -66,48 +108,6 @@
           <% end %>
           <% if can? :read, TMetodoPago %>
             <li><%= link_to 'Métodos de Pago', t_metodo_pagos_path %></li>
-          <% end %>
-        </ul>
-      </li>
-
-      <li>
-        <a href="#">
-          <i class="fa fa-edit"></i>
-          <span class="nav-label">
-            Gestión
-          </span>
-          <span class="fa arrow"></span>
-        </a>
-        <ul class="nav nav-second-level">
-          <% if can? :read, TCliente %>
-            <li><%= link_to 'Clientes', t_clientes_path %></li>
-          <% end %>
-          <% if can? :read, TCliente %>
-            <li><%= link_to 'Estados de cuenta', estados_de_cuenta_path %></li>
-          <% end %>
-          <% if can? :read, TTipoCliente %>
-            <li><%= link_to 'Tipos de Clientes', t_tipo_clientes_path %></li>
-          <% end %>
-          <% if can? :read, TTipoClienteTipo %>
-            <li><%= link_to 'Tipos de Clientes - Tipos', t_tipo_cliente_tipos_path %></li>
-          <% end %>
-          <% if can? :read, TTipoPersona %>
-            <li><%= link_to 'Tipos de Personas', t_tipo_personas_path %></li>
-          <% end %>
-          <% if can? :read, TEstatus %>
-            <li><%= link_to 'Estatus', t_estatuses_path %></li>
-          <% end %>
-          <% if can? :read, TResolucion %>
-            <li><%= link_to 'Resoluciones', t_resolucions_path %></li>
-          <% end %>
-          <% if can? :read, TEmpresa %>
-            <li><%= link_to 'Empresas', t_empresas_path %></li>
-          <% end %>
-          <% if can? :read, TEmpresaTipoValor %>
-            <li><%= link_to 'Empresas - Tipos de Instrumento', t_empresa_tipo_valors_path %></li>
-          <% end %>
-          <% if can? :read, TEmpresaSectorEconomico %>
-            <li><%= link_to 'Empresas - Sectores económicos', t_empresa_sector_economicos_path %></li>
           <% end %>
         </ul>
       </li>
