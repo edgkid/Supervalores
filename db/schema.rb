@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_09_030950) do
+ActiveRecord::Schema.define(version: 2019_12_13_203259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -339,11 +339,12 @@ ActiveRecord::Schema.define(version: 2019_12_09_030950) do
     t.integer "t_cliente_id"
     t.integer "t_recibo_id"
     t.float "monto"
-    t.boolean "usada"
-    t.integer "factura_redimida"
+    t.integer "t_factura_id"
     t.string "descripcion"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "monto_original"
+    t.string "status"
   end
 
   create_table "t_otros", force: :cascade do |t|

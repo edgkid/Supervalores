@@ -177,6 +177,18 @@ class PdfHelper < Prawn::Document
           :cell_style => {:inline_format => true, :border_width => 0.1, :align => align1,:height => height1}, width: bounds.width, )
     end
 
+    def table_for_2_with_widths_and_height_and_alignment_header(text1,text2,width1,height1,align1)
+        fill_color '000000'
+        data = [[text1,text2]]
+        table(data, :column_widths => [width1, bounds.width-width1],
+          :cell_style => {:inline_format => true, :border_width => 0.1, :align => align1,:height => height1}, width: bounds.width, ) do
+            row(0).column(1).style({
+                background_color: '3E8E3D'
+                # text_color: '3E8E3D'
+            })
+        end
+    end
+
     def table_for_2_with_widths_and_height_and_alignment_light_gray(text1,text2,width1,height1,align1)
         fill_color '000000'
         data = [[text1,text2]]
@@ -255,6 +267,30 @@ class PdfHelper < Prawn::Document
         data = [[text1,text2,text3,text4,text5,text6]]
         table(data, :column_widths => [width1,width2,width3,width4,width5, bounds.width-width1-width2-width3-width4-width5],
           :cell_style => {:inline_format => true, :border_width => 0.1, :align => align1}, width: bounds.width )
+    end
+
+    def big_table_for_8_with_widths_and_alignment_and_height(text1,text2,text3,text4,text5,text6,text7,text8,width1,width2,width3,width4,width5,width6,width7,align1)
+        fill_color '000000'
+        data = [[text1,text2,text3,text4,text5,text6,text7,text8]]
+        table(data, :column_widths => [width1,width2,width3,width4,width5,width6,width7, bounds.width-width1-width2-width3-width4-width5-width6-width7],
+          :cell_style => {:inline_format => true, :border_width => 0.1, :align => align1}, width: bounds.width ) do
+            # style( row(0).column(0..7).background_color('000000') )
+            # row(0).style({
+            #     background_color: '000000'
+            # })
+        end
+    end
+
+    def big_table_for_8_with_widths_and_alignment_and_height_header(text1,text2,text3,text4,text5,text6,text7,text8,width1,width2,width3,width4,width5,width6,width7,align1)
+        fill_color '000000'
+        data = [[text1,text2,text3,text4,text5,text6,text7,text8]]
+        table(data, :column_widths => [width1,width2,width3,width4,width5,width6,width7, bounds.width-width1-width2-width3-width4-width5-width6-width7],
+        :cell_style => {:inline_format => true, :border_width => 0.1, :align => align1}, width: bounds.width ) do
+            # style( row(0).column(0..7).background_color('000000') )
+            row(0).style({
+                background_color: 'C4EAF7'
+            })
+        end
     end
 
     def table_inside_a_table

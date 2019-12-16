@@ -1,0 +1,1942 @@
+a = TConfFacAutomatica.first
+a.schedule_invoices
+
+a = TFactura.new
+a.call_oracle_database
+
+SELECT g.NOMBRE_COMERCIAL, sum( case when to_char(a1.periodo,'yyyymm') = '201801' then MONTO else 0 end) as enero,  sum( case when to_char(a1.periodo,'yyyymm') = '201802' then MONTO else 0 end) as febrero, sum( case when to_char(a1.periodo,'yyyymm') = '201803' then MONTO else 0 end) as marzo, sum( case when to_char(a1.periodo,'yyyymm') = '201804' then MONTO else 0 end) as abril, sum( case when to_char(a1.periodo,'yyyymm') = '201805' then MONTO else 0 end) as mayo, sum( case when to_char(a1.periodo,'yyyymm') = '201806' then MONTO else 0 end) as junio, sum( case when to_char(a1.periodo,'yyyymm') = '201807' then MONTO else 0 end) as julio, sum( case when to_char(a1.periodo,'yyyymm') = '201808' then MONTO else 0 end) as agosto, sum( case when to_char(a1.periodo,'yyyymm') = '201809' then MONTO else 0 end) as septiembre, sum( case when to_char(a1.periodo,'yyyymm') = '201810' then MONTO else 0 end) as octubre, sum( case when to_char(a1.periodo,'yyyymm') = '201811' then MONTO else 0 end) as noviembre, sum( case when to_char(a1.periodo,'yyyymm') = '201812' then MONTO else 0 end) as diciembre, sum( case when to_char(a1.periodo,'yyyy') = '$y' then MONTO else 0 end) as total FROM SMV_APP.SMV_DS01_TRANSACCIONES a1 join SMV_APP.SMV_GRAL_ENTIDAD g on (a1.CODIGO_ENTIDAD=g.ID_CASA_VALOR) join SMV_APP.SMV_DOCUMENTOS_XML d on (a1.ID_DOCUMENTO_XML = d.ID and d.ESTATUS=4) Where a1.CODIGO_ENTIDAD = '$codigo' Group by g.NOMBRE_COMERCIAL
+
+SELECT distinct(to_char(periodo,'yyyy')) FROM SMV_APP.SMV_DS01_TRANSACCIONES order by 1
+
+SELECT g.NOMBRE_COMERCIAL, sum( case when to_char(a1.periodo,'yyyymm') = '201801' then MONTO else 0 end) as enero,  sum( case when to_char(a1.periodo,'yyyymm') = '".$y."02' then MONTO else 0 end) as febrero, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."03' then MONTO else 0 end) as marzo, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."04' then MONTO else 0 end) as abril, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."05' then MONTO else 0 end) as mayo, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."06' then MONTO else 0 end) as junio, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."07' then MONTO else 0 end) as julio, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."08' then MONTO else 0 end) as agosto, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."09' then MONTO else 0 end) as septiembre, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."10' then MONTO else 0 end) as octubre, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."11' then MONTO else 0 end) as noviembre, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."12' then MONTO else 0 end) as diciembre, sum( case when to_char(a1.periodo,'yyyy') = '$y' then MONTO else 0 end) as total FROM SMV_APP.SMV_DS01_TRANSACCIONES a1 join SMV_APP.SMV_GRAL_ENTIDAD g on (a1.CODIGO_ENTIDAD=g.ID_CASA_VALOR) join SMV_APP.SMV_DOCUMENTOS_XML d on (a1.ID_DOCUMENTO_XML = d.ID and d.ESTATUS=4) Where a1.CODIGO_ENTIDAD = '$codigo' Group by g.NOMBRE_COMERCIAL
+
+SELECT g.NOMBRE_COMERCIAL, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."01' then (COMPRA + VENTA + VOLUMEN) else 0 end) as enero,  sum( case when to_char(a1.periodo,'yyyymm') = '".$y."02' then (COMPRA + VENTA + VOLUMEN) else 0 end) as febrero, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."03' then (COMPRA + VENTA + VOLUMEN) else 0 end) as marzo, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."04' then (COMPRA + VENTA + VOLUMEN) else 0 end) as abril, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."05' then (COMPRA + VENTA + VOLUMEN) else 0 end) as mayo, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."06' then (COMPRA + VENTA + VOLUMEN) else 0 end) as junio, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."07' then (COMPRA + VENTA + VOLUMEN) else 0 end) as julio, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."08' then (COMPRA + VENTA + VOLUMEN) else 0 end) as agosto, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."09' then (COMPRA + VENTA + VOLUMEN) else 0 end) as septiembre, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."10' then (COMPRA + VENTA + VOLUMEN) else 0 end) as octubre, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."11' then (COMPRA + VENTA + VOLUMEN) else 0 end) as noviembre, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."12' then (COMPRA + VENTA + VOLUMEN) else 0 end) as diciembre, sum( case when to_char(a1.periodo,'yyyy') = '".$y."' then (COMPRA + VENTA + VOLUMEN) else 0 end) as total FROM SMV_APP.SMV_FOREX_ANEXO_II1 a1 join SMV_APP.SMV_GRAL_ENTIDAD g on (a1.CODIGO_ENTIDAD=g.ID_CASA_VALOR) join SMV_APP.SMV_DOCUMENTOS_XML d on (a1.ID_DOCUMENTO_XML = d.ID and d.ESTATUS=4) Where a1.CODIGO_ENTIDAD = '$codigo' Group by g.NOMBRE_COMERCIAL
+
+select idt_facturas, total_factura, fecha_factura, fd.precio_unitario, recargo  from t_facturas f join t_factura_detalle fd on f.idt_facturas=fd.idt_factura where estatus <> 4 and idt_clientes = $idt_c_variables and STR_TO_DATE(fecha_factura,'%Y') like '".$y."-00-00' and fd.idt_tarifa_servicios = 42 and idt_periodo = 3 (edited)
+
+select idt_facturas, total_factura, fecha_factura, fd.precio_unitario, recargo from t_facturas f join t_factura_detalle fd on f.idt_facturas=fd.idt_factura where estatus <> 4 and idt_clientes = $idt_c_variables and STR_TO_DATE(fecha_factura,'%Y') like '".$y."-00-00' and fd.idt_tarifa_servicios = 42 and idt_periodo = 4
+
+=================================-=============================================================
+
+con=OCI8.new("JMEDINA","abc123","(DESCRIPTION=(ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = 35.171.169.71)(PORT = 1521)))(CONNECT_DATA=(SID=orcl)))")
+
+statement= 
+    "Select 
+      a.CODIGO_ENTIDAD codigo_seri, 
+      upper(c.Nombre_comercial) Casa, 
+      to_char(a.periodo,'yyyymm') Periodo, 
+      to_char(a.periodo,'yyyy') Anio, 
+      sum( round(A.MONTO,2) ) Monto ,
+      c.N_RESOLUCION resolucion
+
+      from 
+        smv_app.SMV_DS01_TRANSACCIONES a, 
+        smv_app.SMV_GRAL_ENTIDAD c, 
+        smv_app.smv_001 b , 
+        smv_app.SMV_DOCUMENTOS_XML d,
+        smv_app.smv_gral_estado e
+      where a.periodo > to_date ('20160331','yyyymmdd') 
+        and a.CODIGO_ENTIDAD   = d.CODIGO_ENTIDAD 
+        and a.ID_DOCUMENTO_XML = d.ID 
+        and d.ESTATUS          = 4 
+        and a.codigo_entidad   = c.id_casa_valor 
+        and c.ENT_TST          = 'N' 
+        and b.codigo           = a.ID_TIPO_VALOR  
+        and c.N_RESOLUCION = 'CNV-155-07'
+        and not (c.estado = 4 or c.estado = 7)
+      group  by  
+        a.CODIGO_ENTIDAD, 
+        c.Nombre_comercial, 
+        a.periodo ,
+        c.N_RESOLUCION
+      order by 
+        2,3"
+
+statement= 
+      "Select  
+      upper(c.nombre) nombre,
+      upper(c.apellido) apellido, 
+      to_char(a.periodo,'yyyymm') Periodo, 
+      to_char(a.periodo,'yyyy') Anio, 
+      sum( round(A.MONTO,2) ) Monto,
+      c.resolucion resolucion
+
+      from 
+        smv_app.SMV_DS01_TRANSACCIONES a, 
+        smv_app.SMV_PERSONA_NATURAL c, 
+        smv_app.smv_001 b, 
+        smv_app.SMV_DOCUMENTOS_XML d,
+        smv_app.smv_gral_estado e
+      where a.periodo > to_date ('20160331','yyyymmdd') 
+        and a.CODIGO_ENTIDAD   = d.CODIGO_ENTIDAD 
+        and a.ID_DOCUMENTO_XML = d.ID 
+        and d.ESTATUS          = 4 
+        and a.codigo_entidad   = c.id_casa_valor 
+        and b.codigo           = a.ID_TIPO_VALOR  
+        and c.resolucion = 'CNV-001-06'
+        and not (c.estado = 4 or c.estado = 7)
+      group  by  
+        a.CODIGO_ENTIDAD, 
+        c.nombre, 
+        a.periodo,
+        c.resolucion
+      order by 
+        2,3"
+
+statement= "select * from smv_app.SMV_GRAL_ENTIDAD fetch first 10 rows only"
+
+================= test query ======================
+CNV-245-09
+CNV-224-05
+SMV No.564-2014
+
+con=OCI8.new("JMEDINA","abc123","(DESCRIPTION=(ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = 35.171.169.71)(PORT = 1521)))(CONNECT_DATA=(SID=orcl)))")
+
+juridico muestra
+
+statement= 
+    "Select
+      upper(a.nombre_comercial) casa,
+      a.n_resolucion resolucion,
+      a.estado estado
+      from
+        smv_app.smv_gral_entidad a
+      where a.n_resolucion in ('CNV-155-07', 'CNV-245-09', 'CNV-224-05', 'CNV-251-11')
+        and not (a.estado = 4 or a.estado = 7)"
+
+natural, muestra
+
+statement=
+"Select
+  a.estado,
+  a.nombre,
+  a.apellido,
+  a.resolucion
+  from
+    smv_app.SMV_PERSONA_NATURAL a
+  where not
+    (a.estado = 'Expirada' or a.estado = 'Cancelada')
+  and 
+    a.resolucion in ('CNV-067-08', 'CNV-420-01', 'CNV-108-08', 'CNV-421-01', 'CNV-429-01', 'CNV-120-08')"
+
+montos
+
+resoluciones = 
+statement=
+  "Select 
+    a.CODIGO_ENTIDAD codigo_seri, 
+    upper(c.Nombre_comercial ) Casa, 
+    to_char(a.periodo,'yyyymm') Periodo, 
+    to_char(a.periodo,'yyyy') Anio, 
+    sum(  round(A.MONTO,2) ) Monto 
+  from  
+    smv_app.SMV_DS01_TRANSACCIONES  A, 
+    smv_app.SMV_GRAL_ENTIDAD c, 
+    smv_app.smv_001 B , 
+    smv_app.SMV_DOCUMENTOS_XML d 
+  where  
+    a.periodo >  to_date ('20160331','yyyymmdd') 
+    and  A.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD 
+    and a.ID_DOCUMENTO_XML = d.ID 
+    and  d.ESTATUS=4 
+    and  a.codigo_entidad = c.id_casa_valor 
+    AND C.ENT_TST='N' 
+    and  b.codigo = A.ID_TIPO_VALOR  
+    and not (c.estado = 4 or c.estado = 7)
+  group  by  
+    a.CODIGO_ENTIDAD, 
+    c.Nombre_comercial , 
+    a.periodo 
+  ORDER BY 
+    2,3"
+
+statement=
+  "SELECT  SVN.CODIGO_ENTIDAD  Codigo_SERI ,
+    Upper( SGE.NOMBRE_COMERCIAL) Nombre,
+    to_char(SVN.PERIODO,'yyyy') Anio,
+    round( avg (SVN.VALOR_NETO),2)  promedio ,
+    count(SVN.MES) Mes_reportados
+  FROM    
+    SMV_SDI_IAS_VALOR_NETO SVN , 
+    SMV_GRAL_ENTIDAD SGE ,
+    SMV_DOCUMENTOS_XML d
+  WHERE   TO_CHAR(svn.PERIODO,'YYYY') =2019
+    and SVN.CODIGO_ENTIDAD = SGE.ID_CASA_VALOR
+    and  SVN.CODIGO_ENTIDAD   = D.CODIGO_ENTIDAD
+    and  SVN.ID_DOCUMENTO_XML = d.ID
+    and  d.ESTATUS=4
+    AND UPPER(SGE.NOMBRE_COMERCIAL) =  NVL(:V_ENTIDAD, SGE.NOMBRE_COMERCIAL)
+  group  by  
+    Upper( SGE.NOMBRE_COMERCIAL) , 
+    SVN.CODIGO_ENTIDAD  ,
+    to_char(SVN.PERIODO,'yyyy') 
+  ORDER BY 
+    2"
+
+Sin nombre de casa
+statement=
+  "SELECT  SVN.CODIGO_ENTIDAD  Codigo_SERI ,
+    Upper( SGE.NOMBRE_COMERCIAL) Nombre,
+    to_char(SVN.PERIODO,'yyyy') Anio,
+    round( avg (SVN.VALOR_NETO),2)  promedio ,
+    count(SVN.MES) Mes_reportados,
+  FROM
+    SMV_SDI_IAS_VALOR_NETO SVN ,
+    SMV_GRAL_ENTIDAD SGE ,
+    SMV_DOCUMENTOS_XML d
+  WHERE   TO_CHAR(svn.PERIODO,'YYYY') =2019
+    and SVN.CODIGO_ENTIDAD = SGE.ID_CASA_VALOR
+    and  SVN.CODIGO_ENTIDAD   = D.CODIGO_ENTIDAD
+    and  SVN.ID_DOCUMENTO_XML = d.ID
+    and  d.ESTATUS=4
+  group  by
+    Upper( SGE.NOMBRE_COMERCIAL) ,
+    SVN.CODIGO_ENTIDAD  ,
+    to_char(SVN.PERIODO,'yyyy')
+  ORDER BY
+    2"
+
+    c.id_tipo_regulado ID_Tipo_Regulado
+smv_app.SMV_GRAL_ENTIDAD c,
+
+    statement= 
+    "Select
+      upper(a.nombre_comercial) casa,
+      a.n_resolucion resolucion,
+      a.estado estado
+      from
+        smv_app.smv_gral_entidad a
+      where a.n_resolucion in (#{formato_resoluciones})
+        and not (a.estado = 4 or a.estado = 7)"
+
+
+cursor = con.parse(statement)
+a = []
+cursor.exec
+cursor.fetch() {|row| a.push(row)}
+ap a
+
+t_resolucions = TResolucion.where(t_tipo_cliente_id: 10)
+numero_resoluciones = t_resolucions.pluck(:resolucion)
+a = TConfFacAutomatica.first
+a.call_query_estatus_natural(numero_resoluciones)
+
+===================================================
+
+        cursor = con.parse(statement)
+a = []
+cursor.exec
+cursor.fetch() {|row| a.push(row)}
+ap a
+
+
+statement="select * from smv_app.SMV_GRAL_ENTIDAD"
+
+[ 0] #<OCI8::Metadata::Column: ID NUMBER(20) NOT NULL>,
+    [ 1] #<OCI8::Metadata::Column: ID_TIPO_REGULADO NUMBER(4) NOT NULL>,
+    [ 2] #<OCI8::Metadata::Column: ID_TIPO_CASA NUMBER(4)>,
+    [ 3] #<OCI8::Metadata::Column: ID_CASA_VALOR VARCHAR2(5) NOT NULL>,
+    [ 4] #<OCI8::Metadata::Column: RUC VARCHAR2(30)>,
+    [ 5] #<OCI8::Metadata::Column: N_RESOLUCION VARCHAR2(30)>,
+    [ 6] #<OCI8::Metadata::Column: NOMBRE_COMERCIAL VARCHAR2(256) NOT NULL>,
+    [ 7] #<OCI8::Metadata::Column: INICIO_OPERACION DATE>,
+    [ 8] #<OCI8::Metadata::Column: DIRECCCION VARCHAR2(256)>,
+    [ 9] #<OCI8::Metadata::Column: POSTAL VARCHAR2(20)>,
+    [10] #<OCI8::Metadata::Column: TELEFONO VARCHAR2(20)>,
+    [11] #<OCI8::Metadata::Column: FAX VARCHAR2(20)>,
+    [12] #<OCI8::Metadata::Column: SITIO_WEB VARCHAR2(120)>,
+    [13] #<OCI8::Metadata::Column: CREADO_POR VARCHAR2(40) NOT NULL>,
+    [14] #<OCI8::Metadata::Column: FECHA_CREACION DATE NOT NULL>,
+    [15] #<OCI8::Metadata::Column: CORREO_NOTIFICACION VARCHAR2(3000)>,
+    [16] #<OCI8::Metadata::Column: ESTADO NUMBER(2)>,
+    [17] #<OCI8::Metadata::Column: ENT_TST CHAR(1)>
+
+
+=================================RAW PRINT=======================================================
+cursor = con.parse(statement)
+cursor.exec
+cursor.fetch() {|row| puts row}
+
+
+==================================RAW PRINT 2======================================================
+cursor = con.parse(statement)
+cursor.exec
+cursor.fetch() {|row| printf "CODIGO_SERI: %s, CASA: %s, PERIODO: %s, ANIO: %s, MONTO %d\n", row[0], row[1], row[2], row[3], row[4]}
+
+
+==================================RAW ARRAY======================================================
+cursor = con.parse(statement)
+a = []
+cursor.exec
+cursor.fetch() {|row| a.push(row)}
+ap a
+
+
+
+==================================ARRAY PRINT======================================================
+cursor = con.parse(statement)
+a = []
+cursor.exec
+cursor.fetch() {|row| a.push(["CODIGO_SERI: #{row[0]}", "CASA: #{row[1]}", "PERIODO: #{row[2]}", "ANIO: #{row[3]}", "MONTO #{row[4]}"])}
+ap array
+
+
+
+
+
+cursor = con.parse(statement)
+a = []
+cursor.exec
+cursor.fetch() {|row| a.push(
+                              "CODIGO_SERI" => "#{row[0]}",
+                              "CASA" => "#{row[1]}", 
+                              "PERIODO" => "#{row[2]}", 
+                              "ANIO" => "#{row[3]}",
+                              "MONTO" => "#{row[4]}")}
+
+
+
+cursor.column_metadata
+[0] #<OCI8::Metadata::Column: CODIGO_SERI VARCHAR2(5) NOT NULL>,
+[1] #<OCI8::Metadata::Column: CASA VARCHAR2(256)>,
+[2] #<OCI8::Metadata::Column: PERIODO VARCHAR2(6)>,
+[3] #<OCI8::Metadata::Column: ANIO VARCHAR2(4)>,
+[4] #<OCI8::Metadata::Column: MONTO NUMBER>
+
+
+statement="select ID from smv_app.SMV_GRAL_ENTIDAD"
+statement="select NOMBRE_COMERCIAL from smv_app.SMV_GRAL_ENTIDAD"
+
+statement="select NOMBRE_COMERCIAL from smv_app.SMV_GRAL_ENTIDAD"
+statement="select * from SMV_APP.SMV_DS01_TRANSACCIONES"
+SMV_APP.SMV_DS01_TRANSACCIONES
+
+
+== Por periodo (anio) y nombre comercial
+
+statement="Select a.CODIGO_ENTIDAD codigo_seri, upper(c.Nombre_comercial ) Casa, to_char(a.periodo,'yyyymm') Periodo, to_char(a.periodo,'yyyy') Anio, sum(  round(A.MONTO,2) ) Monto from  smv_app.SMV_DS01_TRANSACCIONES  A, smv_app.SMV_GRAL_ENTIDAD c, smv_app.smv_001 B , smv_app.SMV_DOCUMENTOS_XML d where  a.periodo >  to_date ('20160331','yyyymmdd') and  A.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD and a.ID_DOCUMENTO_XML = d.ID and  d.ESTATUS=4 and  a.codigo_entidad = c.id_casa_valor AND C.ENT_TST='N' and  b.codigo = A.ID_TIPO_VALOR AND    to_char(a.periodo,'yyyy')  =  nvl(2019,  to_char(a.periodo,'yyyy')) and upper(c.Nombre_comercial)  = nvl('WINEXCO SECURITIES, INC.', upper(c.Nombre_comercial)) group  by  a.CODIGO_ENTIDAD, c.Nombre_comercial , a.periodo ORDER BY 2,3"
+
+== Por codigo seri solamente
+
+statement="Select a.CODIGO_ENTIDAD codigo_seri, upper(c.Nombre_comercial ) Casa, to_char(a.periodo,'yyyymm') Periodo, to_char(a.periodo,'yyyy') Anio, sum(  round(A.MONTO,2) ) Monto from  smv_app.SMV_DS01_TRANSACCIONES  A, smv_app.SMV_GRAL_ENTIDAD c, smv_app.smv_001 B , smv_app.SMV_DOCUMENTOS_XML d where  a.periodo >  to_date ('20160331','yyyymmdd') and  A.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD and a.ID_DOCUMENTO_XML = d.ID and  d.ESTATUS=4 and  a.codigo_entidad = c.id_casa_valor AND C.ENT_TST='N' and  b.codigo = A.ID_TIPO_VALOR AND    to_char(a.CODIGO_ENTIDAD)  =  nvl(066,  to_char(a.CODIGO_ENTIDAD)) group  by  a.CODIGO_ENTIDAD, c.Nombre_comercial , a.periodo ORDER BY 2,3"
+
+===========================================================================================================
+
+statement="Select * from smv_app.SMV_GRAL_ENTIDAD"
+
+statement="Select * from smv_app.SMV_DOCUMENTOS_XML"
+
+
+statement="Select a.ESTATUS estatus, a.USUARIO usuario from smv_app.SMV_DOCUMENTOS_XML a"
+
+statement="Select 
+a.ESTATUS estatus, 
+a.USUARIO usuario 
+from smv_app.SMV_DOCUMENTOS_XML a 
+fetch first 5 rows only"
+
+statement="SELECT owner, table_name FROM all_tables"
+
+statement="SELECT owner, table_name FROM all_tables where owner = 'SMV_APP'"
+
+
+statement="Select * from smv_app.SMV_PERSONA_NATURAL fetch first 100 rows only"
+
+statement=statement="select a.CODIGO_ENTIDAD, UPPER( c.Nombre_comercial) Ente , upper (c.sitio_web) Sector , a.resolucion , a.Fecha_resolucion , round((sysdate - a.fecha_resolucion) / 365,2) Anios, upper(a.titulo_valor) Titulo , a.monto_tot_registrado Monto_emision , a.acciones_registrada , a.acciones_circulacion , s.serie , s.fecha_oferta , s.fecha_vencimiento Fecha_vencimiento_serie , to_char (s.fecha_vencimiento,'yyyymm') periodo_vence , s.MONTO Monto_inicial , s.monto_circulacion from smv_emi_f3_emision a, smv_app.SMV_GRAL_ENTIDAD c , smv_emi_f3_series s , smv_documentos_xml d where a.codigo_entidad = c.id_casa_valor and TO_CHAR (A.PERIODO,'YYYYMM') = 201901 and a.CODIGO_ENTIDAD = s.codigo_entidad and a.PERIODO = s.PERIODO and a.ID_DOCUMENTO_XML = s.ID_DOCUMENTO_XML and a.resolucion  = s.RESOLUCION and a.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD and a.ID_DOCUMENTO_XML = d.ID and d.ESTATUS=4 order by 2,3"
+ ====================
+statement="select a.CODIGO_ENTIDAD, UPPER( c.Nombre_comercial) Ente , upper (c.sitio_web) Sector , a.resolucion , a.Fecha_resolucion , round((sysdate - a.fecha_resolucion) / 365,2) Anios, upper(a.titulo_valor) Titulo , a.monto_tot_registrado Monto_emision , a.acciones_registrada , a.acciones_circulacion , s.serie , s.fecha_oferta , s.fecha_vencimiento Fecha_vencimiento_serie , to_char (s.fecha_vencimiento,'yyyymm') periodo_vence , s.MONTO Monto_inicial , s.monto_circulacion from smv_emi_f3_emision a, smv_app.SMV_GRAL_ENTIDAD c , smv_emi_f3_series s , smv_documentos_xml d where a.codigo_entidad = c.id_casa_valor and TO_CHAR (A.PERIODO,'YYYYMM') = 201901 and a.CODIGO_ENTIDAD = s.codigo_entidad and a.PERIODO = s.PERIODO and a.ID_DOCUMENTO_XML = s.ID_DOCUMENTO_XML and a.resolucion  = s.RESOLUCION and a.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD and a.ID_DOCUMENTO_XML = d.ID and d.ESTATUS=4 order by 2,3"
+
+statement="select a.CODIGO_ENTIDAD,
+UPPER( c.Nombre_comercial) Ente , upper (c.sitio_web) Sector ,
+a.resolucion ,
+a.Fecha_resolucion , round((sysdate - a.fecha_resolucion) / 365,2) Anios,
+upper(a.titulo_valor) Titulo ,
+a.monto_tot_registrado Monto_emision ,
+a.acciones_registrada ,
+a.acciones_circulacion ,
+s.serie ,
+s.fecha_oferta ,
+s.fecha_vencimiento Fecha_vencimiento_serie ,
+to_char (s.fecha_vencimiento,'yyyymm') periodo_vence ,
+s.MONTO Monto_inicial ,
+s.monto_circulacion
+from smv_emi_f3_emision a, smv_app.SMV_GRAL_ENTIDAD c , smv_emi_f3_series s , smv_documentos_xml d
+where a.codigo_entidad = c.id_casa_valor
+and TO_CHAR (A.PERIODO,'YYYYMM') = '201901'
+and a.CODIGO_ENTIDAD = s.codigo_entidad
+and a.PERIODO = s.PERIODO
+and a.ID_DOCUMENTO_XML = s.ID_DOCUMENTO_XML
+and a.resolucion  = s.RESOLUCION
+and a.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD
+and a.ID_DOCUMENTO_XML = d.ID
+and d.ESTATUS=4
+order by 2,3"
+
+statement="select a.CODIGO_ENTIDAD,
+UPPER( c.Nombre_comercial) Ente , upper (c.sitio_web) Sector ,
+a.resolucion ,
+a.Fecha_resolucion , 
+round((sysdate - a.fecha_resolucion) / 365,2) Anios,
+upper(a.titulo_valor) Titulo ,
+a.monto_tot_registrado Monto_emision ,
+a.acciones_registrada ,
+a.acciones_circulacion ,
+s.serie ,
+s.fecha_oferta ,
+s.fecha_vencimiento Fecha_vencimiento_serie ,
+to_char (s.fecha_vencimiento,'yyyymm') periodo_vence ,
+s.MONTO Monto_inicial ,
+s.monto_circulacion
+from smv_app.smv_emi_f3_emision a, smv_app.SMV_GRAL_ENTIDAD c , smv_app.smv_emi_f3_series s , smv_app.smv_documentos_xml d
+where a.codigo_entidad = c.id_casa_valor
+
+and TO_CHAR (A.PERIODO,'YYYYMM') = '201902'
+
+and a.CODIGO_ENTIDAD = s.codigo_entidad
+
+and a.CODIGO_ENTIDAD = '2516'
+
+and a.PERIODO = s.PERIODO
+and a.ID_DOCUMENTO_XML = s.ID_DOCUMENTO_XML
+and a.resolucion  = s.RESOLUCION
+and a.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD
+and a.ID_DOCUMENTO_XML = d.ID
+and d.ESTATUS=4
+order by 2,3"
+
+statement=
+"select b.CODIGO_ENTIDAD,
+  to_char(b.PERIODO, 'YYYYMM'),
+  b.RESOLUCION,
+  b.SERIE,
+  b.MONTO,
+  b.MONTO_CIRCULACION
+  b.FECHA_CREACION
+  from  
+    smv_app.smv_emi_f3_emision a, 
+    smv_app.smv_emi_f3_series b
+  where a.CODIGO_ENTIDAD = b.CODIGO_ENTIDAD
+    and a.CODIGO_ENTIDAD = '2904'
+    and TO_CHAR (A.PERIODO,'YYYYMM') = '201806'"
+
+
+SMV_GRAL_ESTADO = tabla de estados
+
+statement="select * from smv_app.SMV_GRAL_ESTADO"
+statement="select * from smv_app.smv_documentos_xml fetch first 10 rows only"
+
+cursor = con.parse(statement)
+a = []
+cursor.exec
+cursor.fetch() {|row| a.push(row)}
+ap a
+
+
+===========================================================================================================
+
+statement="Select a.CODIGO_ENTIDAD codigo_seri, upper(c.Nombre_comercial ) Casa, to_char(a.periodo,'yyyymm') Periodo, to_char(a.periodo,'yyyy') Anio, sum(  round(A.MONTO,2) ) Monto from  smv_app.SMV_DS01_TRANSACCIONES  A, smv_app.SMV_GRAL_ENTIDAD c, smv_app.smv_001 B , smv_app.SMV_DOCUMENTOS_XML d where  a.periodo >  to_date ('20160331','yyyymmdd') and  A.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD and a.ID_DOCUMENTO_XML = d.ID and  d.ESTATUS=4 and  a.codigo_entidad = c.id_casa_valor AND C.ENT_TST='N' and  b.codigo = A.ID_TIPO_VALOR 
+
+  
+  AND    to_char(a.CODIGO_ENTIDAD)  =  nvl(066,  to_char(a.CODIGO_ENTIDAD)) 
+
+	AND    to_char(a.periodo,'yyyy')  =  nvl(2019,  to_char(a.periodo,'yyyy'))
+
+	and upper(c.Nombre_comercial)  = nvl('WINEXCO SECURITIES, INC.', upper(c.Nombre_comercial)) 
+
+
+	group  by  a.CODIGO_ENTIDAD, c.Nombre_comercial , a.periodo ORDER BY 2,3"
+
+
+
+AND to_char(a.periodo,'yyyy')  =  nvl(2019,  to_char(a.periodo,'yyyy'))   Cambiar el 2019 por una variable
+and upper(c.Nombre_comercial)  = nvl('WINEXCO SECURITIES, INC.', upper(c.Nombre_comercial))  Cambiar el WINEXCO SECURITIES por una variable
+
+===========================================================================================================
+
+Select a.CODIGO_ENTIDAD codigo_seri ,
+
+       upper(c.Nombre_comercial ) Casa,
+
+        to_char(a.periodo,'yyyymm') Periodo,
+
+        to_char(a.periodo,'yyyy') Anio,
+
+                  sum(  round(A.MONTO,2) ) Monto
+
+          from  smv_app.SMV_DS01_TRANSACCIONES  A ,
+
+               smv_app.SMV_GRAL_ENTIDAD c, smv_app.smv_001 B , smv_app.SMV_DOCUMENTOS_XML d
+
+where  a.periodo >  to_date ('20160331','yyyymmdd')
+
+ --
+
+and  A.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD
+
+and  a.ID_DOCUMENTO_XML = d.ID
+
+and  d.ESTATUS=4
+
+--
+
+and  a.codigo_entidad = c.id_casa_valor
+
+AND C.ENT_TST='N'
+
+and  b.codigo = A.ID_TIPO_VALOR
+
+AND    to_char(a.periodo,'yyyy')  = nvl(:codigo_ANIO,  to_char(a.periodo,'yyyy'))
+
+and upper(c.Nombre_comercial)  = nvl(:codigo_CASA, upper(c.Nombre_comercial))
+
+group  by  a.CODIGO_ENTIDAD,
+
+       c.Nombre_comercial ,
+
+        a.periodo 
+
+ ORDER BY 2,3
+
+Select a.CODIGO_ENTIDAD codigo_seri ,
+
+       upper(c.Nombre_comercial ) Casa,
+
+        to_char(a.periodo,'yyyymm') Periodo,
+
+        to_char(a.periodo,'yyyy') Anio,
+
+                  sum(  round(A.MONTO,2) ) Monto
+
+          from  smv_app.SMV_DS01_TRANSACCIONES  A ,
+
+               smv_app.SMV_GRAL_ENTIDAD c, smv_app.smv_001 B , smv_app.SMV_DOCUMENTOS_XML d
+
+where  a.periodo >  to_date ('20160331','yyyymmdd')
+
+and  A.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD
+
+and  a.ID_DOCUMENTO_XML = d.ID
+
+and  d.ESTATUS=4
+
+and  a.codigo_entidad = c.id_casa_valor
+
+AND C.ENT_TST='N'
+
+and  b.codigo = A.ID_TIPO_VALOR
+
+AND    to_char(a.periodo,'yyyy')  =  to_char(a.periodo,'yyyy')
+
+and upper(c.Nombre_comercial)  = upper(c.Nombre_comercial)
+
+group  by  a.CODIGO_ENTIDAD,
+
+       c.Nombre_comercial ,
+
+        a.periodo
+
+ ORDER BY 2,3;
+
+
+
+
+
+
+
+
+
+
+cursor = conn.parse("BEGIN :out := 'BAR'; END;")
+cursor.bind_param(:out, 'g.NOMBRE_COMERCIAL') # bind by name
+p cursor[:out] # => 'FOO'  - The subscript must be :out.
+cursor.exec()
+p cursor[:out] # => 'BAR'
+
+SELECT g.NOMBRE_COMERCIAL, sum( case when to_char(a1.periodo,'yyyymm') = '201801' then MONTO else 0 end) as enero,  sum( case when to_char(a1.periodo,'yyyymm') = '".$y."02' then MONTO else 0 end) as febrero, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."03' then MONTO else 0 end) as marzo, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."04' then MONTO else 0 end) as abril, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."05' then MONTO else 0 end) as mayo, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."06' then MONTO else 0 end) as junio, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."07' then MONTO else 0 end) as julio, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."08' then MONTO else 0 end) as agosto, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."09' then MONTO else 0 end) as septiembre, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."10' then MONTO else 0 end) as octubre, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."11' then MONTO else 0 end) as noviembre, sum( case when to_char(a1.periodo,'yyyymm') = '".$y."12' then MONTO else 0 end) as diciembre, sum( case when to_char(a1.periodo,'yyyy') = '$y' then MONTO else 0 end) as total FROM SMV_APP.SMV_DS01_TRANSACCIONES a1 join SMV_APP.SMV_GRAL_ENTIDAD g on (a1.CODIGO_ENTIDAD=g.ID_CASA_VALOR) join SMV_APP.SMV_DOCUMENTOS_XML d on (a1.ID_DOCUMENTO_XML = d.ID and d.ESTATUS=4) Where a1.CODIGO_ENTIDAD = '$codigo' Group by g.NOMBRE_COMERCIAL
+
+
+
+
+
+[
+    [  0] [
+        [0] "SMV_APP",
+        [1] "SMV_TRANS_BV_DIARIO_TEMP"
+    ],
+    [  1] [
+        [0] "SMV_APP",
+        [1] "SMV_TRANS_LCLEAR_DIARIO"
+    ],
+    [  2] [
+        [0] "SMV_APP",
+        [1] "SMV_TRANS_LCLEAR_DIARIO_TEMP"
+    ],
+    [  3] [
+        [0] "SMV_APP",
+        [1] "SMV_TRANS_LCLEAR_TRIM"
+    ],
+    [  4] [
+        [0] "SMV_APP",
+        [1] "SMV_TRANS_LCLEAR_TRIM_TEMP"
+    ],
+    [  5] [
+        [0] "SMV_APP",
+        [1] "SMV_USUARIOS_AUTH_WS"
+    ],
+    [  6] [
+        [0] "SMV_APP",
+        [1] "SYSTEM_LOG"
+    ],
+    [  7] [
+        [0] "SMV_APP",
+        [1] "APEX$TEAM_DEV_FILES"
+    ],
+    [  8] [
+        [0] "SMV_APP",
+        [1] "SMV_MAIL_CONFIGURATION"
+    ],
+    [  9] [
+        [0] "SMV_APP",
+        [1] "SMV_003_GRUPO"
+    ],
+    [ 10] [
+        [0] "SMV_APP",
+        [1] "SMV_PUC_INF_FINANCIERA"
+    ],
+    [ 11] [
+        [0] "SMV_APP",
+        [1] "SMV_DS01_TRANSACCIONES_ART60"
+    ],
+    [ 12] [
+        [0] "SMV_APP",
+        [1] "SMV_ESTATUS"
+    ],
+    [ 13] [
+        [0] "SMV_APP",
+        [1] "SMV_GRAL_ENTIDAD"
+    ],
+    [ 14] [
+        [0] "SMV_APP",
+        [1] "SMV_HECHOS_IMPORTANCIA"
+    ],
+    [ 15] [
+        [0] "SMV_APP",
+        [1] "SMV_LOG_ERROR_CARGA"
+    ],
+    [ 16] [
+        [0] "SMV_APP",
+        [1] "SMV_OTRAS_LICENCIAS"
+    ],
+    [ 17] [
+        [0] "SMV_APP",
+        [1] "SMV_PERMISO_FORMULARIO"
+    ],
+    [ 18] [
+        [0] "SMV_APP",
+        [1] "SMV_P_CON_LICENCIA"
+    ],
+    [ 19] [
+        [0] "SMV_APP",
+        [1] "SMV_SI_EX"
+    ],
+    [ 20] [
+        [0] "SMV_APP",
+        [1] "TEMP_RAZONES_FINANCIERA"
+    ],
+    [ 21] [
+        [0] "SMV_APP",
+        [1] "TEMP_RAZONES"
+    ],
+    [ 22] [
+        [0] "SMV_APP",
+        [1] "SMV_001"
+    ],
+    [ 23] [
+        [0] "SMV_APP",
+        [1] "SMV_003"
+    ],
+    [ 24] [
+        [0] "SMV_APP",
+        [1] "SMV_CUMPLIMIENTO"
+    ],
+    [ 25] [
+        [0] "SMV_APP",
+        [1] "SMV_DS03_ANEXODS3_SUB"
+    ],
+    [ 26] [
+        [0] "SMV_APP",
+        [1] "SMV_DS03_ANEXODS4"
+    ],
+    [ 27] [
+        [0] "SMV_APP",
+        [1] "SMV_DS03_ANEXODS5"
+    ],
+    [ 28] [
+        [0] "SMV_APP",
+        [1] "SMV_DS03_ANEXODS7"
+    ],
+    [ 29] [
+        [0] "SMV_APP",
+        [1] "SMV_TIPO_CASAS"
+    ],
+    [ 30] [
+        [0] "SMV_APP",
+        [1] "SMV_TIPO_FORMULARIO"
+    ],
+    [ 31] [
+        [0] "SMV_APP",
+        [1] "SMV_TIPO_LICENCIA"
+    ],
+    [ 32] [
+        [0] "SMV_APP",
+        [1] "SMV_TIPO_REGULADOS"
+    ],
+    [ 33] [
+        [0] "SMV_APP",
+        [1] "DEPT"
+    ],
+    [ 34] [
+        [0] "SMV_APP",
+        [1] "EMP"
+    ],
+    [ 35] [
+        [0] "SMV_APP",
+        [1] "SMV_DS01_TRANSACCIONES_TEMP"
+    ],
+    [ 36] [
+        [0] "SMV_APP",
+        [1] "SMV_DS11_INF_CORPORATIVA_TEMP"
+    ],
+    [ 37] [
+        [0] "SMV_APP",
+        [1] "SMV_DS03_ANEXODS9_TEMP"
+    ],
+    [ 38] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02"
+    ],
+    [ 39] [
+        [0] "SMV_APP",
+        [1] "SMV_LOG_ERROR_VALIDACION"
+    ],
+    [ 40] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02_ANEXO1"
+    ],
+    [ 41] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02_ANEXO10"
+    ],
+    [ 42] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02_ANEXO11"
+    ],
+    [ 43] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02_ANEXO2"
+    ],
+    [ 44] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02_ANEXO3"
+    ],
+    [ 45] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02_ANEXO4"
+    ],
+    [ 46] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02_ANEXO5"
+    ],
+    [ 47] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02_ANEXO6"
+    ],
+    [ 48] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02_ANEXO7"
+    ],
+    [ 49] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02_ANEXO8"
+    ],
+    [ 50] [
+        [0] "SMV_APP",
+        [1] "SMV_DS02_ANEXO9"
+    ],
+    [ 51] [
+        [0] "SMV_APP",
+        [1] "SMV_DS03_ANEXODS3"
+    ],
+    [ 52] [
+        [0] "SMV_APP",
+        [1] "HTMLDB_PLAN_TABLE"
+    ],
+    [ 53] [
+        [0] "SMV_APP",
+        [1] "SMV_LOG_REENVIOS_AUDIT"
+    ],
+    [ 54] [
+        [0] "SMV_APP",
+        [1] "BVPA_SYSTEM_LOG"
+    ],
+    [ 55] [
+        [0] "SMV_APP",
+        [1] "EBA_DEMO_LOAD_DEPT"
+    ],
+    [ 56] [
+        [0] "SMV_APP",
+        [1] "LCLEAR_SYSTEM_LOG"
+    ],
+    [ 57] [
+        [0] "SMV_APP",
+        [1] "SMV_ADM_ASESORES_DECLARACION"
+    ],
+    [ 58] [
+        [0] "SMV_APP",
+        [1] "SMV_ADM_ASESORES_GENERALES"
+    ],
+    [ 59] [
+        [0] "SMV_APP",
+        [1] "SMV_ADM_ASESORES_RIESGO_CAN"
+    ],
+    [ 60] [
+        [0] "SMV_APP",
+        [1] "SMV_ADM_ASESORES_RIESGO_CLTE"
+    ],
+    [ 61] [
+        [0] "SMV_APP",
+        [1] "SMV_ADM_ASESORES_RIESGO_PROD"
+    ],
+    [ 62] [
+        [0] "SMV_APP",
+        [1] "SMV_ADM_ASESORES_RIESGO_ZON"
+    ],
+    [ 63] [
+        [0] "SMV_APP",
+        [1] "SMV_AIP_ASESORES_DECLARACION"
+    ],
+    [ 64] [
+        [0] "SMV_APP",
+        [1] "SMV_AIP_ASESORES_RIESGO_CAN"
+    ],
+    [ 65] [
+        [0] "SMV_APP",
+        [1] "SMV_AIP_ASESORES_RIESGO_CLTE"
+    ],
+    [ 66] [
+        [0] "SMV_APP",
+        [1] "SMV_AIP_ASESORES_RIESGO_PROD"
+    ],
+    [ 67] [
+        [0] "SMV_APP",
+        [1] "SMV_AIP_ASESORES_RIESGO_ZON"
+    ],
+    [ 68] [
+        [0] "SMV_APP",
+        [1] "SMV_AIP_EQUIPO_GERENCIAL"
+    ],
+    [ 69] [
+        [0] "SMV_APP",
+        [1] "SMV_AIP_ESTRUCTURA_CORPORATIVA"
+    ],
+    [ 70] [
+        [0] "SMV_APP",
+        [1] "SMV_AIP_ESTRUCTURA_GENERALES"
+    ],
+    [ 71] [
+        [0] "SMV_APP",
+        [1] "SMV_AIP_ESTRUCTURA_P_LICENCIA"
+    ],
+    [ 72] [
+        [0] "SMV_APP",
+        [1] "SMV_ANEXO1_BOLSA_VALORES"
+    ],
+    [ 73] [
+        [0] "SMV_APP",
+        [1] "SMV_ASESORES_DECLARACION"
+    ],
+    [ 74] [
+        [0] "SMV_APP",
+        [1] "SMV_ASESORES_GENERALES"
+    ],
+    [ 75] [
+        [0] "SMV_APP",
+        [1] "SMV_ASESORES_RIESGO_CANALES"
+    ],
+    [ 76] [
+        [0] "SMV_APP",
+        [1] "SMV_ASESORES_RIESGO_CLIENTE"
+    ],
+    [ 77] [
+        [0] "SMV_APP",
+        [1] "SMV_ASESORES_RIESGO_PROD_SER"
+    ],
+    [ 78] [
+        [0] "SMV_APP",
+        [1] "SMV_ASESORES_RIESGO_ZONAS"
+    ],
+    [ 79] [
+        [0] "SMV_APP",
+        [1] "SMV_AUDIT_HECHOS_IMPORT"
+    ],
+    [ 80] [
+        [0] "SMV_APP",
+        [1] "SMV_DS13_CORRESPONSALES"
+    ],
+    [ 81] [
+        [0] "SMV_APP",
+        [1] "SMV_DS13_CUSTODIOS"
+    ],
+    [ 82] [
+        [0] "SMV_APP",
+        [1] "SMV_DS13_EMPRESAS_CDA"
+    ],
+    [ 83] [
+        [0] "SMV_APP",
+        [1] "SMV_DS13_GENERALES"
+    ],
+    [ 84] [
+        [0] "SMV_APP",
+        [1] "SMV_DS13_INF_ADICIONAL"
+    ],
+    [ 85] [
+        [0] "SMV_APP",
+        [1] "SMV_DS13_INF_CORPORATIVA"
+    ],
+    [ 86] [
+        [0] "SMV_APP",
+        [1] "SMV_DS13_INF_CORP_PEFECTIVOS"
+    ],
+    [ 87] [
+        [0] "SMV_APP",
+        [1] "SMV_DS13_P_CON_LICENCIA"
+    ],
+    [ 88] [
+        [0] "SMV_APP",
+        [1] "SMV_DS15_GENERALES"
+    ],
+    [ 89] [
+        [0] "SMV_APP",
+        [1] "SMV_DS15_INF_ADICIONAL"
+    ],
+    [ 90] [
+        [0] "SMV_APP",
+        [1] "SMV_DS15_INF_CORPORATIVA"
+    ],
+    [ 91] [
+        [0] "SMV_APP",
+        [1] "SMV_DS15_INF_CORP_PEFECTIVOS"
+    ],
+    [ 92] [
+        [0] "SMV_APP",
+        [1] "SMV_DS15_P_CON_LICENCIA"
+    ],
+    [ 93] [
+        [0] "SMV_APP",
+        [1] "SMV_DS16_GENERALES"
+    ],
+    [ 94] [
+        [0] "SMV_APP",
+        [1] "SMV_DS16_INF_ADICIONAL"
+    ],
+    [ 95] [
+        [0] "SMV_APP",
+        [1] "SMV_DS16_INF_CORPORATIVA"
+    ],
+    [ 96] [
+        [0] "SMV_APP",
+        [1] "SMV_DS16_INF_CORP_PEFECTIVOS"
+    ],
+    [ 97] [
+        [0] "SMV_APP",
+        [1] "SMV_DS16_P_CON_LICENCIA"
+    ],
+    [ 98] [
+        [0] "SMV_APP",
+        [1] "SMV_DS17_CLIENTES"
+    ],
+    [ 99] [
+        [0] "SMV_APP",
+        [1] "SMV_DS18_GENERALES"
+    ],
+    [100] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F1_CORPORATIVA"
+    ],
+    [101] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F1_GENERAL"
+    ],
+    [102] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F3_EMISION"
+    ],
+    [103] [
+        [0] "SMV_APP",
+        [1] "SMV_PUC"
+    ],
+    [104] [
+        [0] "SMV_APP",
+        [1] "SMV_PUC_DETALLE"
+    ],
+    [105] [
+        [0] "SMV_APP",
+        [1] "SMV_PUESTOS_M_BOLSA_VALORES"
+    ],
+    [106] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_ASESORES_DECLARACION"
+    ],
+    [107] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_ASESORES_GENERALES"
+    ],
+    [108] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_CARTERA_DEUDA"
+    ],
+    [109] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_CONTINGENCIAS"
+    ],
+    [110] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_LOOKUPS"
+    ],
+    [111] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_PATRIMONIO"
+    ],
+    [112] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_PAT_III"
+    ],
+    [113] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_ASESORES_RIESGO_CAN"
+    ],
+    [114] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_ASESORES_RIESGO_CLTE"
+    ],
+    [115] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_ASESORES_RIESGO_PROD"
+    ],
+    [116] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_ASESORES_RIESGO_ZON"
+    ],
+    [117] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_CR1"
+    ],
+    [118] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_CR1_INV_INCIDENTALES"
+    ],
+    [119] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_CR1_INV_PERMITIDAS"
+    ],
+    [120] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_CR1_PASIVOS"
+    ],
+    [121] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_CR1_VNA"
+    ],
+    [122] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_F2_DIGNATARIOS"
+    ],
+    [123] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_F2_DIRECTORES"
+    ],
+    [124] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_F2_DIRECTORES_I"
+    ],
+    [125] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_F2_GENERALES"
+    ],
+    [126] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_F2_INF_ADICIONAL"
+    ],
+    [127] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_F2_INF_ADICIONAL2"
+    ],
+    [128] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_F2_INF_CORPORATIVA"
+    ],
+    [129] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_IAS_COMPRA_VENTA"
+    ],
+    [130] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_IAS_DETALLE"
+    ],
+    [131] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_IAS_EVOLUCION_VNA"
+    ],
+    [132] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_IAS_PASIVOS_GASTOS"
+    ],
+    [133] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_IAS_VALOR_NETO"
+    ],
+    [134] [
+        [0] "SMV_APP",
+        [1] "SMV_TRANS_BV_DIARIO"
+    ],
+    [135] [
+        [0] "SMV_APP",
+        [1] "SMV_PUC_TIPO_CUENTAS_TEMP"
+    ],
+    [136] [
+        [0] "SMV_APP",
+        [1] "SMV_DOCUMENTOS_XML_TEST"
+    ],
+    [137] [
+        [0] "SMV_APP",
+        [1] "SMV_TRANS_LCLEAR_DIARIO_BK"
+    ],
+    [138] [
+        [0] "SMV_APP",
+        [1] "TEMP_CALENDARIO"
+    ],
+    [139] [
+        [0] "SMV_APP",
+        [1] "SMV_TRANS_BV_DIARIO_BK"
+    ],
+    [140] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_INDIV_GEO"
+    ],
+    [141] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_INDIV_RES"
+    ],
+    [142] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_VLA_DI_TMP"
+    ],
+    [143] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_VLA_MENSUAL"
+    ],
+    [144] [
+        [0] "SMV_APP",
+        [1] "SMV_GRAL_ESTADO"
+    ],
+    [145] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F3_SERIES"
+    ],
+    [146] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F4_NB_BAL_GENERAL"
+    ],
+    [147] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F4_NB_RAZ_FINANCIERAS"
+    ],
+    [148] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F4_NB_SIT_FINANCIERA"
+    ],
+    [149] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F4_SB_BAL_GENERAL"
+    ],
+    [150] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F4_SB_RAZ_FINANCIERAS"
+    ],
+    [151] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F4_SB_SIT_FINANCIERA"
+    ],
+    [152] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F4_SIT_FINANCIERA"
+    ],
+    [153] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F5_CUESTIONARIO"
+    ],
+    [154] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F6_BIENES"
+    ],
+    [155] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F6_CERTIFICACION"
+    ],
+    [156] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F6_SERIES"
+    ],
+    [157] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F7_SERIE"
+    ],
+    [158] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F7_SUPLEMENTO"
+    ],
+    [159] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F8_CAMBIO_AUDITORES"
+    ],
+    [160] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F8_EQUIPO_AUDITORIA"
+    ],
+    [161] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F8_ROTACION_AUDITORES"
+    ],
+    [162] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F9_ABOGADOS_TRAN"
+    ],
+    [163] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F9_CONTACTOS_TRAN"
+    ],
+    [164] [
+        [0] "SMV_APP",
+        [1] "SMV_ESTADOS_FIN_INTERINOS"
+    ],
+    [165] [
+        [0] "SMV_APP",
+        [1] "SMV_F2_CUMPLIMIENTO_BEN_FINAL"
+    ],
+    [166] [
+        [0] "SMV_APP",
+        [1] "SMV_LICENCIAS_PER_NATURALES"
+    ],
+    [167] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_AFILIADOS"
+    ],
+    [168] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_CARGA"
+    ],
+    [169] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_FONDOS"
+    ],
+    [170] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_TIPO_ACCION"
+    ],
+    [171] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_CARTERA_ACCIONES"
+    ],
+    [172] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_TIPO_DEPO"
+    ],
+    [173] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_CARTERA_DEPO"
+    ],
+    [174] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_TIPO_DEUDA"
+    ],
+    [175] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_TRASPASOS"
+    ],
+    [176] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_VENTA_SALIDA"
+    ],
+    [177] [
+        [0] "SMV_APP",
+        [1] "SMV_DS18_INF_CORPORATIVA"
+    ],
+    [178] [
+        [0] "SMV_APP",
+        [1] "SMV_DS18_P_CON_LICENCIA"
+    ],
+    [179] [
+        [0] "SMV_APP",
+        [1] "SMV_CUMPLIMIENTO_AUTOREG"
+    ],
+    [180] [
+        [0] "SMV_APP",
+        [1] "SBR_CASAS_BK"
+    ],
+    [181] [
+        [0] "SMV_APP",
+        [1] "SMV_PEN_VLADIARIO_REENVIOS"
+    ],
+    [182] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_AIOS_FO_BK"
+    ],
+    [183] [
+        [0] "SMV_APP",
+        [1] "SMV_DS18_INF_ADICIONAL"
+    ],
+    [184] [
+        [0] "SMV_APP",
+        [1] "SMV_DS18_INF_CORP_PEFECTIVOS"
+    ],
+    [185] [
+        [0] "SMV_APP",
+        [1] "TEMP_EMISOR"
+    ],
+    [186] [
+        [0] "SMV_APP",
+        [1] "SMV_GRAL_ENTIDAD_BK01"
+    ],
+    [187] [
+        [0] "SMV_APP",
+        [1] "TEMP_LCLEAR_TRIM"
+    ],
+    [188] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_AIOS_BE"
+    ],
+    [189] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_AIOS_CO"
+    ],
+    [190] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_AIOS_DE"
+    ],
+    [191] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_AIOS_FO"
+    ],
+    [192] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_AIOS_IG"
+    ],
+    [193] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_AIOS_RE"
+    ],
+    [194] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_BALANCE"
+    ],
+    [195] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_INDIV_BAL"
+    ],
+    [196] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_INDIV_FID"
+    ],
+    [197] [
+        [0] "SMV_APP",
+        [1] "SMV_DOCUMENTOS_XML_TMP_BK"
+    ],
+    [198] [
+        [0] "SMV_APP",
+        [1] "SMV_GRAL_ENTIDAD_BKP"
+    ],
+    [199] [
+        [0] "SMV_APP",
+        [1] "LCLEAR_DIARIO"
+    ],
+    [200] [
+        [0] "SMV_APP",
+        [1] "TEMP_01"
+    ],
+    [201] [
+        [0] "SMV_APP",
+        [1] "SMV_PERSONAS_NATURALES"
+    ],
+    [202] [
+        [0] "SMV_APP",
+        [1] "SMV_PERSONAS_NATURALES_HIST"
+    ],
+    [203] [
+        [0] "SMV_APP",
+        [1] "SMV_PER_NAT_MOVIMIENTOS"
+    ],
+    [204] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_CARGA_RICARDO"
+    ],
+    [205] [
+        [0] "SMV_APP",
+        [1] "PENSION_COPIA"
+    ],
+    [206] [
+        [0] "SMV_APP",
+        [1] "SMV_CALIFICADORAS"
+    ],
+    [207] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_CATALOGO_F1"
+    ],
+    [208] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_ADMINIST_CATALOGO_F1"
+    ],
+    [209] [
+        [0] "SMV_APP",
+        [1] "SMV_DS14_CLIENTES_BKP"
+    ],
+    [210] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_VLA_DIARIO_BKP"
+    ],
+    [211] [
+        [0] "SMV_APP",
+        [1] "SMV_EMI_F4_AR_FINANCIEROS"
+    ],
+    [212] [
+        [0] "SMV_APP",
+        [1] "SMV_SDI_ASESORES_CATALOGO"
+    ],
+    [213] [
+        [0] "SMV_APP",
+        [1] "SMV_PERSONA_NATURAL"
+    ],
+    [214] [
+        [0] "SMV_APP",
+        [1] "SMV_PERSONA_NATURAL_MOVI"
+    ],
+    [215] [
+        [0] "SMV_APP",
+        [1] "SMV_CV_CUMP_DECLARACION"
+    ],
+    [216] [
+        [0] "SMV_APP",
+        [1] "SMV_CV_CUMP_GENERALES"
+    ],
+    [217] [
+        [0] "SMV_APP",
+        [1] "SMV_CV_CUMP_RIESGO_CANALES"
+    ],
+    [218] [
+        [0] "SMV_APP",
+        [1] "SMV_CV_CUMP_RIESGO_CLIENTE"
+    ],
+    [219] [
+        [0] "SMV_APP",
+        [1] "SMV_CV_CUMP_RIESGO_PROD_SER"
+    ],
+    [220] [
+        [0] "SMV_APP",
+        [1] "SMV_CV_CUMP_RIESGO_ZONAS"
+    ],
+    [221] [
+        [0] "SMV_APP",
+        [1] "ESTADOS_FINANCIEROS_BK"
+    ],
+    [222] [
+        [0] "SMV_APP",
+        [1] "SMV_PUC_A_GRUPO_CUENTAS"
+    ],
+    [223] [
+        [0] "SMV_APP",
+        [1] "SMV_FONDO_CESANTIA"
+    ],
+    [224] [
+        [0] "SMV_APP",
+        [1] "SMV_GRUPO_CUENTAS_BKP"
+    ],
+    [225] [
+        [0] "SMV_APP",
+        [1] "SMV_PUC_TIPO_CUENTAS_BKP"
+    ],
+    [226] [
+        [0] "SMV_APP",
+        [1] "SBR_CASAS"
+    ],
+    [227] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_CARGA_BK"
+    ],
+    [228] [
+        [0] "SMV_APP",
+        [1] "SMV_PERSONA_NATURAL_BKTOTAL"
+    ],
+    [229] [
+        [0] "SMV_APP",
+        [1] "SMV_PERSONA_NATURAL_TEMP"
+    ],
+    [230] [
+        [0] "SMV_APP",
+        [1] "SMV_PERSONA_NATURAL_BKTOTAL02"
+    ],
+    [231] [
+        [0] "SMV_APP",
+        [1] "ADM_PUC"
+    ],
+    [232] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_AFILIADOS_TMP"
+    ],
+    [233] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_AIOS_IG_TMP"
+    ],
+    [234] [
+        [0] "SMV_APP",
+        [1] "SMV_DS01_TRANSACCIONES"
+    ],
+    [235] [
+        [0] "SMV_APP",
+        [1] "SMV_DS11_GENERALES"
+    ],
+    [236] [
+        [0] "SMV_APP",
+        [1] "SMV_DS11_INF_ADICIONAL"
+    ],
+    [237] [
+        [0] "SMV_APP",
+        [1] "SMV_DS11_INF_PROP_EFECTIVO"
+    ],
+    [238] [
+        [0] "SMV_APP",
+        [1] "SMV_DS11_INF_PROP_PERSONAL"
+    ],
+    [239] [
+        [0] "SMV_APP",
+        [1] "SMV_DS12_CLIENTES"
+    ],
+    [240] [
+        [0] "SMV_APP",
+        [1] "SMV_FOREX_ANEXO_II1"
+    ],
+    [241] [
+        [0] "SMV_APP",
+        [1] "SMV_FOREX_ANEXO_II2"
+    ],
+    [242] [
+        [0] "SMV_APP",
+        [1] "SMV_FOREX_ANEXO_II3A"
+    ],
+    [243] [
+        [0] "SMV_APP",
+        [1] "SMV_FOREX_ANEXO_II3B"
+    ],
+    [244] [
+        [0] "SMV_APP",
+        [1] "SMV_FOREX_GENERALES"
+    ],
+    [245] [
+        [0] "SMV_APP",
+        [1] "SMV_GRUPO_CUENTAS"
+    ],
+    [246] [
+        [0] "SMV_APP",
+        [1] "SMV_PUC_TIPO_CUENTAS"
+    ],
+    [247] [
+        [0] "SMV_APP",
+        [1] "SMV_DOCUMENTOS_XML"
+    ],
+    [248] [
+        [0] "SMV_APP",
+        [1] "SMV_DOCUMENTOS_XML_TMP"
+    ],
+    [249] [
+        [0] "SMV_APP",
+        [1] "SMV_DS03_ANEXODS9"
+    ],
+    [250] [
+        [0] "SMV_APP",
+        [1] "SMV_MANT_REPORTES"
+    ],
+    [251] [
+        [0] "SMV_APP",
+        [1] "SMV_DS11_INF_CORPORATIVA"
+    ],
+    [252] [
+        [0] "SMV_APP",
+        [1] "TEMP_ENTIDAD"
+    ],
+    [253] [
+        [0] "SMV_APP",
+        [1] "SMV_DS14_CLIENTES"
+    ],
+    [254] [
+        [0] "SMV_APP",
+        [1] "SMV_PENSION_VLA_DIARIO"
+    ],
+    [255] [
+        [0] "SMV_APP",
+        [1] "USUARIOS_MIGRADOS"
+    ],
+    [256] [
+        [0] "SMV_APP",
+        [1] "SMV_DOC_XML_TEMP_DESA"
+    ],
+    [257] [
+        [0] "SMV_APP",
+        [1] "SMV_PUC_A_TIPO_CUENTAS"
+    ]
+]
+
+a = 5
+
+case a
+when 1
+  puts "not 5"
+when a == 5
+  puts "hey"
+end
+
+
+def call_oracle_database(tipo_de_request="series", periodo=2019, casa="WINEXCO SECURITIES, INC.", anio=2019, mes=02, input_estatus=4)
+    con=OCI8.new("JMEDINA","abc123","(DESCRIPTION=(ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = 35.171.169.71)(PORT = 1521)))(CONNECT_DATA=(SID=orcl)))")
+    output_array = []
+
+    if tipo_de_request == "monto"
+      monto = nil
+      statement= monto(periodo, casa)
+      cursor = con.parse(statement)
+      cursor.exec
+      cursor.fetch() {|row| output_array.push("CODIGO_SERI" => "#{row[0]}","CASA" => "#{row[1]}", "PERIODO" => "#{row[2]}", "ANIO" => "#{row[3]}","MONTO" => "#{row[4]}")}
+
+      output_array.select{|output| monto = output["MONTO"] if output["PERIODO"] == "201908"}
+
+      #Descomentar luego
+      # return monto
+
+    elsif tipo_de_request == "estatus" 
+      output_status = nil
+      mes = mes < 10 ? "0" + mes.to_s : mes
+      anio_y_mes = "#{anio}#{mes}" 
+      statement= estatus(anio_y_mes.to_i, input_estatus)
+      cursor = con.parse(statement)
+      cursor.exec
+      cursor.fetch() {|row| output_array.push("CODIGO_ENTIDAD" => "#{row[0]}","ENTE" => "#{row[1]}", "SECTOR" => "#{row[2]}", "RESOLUCION" => "#{row[3]}","FECHA_RESOLUCION" => "#{row[4]}", "ANIOS" => "#{row[5]}", "TITULO" => "#{row[6]}", "MONTO_EMISION" => "#{row[7]}", "ACCIONES_REGISTRADA" => "#{row[8]}", "ACCIONES_CIRCULACION" => "#{row[9]}", "SERIE" => "#{row[10]}", "FECHA_OFERTA" => "#{row[11]}", "FECHA_VENCIMIENTO_SERIE" => "#{row[12]}", "PERIODO_VENCE" => "#{row[13]}", "MONTO_INICIAL" => "#{row[14]}", "MONTO_CIRCULACION" => "#{row[15]}", "ESTATUS" => "#{row[16]}")}
+      output_array.select{|output| output_status = output["ESTATUS"] if output["ESTATUS"] == input_estatus}
+
+      #Descomentar luego
+      # return output_status
+    elsif tipo_de_request == "series"
+      output_series = []
+      mes = mes < 10 ? "0" + mes.to_s : mes
+      anio_y_mes = "#{anio}#{mes}" 
+      #La variable de abajo es solo para probar que funciona y trae resultados, una vez implementado completamente quitar el valor de abajo, de esta manera solo dependera del de arriba que es la suma del mes y el anio
+      anio_y_mes = 201806
+      codigo_entidad = 2904
+      statement= series(codigo_entidad, anio_y_mes.to_i)
+      cursor = con.parse(statement)
+      cursor.exec
+      cursor.fetch() {|row| output_series.push("CODIGO_ENTIDAD" => "#{row[0]}","PERIODO" => "#{row[1]}", "RESOLUCION" => "#{row[2]}", "SERIE" => "#{row[3]}","MONTO" => "#{row[4]}", "MONTO_CIRCULACION" => "#{row[5]}", "FECHA_CREACION" => "#{row[6]}")}
+
+      #Descomentar luego
+      # return output_series
+    end
+  end
+
+  def monto(periodo, casa)
+    statement= 
+    "Select a.CODIGO_ENTIDAD codigo_seri, 
+      upper(c.Nombre_comercial) Casa, 
+      to_char(a.periodo,'yyyymm') Periodo, 
+      to_char(a.periodo,'yyyy') Anio, 
+      sum( round(A.MONTO,2) ) Monto 
+
+      from 
+        smv_app.SMV_DS01_TRANSACCIONES a, 
+        smv_app.SMV_GRAL_ENTIDAD c, 
+        smv_app.smv_001 b , 
+        smv_app.SMV_DOCUMENTOS_XML d 
+      where a.periodo > to_date ('20160331','yyyymmdd') 
+        and a.CODIGO_ENTIDAD   = d.CODIGO_ENTIDAD 
+        and a.ID_DOCUMENTO_XML = d.ID 
+        and d.ESTATUS          = 4 
+        and a.codigo_entidad   = c.id_casa_valor 
+        and c.ENT_TST          = 'N' 
+        and b.codigo           = a.ID_TIPO_VALOR 
+        and to_char(a.periodo,'yyyy') = nvl('#{periodo}', to_char(a.periodo,'yyyy') ) 
+        and upper(c.Nombre_comercial)   = nvl('#{casa}', upper(c.Nombre_comercial)) 
+      group  by  
+        a.CODIGO_ENTIDAD, 
+        c.Nombre_comercial, 
+        a.periodo 
+      order by 
+        2,3"
+    return statement
+  end
+
+  def estatus(anio_y_mes, input_estatus)
+    statement=
+    "Select a.CODIGO_ENTIDAD,
+      upper(c.Nombre_comercial) Ente, 
+      upper(c.sitio_web) Sector,
+      a.resolucion,
+      a.Fecha_resolucion, 
+      round((sysdate - a.fecha_resolucion) / 365,2) Anios,
+      upper(a.titulo_valor) Titulo,
+      a.monto_tot_registrado Monto_emision,
+      a.acciones_registrada,
+      a.acciones_circulacion,
+      s.serie,
+      s.fecha_oferta,
+      s.fecha_vencimiento Fecha_vencimiento_serie,
+      to_char (s.fecha_vencimiento,'yyyymm') periodo_vence,
+      s.MONTO Monto_inicial,
+      s.monto_circulacion,
+      d.ESTATUS
+
+      from 
+        smv_app.smv_emi_f3_emision a, 
+        smv_app.SMV_GRAL_ENTIDAD c, 
+        smv_app.smv_emi_f3_series s, 
+        smv_app.smv_documentos_xml d
+      where a.codigo_entidad = c.id_casa_valor
+        and to_char(a.PERIODO,'YYYYMM') = '#{anio_y_mes}'
+        and a.CODIGO_ENTIDAD = s.codigo_entidad
+        and a.CODIGO_ENTIDAD = '2516'
+        and a.PERIODO = s.PERIODO
+        and a.ID_DOCUMENTO_XML = s.ID_DOCUMENTO_XML
+        and a.resolucion  = s.RESOLUCION
+        and a.CODIGO_ENTIDAD = d.CODIGO_ENTIDAD
+        and a.ID_DOCUMENTO_XML = d.ID
+        and d.ESTATUS=4
+      order by
+        2,3"
+    return statement
+  end
+
+  def series(codigo_entidad, periodo)
+    statement=
+    "Select b.CODIGO_ENTIDAD,
+      to_char(b.PERIODO, 'YYYYMM'),
+      b.RESOLUCION,
+      b.SERIE,
+      b.MONTO,
+      b.MONTO_CIRCULACION,
+      b.FECHA_CREACION
+
+      from  
+        smv_app.smv_emi_f3_emision a, 
+        smv_app.smv_emi_f3_series b
+      where a.CODIGO_ENTIDAD = b.CODIGO_ENTIDAD
+        and b.CODIGO_ENTIDAD = '#{codigo_entidad}'
+        and TO_CHAR (A.PERIODO,'YYYYMM') = '#{periodo}'"
+    return statement
+  end
+
+  select 
+      a.CODIGO_ENTIDAD,
+      UPPER( c.Nombre_comercial) Ente ,  upper (c.sitio_web) Sector ,
+      a.resolucion ,
+      a.Fecha_resolucion ,  round((sysdate - a.fecha_resolucion) / 365,2) Años,
+      upper(a.titulo_valor) Titulo ,
+      a.monto_tot_registrado Monto_emision ,
+      a.acciones_registrada ,
+      a.acciones_circulacion ,
+      s.serie ,
+      s.fecha_oferta ,
+      s.fecha_vencimiento Fecha_vencimiento_serie ,
+      to_char (s.fecha_vencimiento,'yyyymm') periodo_vence ,
+      s.MONTO Monto_inicial ,
+      s.monto_circulacion
+  from  
+      smv_emi_f3_emision  a,  
+      smv_app.SMV_GRAL_ENTIDAD c , 
+      smv_emi_f3_series s , 
+      smv_documentos_xml  d
+  where   
+      a.codigo_entidad = c.id_casa_valor
+      and TO_CHAR (A.PERIODO,'YYYYMM') = :LV_PER
+      and a.CODIGO_ENTIDAD = s.codigo_entidad
+      and a.PERIODO = s.PERIODO
+      and a.ID_DOCUMENTO_XML = s.ID_DOCUMENTO_XML
+      and a.resolucion  = s.RESOLUCION
+      and a.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD
+      and a.ID_DOCUMENTO_XML = d.ID
+      and d.ESTATUS=4
+  order by 
+      2,3
+
+
+
+select
+      a.CODIGO_ENTIDAD,
+      UPPER( c.Nombre_comercial) Ente ,  upper (c.sitio_web) Sector ,
+      a.resolucion ,
+      a.Fecha_resolucion ,  round((sysdate - a.fecha_resolucion) / 365,2) Años,
+      upper(a.titulo_valor) Titulo ,
+      a.monto_tot_registrado Monto_emision ,
+      a.acciones_registrada ,
+      a.acciones_circulacion ,
+      s.serie ,
+      s.fecha_oferta ,
+      s.fecha_vencimiento Fecha_vencimiento_serie ,
+      to_char (s.fecha_vencimiento,'yyyymm') periodo_vence ,
+      s.MONTO Monto_inicial ,
+      s.monto_circulacion
+  from
+      smv_app.smv_emi_f3_emision  a,
+      smv_app.SMV_GRAL_ENTIDAD c ,
+      smv_app.smv_emi_f3_series s ,
+      smv_app.smv_documentos_xml  d
+  where
+      a.codigo_entidad = c.id_casa_valor
+      and TO_CHAR (A.PERIODO,'YYYYMM') = :LV_PER
+      and a.CODIGO_ENTIDAD = s.codigo_entidad
+      and a.PERIODO = s.PERIODO
+      and a.ID_DOCUMENTO_XML = s.ID_DOCUMENTO_XML
+      and a.resolucion  = s.RESOLUCION
+      and a.CODIGO_ENTIDAD = D.CODIGO_ENTIDAD
+      and a.ID_DOCUMENTO_XML = d.ID
+      and d.ESTATUS=4
+  order by
+      2,3
+
+
+
+resoluciones = TResolucion.where(t_tipo_cliente_id: [5,7,8])
+
+resoluciones.includes(:t_cliente).pluck("t_clientes.codigo")
+
+
+resoluciones.joins(:t_cliente).where("t_clientes.persona_type = 'TEmpresa'").pluck(:'t_clientes.id' ,:'t_clientes.codigo')
+
+
+resoluciones.joins(:t_cliente).pluck(:'t_clientes.codigo')
+
+#Algunas personas juridicas no tienen codigo seri o lo tienen como 0
+resoluciones.joins(:t_cliente).where("t_clientes.persona_type = 'TEmpresa'").pluck(:"t_clientes.codigo")
+
+2765 PN codigo 0
+
+2590
+
+#Prueba del metodo entero
+
+scheduler = Rufus::Scheduler.singleton
+scheduler.in '2s' do |j0b|
+        create_invoices(j0b)
+end
+
+#Test casa valores query
+configuracion_actual = TConfFacAutomatica.first
+t_resolucions = TResolucion.where(t_tipo_cliente: configuracion_actual.t_tipo_cliente)
+query_casa_de_valores = [5,7,8]
+codigos_seri = t_resolucions.joins(:t_cliente).pluck(:"t_clientes.codigo")
+resoluciones_x_monto_casa_valores = configuracion_actual.call_query_monto_casa_valores(codigos_seri)
+
+Casa de valores
+resoluciones = TResolucion.where(t_tipo_cliente_id: [5,7,8])
+ap codigos_seri = TResolucion.joins(:t_cliente).where(t_tipo_cliente_id: [5,7,8]).pluck(:"t_clientes.codigo")
+TConfFacAutomatica.call_query_monto_casa_valores(codigos_seri)
+
+Sociedades de Inversion
+resoluciones = TResolucion.where(t_tipo_cliente_id: [15,16])
+codigos_seri = resoluciones.joins(:t_cliente).pluck(:"t_clientes.codigo")
+TConfFacAutomatica.call_query_monto_sociedades_inversion(codigos_seri)
+
+Emisores
+resoluciones = ['SMV No.618-17', '322-18', 'CNV-913-95', 'CNV-262-11', 'SMV-295-13']
+resoluciones = TResolucion.where(t_tipo_cliente_id: [12])
+configuracion_actual = TConfFacAutomatica.first
+configuracion_actual.call_query_monto_emisores(resoluciones)
+
+14260, last factura
+14363 last factura
+14408
+14466
+14543
+14569
+15187
+15290
+15383
+15393
+15499
+15509
+
+15517
+
+
+
+
+
+
+
+configuracion_actual = TConfFacAutomatica.first
+configuracion_actual.schedule_invoices
+
+
+            <%= form_tag t_cliente_generar_pdf_path(@t_cliente, format:'pdf'), method: "get", target: "_blank" do %>
+              <%= hidden_field_tag :client_code, '', :id => "cliente_code" %>
+              <%= submit_tag("Generar Paz y Salvo", :id => "force_client_code", class: "fa fa-download btn btn-primary") %>
+            <% end %>
+
+
+
+
+- unless @t_factura.t_notas_credito.count == 0
+  = link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do
+    %i.fa.fa-download
+      Generar Notas de Credito
+
+
+SMV-140-2016
+
+SMV-140-2016
+
+
+- if params["show_pdf"] == "true"
+  = link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do
+    %i.fa.fa-download
+      Generar Nota de Crédito
+- else
+  - unless @t_recibo.t_nota_creditos.where.not(status: "Usada").count == 0
+    = link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do
+      %i.fa.fa-download
+        Generar Nota de Crédito
+
+
+
+<% if params["show_pdf"] == "true" %>
+  <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do %>
+    <i class="fa fa-download">
+      Generar Notas de Credito
+    </i>
+  <% end %>
+<% else %>
+  <% unless @t_recibo.t_nota_creditos.where.not(status: "Usada").count == 0 %>
+    <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do %>
+      <i class="fa fa-download">
+        Generar Notas de Credito
+      </i>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf'), target: "_blank", class: 'btn btn-primary' do %>
+  <i class="fa fa-download"></i>
+  Generar Recibo
+<% end %>
+
+
+
+
+<%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do %>
+  <i class="fa fa-download">
+    Generar Notas de Credito
+  </i>
+<% end %>

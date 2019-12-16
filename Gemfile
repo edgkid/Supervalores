@@ -39,6 +39,9 @@ gem 'rufus-scheduler', '~> 3.6'
 
 gem 'prawn-table'
 gem 'prawn'
+
+gem 'will_paginate', '~> 3.1.1'
+gem 'will_paginate-bootstrap' 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
@@ -64,6 +67,7 @@ group :development do
   gem "binding_of_caller"
   gem "better_errors"
   gem 'annotate'
+  gem "rails-erd"
   # Use postgresql as the database for Active Record
   gem 'pg', '>= 0.18', '< 2.0'
 end

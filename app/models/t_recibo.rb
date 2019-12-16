@@ -48,6 +48,8 @@ class TRecibo < ApplicationRecord
   validate :received_payment_cannot_be_less_than_minimum_allowed
   validate :received_payment_cannot_be_more_than_maximum_allowed
 
+  default_scope { order("t_recibos.fecha_pago asc","t_recibos.id") }
+
   def received_payment_cannot_be_less_than_minimum_allowed
     t_metodo_pago = TMetodoPago.find(t_metodo_pago_id)
     if pago_recibido && t_metodo_pago.minimo && pago_recibido < t_metodo_pago.minimo
@@ -67,7 +69,9 @@ class TRecibo < ApplicationRecord
   end
 
   def get_services_total(t_factura, has_no_receipts)
-    has_no_receipts ? t_factura.calculate_services_total_price : t_factura.t_recibos.last.servicios_x_pagar
+    ammount = has_no_receipts ? t_factura.calculate_services_total_price : t_factura.t_recibos.last.servicios_x_pagar
+    credit = t_factura.t_nota_creditos.last.nil? ? 0 :  t_factura.t_nota_creditos.last.monto
+    (ammount.to_f - credit)
   end
 
   def get_total_surcharge(t_factura, has_no_receipts)
