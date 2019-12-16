@@ -274,4 +274,11 @@ class TFactura < ApplicationRecord
     self.total_factura - (total_recibos + total_nota_credito)
   end
 
+  def es_ts?
+    self.t_factura_detalles.each do |fdet|
+      return true if fdet.t_tarifa_servicio.tipo.downcase == 'ts'
+    end
+    return false
+  end
+
 end

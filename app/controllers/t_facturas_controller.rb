@@ -40,7 +40,7 @@ class TFacturasController < ApplicationController
         @t_factura.apply_2_percent_monthly_surcharge
       end
       #Condicion para aplicar nota de  crédito
-      if true
+      if @t_factura.es_ts?
         @t_nota_credito = @t_factura.t_cliente.t_nota_creditos.where(status:"Sin Usar").first
         unless @t_nota_credito.nil?
           @t_nota_credito.t_factura_id = @t_factura.id
