@@ -24,6 +24,7 @@
           </div>
           <div class="col-sm-1 input-value">
             <button id="btn-refresh-table" class="btn btn-default"><i class="fa fa-refresh"></i></button>            
+            <button id="btn-paz-y-saldo" class="btn btn-default hide"><i class="fa fa-print"></i>Paz y Saldo</button>
           </div>
         </div>
       </div>
@@ -71,6 +72,11 @@
         })
           .done(function (data) {
             if (data.procesado) {
+              if (data.mostrar_paz_y_salvo) {
+                $("#btn-paz-y-saldo").removeClass("hide")
+              } else {
+                $("#btn-paz-y-saldo").addClass("hide")
+              }
               footer.empty().append($("<tr />")
                 .append($("<td />"))
                 .append($("<td />"))

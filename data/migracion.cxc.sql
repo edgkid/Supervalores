@@ -58,31 +58,47 @@ CREATE MATERIALIZED VIEW cxc_t_usuario_x_rol AS SELECT dt.* FROM dblink('cxc_ser
 /* Migracion por Querys */
 
 CREATE MATERIALIZED VIEW tarifas_normalizados AS
-SELECT 'Desconocida' nombre, 'Desconocida' descripcion, '0' rango_monto, 0 recargo, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
-UNION ALL (SELECT nombre, descripcion, rango_monto, recargo, estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
-	FROM cxc_t_tarifa);
+SELECT 
+	row_number() OVER (ORDER BY dt.descripcion) AS prediction_id
+	, dt.*
+FROM (
+	SELECT 'Desconocida' nombre, 'Desconocida' descripcion, '0' rango_monto, 0 recargo, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
+	UNION ALL (SELECT nombre, descripcion, rango_monto, recargo, estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
+		FROM cxc_t_tarifa)
+) dt;
 
 INSERT INTO t_tarifas (nombre, descripcion, rango_monto, recargo, estatus, created_at, updated_at)
 SELECT nombre, descripcion, rango_monto, recargo, estatus, created_at, updated_at
 FROM tarifas_normalizados;
 
 CREATE MATERIALIZED VIEW tipo_cliente_tipos_normalizados AS
-SELECT DISTINCT TRIM(UPPER(cttc.tipo)) descripcion, 1 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
-FROM cxc_t_tipo_cliente cttc
-ORDER BY 1;
+SELECT 
+	row_number() OVER (ORDER BY dt.descripcion) AS prediction_id
+	, dt.*
+FROM (
+	SELECT 'Desconocida' descripcion, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
+	UNION ALL (SELECT DISTINCT TRIM(UPPER(cttc.tipo)) descripcion, 1 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
+	FROM cxc_t_tipo_cliente cttc
+	ORDER BY 1)
+) dt;
 
 INSERT INTO t_tipo_cliente_tipos (descripcion, estatus, created_at, updated_at)
 SELECT descripcion, estatus, created_at, updated_at
 FROM tipo_cliente_tipos_normalizados;
 
 CREATE MATERIALIZED VIEW tipo_clientes_normalizados AS
+SELECT 
+	row_number() OVER (ORDER BY dt.codigo) AS prediction_id
+	, dt.*
+FROM (
 SELECT '00' codigo, 'Desconocido' descripcion, 1 t_tipo_cliente_tipo_id, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 1 t_tarifa_id
 UNION ALL (SELECT cttc.codigo, cttc.descripcion, tttc.id, cttc.estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, tt."id"
 	FROM t_tarifas tt
 	JOIN cxc_t_tarifa ctt on tt.nombre = ctt.nombre
 	JOIN cxc_t_tipo_cliente cttc on ctt.idt_tarifa = cttc.idt_tarifa
 	JOIN t_tipo_cliente_tipos tttc on TRIM(UPPER(cttc.tipo)) = tttc.descripcion
-	ORDER BY 2);
+	ORDER BY 2)
+) dt;
 
 INSERT INTO t_tipo_clientes (codigo, descripcion, t_tipo_cliente_tipo_id, estatus, created_at, updated_at, t_tarifa_id)
 SELECT codigo, descripcion, t_tipo_cliente_tipo_id, estatus, created_at, updated_at, t_tarifa_id
@@ -115,8 +131,13 @@ GROUP BY prediction_id, estatus, para, descripcion, color, created_at, updated_a
 ORDER BY prediction_id;
 
 CREATE MATERIALIZED VIEW tipo_personas_normalizados AS
-SELECT descripcion, estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
-FROM cxc_t_tipo_persona;
+SELECT 
+	row_number() OVER (ORDER BY dt.descripcion) AS prediction_id
+	, dt.*
+FROM (
+	SELECT descripcion, estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
+	FROM cxc_t_tipo_persona
+) dt;
 
 INSERT INTO t_tipo_personas (descripcion, estatus, created_at, updated_at)
 SELECT descripcion, estatus, created_at, updated_at
@@ -125,32 +146,47 @@ FROM tipo_personas_normalizados;
 UPDATE t_tipo_personas SET descripcion = REPLACE(descripcion, 'Juridicas', 'Jurídicas');
 
 CREATE MATERIALIZED VIEW empresa_tipo_valors_normalizados AS
-SELECT 'Desconocido' descripcion, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
-UNION ALL (SELECT DISTINCT TRIM(UPPER(tipo_valor)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-FROM cxc_t_clientes_padre
-WHERE TRIM(UPPER(tipo_valor)) != '' AND TRIM(UPPER(tipo_valor)) != '0'
-ORDER BY 1);
+SELECT 
+	row_number() OVER (ORDER BY dt.descripcion) AS prediction_id
+	, dt.*
+FROM (
+	SELECT 'Desconocido' descripcion, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
+	UNION ALL (SELECT DISTINCT TRIM(UPPER(tipo_valor)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+	FROM cxc_t_clientes_padre
+	WHERE TRIM(UPPER(tipo_valor)) != '' AND TRIM(UPPER(tipo_valor)) != '0'
+	ORDER BY 1)
+) dt;
 
 INSERT INTO t_empresa_tipo_valors(descripcion, estatus, created_at, updated_at)
 SELECT descripcion, estatus, created_at, updated_at
 FROM empresa_tipo_valors_normalizados;
 
 CREATE MATERIALIZED VIEW empresa_sector_economicos_normalizados AS
-SELECT 'Desconocido' descripcion, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
-UNION ALL (SELECT DISTINCT TRIM(UPPER(sector_economico)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-FROM cxc_t_clientes_padre
-WHERE sector_economico != '' AND sector_economico != '0' AND sector_economico != '11' AND sector_economico != '123'
-ORDER BY 1);
+SELECT 
+	row_number() OVER (ORDER BY dt.descripcion) AS prediction_id
+	, dt.*
+FROM (
+	SELECT 'Desconocido' descripcion, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
+	UNION ALL (SELECT DISTINCT TRIM(UPPER(sector_economico)), 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+	FROM cxc_t_clientes_padre
+	WHERE sector_economico != '' AND sector_economico != '0' AND sector_economico != '11' AND sector_economico != '123'
+	ORDER BY 1)
+) dt;
 
 INSERT INTO t_empresa_sector_economicos(descripcion, estatus, created_at, updated_at)
 SELECT descripcion, estatus, created_at, updated_at
 FROM empresa_sector_economicos_normalizados;
 
 CREATE MATERIALIZED VIEW tipo_emisions_normalizados AS
-SELECT 'Desconocido' descripcion, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
-UNION ALL (SELECT descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-from cxc_t_tipo_emision
-ORDER BY 1);
+SELECT 
+	row_number() OVER (ORDER BY dt.descripcion) AS prediction_id
+	, dt.*
+FROM (
+	SELECT 'Desconocido' descripcion, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
+	UNION ALL (SELECT descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+	from cxc_t_tipo_emision
+	ORDER BY 1)
+) dt;
 
 INSERT INTO t_tipo_emisions (descripcion, estatus, created_at, updated_at)
 SELECT descripcion, estatus, created_at, updated_at
@@ -159,14 +195,7 @@ FROM tipo_emisions_normalizados;
 CREATE MATERIALIZED VIEW periodos_normalizados AS
 SELECT 
 	row_number() OVER (ORDER BY dt.prev_id) prediction_id
-	, dt.descripcion
-	, dt.estatus
-	, dt.created_at
-	, dt.updated_at
-	, dt.rango_dias
-	, dt.dia_tope
-	, dt.mes_tope
-	, dt.prev_id
+	, dt.*
 FROM (
 	SELECT 'Desconocido' descripcion, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, '0' rango_dias, 1 dia_tope, 1 mes_tope, 0 prev_id
 	UNION ALL (select descripcion, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, rango_dias, dia_tope, mes_tope, idt_periodo
@@ -181,12 +210,7 @@ FROM periodos_normalizados;
 CREATE MATERIALIZED VIEW recargos_normalizados AS
 SELECT 
 	row_number() OVER (ORDER BY dt.prev_id) prediction_id
-	, dt.descripcion
-	, dt.tasa
-	, dt.estatus
-	, dt.created_at
-	, dt.updated_at	
-	, dt.prev_id
+	, dt.*
 FROM (
 	SELECT 'Desconocido' descripcion, 0 tasa, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id
 	UNION ALL (select descripcion, tasa, estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, idt_recargo prev_id
@@ -576,24 +600,32 @@ FROM (
 				, ctc.prev_client_id
 			FROM (	
 				SELECT 
-						cli.client_id				
-					, cli.resolucion as original
-					, cli.num_licencia
+						cli.client_id
+					, cli.original[ 1 ] as original
+					, cli.num_licencia[ 1 ]
 					, trim(cli.resolucion) resolucion
-					, cli.fecha_resolucion
-					, ttcs.id tipo_client_id
-					, cli.prev_client_id
+					, cli.fecha_resolucion[ 1 ]
+					, CASE WHEN cli.tipo_client_id[1] IS NULL THEN 1 ELSE cli.tipo_client_id[1] END tipo_client_id
+					, s.prev_client_id
 				FROM (
-					SELECT ctcs.idt_tipo_cliente, ctcs.resolucion, ctcs.fecha_resolucion, cns.prediction_id as "client_id", ctcs.num_licencia, cns.prev_client_id
-					FROM clientes_normalizados cns
-					JOIN cxc_t_clientes ctcs ON ctcs.idt_clientes = cns.prev_client_id
-				) cli
-				LEFT JOIN cxc_t_tipo_cliente cttc ON cli.idt_tipo_cliente = cttc.idt_tipo_cliente
-				JOIN t_tipo_clientes ttcs on TRIM(UPPER(cttc.descripcion)) = ttcs.descripcion
+						SELECT 
+							cns.prediction_id as "client_id"
+							, CASE WHEN ctcs.resolucion = '0' THEN '0 > ' || string_agg(CAST(cns.prev_client_id AS VARCHAR), '|') ELSE ctcs.resolucion END resolucion
+							, array_agg(DISTINCT ttcs.id) tipo_client_id
+							, array_agg(DISTINCT ctcs.resolucion) original
+							, array_agg(DISTINCT ctcs.fecha_resolucion) fecha_resolucion
+							, array_agg(DISTINCT cns.prev_client_id) prev_client_id
+							, array_agg(DISTINCT ctcs.num_licencia) num_licencia														
+						FROM clientes_normalizados cns
+						LEFT JOIN cxc_t_clientes ctcs ON ctcs.idt_clientes = cns.prev_client_id
+						LEFT JOIN cxc_t_tipo_cliente cttc ON ctcs.idt_tipo_cliente = cttc.idt_tipo_cliente
+						LEFT JOIN t_tipo_clientes ttcs on TRIM(UPPER(cttc.descripcion)) = ttcs.descripcion
+						GROUP BY cns.prediction_id, ctcs.resolucion
+				) cli,
+				UNNEST (cli.prev_client_id) s ( prev_client_id )
 			) ctc
 		) dt
 	) rns
-	GROUP BY rns.client_id, rns.resolucion, rns.original, rns.tipo_client_id, rns.fecha_resolucion, rns.num_licencia, rns.prev_client_id
 ) rw;
 
 INSERT INTO t_resolucions (resolucion, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia)

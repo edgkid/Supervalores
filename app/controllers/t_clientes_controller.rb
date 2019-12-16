@@ -30,6 +30,7 @@ class TClientesController < ApplicationController
       :es_prospecto,
       :estatus,
       :tipo_persona,
+      :created_at,
     ]
     respond_to do |format|
       format.html
