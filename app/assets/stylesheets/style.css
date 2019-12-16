@@ -9543,6 +9543,7 @@ body.md-skin {
   }
 }
 @media print {
+
   nav.navbar-static-side {
     display: none;
   }

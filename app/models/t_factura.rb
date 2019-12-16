@@ -268,4 +268,17 @@ class TFactura < ApplicationRecord
     credit.abs
   end
 
+  def pendiente_total
+    total_recibos = self.t_recibos.sum(:pago_recibido) - self.t_recibos.sum(:monto_acreditado)
+    total_nota_credito = self.t_nota_creditos.last.nil? ? 0 : self.t_nota_creditos.last.monto
+    self.total_factura - (total_recibos + total_nota_credito)
+  end
+
+  def es_ts?
+    self.t_factura_detalles.each do |fdet|
+      return true if fdet.t_tarifa_servicio.tipo.downcase == 'ts'
+    end
+    return false
+  end
+
 end

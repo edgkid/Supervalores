@@ -1,0 +1,19 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Recibo</th>
+      <th>Monto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @t_nota_creditos.each do |t_nota_credito| %>
+      <tr>
+        <td><%= t_nota_credito.id %></td>
+        <td><%= t_nota_credito.t_recibo_id %></td>
+        <td><%=number_to_balboa(t_nota_credito.monto) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

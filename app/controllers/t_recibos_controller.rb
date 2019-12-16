@@ -6,7 +6,6 @@ class TRecibosController < ApplicationController
 
   def new
     @last_t_recibo = TRecibo.find(params[:recibo_id]) if params[:recibo_id]
-    # generar_pdf(target) if params[:show_pdf] == "true"
     @t_recibo = TRecibo.new
   end
 
@@ -20,7 +19,8 @@ class TRecibosController < ApplicationController
         t_nota_credito.t_cliente_id = @t_recibo.t_cliente_id
         t_nota_credito.t_recibo_id = @t_recibo.id
         t_nota_credito.monto = @t_recibo.monto_acreditado
-        t_nota_credito.usada = false
+        t_nota_credito.status = "Sin Usar"
+        t_nota_credito.monto_original =  @t_recibo.monto_acreditado
         t_nota_credito.save!
       end
       # generar_pdf
@@ -65,6 +65,8 @@ class TRecibosController < ApplicationController
   end
 
   def comparativa_ingresos
+    @recibos = TRecibo.all
+    @recibos = @recibos.paginate(page: params[:page], per_page: 100)
     @usar_dataTables = true
     @useDataTableFooter = true
     @do_not_use_plain_select2 = true
@@ -102,10 +104,35 @@ class TRecibosController < ApplicationController
   end
 
   def generar_pdf
-    pdf = TReciboPdf.new(@t_factura, @t_recibo, current_user.id)
+    # debugger
+    if params[:notas_credito] == "true"
+      # debugger
+      pdf = TNotasCreditoPdf.new(@t_factura, @t_recibo, current_user.id)
+      send_data(
+        pdf.render,
+        filename: "recibo_nro_#{@t_recibo.id}.pdf",
+        type: "application/pdf",
+        disposition: "inline"
+      ) and return
+    else
+      pdf = TReciboPdf.new(@t_factura, @t_recibo, current_user.id)
     send_data(
       pdf.render,
       filename: "recibo_nro_#{@t_recibo.id}.pdf",
+      type: "application/pdf",
+      disposition: "inline"
+    ) and return
+    end
+    
+  end
+
+  def generar_reporte_pdf
+    cliente_ruc_o_cedula = params[:selected_client].split(" - ").first.strip unless params[:selected_client].blank?
+    tarifa_servicio_codigo = params[:selected_service].split(" - ").second.strip unless params[:selected_service].blank?
+    pdf = TReporteComparativaIngresosXTarifaClientePdf.new(cliente_ruc_o_cedula, tarifa_servicio_codigo)
+    send_data(
+      pdf.render,
+      filename: "test_reporte.pdf",
       type: "application/pdf",
       disposition: "inline"
     ) and return
@@ -141,11 +168,9 @@ class TRecibosController < ApplicationController
 
     def set_necessary_objects
       @t_recibos = @t_factura.t_recibos
-      if @t_recibos.any?
-        @pending_payment = @t_recibos.last.pago_pendiente.truncate(2)
-      else
-        @pending_payment = @t_factura.calculate_pending_payment.truncate(2)
-      end
+      @t_nota_creditos = @t_factura.t_nota_creditos
+      @pending_payment = @t_factura.pendiente_total.truncate(2)
+
 
       @t_resolucion = @t_factura.t_resolucion
       # @t_tarifa  = @t_resolucion.t_tipo_cliente.t_tarifa
