@@ -275,10 +275,10 @@ class TFactura < ApplicationRecord
   end
 
   def es_ts?
+    tarifas = TTarifaServicio.where("nombre ilike '%TS%'").pluck(:nombre)
     self.t_factura_detalles.each do |fdet|
-      return true if fdet.t_tarifa_servicio.tipo.downcase == 'ts'
+      return true if tarifas.include?(fdet.t_tarifa_servicio.nombre)
     end
     return false
   end
-
 end
