@@ -8,7 +8,8 @@ class TClienteDatatable < ApplicationDatatable
       email: { source: "ViewClient.email" },
       es_prospecto: { source: "ViewClient.es_prospecto" },
       estatus: { source: "ViewClient.estatus" },
-      tipo_persona: { source: "ViewClient.tipo_persona" }
+      tipo_persona: { source: "ViewClient.tipo_persona" },
+      created_at: { source: "ViewClient.created_at" }
     }
   end
   
@@ -23,6 +24,7 @@ class TClienteDatatable < ApplicationDatatable
         es_prospecto: record.es_prospecto,
         estatus: record.estatus, 
         tipo_persona: record.tipo_persona,
+        created_at: record.created_at,
         DT_RowId: url_for({
           id: record.id, controller: 't_clientes', action: 'show', only_path: true
         })
@@ -31,6 +33,6 @@ class TClienteDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    ViewClient.all
+    ViewClient.all.order(created_at: :desc)
   end
 end
