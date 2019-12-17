@@ -17,11 +17,8 @@
         <div class="row">
           <h3 class="col-sm-4">Facturas y Recibos Registrados</h3>
 
-          <div class="col-md-1">
-            <%= form_tag t_cliente_generar_pdf_path(@t_cliente, format:'pdf'), method: "get", target: "_blank" do %>
-              <%= hidden_field_tag :client_code, '', :id => "cliente_code" %>
-              <%= submit_tag("Generar Paz y Salvo", :id => "force_client_code", class: "fa fa-download btn btn-primary") %>
-            <% end %>
+          <div class="col-md-1">            
+            <a id="btn-paz-y-saldo" target="_blank" href="#" class="fa fa-download btn btn-primary hide" style="position: relative;z-index: 1;">Generar Paz y Salvo</a>
           </div>
           <div class="col-sm-4 col-form-label">
             <%= label_tag("Resolución:", nil, class: "text-right") %>
@@ -30,7 +27,7 @@
             <%= select_tag(:option, options_for_select([], params[:option] ), id:"select-cliente-resolucion") %>
           </div>
           <div class="col-sm-1 input-value">
-            <button id="btn-refresh-table" class="btn btn-default"><i class="fa fa-refresh"></i></button>  
+            <button id="btn-refresh-table" class="btn btn-default"><i class="fa fa-refresh"></i></button>
           </div>
       </div>
       <div class="ibox-content">
@@ -88,6 +85,7 @@
               } else {
                 $("#btn-paz-y-saldo").addClass("hide")
               }
+              $("#btn-paz-y-saldo").attr("href", "/clientes/"+data.cliente_id+"/generar_pdf.pdf?client_code="+data.cliente_codigo)
               footer.empty().append($("<tr />")
                 .append($("<td />"))
                 .append($("<td />"))
