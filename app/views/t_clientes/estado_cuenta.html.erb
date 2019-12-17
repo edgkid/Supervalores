@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="row">
   <div class="col-5">
     <div class="card">
@@ -83,6 +84,11 @@
         })
           .done(function (data) {
             if (data.procesado) {
+              if (data.mostrar_paz_y_salvo) {
+                $("#btn-paz-y-saldo").removeClass("hide")
+              } else {
+                $("#btn-paz-y-saldo").addClass("hide")
+              }
               footer.empty().append($("<tr />")
                 .append($("<td />"))
                 .append($("<td />"))

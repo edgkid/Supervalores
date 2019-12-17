@@ -274,4 +274,11 @@ class TFactura < ApplicationRecord
     self.total_factura - (total_recibos + total_nota_credito)
   end
 
+  def es_ts?
+    tarifas = TTarifaServicio.where("nombre ilike '%TS%'").pluck(:nombre)
+    self.t_factura_detalles.each do |fdet|
+      return true if tarifas.include?(fdet.t_tarifa_servicio.nombre)
+    end
+    return false
+  end
 end
