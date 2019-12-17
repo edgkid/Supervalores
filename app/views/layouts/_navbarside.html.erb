@@ -147,10 +147,8 @@
         <ul class="nav nav-second-level">
           <% if can? :read, TRecibo %>
             <li><%= link_to 'Caja', t_caja_index_path %></li>
-            <!--
-              <li><%= link_to 'Comparativa de Ingresos por Tarifas y Clientes', comparativa_ingresos_t_recibos_path %></li>
-            -->
-             <li><%= link_to 'Comparativa de Ingresos por Tarifas y Clientes', comparativa_ingresos_no_datatables_t_recibos_path %></li>
+            <li><%= link_to 'Comparativa de Ingresos por Tarifas y Clientes', comparativa_ingresos_t_recibos_path %></li>
+            <li><%= link_to 'Comparativa de Ingresos por Tarifas y Clientes 2', comparativa_ingresos_no_datatables_t_recibos_path %></li>
           <% end %>
           <% if can? :read, TCliente %>
             <li><%= link_to 'Trámites de Clientes Registrados', tramites_t_clientes_path %></li>
