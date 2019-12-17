@@ -1,5 +1,5 @@
 class TRecibosController < ApplicationController
-  before_action :set_t_factura, except: [:index, :comparativa_ingresos, :comparativa_ingresos_test, :pago_recibido_total]
+  before_action :set_t_factura, except: [:index, :comparativa_ingresos, :comparativa_ingresos_no_datatables, :pago_recibido_total]
   before_action :set_preview_data, only: :new
   before_action :set_t_recibo, only: [:show, :destroy, :generar_pdf]
   before_action :set_necessary_objects, only: [:new, :create, :show]
@@ -105,7 +105,7 @@ class TRecibosController < ApplicationController
     end
   end
 
-  def comparativa_ingresos_test
+  def comparativa_ingresos_no_datatables
     @tarifas_servicios = TTarifaServicio.where.not(estatus: 0)
     # @tarifas_servicios = TTarifaServicio.where(descripcion: ["Multas Supervision"])
     # @tarifas_servicios = TTarifaServicio.all
