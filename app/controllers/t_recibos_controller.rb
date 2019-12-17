@@ -245,12 +245,12 @@ class TRecibosController < ApplicationController
       ) and return
     else
       pdf = TReciboPdf.new(@t_factura, @t_recibo, current_user.id)
-    send_data(
-      pdf.render,
-      filename: "recibo_nro_#{@t_recibo.id}.pdf",
-      type: "application/pdf",
-      disposition: "inline"
-    ) and return
+      send_data(
+        pdf.render,
+        filename: "recibo_nro_#{@t_recibo.id}.pdf",
+        type: "application/pdf",
+        disposition: "inline"
+      ) and return
     end
     
   end

@@ -178,7 +178,6 @@ ActiveRecord::Schema.define(version: 2019_12_13_203259) do
     t.bigint "t_empresa_tipo_valor_id", null: false
     t.bigint "t_empresa_sector_economico_id"
     t.string "dv"
-    t.index ["rif"], name: "index_t_empresas_on_rif", unique: true
   end
 
   create_table "t_estado_cuenta", force: :cascade do |t|
@@ -394,7 +393,6 @@ ActiveRecord::Schema.define(version: 2019_12_13_203259) do
     t.string "telefono"
     t.string "email"
     t.string "direccion"
-    t.index ["cedula"], name: "index_t_personas_on_cedula", unique: true
     t.index ["t_empresa_id"], name: "index_t_personas_on_t_empresa_id"
   end
 
