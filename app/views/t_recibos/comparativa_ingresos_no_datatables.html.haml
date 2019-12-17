@@ -1,0 +1,231 @@
+.wrapper.wrapper-content.animated.fadeInRight
+  .row.d-print-none
+    .col-md-12
+      = form_tag(comparativa_ingresos_no_datatables_t_recibos_path, class: "", method: :get) do
+        .form-group
+          .input-group.search
+            = label_tag "desde"
+            = select_tag :from, options_for_select(TRecibo.years_options, params[:from]), class: 'form-control mr-3'
+            = label_tag "hasta"
+            = select_tag :to, options_for_select(TRecibo.years_options, params[:to]), class: 'form-control mr-3'
+            .input-group-btn
+              %button.btn.btn-secondary.disabled{:type => "submit", :disabled => true, :id => "search_with_years"}
+                %i.fa.fa-search{"aria-hidden" => "true"}
+              %button.btn.btn-default{:onclick => "javascript:window.print()", :type => "button", :id => "print_all"} Imprimir
+              
+  .row
+    .col-md-6
+      = image_tag "logoSMV.png", width: '150px'
+    .col-md-6{:align => "right"}
+      %h5
+        %b Fecha de impresión:
+        = Date.today.strftime('%d/%m/%Y')
+  .row{:style => "margin-top: -40px;"}
+    .col-12{:align => "center"}
+      %h3 REPÚBLICA DE PANAMÁ
+      %h3 SUPERINTENDENCIA DEL MERCADO DE VALORES
+      %h3 DEPARTAMENTO DE TESORERÍA
+      %hr/
+      - if params[:from] && params[:to]
+        - if params[:from] == params[:to]
+          %h3
+            = "COMPARATIVA DE INGRESOS POR TARIFAS Y CLIENTES #{params[:from]}"
+        - else
+          %h3 
+            = "COMPARATIVA DE INGRESOS POR TARIFAS Y CLIENTES #{params[:from]} - #{params[:to]}"
+      - else
+        %h3 
+          = "COMPARATIVA DE INGRESOS POR TARIFAS Y CLIENTES #{Date.today.strftime("%Y")}"
+      %hr/
+  .row
+    .col-lg-12
+      %table.table.table-striped.table-bordered.table-hover
+        %thead
+          %tr{:style => "font-size: x-small"}
+            %th Tarifa de servicio  
+            %th Enero
+            %th Febrero
+            %th Marzo
+            %th Abril
+            %th Mayo
+            %th Junio
+            %th Julio
+            %th Agosto
+            %th Septiembre
+            %th Octubre
+            %th Noviembre
+            %th Diciembre
+            %th Total
+        %tbody
+          - @tarifas_servicios.each do |tarifa_servicio|
+            - selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == tarifa_servicio.descripcion}.first
+            %tr{:style => "font-size: x-small"}
+              %td
+                = tarifa_servicio.descripcion
+              %td
+                = selected_mes_monto["ENERO"].round(2)
+              %td
+                = selected_mes_monto["FEBRERO"].round(2)
+              %td
+                = selected_mes_monto["MARZO"].round(2)
+              %td
+                = selected_mes_monto["ABRIL"].round(2)
+              %td
+                = selected_mes_monto["MAYO"].round(2)
+              %td
+                = selected_mes_monto["JUNIO"].round(2)
+              %td
+                = selected_mes_monto["JULIO"].round(2)
+              %td
+                = selected_mes_monto["AGOSTO"].round(2)
+              %td
+                = selected_mes_monto["SEPTIEMBRE"].round(2)
+              %td
+                = selected_mes_monto["OCTUBRE"].round(2)
+              %td
+                = selected_mes_monto["NOVIEMBRE"].round(2)
+              %td
+                = selected_mes_monto["DICIEMBRE"].round(2)
+              %td
+                = selected_mes_monto["TOTAL"].round(2)
+          %tr{:style => "font-size: x-small"}
+            %td{:colspan => "12"}
+              = "Total acumulado"
+            %td{:colspan => "2"} 
+              = @monto_final.round(2)
+
+:javascript
+  $(document).ready(function(){
+    $('#from').change(value_changed);
+    $('#to').change(value_changed);
+
+    function value_changed(){
+      if ( ( $('#from').val() != "" && $('#to').val() != "" ) && ( ($('#from').val() < $('#to').val()) || ($('#from').val() == $('#to').val()) ) ){
+        document.getElementById('search_with_years').disabled = false;
+        $('#search_with_years').removeClass('disabled')
+      }
+      else if ( $('#from').val() > $('#to').val() ){
+        document.getElementById('search_with_years').disabled = true;
+        $('#search_with_years').addClass('disabled')
+      }
+    }
+
+    $(document).on('click', '#print_every_page', function() {
+      $('#print').val("true")
+    });
+
+    if ($('#print_condition').val() == "true"){
+      
+    }
+
+    $('.datepicker').datepicker({
+      autoclose: true,
+      format: "dd/mm/yyyy"
+    });
+
+    $("#client-select").select2({
+      ajax: {
+        url: '#{"\#{t_clientes_all_clients_path}"}',
+        dataType: 'json',
+        data: function (params) {
+          var query = {
+            search: params.term
+          }
+
+          return query;
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function(t_cliente, i) {
+              return {
+                id: t_cliente.id,
+                text: `${t_cliente.ide} - ${t_cliente.rs}`
+              }
+            })
+          };
+        },
+        delay: 250
+      },
+      placeholder: 'Seleccione Cliente',
+      allowClear: true
+    });
+
+    $("#tariff-select").select2({
+      ajax: {
+        url: '#{"\#{all_services_t_tarifa_servicios_path}"}',
+        dataType: 'json',
+        data: function (params) {
+          var query = {
+            search: params.term
+          }
+
+          return query;
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function(t_tarifa_servicio, i) {
+              return {
+                id: t_tarifa_servicio.id,
+                text: `${t_tarifa_servicio.tipo ? t_tarifa_servicio.tipo : ''} - ${t_tarifa_servicio.codigo} - ${t_tarifa_servicio.nombre}`
+              }
+            })
+          };
+        },
+        delay: 250
+      },
+      placeholder: 'Seleccione Servicio',
+      allowClear: true
+    });
+
+    $.extend({
+      useDataInAjaxCall: function (d) {
+        d.t_cliente_id = $("#client-select").val();
+        d.t_tarifa_servicio_id = $("#tariff-select").val();
+      },
+      useDataTableFooter: function (footer) {
+        $.ajax({
+          url: '#{pago_recibido_total_t_recibos_path}',
+          contentType: "application/json",
+          type: 'get',
+          data: {
+            from: $('#from').val(),
+            to: $('#to').val()
+          }
+        })
+        .done(function (data) {
+          if (data.procesado) {
+            footer.empty().append($("<tr />")
+              .append($("<td />").html("<b>Total</b>"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />").html(data.total))
+            )
+          }
+        });
+      }
+    });
+
+    function refreshTable () {
+      $("#ajax-datatable").DataTable().ajax.reload();
+    }
+
+    $('.datepicker').on('changeDate', function (e) {
+      refreshTable();
+    });
+
+    $('#execute').click(function () {
+      refreshTable();
+    });
+  });
+%style{:media => "print", :type => "text/css"}
+  :cdata
+    @media print {
+    \#period-form-container {display:none;}
+    \#ajax-datatable_length {display:none;}
+    \#ajax-datatable_filter {display:none;}
+    \#ajax-datatable_paginate {display:none;}
+    }

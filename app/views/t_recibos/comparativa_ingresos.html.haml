@@ -1,0 +1,195 @@
+.wrapper.wrapper-content.animated.fadeInRight
+  = hidden_field_tag :print_condition, @print
+  .row
+    .col-md-12
+      = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do
+        .form-group
+          .input-group.search
+            = text_field_tag :search_client, params[:search_client], placeholder: 'Nombre del cliente', class: 'form-control mr-3'
+            = text_field_tag :search_service, params[:search_service], placeholder: 'Nombre del servicio', class: 'form-control'
+            .input-group-btn
+              %button.btn.btn-secondary{:type => "submit"}
+                %i.fa.fa-search{"aria-hidden" => "true"}
+              %button.btn.btn-default{:onclick => "javascript:window.print()", :type => "button", :id => "print_all"} Imprimir
+              = form_tag comparativa_ingresos_t_recibos_path, target: "_blank" do
+                = hidden_field_tag :print, false
+                = submit_tag("Mostrar Todo", :id => "print_every_page", class: "fa fa-download btn btn-primary")
+  .row
+    .col-md-6
+      = image_tag "logoSMV.png", width: '150px'
+    .col-md-6{:align => "right"}
+      %h5
+        %b Fecha de impresión:
+        = Date.today.strftime('%d/%m/%Y')
+  .row{:style => "margin-top: -40px;"}
+    .col-12{:align => "center"}
+      %h3 REPÚBLICA DE PANAMÁ
+      %h3 SUPERINTENDENCIA DEL MERCADO DE VALORES
+      %h3 DEPARTAMENTO DE TESORERÍA
+      %hr/
+      %h3 COMPARATIVA DE INGRESOS POR TARIFAS Y CLIENTES
+      %hr/
+  .row
+    .col-lg-12
+      - if TFactura.count > 0
+        %table.table.table-striped.table-bordered.table-hover
+          %thead
+            %tr
+              %th Nro. Recibo
+              %th Fecha de Pago
+              %th Detalle de Factura
+              %th Servicio
+              %th Descripcion del Servicio
+              %th CÉD / PAS / RUC
+              %th Razón Social
+              %th Pago Recibido
+          %tbody
+            - @recibos.each do |recibo|
+              %tr
+                %td
+                  = recibo.id
+                %td
+                  = recibo.fecha_pago.strftime("%Y-%m-%d")
+                %td
+                  = recibo.t_factura.t_factura_detalles.first.cuenta_desc.titleize
+                %td
+                  = recibo.t_factura.t_factura_detalles.first.t_tarifa_servicio.codigo
+                %td
+                  = recibo.t_factura.t_factura_detalles.first.t_tarifa_servicio.descripcion
+
+                %td
+                  = recibo.t_cliente.persona_type == "TPersona" ? recibo.t_cliente.persona.cedula : recibo.t_cliente.persona.rif
+                %td
+                  = recibo.t_cliente.persona_type == "TPersona" ? recibo.t_cliente.persona.nombre : recibo.t_cliente.persona.razon_social
+                %td
+                  = recibo.pago_recibido
+      - else
+        %div
+          %p No se encontraron registros.
+.row.no-gutters.mt-20
+  .col-md-12
+    %nav.text-center{"aria-label" => "Page navigation "}
+      - unless @recibos.first.nil?
+        = will_paginate @recibos
+:javascript
+  $(document).ready(function(){
+  
+    $(document).on('click', '#print_every_page', function() {
+      $('#print').val("true")
+    });
+
+    if ($('#print_condition').val() == "true"){
+      
+    }
+
+    $('.datepicker').datepicker({
+      autoclose: true,
+      format: "dd/mm/yyyy"
+    });
+
+    $("#client-select").select2({
+      ajax: {
+        url: '#{"\#{t_clientes_all_clients_path}"}',
+        dataType: 'json',
+        data: function (params) {
+          var query = {
+            search: params.term
+          }
+
+          return query;
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function(t_cliente, i) {
+              return {
+                id: t_cliente.id,
+                text: `${t_cliente.ide} - ${t_cliente.rs}`
+              }
+            })
+          };
+        },
+        delay: 250
+      },
+      placeholder: 'Seleccione Cliente',
+      allowClear: true
+    });
+
+    $("#tariff-select").select2({
+      ajax: {
+        url: '#{"\#{all_services_t_tarifa_servicios_path}"}',
+        dataType: 'json',
+        data: function (params) {
+          var query = {
+            search: params.term
+          }
+
+          return query;
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function(t_tarifa_servicio, i) {
+              return {
+                id: t_tarifa_servicio.id,
+                text: `${t_tarifa_servicio.tipo ? t_tarifa_servicio.tipo : ''} - ${t_tarifa_servicio.codigo} - ${t_tarifa_servicio.nombre}`
+              }
+            })
+          };
+        },
+        delay: 250
+      },
+      placeholder: 'Seleccione Servicio',
+      allowClear: true
+    });
+
+    $.extend({
+      useDataInAjaxCall: function (d) {
+        d.t_cliente_id = $("#client-select").val();
+        d.t_tarifa_servicio_id = $("#tariff-select").val();
+      },
+      useDataTableFooter: function (footer) {
+        $.ajax({
+          url: '#{pago_recibido_total_t_recibos_path}',
+          contentType: "application/json",
+          type: 'get',
+          data: {
+            from: $('#from').val(),
+            to: $('#to').val()
+          }
+        })
+        .done(function (data) {
+          if (data.procesado) {
+            footer.empty().append($("<tr />")
+              .append($("<td />").html("<b>Total</b>"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />").html(data.total))
+            )
+          }
+        });
+      }
+    });
+
+    function refreshTable () {
+      $("#ajax-datatable").DataTable().ajax.reload();
+    }
+
+    $('.datepicker').on('changeDate', function (e) {
+      refreshTable();
+    });
+
+    $('#execute').click(function () {
+      refreshTable();
+    });
+  });
+%style{:media => "print", :type => "text/css"}
+  :cdata
+    @media print {
+    \#period-form-container {display:none;}
+    \#ajax-datatable_length {display:none;}
+    \#ajax-datatable_filter {display:none;}
+    \#ajax-datatable_paginate {display:none;}
+    }

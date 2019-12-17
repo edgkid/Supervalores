@@ -1,3 +1,4 @@
+
 a = TConfFacAutomatica.first
 a.schedule_invoices
 
@@ -1940,3 +1941,214 @@ SMV-140-2016
     Generar Notas de Credito
   </i>
 <% end %>
+=======
+<div class="row" id="period-form-container">
+  <div class="offset-10 col-md-2">
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-default" type="button" onclick="javascript:window.print()">
+          Imprimir
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+if (document.getElementById("select2-client-select-container").firstChild.nextSibling == null) && (document.getElementById("select2-tariff-select-container").firstChild.nextSibling == null){
+        window.location.reload();
+      }
+      else if (document.getElementById("select2-client-select-container").firstChild.nextSibling == null) && (document.getElementById("select2-tariff-select-container").firstChild.nextSibling != null){
+        var service = document.getElementById("select2-tariff-select-container").firstChild.nextSibling.textContent;
+        $('#selected_service').val( service );
+        window.location.reload();
+      }
+      else if (document.getElementById("select2-client-select-container").firstChild.nextSibling != null) && (document.getElementById("select2-tariff-select-container").firstChild.nextSibling == null){
+        var client = document.getElementById("select2-client-select-container").firstChild.nextSibling.textContent; 
+        $('#selected_client').val( client );
+        window.location.reload();
+      }
+      else {
+        var service = document.getElementById("select2-tariff-select-container").firstChild.nextSibling.textContent;
+        var client = document.getElementById("select2-client-select-container").firstChild.nextSibling.textContent; 
+        $('#selected_client').val( client );
+        $('#selected_service').val( service );
+        window.location.reload();
+      }
+
+
+      34+45+90+80+80+70+90
+
+
+      TCliente id: 3351, codigo: "CLI3351", t_estatus_id: 2, created_at: "2019-11-18 06:45:29", updated_at: "2019-11-18 06:45:29", prospecto_at: nil, persona_id: 2662, persona_type: "TPersona">
+>> recibo.t_cliente.t_persona
+
+
+$(document).on('click', '#pass_client_and_service', function() {
+      var service = ""
+      var client = ""
+      if (document.getElementById("select2-tariff-select-container").firstChild.nextSibling != null){
+        var service = document.getElementById("select2-tariff-select-container").firstChild.nextSibling.textContent;
+      }
+      else if (document.getElementById("select2-client-select-container").firstChild.nextSibling != null){
+        var client = document.getElementById("select2-client-select-container").firstChild.nextSibling.textContent; 
+      }
+      $('#selected_client').val( client );
+      $('#selected_service').val( service );
+      window.location.reload();
+    });
+
+
+
+
+
+= form_tag generar_reporte_pdf_t_factura_t_recibo_path(1, 1, format:'pdf'), method: "get", target: "_blank" do
+      = hidden_field_tag :selected_client, ''
+      = hidden_field_tag :selected_service, ''
+      = submit_tag("Generar PDF", :id => "pass_client_and_service", class: "fa fa-download btn btn-primary")
+
+
+
+
+- if @last_t_recibo != nil
+  = link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @last_t_recibo, format:'pdf'), id: "generated_pdf", target: "_blank", class: 'btn btn-primary' do
+    %i.fa.fa-download
+    Generar PDF
+:javascript
+  ready = function() {
+    document.getElementById('generated_pdf').style.display = "none"
+    document.getElementById('generated_pdf').click();
+  };
+
+  $(document).ready(ready);
+  $(document).on('page:load', ready);
+
+
+
+  document.getElementById('print_all').click();
+
+
+  :style => "display: none" ,
+
+
+  <h3 class="col-sm-4">Facturas y Recibos Registrados</h3>
+          
+
+.row
+	%h3.col-sm-5 Facturas y Recibos Registrados
+	.col-sm-2.col-form-label
+	  = label_tag(Resolución:, nil, class: text-right)
+	.col-sm-4.input-value
+	  = select_tag(:option, options_for_select([], params[:option] ), id:select-cliente-resolucion)
+
+	.col-sm-1.input-value
+	  %button#btn-refresh-table.btn.btn-default
+	    %i.fa.fa-refresh
+
+
+
+.row.no-gutters.mt-20
+  .col-md-12
+    %nav.text-center{"aria-label" => "Page navigation "}
+      - unless @tarifas_servicios.first.nil?
+        = will_paginate @recibos
+
+//= text_field_tag :search_client, params[:search_client], placeholder: 'Nombre del cliente', class: 'form-control mr-3'
+//= text_field_tag :search_service, params[:search_service], placeholder: 'Nombre del servicio', class: 'form-control'
+
+ :disabled => true
+
+
+ 2182
+ 2947
+
+
+ = form_tag comparativa_ingresos_test_t_recibos_path, target: "_blank" do
+                = hidden_field_tag :print, false
+                = submit_tag("Mostrar Todo", :id => "print_every_page", class: "fa fa-download btn btn-primary")
+
+
+5000,0
+5000,0
+31500,0
+20000,0
+
+61500,0
+6022112,92
+6398484,98
+
+6229724,98
+
+146796,17
+6229724,98
+6398484,98
+12583843,46
+
+
+12730639,63
+12411593,68
+
+6376521,15111
+
+
+3989
+145
+3832
+3316
+
+6601783,96
+7083017,31999998
+13684801,28
+
+
+161796,17
+6250679,05
+6402531,25
+6029352,92
+
+
+
+161796,17
+6250679,05
+6402531,25
+6029352,92
+
+18789669,17
+
+
+
+pre-change 6250679.05
+
+2017       6250479.05
+facturas_detalles
+1.- 200
+changed to 6250279.05
+
+
+2018       6402531.25
+facturas_detalles
+1.- 100
+changed to 6402431.25
+
+6250279.05 + 6402431.25 = 12652710.3 
+
+2017 - 2018   12608643.8
+should be 300 below
+			  12608343.8	
+
+
+3000.0	50.0	800.0	2400.0	9900.0	7475.0	0	6000.0	6000.0	1950.0	6450.0	0		44025.0
+800.0	7000.0	0		0		3000.0	1950.0	0	0		3000.0	3300.0	13800.0	8400.0	41250.0
+3800.0	7050.0	800.0	0		12900.0	9425.0	0	6000.0	9000.0	5250.0	20250.0	8400.0	
+
+
+factura detalle id 3003
+factura.id 11
+
+
+162161,17
+6204728,05
+6393427,03
+6029352,92
+
+18789669,17
+
