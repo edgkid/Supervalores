@@ -141,7 +141,7 @@ class TRecibosController < ApplicationController
     
     @resoluciones = TResolucion.joins(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).includes(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')})")
 
-    @resoluciones = TResolucion.where("id < 20")
+    # @resoluciones = TResolucion.where("id < 20")
 
     @resoluciones.each do |resolucion|
       next if resolucion.t_facturas.count == 0
