@@ -44,8 +44,6 @@ class TClientesController < ApplicationController
   end
 
   def estado_cuenta
-    #Ignorar @t_cliente, es necesario solamente para que el pdf abra, despues de que abra el pdf, se utiliza javascript para pasar el cliente seleccionado y dentro de la accion del pdf buscamos al cliente correspondiente
-    @t_cliente = TCliente.first
     @do_not_use_plain_select2 = true   
     @useDataTableFooter = true
     @attributes_to_display = [
@@ -78,6 +76,7 @@ class TClientesController < ApplicationController
   def estado_cuenta_calculo_de_totales
     t_resolucion_id = params[:t_resolucion_id]
     if t_resolucion_id != ""
+      resolucion = TResolucion.find(t_resolucion_id)
       sum_total = TFactura.left_joins(
           {t_recibos: :user}, 
           {t_resolucion: :t_cliente}
@@ -106,7 +105,9 @@ class TClientesController < ApplicationController
         mostrar_paz_y_salvo: sum_total > 0 && deuda == 0,
         por_pagar: deuda,
         total_pago_recibido: sum_pago_recibido,
-        total_monto_acreditado: sum_monto_acreditado
+        total_monto_acreditado: sum_monto_acreditado,
+        cliente_id: resolucion.t_cliente.id,
+        cliente_codigo: resolucion.t_cliente.codigo
       }
     else
       render json: {
