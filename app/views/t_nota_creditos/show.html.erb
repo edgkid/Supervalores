@@ -29,7 +29,6 @@
 <p id="notice"><%= notice %></p>
 
 
-
 <div align="center" class="row">
   <div class="col-md-6">
     <b>Cliente:</b> <%= @t_nota_credito.t_cliente.razon_social %>
@@ -57,5 +56,10 @@
 <div class="col-sm-12">
 <%= link_to 'Editar', edit_t_nota_credito_path(@t_nota_credito) %> |
 <%= link_to 'Regresar', t_nota_creditos_path %>
+<%= link_to generar_pdf_t_factura_t_recibo_path(@t_nota_credito.t_recibo.t_factura, @t_nota_credito.t_recibo, format:'pdf', notas_credito: true), id: "generated_pdf_2", target: "_blank", class: 'btn btn-primary' do %>
+  <i class="fa fa-download">
+    Generar PDF
+  </i>
+<% end %>
  </div>
 </div>

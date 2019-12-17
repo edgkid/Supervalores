@@ -113,7 +113,7 @@ class TNotasCreditoPdf < PdfHelper
     move_down 10
 
     fill_color '000000'
-  
+    # debugger
 
     bounding_box([0, cursor], :width => 165, :height => 40) do
       # stroke_bounds

@@ -157,15 +157,7 @@
             <% end %>
 
             <script>
-              ready = function() {
-                document.getElementById('generated_pdf_2').style.display = "none"
-                document.getElementById('generated_pdf_2').click();
-                document.getElementById('generated_pdf').style.display = "none"
-                document.getElementById('generated_pdf').click();
-              };
-
-              $(document).ready(ready);
-              $(document).on('page:load', ready);
+              
             </script>
 
             <%= render "shared/action_buttons",
@@ -181,6 +173,25 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
+    ready_recibo = function() {
+                document.getElementById('generated_pdf').style.display = "none"
+                document.getElementById('generated_pdf').click()
+                
+              };
+
+    ready_nota_credito = function() {
+                if (document.getElementById('generated_pdf_2') != null) {
+                  document.getElementById('generated_pdf_2').style.display = "none"
+                  document.getElementById('generated_pdf_2').click()
+                }
+                  
+              };
+
+    $(document).ready(ready_recibo);
+    $(document).ready(ready_nota_credito);
+    $(document).on('page:load', ready_recibo);
+    $(document).on('page:load', ready_nota_credito);
+
     $('#payment-received-input').keyup(function() {
       allowOnlyNumbers(this);
 
@@ -200,5 +211,7 @@
     //   window.location.href = "<%#= generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo) %>";
     //   $('#save').click();
     // }
+
+
   });
 </script>

@@ -367,6 +367,8 @@ class TReciboPdf < PdfHelper
     <b>SUPERINTENDENCIA DEL MERCADO DE VALORES</b>
     <b>DEPARTAMENTO DE TESORERÍA</b>", inline_format: true, at: [10,700], :align => :center
 
+    text_box "<b>RECIBO DE INGRESO</b>", inline_format: true, at: [10,665], :align => :center
+
     text_box "<b>Copia CXC</b>", inline_format: true, at: [508,740]
 
     stroke do

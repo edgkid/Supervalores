@@ -2152,3 +2152,11 @@ factura.id 11
 
 18789669,17
 
+
+
+<%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @last_t_recibo, format:'pdf', notas_credito: true), id: "generated_pdf_2", target: "_blank", class: 'btn btn-primary' do %>
+                  <i class="fa fa-download">
+                    Generar Notas de Credito
+                  </i>
+                <% end %>
+
