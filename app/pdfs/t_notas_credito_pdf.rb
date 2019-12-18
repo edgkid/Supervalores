@@ -113,7 +113,7 @@ class TNotasCreditoPdf < PdfHelper
     move_down 10
 
     fill_color '000000'
-  
+    # debugger
 
     bounding_box([0, cursor], :width => 165, :height => 40) do
       # stroke_bounds
@@ -246,7 +246,7 @@ class TNotasCreditoPdf < PdfHelper
     <b>SUPERINTENDENCIA DEL MERCADO DE VALORES</b>
     <b>DEPARTAMENTO DE TESORERÍA</b>", inline_format: true, at: [10,700], :align => :center
 
-    text_box "<b>RECIBO DE INGRESO</b>", inline_format: true, at: [10,665], :align => :center
+    text_box "<b>NOTA DE CRÉDITO</b>", inline_format: true, at: [10,665], :align => :center
 
     stroke do
       move_down 20
@@ -283,6 +283,7 @@ class TNotasCreditoPdf < PdfHelper
       ", inline_format: true, at: [5, cursor], :align => :justify
     end
 
+
     big_table_for_5_with_widths_and_alignment(
       bold("Cantidad"), 
       bold("Ítem"), 
@@ -291,56 +292,66 @@ class TNotasCreditoPdf < PdfHelper
       bold("Saldo"),
       45, 130, 240, 70, :center)
 
-    @t_factura.t_factura_detalles.each do |fd|
+    nota_de_credito = @t_recibo.t_nota_creditos.where.not(status: "Usada").order("created_at ASC").last 
+    unless nota_de_credito.nil?
       big_table_for_5_with_widths_and_alignment(
-        "#{fd.cantidad}", 
-        "#{fd.t_tarifa_servicio.nombre}", 
-        "#{fd.cuenta_desc}", 
-        "#{fd.precio_unitario}", 
-        "#{fd.precio_unitario * fd.cantidad}", 
+        "1", 
+        "Nota de Crédito", 
+        "Saldo a favor", 
+        "#{nota_de_credito.monto}", 
+        "#{nota_de_credito.monto}", 
         45, 130, 240, 70, :center)
     end
+    # @t_factura.t_factura_detalles.each do |fd|
+    #   big_table_for_5_with_widths_and_alignment(
+    #     "#{fd.cantidad}", 
+    #     "#{fd.t_tarifa_servicio.nombre}", 
+    #     "#{fd.cuenta_desc}", 
+    #     "#{fd.precio_unitario}", 
+    #     "#{fd.precio_unitario * fd.cantidad}", 
+    #     45, 130, 240, 70, :center)
+    # end
 
-    @t_factura.t_recargos.each do |r|
-      big_table_for_5_with_widths_and_alignment(
-        "", 
-        "Recargo", 
-        "#{r.descripcion}", 
-        "#{r.tasa * @t_factura.calculate_services_total_price}", 
-        "",
-        45, 130, 240, 70, :center)
-    end  
+    # @t_factura.t_recargos.each do |r|
+    #   big_table_for_5_with_widths_and_alignment(
+    #     "", 
+    #     "Recargo", 
+    #     "#{r.descripcion}", 
+    #     "#{r.tasa * @t_factura.calculate_services_total_price}", 
+    #     "",
+    #     45, 130, 240, 70, :center)
+    # end  
 
     move_down 30
 
-    bounding_box([0, cursor], :width => 270, :height => 110) do
-        num_cheque = @t_recibo.t_metodo_pago.forma_pago == "Cheque" ? "<b>N° de cheque:</b> #{@t_recibo.num_cheque}" : ""
-        # stroke_bounds
-        text_box "<b>Método de Pago:</b> #{@t_recibo.t_metodo_pago.forma_pago}
-        #{num_cheque}", inline_format: true, at: [5, cursor], :align => :justify
-    end
+    # bounding_box([0, cursor], :width => 270, :height => 110) do
+    #     num_cheque = @t_recibo.t_metodo_pago.forma_pago == "Cheque" ? "<b>N° de cheque:</b> #{@t_recibo.num_cheque}" : ""
+    #     # stroke_bounds
+    #     text_box "<b>Método de Pago:</b> #{@t_recibo.t_metodo_pago.forma_pago}
+    #     #{num_cheque}", inline_format: true, at: [5, cursor], :align => :justify
+    # end
 
-    move_up 110
+    # move_up 110
 
-    table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Subtotal:"),
-      bold("#{@t_factura.total_factura}"),
-      110, 110, 20, :center)
+    # table_for_2_with_widths_and_height_and_alignment_to_the_right(
+    #   bold("Subtotal:"),
+    #   bold("#{@t_factura.total_factura}"),
+    #   110, 110, 20, :center)
 
-    table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Total:"),
-      bold("#{@t_factura.total_factura}"),
-      110, 110, 20, :center)
+    # table_for_2_with_widths_and_height_and_alignment_to_the_right(
+    #   bold("Total:"),
+    #   bold("#{@t_factura.total_factura}"),
+    #   110, 110, 20, :center)
 
-    table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Pago Recibido:"),
-      bold("#{@t_recibo.pago_recibido}"),
-      110, 110, 20, :center)
+    # table_for_2_with_widths_and_height_and_alignment_to_the_right(
+    #   bold("Pago Recibido:"),
+    #   bold("#{@t_recibo.pago_recibido}"),
+    #   110, 110, 20, :center)
 
-    table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Saldo Pendiente:"),
-      bold("#{@t_recibo.pago_pendiente}"),
-      110, 110, 20, :center)
+    # table_for_2_with_widths_and_height_and_alignment_to_the_right(
+    #   bold("Saldo Pendiente:"),
+    #   bold("#{@t_recibo.pago_pendiente}"),
+    #   110, 110, 20, :center)
 
     stroke do
       move_down 10
@@ -355,7 +366,6 @@ class TNotasCreditoPdf < PdfHelper
         
         <b>IMPORTANTE:</b> Verifique que el nombre en el presente recibo haya sido escrito de la forma correcta. En caso de una devolución, la misma se realizará a nombre de quien aparece en este recibo de pago.", inline_format: true, at: [5, cursor], :align => :justify
     end
-
 
     text_box "Recibido por _____________________________", at: [350,cursor + 70], inline_format: true
 
@@ -376,6 +386,8 @@ class TNotasCreditoPdf < PdfHelper
     text_box "<b>REPÚBLICA DE PANAMÁ</b>
     <b>SUPERINTENDENCIA DEL MERCADO DE VALORES</b>
     <b>DEPARTAMENTO DE TESORERÍA</b>", inline_format: true, at: [10,700], :align => :center
+
+    text_box "<b>NOTA DE CRÉDITO</b>", inline_format: true, at: [10,665], :align => :center
 
     text_box "<b>Copia CXC</b>", inline_format: true, at: [508,740]
 
@@ -423,59 +435,66 @@ class TNotasCreditoPdf < PdfHelper
       bold("Saldo"),
       45, 130, 240, 70, :center)
 
-    @t_factura.t_factura_detalles.each do |fd|
+    nota_de_credito = @t_recibo.t_nota_creditos.where.not(status: "Usada").order("created_at ASC").last 
+    unless nota_de_credito.nil?
       big_table_for_5_with_widths_and_alignment(
-        "#{fd.cantidad}", 
-        "#{fd.t_tarifa_servicio.nombre}", 
-        "#{fd.cuenta_desc}", 
-        "#{fd.precio_unitario}", 
-        "#{fd.precio_unitario * fd.cantidad}", 
+        "1", 
+        "Nota de Crédito", 
+        "Saldo a favor", 
+        "#{nota_de_credito.monto}", 
+        "#{nota_de_credito.monto}", 
         45, 130, 240, 70, :center)
     end
+    # @t_factura.t_factura_detalles.each do |fd|
+    #   big_table_for_5_with_widths_and_alignment(
+    #     "#{fd.cantidad}", 
+    #     "#{fd.t_tarifa_servicio.nombre}", 
+    #     "#{fd.cuenta_desc}", 
+    #     "#{fd.precio_unitario}", 
+    #     "#{fd.precio_unitario * fd.cantidad}", 
+    #     45, 130, 240, 70, :center)
+    # end
 
-    @t_factura.t_recargos.each do |r|
-      big_table_for_5_with_widths_and_alignment(
-        "", 
-        "Recargo", 
-        "#{r.descripcion}", 
-        "#{r.tasa * @t_factura.calculate_services_total_price}", 
-        "",
-        45, 130, 240, 70, :center)
-    end    
-    #######
-    #Loop here plz
-    #######
+    # @t_factura.t_recargos.each do |r|
+    #   big_table_for_5_with_widths_and_alignment(
+    #     "", 
+    #     "Recargo", 
+    #     "#{r.descripcion}", 
+    #     "#{r.tasa * @t_factura.calculate_services_total_price}", 
+    #     "",
+    #     45, 130, 240, 70, :center)
+    # end  
 
     move_down 30
 
-    bounding_box([0, cursor], :width => 270, :height => 110) do
-        num_cheque = @t_recibo.t_metodo_pago.forma_pago == "Cheque" ? "<b>N° de cheque:</b> #{@t_recibo.num_cheque}" : ""
-        # stroke_bounds
-        text_box "<b>Método de Pago:</b> #{@t_recibo.t_metodo_pago.forma_pago}
-        #{num_cheque}", inline_format: true, at: [5, cursor], :align => :justify
-    end
+    # bounding_box([0, cursor], :width => 270, :height => 110) do
+    #     num_cheque = @t_recibo.t_metodo_pago.forma_pago == "Cheque" ? "<b>N° de cheque:</b> #{@t_recibo.num_cheque}" : ""
+    #     # stroke_bounds
+    #     text_box "<b>Método de Pago:</b> #{@t_recibo.t_metodo_pago.forma_pago}
+    #     #{num_cheque}", inline_format: true, at: [5, cursor], :align => :justify
+    # end
 
-    move_up 110
+    # move_up 110
 
-    table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Subtotal:"),
-      bold("#{@t_factura.total_factura}"),
-      110, 110, 20, :center)
+    # table_for_2_with_widths_and_height_and_alignment_to_the_right(
+    #   bold("Subtotal:"),
+    #   bold("#{@t_factura.total_factura}"),
+    #   110, 110, 20, :center)
 
-    table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Total:"),
-      bold("#{@t_factura.total_factura}"),
-      110, 110, 20, :center)
+    # table_for_2_with_widths_and_height_and_alignment_to_the_right(
+    #   bold("Total:"),
+    #   bold("#{@t_factura.total_factura}"),
+    #   110, 110, 20, :center)
 
-    table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Pago Recibido:"),
-      bold("#{@t_recibo.pago_recibido}"),
-      110, 110, 20, :center)
+    # table_for_2_with_widths_and_height_and_alignment_to_the_right(
+    #   bold("Pago Recibido:"),
+    #   bold("#{@t_recibo.pago_recibido}"),
+    #   110, 110, 20, :center)
 
-    table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Saldo Pendiente:"),
-      bold("#{@t_recibo.pago_pendiente}"),
-      110, 110, 20, :center)
+    # table_for_2_with_widths_and_height_and_alignment_to_the_right(
+    #   bold("Saldo Pendiente:"),
+    #   bold("#{@t_recibo.pago_pendiente}"),
+    #   110, 110, 20, :center)
 
     stroke do
       move_down 10
@@ -483,6 +502,7 @@ class TNotasCreditoPdf < PdfHelper
     end
 
     move_down 20
+
     bounding_box([0, cursor], :width => bounds.width, :height => 70) do
         # stroke_bounds
         text_box "<b>Cajero(a):</b> #{@current_user.nombre} #{@current_user.apellido}                                                                                                                                 

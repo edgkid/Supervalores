@@ -1,29 +1,65 @@
+<div class="row">
+  <div class="col-md-6">
+    <%= image_tag "logoSMV.png", width: '200px' %>
+  </div>
+  <div align="right" class="col-md-6">
+    <h5><b>Fecha de impresión:</b> <%= Date.today.strftime('%d/%m/%Y') %></h5>
+  </div>
+</div>
+
+<div align="center" class="row">
+  <div class="col-sm-12">
+    <h3><b>REPÚBLICA DE PANAMÁ</b></h3>
+    <h3><b>SUPERINTENDENCIA DEL MERCADO DE VALORES</b></h3>
+    <h3><b>DEPARTAMENTO DE TESORERÍA</b></h3>
+  </div>
+</div>
+
+<hr>
+
+<div align="center" class="row">
+  <div class="col-sm-12">
+    <h3>NOTA DE CRÉDITO</h3>
+  </div>
+</div>
+
+<hr>
+
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>T cliente:</strong>
-  <%= @t_nota_credito.t_cliente_id %>
-</p>
 
-<p>
-  <strong>T recibo:</strong>
-  <%= @t_nota_credito.t_recibo_id %>
-</p>
+<div align="center" class="row">
+  <div class="col-md-6">
+    <b>Cliente:</b> <%= @t_nota_credito.t_cliente.razon_social %>
+    <br>
+    <b>Recibo Asociado:</b> <%= @t_nota_credito.t_recibo_id %>
+    <br>
+    <b>Factura de Redención:</b> <%= @t_nota_credito.t_factura_id.nil? ? "No Redimida" : @t_nota_credito.t_factura_id %>
+    <br>
 
-<p>
-  <strong>Monto:</strong>
-  <%= @t_nota_credito.monto %>
-</p>
 
-<p>
-  <strong>Factura redimida:</strong>
-  <%= @t_nota_credito.t_factura_id %>
-</p>
+  </div>
+  <div class="col-md-6">
+    <b>Monto:</b> <%= number_to_balboa(@t_nota_credito.monto) %>
+    <br>
+    <b>Estatus:</b> <%= @t_nota_credito.status %>
+    <br>
+    <b>Fecha de Creación:</b> <%= @t_nota_credito.created_at.strftime('%d/%m/%Y') %>
 
-<p>
-  <strong>Descripcion:</strong>
-  <%= @t_nota_credito.descripcion %>
-</p>
+  </div>
 
-<%= link_to 'Edit', edit_t_nota_credito_path(@t_nota_credito) %> |
-<%= link_to 'Back', t_nota_creditos_path %>
+</div>
+
+<br>
+<div align="center" class="row">
+<div class="col-sm-12">
+<%= link_to 'Editar', edit_t_nota_credito_path(@t_nota_credito) %> |
+<%= link_to 'Regresar', t_nota_creditos_path %>
+<%= link_to generar_pdf_t_factura_t_recibo_path(@t_nota_credito.t_recibo.t_factura, @t_nota_credito.t_recibo, format:'pdf', notas_credito: true), id: "generated_pdf_2", target: "_blank", class: 'btn btn-primary' do %>
+  <i class="fa fa-download">
+    Generar PDF
+  </i>
+<% end %>
+ </div>
+</div>

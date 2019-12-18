@@ -48,7 +48,7 @@ class User < ApplicationRecord
 	validates :password,
             presence: { message: "|La contraseña no debe estar vacía." },
 						confirmation: { message: "|La confirmación de contraseña debe coincidir." },
-						format: { message: "|La contraseña solo debe contener mayúsculas, minúsculas y números (mínimo 6 caracteres).",
+						format: { message: "|La contraseña debe contener al menos una mayúscula, una minúscula y un número (mínimo 6 caracteres).",
 						with: /\A(?=.*[A-Z])(?=.*\d).{6,12}\z/ },
             allow_blank: true
 

@@ -12,12 +12,12 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :t_cliente_id %>
+    <%= form.label :t_cliente_id, "Cliente" %>
     <%= form.number_field :t_cliente_id %>
   </div>
 
   <div class="field">
-    <%= form.label :t_recibo_id %>
+    <%= form.label :t_recibo_id, "Recibo Asociado" %>
     <%= form.number_field :t_recibo_id %>
   </div>
 
@@ -27,16 +27,18 @@
   </div>
 
   <div class="field">
-    <%= form.label :t_factura_id %>
+    <%= form.label :t_factura_id, "Factura de Redención" %>
     <%= form.number_field :t_factura_id %>
   </div>
 
   <div class="field">
-    <%= form.label :descripcion %>
-    <%= form.text_field :descripcion %>
+    <%= form.label :status, "Estatus" %>
+    <%= form.select :status, options_for_select(["Usada","Sin Usar"],@t_nota_credito.status), include_blank: 'Seleccione' %> 
   </div>
 
+
+
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Guardar" %>
   </div>
 <% end %>
