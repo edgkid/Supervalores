@@ -32,7 +32,12 @@ class TTarifaServicio < ApplicationRecord
         when 'partida presupuestaria'
           @partida = val
           par = [@codigo, @partida] if @codigo && @partida
-          p par if par
+          # p par if par
+
+          case @codigo
+          when 'ATA SMV'
+            @codigo = 'ATA-SMV'
+          end
 
           case @codigo
           when 'ATA SMV'
@@ -46,6 +51,12 @@ class TTarifaServicio < ApplicationRecord
             @partida = '365.1.2.6.0.3.01'
             p [@codigo, @partida]
           end
+
+          # if (@partida =~ /.+\.01$/) == 0
+          #   p @partida
+          # else
+          #   'Nah'
+          # end
 
           t_tarifa_servicio = TTarifaServicio.find_by(codigo: @codigo) if @codigo
           t_presupuesto = TPresupuesto.find_by(codigo: @partida) if @partida

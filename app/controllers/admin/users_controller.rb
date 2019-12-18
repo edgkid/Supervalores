@@ -54,7 +54,7 @@ class Admin::UsersController < ApplicationController
 
   def destroy
     @user.delete
-    redirect_to admin_users_path, notice: 'Usuario eliminado exitosamente'
+    redirect_to users_path, notice: 'Usuario eliminado exitosamente'
   end
 
   private

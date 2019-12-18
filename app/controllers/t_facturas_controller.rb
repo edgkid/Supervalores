@@ -1,7 +1,12 @@
 class TFacturasController < ApplicationController
   before_action :set_t_factura, only: [:edit, :update, :preview, :show, :destroy, :generar_pdf]
   before_action :set_dynamic_attributes, only: [:edit]
-  load_and_authorize_resource
+  load_and_authorize_resource except: [
+    :pagadas, :informe_recaudacion, :informe_ingresos_diarios, :informe_ingresos_presupuesto,
+    :informe_cuentas_x_cobrar, :informe_presupuestario, :informe_por_tipos_de_ingreso]
+  before_action :authorize_user_to_read_reports, only: [
+    :pagadas, :informe_recaudacion, :informe_ingresos_diarios, :informe_ingresos_presupuesto,
+    :informe_cuentas_x_cobrar, :informe_presupuestario, :informe_por_tipos_de_ingreso]
 
   def new
     @do_not_use_plain_select2 = true
@@ -34,7 +39,12 @@ class TFacturasController < ApplicationController
 
     @t_factura.t_cliente = t_empresa.try(:t_cliente) || t_persona.try(:t_cliente) || t_otro.try(:t_cliente)
 
-    if @t_factura.save
+    if !@t_factura.t_cliente
+      @notice = Notice.new(nil, "Debe indicar el cliente asociado a la factura.", :error)
+      #@notice.messages[:t_resolucion] -= [@notice.messages[:t_resolucion].first]
+      @do_not_use_plain_select2 = true
+      render 'new', params[:dynamic_attributes]
+    elsif @t_factura.save
       t_factura_detalles = @t_factura.t_factura_detalles
       if t_factura_detalles.any? && t_factura_detalles.first.t_tarifa_servicio.tipo && t_factura_detalles.first.t_tarifa_servicio.tipo.downcase == 'ts'
         @t_factura.apply_2_percent_monthly_surcharge
@@ -414,5 +424,9 @@ class TFacturasController < ApplicationController
           }
         }
       ).permit!)
+    end
+
+    def authorize_user_to_read_reports
+      authorize! :read_reports, TFactura
     end
 end
