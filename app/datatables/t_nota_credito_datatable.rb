@@ -7,17 +7,11 @@ class TNotaCreditoDatatable < ApplicationDatatable
       id: { source: "TNotaCredito.id" },
       t_cliente: { source: "razon_social", searchable: false },
       t_recibo: { source: "t_recibo_id", searchable: false },
-      monto: { source: "monto", searchable: false }
+      monto: { source: "monto", searchable: false },
+      monto_original: { source: "monto_original", searchable: false },
+      status: { source: "status", searchable: false }
     }
   end
-
-#  id               :bigint           not null, primary key
-#  t_cliente_id     :integer
-#  t_recibo_id      :integer
-#  monto            :float
-#  usada            :boolean
-#  factura_redimida :integer
-
 
   def data
     records.map do |record|
@@ -26,6 +20,8 @@ class TNotaCreditoDatatable < ApplicationDatatable
         t_cliente: record.t_cliente.razon_social,
         t_recibo: record[:t_recibo_id],
         monto: record[:monto],
+        monto_original: record[:monto_original],
+        status: record[:status],
         DT_RowId: url_for({
           id: record.id, controller: 't_nota_creditos', action: 'show', only_path: true
         })

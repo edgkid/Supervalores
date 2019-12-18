@@ -167,24 +167,109 @@ class TFacturaPdf < PdfHelper
         "", 
         45, 150, 200, 80, :center)
     end    
-    #######
-    #Loop here plz
-    #######
-
-    move_down 30
-
-    bounding_box([0, cursor], :width => 370, :height => 130) do
-        # stroke_bounds
-        text_box "Mediante la ley 67 de 1 de septiembre de 2011 publicada en la Gaceta Oficial No. 26863-A de 2 de septiembre de 2011, se crea la Superintendencia del Mercado de Valores como un organismo autónomo del Estado, con personería jurídica, patrimonio propio e independencia administrativa, presupuestaria y financiera, con competencia privativa para regular y supervisar a los emisores, sociedades de inversiones, intermediarios y demás participantes del mercados de valores.", inline_format: true, at: [5, cursor], :align => :justify
-    end
-
-    move_up 130
 
     fill_color '000000'
 
     data = [[bold("Total:"), bold("#{@t_factura.total_factura}")]]
     table(data, :column_widths => [80, 80],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 160, :position => :right )
+
+    move_down 20
+
+    stroke do
+      move_down 20
+      horizontal_rule
+    end
+
+    fill_color '1A135C'
+
+    text_box "<b>NOTAS DE CRÉDITO</b>", inline_format: true, at: [10,455], :align => :center
+
+    fill_color '000000'
+
+    stroke do
+      move_down 20
+      horizontal_rule
+    end
+
+    big_table_for_5_with_widths_and_alignment(
+      bold("Cantidad"), 
+      bold("Ítem"), 
+      bold("Descripción"), 
+      bold("Precio"), 
+      bold("Saldo"),
+      45, 150, 200, 80, :center)
+
+    @t_factura.t_nota_creditos.each do |nota_credito|
+      big_table_for_5_with_widths_and_alignment(
+          "1", 
+          "Nota de Crédito", 
+          "Saldo a favor", 
+          "#{nota_credito.monto}", 
+          "", 
+          45, 150, 200, 80, :center)
+    end
+
+    data = [[bold("Total Crédito a Favor:"), bold("#{@t_factura.t_nota_creditos.sum(:monto)}")]]
+    table(data, :column_widths => [200, 160],
+      :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
+
+    move_down 20
+
+    stroke do
+      move_down 20
+      horizontal_rule
+    end
+
+    fill_color '1A135C'
+
+    text_box "<b>RECIBOS</b>", inline_format: true, at: [10,cursor + 9], :align => :center
+
+    fill_color '000000'
+
+    move_down 20
+    # stroke do
+    #   move_down 20
+    #   horizontal_rule
+    # end
+
+    big_table_for_3_with_widths_and_alignment_and_height(
+      bold("Número de recibo"), 
+      bold("Fecha"), 
+      bold("Monto"),
+      195, 200, :center, 20)
+
+    recibos_monto_total = 0
+
+    @t_factura.t_recibos.each do |recibo|
+      big_table_for_3_with_widths_and_alignment_and_height(
+      "#{recibo.id}", 
+      "#{recibo.created_at}", 
+      "#{recibo.pago_recibido}",
+      195, 200, :center, 20)
+
+      recibos_monto_total += recibo.pago_recibido
+    end
+
+    data = [[bold("Total Recibos:"), bold("#{recibos_monto_total}")]]
+    table(data, :column_widths => [200, 160],
+      :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
+    data = [[bold("Total Crédito a Favor:"), bold("#{@t_factura.t_nota_creditos.sum(:monto)}")]]
+    table(data, :column_widths => [200, 160],
+      :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
+    data = [[bold("Total Factura:"), bold("#{@t_factura.total_factura}")]]
+    table(data, :column_widths => [200, 160],
+      :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
+    data = [[bold("Total:"), bold("#{@t_factura.total_factura - recibos_monto_total - @t_factura.t_nota_creditos.sum(:monto)}")]]
+    table(data, :column_widths => [200, 160],
+      :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
+
+    move_down 30
+
+    # bounding_box([0, cursor], :width => 370, :height => 130) do
+        # stroke_bounds
+        text_box "Mediante la ley 67 de 1 de septiembre de 2011 publicada en la Gaceta Oficial No. 26863-A de 2 de septiembre de 2011, se crea la Superintendencia del Mercado de Valores como un organismo autónomo del Estado, con personería jurídica, patrimonio propio e independencia administrativa, presupuestaria y financiera, con competencia privativa para regular y supervisar a los emisores, sociedades de inversiones, intermediarios y demás participantes del mercados de valores.", inline_format: true, at: [1, cursor], :align => :justify
+    # end
 
     fill_color '1A135C'
 

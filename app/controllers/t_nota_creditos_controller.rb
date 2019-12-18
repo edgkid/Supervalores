@@ -7,7 +7,7 @@ class TNotaCreditosController < ApplicationController
 
     @usar_dataTables = true
     @attributes_to_display = [
-      :id, :t_cliente, :t_recibo, :monto]
+      :id, :t_cliente, :t_recibo, :monto, :monto_original, :status]
 
     respond_to do |format|
       format.html
@@ -92,6 +92,6 @@ class TNotaCreditosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def t_nota_credito_params
-      params.require(:t_nota_credito).permit(:t_cliente_id, :t_recibo_id, :monto, :usada, :factura_redimida, :descripcion)
+      params.require(:t_nota_credito).permit(:t_cliente_id, :t_recibo_id, :monto, :status, :t_factura_id, :descripcion, :monto_original)
     end
 end

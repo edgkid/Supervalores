@@ -39,6 +39,11 @@ class TTarifaServicio < ApplicationRecord
             @codigo = 'ATA-SMV'
           end
 
+          case @codigo
+          when 'ATA SMV'
+            @codigo = 'ATA-SMV'
+          end
+
           case @partida
           when '365.1.2.4.2.60'
             @partida = '365.1.2.4.2.3.60'

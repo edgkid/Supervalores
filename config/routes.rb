@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     end
     resources :t_recibos do
       get 'generar_pdf', on: :member
+      get 'generar_reporte_pdf', on: :member
     end
     collection do
       get 'pagadas'
@@ -71,6 +72,7 @@ Rails.application.routes.draw do
   end
   resources :t_tipo_personas, path: "tipos_de_personas"
   resources :t_clientes, path: "clientes" do
+    get 'generar_pdf'
     collection do
       get 'tramites'
       get 'total'

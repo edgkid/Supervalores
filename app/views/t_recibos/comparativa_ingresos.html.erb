@@ -6,6 +6,12 @@
   ") %>
   <%= render 'report_header', filters: true, subtitle: subtitle %>
 
+<%= form_tag generar_reporte_pdf_t_factura_t_recibo_path(1, 1, format:'pdf'), method: "get", target: "_blank" do %>
+  <%= hidden_field_tag :selected_client, '' %>
+  <%= hidden_field_tag :selected_service, '' %>
+  <%= submit_tag("Generar PDF", :id => "pass_client_and_service", class: "fa fa-download btn btn-primary") %>
+<% end %>
+
   <div class="row">
     <div class="col-lg-12">
       <% if TFactura.count > 0 %>
@@ -43,6 +49,20 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
+    $(document).on('click', '#pass_client_and_service', function() {
+      var service = ""
+      var client = ""
+      if (document.getElementById("select2-tariff-select-container").firstChild.nextSibling != null){
+        var service = document.getElementById("select2-tariff-select-container").firstChild.nextSibling.textContent;
+      }
+      else if (document.getElementById("select2-client-select-container").firstChild.nextSibling != null){
+        var client = document.getElementById("select2-client-select-container").firstChild.nextSibling.textContent; 
+      }
+      $('#selected_client').val( client );
+      $('#selected_service').val( service );
+      window.location.reload();
+    });
+
     $('.datepicker').datepicker({
       autoclose: true,
       format: "dd/mm/yyyy"
