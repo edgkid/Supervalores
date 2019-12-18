@@ -159,7 +159,7 @@
           <% if can? :read, TTarifaServicio %>
             <li><%= link_to 'Trámites de Tarifas Registradas', tramites_t_tarifa_servicios_path %></li>
           <% end %>
-          <% if can? :read, TFactura %>
+          <% if can? :read_reports, TFactura %>
             <li><%= link_to 'Facturas Pagadas', pagadas_t_facturas_path %></li>
             <li><%= link_to 'Informe de Recaudación', informe_recaudacion_t_facturas_path %></li>
             <li><%= link_to 'Informe Consolidado de Ingresos Diarios', informe_ingresos_diarios_t_facturas_path %></li>

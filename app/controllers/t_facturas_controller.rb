@@ -1,7 +1,12 @@
 class TFacturasController < ApplicationController
   before_action :set_t_factura, only: [:edit, :update, :preview, :show, :destroy, :generar_pdf]
   before_action :set_dynamic_attributes, only: [:edit]
-  load_and_authorize_resource
+  load_and_authorize_resource except: [
+    :pagadas, :informe_recaudacion, :informe_ingresos_diarios, :informe_ingresos_presupuesto,
+    :informe_cuentas_x_cobrar, :informe_presupuestario, :informe_por_tipos_de_ingreso]
+  before_action :authorize_user_to_read_reports, only: [
+    :pagadas, :informe_recaudacion, :informe_ingresos_diarios, :informe_ingresos_presupuesto,
+    :informe_cuentas_x_cobrar, :informe_presupuestario, :informe_por_tipos_de_ingreso]
 
   def new
     @do_not_use_plain_select2 = true
@@ -419,5 +424,9 @@ class TFacturasController < ApplicationController
           }
         }
       ).permit!)
+    end
+
+    def authorize_user_to_read_reports
+      authorize! :read_reports, TFactura
     end
 end
