@@ -68,20 +68,16 @@ class TFactura < ApplicationRecord
     if before_save
       sum = 0
       self.t_recibos.each { |t_recibo| sum += t_recibo.pago_recibido }
-      (self.calculate_services_total_price(before_save) + self.recargo || 0) - sum
+      (self.calculate_services_total_price + self.recargo || 0) - sum
     else
-      (self.calculate_services_total_price(before_save) + self.recargo || 0) - self.t_recibos.sum(:pago_recibido)
+      (self.calculate_services_total_price + self.recargo || 0) - self.t_recibos.sum(:pago_recibido)
     end
   end
 
-  def calculate_services_total_price(before_save = false)
-    if before_save
-      sum = 0
-      self.t_factura_detalles.each { |t_factura_detalle| sum += t_factura_detalle.precio_unitario }
-      sum
-    else
-      self.t_factura_detalles.sum(:precio_unitario)
-    end
+  def calculate_services_total_price
+    sum = 0
+    self.t_factura_detalles.each { |t_factura_detalle| sum += t_factura_detalle.precio_unitario * t_factura_detalle.cantidad }
+    sum
   end
 
   def calculate_total_surcharge_rate(before_save = false)
@@ -96,7 +92,7 @@ class TFactura < ApplicationRecord
 
   def calculate_total_surcharge(before_save = false)
     if before_save
-      calculate_total_surcharge_rate(true) * calculate_services_total_price(true)
+      calculate_total_surcharge_rate(true) * calculate_services_total_price
     else
       calculate_total_surcharge_rate * calculate_services_total_price
     end
@@ -104,7 +100,7 @@ class TFactura < ApplicationRecord
 
   def calculate_total(before_save = false)
     if before_save
-      calculate_services_total_price(true) + calculate_total_surcharge(true)
+      calculate_services_total_price + calculate_total_surcharge(true)
     else
       calculate_services_total_price + calculate_total_surcharge
     end
