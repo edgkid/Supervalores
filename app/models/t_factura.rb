@@ -277,4 +277,13 @@ class TFactura < ApplicationRecord
     end
     return false
   end
+
+  def monto_pendiente_para_pdf
+    monto_pendiente = 0 
+    self.t_recibos.order("created_at ASC").first(self.t_recibos.count - 1).each do |recibo|
+      monto_pendiente += recibo.pago_recibido
+    end
+    monto_final = self.total_factura - monto_pendiente
+    monto_final < 0 ? 0 : monto_final
+  end
 end
