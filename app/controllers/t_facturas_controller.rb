@@ -39,12 +39,7 @@ class TFacturasController < ApplicationController
 
     @t_factura.t_cliente = t_empresa.try(:t_cliente) || t_persona.try(:t_cliente) || t_otro.try(:t_cliente)
 
-    if !@t_factura.t_cliente
-      @notice = Notice.new(nil, "Debe indicar el cliente asociado a la factura.", :error)
-      #@notice.messages[:t_resolucion] -= [@notice.messages[:t_resolucion].first]
-      @do_not_use_plain_select2 = true
-      render 'new', params[:dynamic_attributes]
-    elsif @t_factura.save
+    if @t_factura.save
       t_factura_detalles = @t_factura.t_factura_detalles
       if t_factura_detalles.any? && t_factura_detalles.first.t_tarifa_servicio.tipo && t_factura_detalles.first.t_tarifa_servicio.tipo.downcase == 'ts'
         @t_factura.apply_2_percent_monthly_surcharge
