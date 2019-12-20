@@ -9,6 +9,7 @@
       <th>Pagado (B/.)</th>
       <th>Por Pagar (B/.)</th>
       <th>Acreditado (B/.)</th>
+      <th>Opciones</th>
     </tr>
   </thead>
   <tbody>
@@ -22,6 +23,7 @@
         <td><%= number_to_balboa(t_recibo.pago_recibido, false) %></td>
         <td><%= number_to_balboa(t_recibo.pago_pendiente, false) %></td>
         <td><%= number_to_balboa(t_recibo.monto_acreditado, false) %></td>
+        <td><%= link_to 'Ver', t_factura_t_recibo_path(@t_factura, t_recibo)%></td>
       </tr>
     <% end %>
   </tbody>

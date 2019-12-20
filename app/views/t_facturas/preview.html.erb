@@ -58,6 +58,7 @@
       <th>Tasa (%)</th>
       <th>Precio Unitario (B/.)</th>
       <th>Importe (B/.)</th>
+      
     </tr>
   </thead>
   <tbody>
@@ -76,6 +77,7 @@
         <td>N/A</td>
         <td><%= number_to_balboa(fd.precio_unitario, false) %></td>
         <td><%= number_to_balboa(fd.precio_unitario * fd.cantidad, false) %></td>
+         
       </tr>
     <% end %>
 
