@@ -58,6 +58,7 @@
       <th>Tasa (%)</th>
       <th>Precio Unitario (B/.)</th>
       <th>Importe (B/.)</th>
+      
     </tr>
   </thead>
   <tbody>
@@ -72,12 +73,14 @@
       <tr>
         <td><%= fd.cantidad %></td>
         <td><%= fd.t_tarifa_servicio.nombre %></td>
-        <td><%= fd.cuenta_desc %></td>
+        <td><%= "#{fd.t_tarifa_servicio.descripcion} | #{fd.t_tarifa_servicio.codigo} | #{fd.cuenta_desc}" %></td>
         <td>N/A</td>
         <td><%= number_to_balboa(fd.precio_unitario, false) %></td>
         <td><%= number_to_balboa(fd.precio_unitario * fd.cantidad, false) %></td>
+         
       </tr>
     <% end %>
+
     <% @t_factura.t_recargos.each do |r| %>
       <tr>
         <td></td>

@@ -129,12 +129,15 @@ class TReciboPdf < PdfHelper
       # stroke_bounds
       text_box "<b>Referencia:</b>
       <b>CIP/RUC:</b> #{@t_empresa.try(:rif)}#{@t_persona.try(:cedula)}
+      <b>Resolucion:</b> #{@t_recibo.t_factura.t_resolucion.resolucion}
       ", inline_format: true, at: [5, cursor], :align => :justify
+
     end
 
     bounding_box([370, 644], :width => 165, :height => 40) do
       # stroke_bounds
-      text_box "<b>Recibo:</b> #{@t_recibo.id}
+      text_box "<b>Número Recibo:</b> #{@t_recibo.id}
+      <b>Número Factura:</b> #{@t_factura.id}
       <b>Estado:</b> #{(@t_recibo.pago_pendiente <= 0) ? 'Pagado' : 'Sin Pagar'}
       <b>Fecha:</b> #{@t_recibo.created_at.strftime('%d/%m/%Y %I:%M:%S %p')}
       ", inline_format: true, at: [5, cursor], :align => :justify
@@ -181,13 +184,19 @@ class TReciboPdf < PdfHelper
     move_up 110
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Subtotal:"),
+      bold("Total Factura:"),
       bold("#{@t_factura.total_factura}"),
       110, 110, 20, :center)
 
+    if @t_recibo.t_nota_creditos.count == 0
+      monto_pendiente = @t_factura.pendiente_total + @t_recibo.pago_recibido
+    else
+      monto_pendiente = @t_recibo.t_nota_creditos.sum(:monto) + @t_recibo.pago_recibido
+    end
+
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Total:"),
-      bold("#{@t_factura.total_factura}"),
+      bold("Pendiente Factura:"),
+      bold("#{@t_factura.monto_pendiente_para_pdf}"),
       110, 110, 20, :center)
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
@@ -197,7 +206,7 @@ class TReciboPdf < PdfHelper
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
       bold("Saldo Pendiente:"),
-      bold("#{@t_recibo.pago_pendiente}"),
+      bold("#{@t_factura.pendiente_total.round(2)}"),
       110, 110, 20, :center)
 
     stroke do
@@ -313,13 +322,19 @@ class TReciboPdf < PdfHelper
     move_up 110
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Subtotal:"),
+      bold("Total Factura:"),
       bold("#{@t_factura.total_factura}"),
       110, 110, 20, :center)
 
+    if @t_recibo.t_nota_creditos.count == 0
+      monto_pendiente = @t_factura.pendiente_total + @t_recibo.pago_recibido
+    else
+      monto_pendiente = @t_recibo.t_nota_creditos.sum(:monto) + @t_recibo.pago_recibido
+    end
+
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Total:"),
-      bold("#{@t_factura.total_factura}"),
+      bold("Pendiente Factura:"),
+      bold("#{@t_factura.monto_pendiente_para_pdf}"),
       110, 110, 20, :center)
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
@@ -329,7 +344,7 @@ class TReciboPdf < PdfHelper
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
       bold("Saldo Pendiente:"),
-      bold("#{@t_recibo.pago_pendiente}"),
+      bold("#{@t_factura.pendiente_total}"),
       110, 110, 20, :center)
 
     stroke do
@@ -450,13 +465,19 @@ class TReciboPdf < PdfHelper
     move_up 110
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Subtotal:"),
+      bold("Total Factura:"),
       bold("#{@t_factura.total_factura}"),
       110, 110, 20, :center)
 
+    if @t_recibo.t_nota_creditos.count == 0
+      monto_pendiente = @t_factura.pendiente_total + @t_recibo.pago_recibido
+    else
+      monto_pendiente = @t_recibo.t_nota_creditos.sum(:monto) + @t_recibo.pago_recibido
+    end
+
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
-      bold("Total:"),
-      bold("#{@t_factura.total_factura}"),
+      bold("Pendiente Factura:"),
+      bold("#{@t_factura.monto_pendiente_para_pdf}"),
       110, 110, 20, :center)
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
@@ -466,7 +487,7 @@ class TReciboPdf < PdfHelper
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
       bold("Saldo Pendiente:"),
-      bold("#{@t_recibo.pago_pendiente}"),
+      bold("#{@t_factura.pendiente_total}"),
       110, 110, 20, :center)
 
     stroke do
@@ -489,3 +510,4 @@ class TReciboPdf < PdfHelper
     # text_box "<b>2019 - 20 Años propiciando seguridad, confianza y transparencia</b>", inline_format: true, at: [170,10]
   end
 end
+

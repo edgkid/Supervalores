@@ -1,5 +1,4 @@
 class TFacturaPdf < PdfHelper
-#Cambiar nombre despues
 
   require 'prawn/measurement_extensions'
   require 'prawn/table'
@@ -158,21 +157,30 @@ class TFacturaPdf < PdfHelper
         45, 150, 200, 80, :center)
     end
 
-    @t_factura.t_recargos.each do |r|
-      big_table_for_5_with_widths_and_alignment(
-        "", 
-        "Recargo", 
-        "#{r.descripcion}", 
-        "#{r.tasa * @t_factura.calculate_services_total_price}", 
-        "", 
-        45, 150, 200, 80, :center)
-    end    
+    # move_down 10
+    # big_table_for_5_with_widths_and_alignment(
+    #   bold("Cantidad"), 
+    #   bold("Ítem"), 
+    #   bold("Descripción"), 
+    #   bold("Precio"), 
+    #   bold("Importe"), 
+    #   45, 150, 200, 80, :center)
 
-    fill_color '000000'
+    # @t_factura.t_recargos.each do |r|
+    #   big_table_for_5_with_widths_and_alignment(
+    #     "", 
+    #     "Recargo", 
+    #     "#{r.descripcion}", 
+    #     "#{r.tasa * @t_factura.calculate_services_total_price}", 
+    #     "", 
+    #     45, 150, 200, 80, :center)
+    # end    
 
-    data = [[bold("Total:"), bold("#{@t_factura.total_factura}")]]
-    table(data, :column_widths => [80, 80],
-      :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 160, :position => :right )
+    # fill_color '000000'
+
+    # data = [[bold("Total:"), bold("#{@t_factura.total_factura}")]]
+    # table(data, :column_widths => [80, 80],
+    #   :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 160, :position => :right )
 
     move_down 20
     # debugger
@@ -185,20 +193,22 @@ class TFacturaPdf < PdfHelper
     # unless @t_factura.t_nota_creditos.count == 0
     unless i == 0
 
-      stroke do
-        move_down 20
-        horizontal_rule
-      end
+      # stroke do
+      #   move_down 20
+      #   horizontal_rule
+      # end
 
       fill_color '1A135C'
-      text_box "<b>NOTAS DE CRÉDITO</b>", inline_format: true, at: [10,455], :align => :center
+      text_box "<b>NOTAS DE CRÉDITO</b>", inline_format: true, at: [10,cursor], :align => :center
 
       fill_color '000000'
 
       stroke do
-        move_down 20
+        move_down 10
         horizontal_rule
       end
+
+      move_down 20
 
       big_table_for_5_with_widths_and_alignment(
         bold("Cantidad"), 
@@ -268,20 +278,33 @@ class TFacturaPdf < PdfHelper
 
         recibos_monto_total += recibo.pago_recibido
       end
+
+      data = [[bold("Total Recibos:"), bold("#{recibos_monto_total}")]]
+      table(data, :column_widths => [200, 160],
+        :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
     end
 
     # move_down 20
 
+    
+    
+    stroke do
+      move_down 20
+      horizontal_rule
+    end
+
+    move_down 20
+
     data = [[bold("Total Recibos:"), bold("#{recibos_monto_total}")]]
-    table(data, :column_widths => [200, 160],
-      :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
-    data = [[bold("Total Crédito a Favor:"), bold("#{monto_credito}")]]
     table(data, :column_widths => [200, 160],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
     data = [[bold("Total Factura:"), bold("#{@t_factura.total_factura}")]]
     table(data, :column_widths => [200, 160],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
-    data = [[bold("Pendiente:"), bold("#{@t_factura.total_factura - recibos_monto_total - @t_factura.t_nota_creditos.sum(:monto)}")]]
+    data = [[bold("Pendiente:"), bold("#{@t_factura.pendiente_total}")]]
+    table(data, :column_widths => [200, 160],
+      :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
+    data = [[bold("Total Crédito a Favor:"), bold("#{monto_credito}")]]
     table(data, :column_widths => [200, 160],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
 
