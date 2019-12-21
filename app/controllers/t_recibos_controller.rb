@@ -13,7 +13,10 @@ class TRecibosController < ApplicationController
     @t_recibo = TRecibo.new(t_recibo_params)
     @t_recibo.set_surcharge_and_services_total(@t_recibo.pago_recibido || 0, @t_factura, @t_factura.t_recibos.empty?)
     @t_recibo.calculate_default_attributes(@t_factura, @t_cliente, current_user)
+    penultimo_recibo = @t_factura.t_recibos.find_by(ultimo_recibo: true)
+    penultimo_recibo.ultimo_recibo = false if penultimo_recibo
     if @t_recibo.save
+      penultimo_recibo.update_attribute(:ultimo_recibo, false) if penultimo_recibo
       if @t_recibo.monto_acreditado > 0
         t_nota_credito = TNotaCredito.new
         t_nota_credito.t_cliente_id = @t_recibo.t_cliente_id
@@ -301,7 +304,11 @@ class TRecibosController < ApplicationController
       @t_recibos = @t_factura.t_recibos
       @t_nota_creditos = @t_factura.t_nota_creditos
       # @pending_payment = @t_factura.pendiente_total.truncate(2)
-      @pending_payment = @t_factura.calculate_pending_payment.truncate(2)
+      if @t_factura.t_recibos.any?
+        @pending_payment = @t_factura.t_recibos.find_by(ultimo_recibo: true).pago_pendiente.truncate(2)
+      else
+        @pending_payment = @t_factura.calculate_pending_payment.truncate(2)
+      end
 
       @t_resolucion = @t_factura.t_resolucion
       # @t_tarifa  = @t_resolucion.t_tipo_cliente.t_tarifa

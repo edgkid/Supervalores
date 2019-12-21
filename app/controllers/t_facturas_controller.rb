@@ -92,11 +92,29 @@ class TFacturasController < ApplicationController
   end
 
   def update
+    old_t_factura = @t_factura.dup
     if @t_factura.update(t_factura_params)
       params[:services_to_destroy].each do |t_tarifa_servicio_id|
         @t_factura.t_factura_detalles.find_by(t_tarifa_servicio_id: t_tarifa_servicio_id).try(:destroy)
       end if !params[:services_to_destroy].blank?
       @t_factura.t_recargo_ids - params[:surcharges_to_destroy].map {|id| id.to_i} if !params[:surcharges_to_destroy].blank?
+
+      t_recibos = @t_factura.t_recibos
+
+      if (ultimo_recibo = t_recibos.find_by(ultimo_recibo: true))
+        t_recibos.each do |t_recibo|
+          t_recibo.pago_pendiente +=
+            @t_factura.total_factura - old_t_factura.total_factura
+          t_recibo.save
+        end
+        ultimo_recibo.recargo_x_pagar +=
+          @t_factura.recargo - old_t_factura.recargo
+        ultimo_recibo.servicios_x_pagar +=
+          (@t_factura.total_factura - @t_factura.recargo) -
+          (old_t_factura.total_factura - old_t_factura.recargo)
+        ultimo_recibo.save
+      end
+
       redirect_to t_facturas_path
     else
       @notice = @t_factura.errors

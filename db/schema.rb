@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_13_203259) do
+ActiveRecord::Schema.define(version: 2019_12_20_183646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -178,7 +178,6 @@ ActiveRecord::Schema.define(version: 2019_12_13_203259) do
     t.bigint "t_empresa_tipo_valor_id", null: false
     t.bigint "t_empresa_sector_economico_id"
     t.string "dv"
-    t.index ["rif"], name: "index_t_empresas_on_rif", unique: true
   end
 
   create_table "t_estado_cuenta", force: :cascade do |t|
@@ -394,7 +393,6 @@ ActiveRecord::Schema.define(version: 2019_12_13_203259) do
     t.string "telefono"
     t.string "email"
     t.string "direccion"
-    t.index ["cedula"], name: "index_t_personas_on_cedula", unique: true
     t.index ["t_empresa_id"], name: "index_t_personas_on_t_empresa_id"
   end
 
@@ -455,6 +453,7 @@ ActiveRecord::Schema.define(version: 2019_12_13_203259) do
     t.bigint "user_id", null: false
     t.decimal "recargo_x_pagar"
     t.decimal "servicios_x_pagar"
+    t.boolean "ultimo_recibo", default: true
     t.index ["t_cliente_id"], name: "index_t_recibos_on_t_cliente_id"
     t.index ["t_factura_id"], name: "index_t_recibos_on_t_factura_id"
     t.index ["t_metodo_pago_id"], name: "index_t_recibos_on_t_metodo_pago_id"
