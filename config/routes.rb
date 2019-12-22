@@ -274,12 +274,12 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  # namespace :admin do
-  #   resources :users
-  # end
-  scope module: 'admin' do
+  namespace :admin do
     resources :users
   end
+  # scope module: 'admin' do
+  #   resources :users
+  # end
   resources :t_caja, only: :index do
     get 'get_total', on: :collection
   end

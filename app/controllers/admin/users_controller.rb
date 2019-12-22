@@ -45,7 +45,7 @@ class Admin::UsersController < ApplicationController
     end
 
     if @user.update(user_params)
-      redirect_to @user, notice: 'Usuario actualizado correctamente.'
+      redirect_to [:admin, @user], notice: 'Usuario actualizado correctamente.'
     else
       @notice = @user.errors
       render 'edit'

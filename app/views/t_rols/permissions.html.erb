@@ -8,7 +8,14 @@
             <%= f.fields_for :t_modulo_rols do |mr_form| %>
               <div class="col-md-3">
                 <%= mr_form.object.t_modulo.nombre %>
-                <%= mr_form.select :t_permiso_ids, object_options(TPermiso, 'nombre'), {}, { class: 'form-control m-b', multiple: true } %>
+
+                <% options = object_options(TPermiso, 'nombre') %>
+
+                <% options.reject! { |n, _| n == 'generate_pdf' || n == 'send_email' } unless mr_form.object.t_modulo.nombre == 'TFactura' %>
+                <% options.reject! { |n, _| n == 'generate_receipt' } unless mr_form.object.t_modulo.nombre == 'TRecibo' %>
+                <%#= mr_form.select :t_permiso_ids, object_options(TPermiso, 'nombre'), {}, { class: 'form-control m-b', multiple: true } %>
+                <%= mr_form.select :t_permiso_ids, options, {}, { class: 'form-control m-b', multiple: true } %>
+                <% mr_form.object.t_modulo.nombre == 'TFactura' %>
               </div>
             <% end %>
           </div>
