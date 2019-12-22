@@ -53,8 +53,9 @@ class Admin::UsersController < ApplicationController
   end
 
   def destroy
+    @user.t_rol_usuarios.each { |ru| ru.destroy }
     @user.delete
-    redirect_to users_path, notice: 'Usuario eliminado exitosamente'
+    redirect_to admin_users_path, notice: 'Usuario eliminado exitosamente'
   end
 
   private
