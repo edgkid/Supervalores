@@ -112,6 +112,15 @@
           <% if can? :read, TMetodoPago %>
             <li><%= link_to 'Métodos de Pago', t_metodo_pagos_path %></li>
           <% end %>
+          <% if TConfiguracionRecargoT.any? %>
+            <% if can? :read, TConfiguracionRecargoT %>
+              <li><%= link_to 'Configuración de Recargo a Servicios TS', TConfiguracionRecargoT.take %>
+            <% end %>
+          <% else %>
+            <% if can? :create, TConfiguracionRecargoT %>
+              <li><%= link_to 'Configuración de Recargo a Servicios TS', new_t_configuracion_recargo_t_path %></li>
+            <% end %>
+          <% end %>
         </ul>
       </li>
       <% if (can? :read, User ) || (can? :read, TRol) %>

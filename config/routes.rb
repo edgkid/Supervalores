@@ -373,6 +373,7 @@ Rails.application.routes.draw do
     end
   end
   resources :t_modulos, only: :index
+  resources :t_configuracion_recargo_ts
 
   get "redirect" => "t_tipo_clientes#redirect"
 end

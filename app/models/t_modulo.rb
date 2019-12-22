@@ -61,6 +61,7 @@ class TModulo < ApplicationRecord
     "TConfFacAutomatica",
     "TRol",
     "TModulo",
-    "TPermiso"
+    "TPermiso",
+    "TConfiguracionRecargoT"
   ]
 end

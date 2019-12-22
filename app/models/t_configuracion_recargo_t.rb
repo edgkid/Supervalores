@@ -1,0 +1,2 @@
+class TConfiguracionRecargoT < ApplicationRecord
+end

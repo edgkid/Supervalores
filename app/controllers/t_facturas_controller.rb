@@ -50,7 +50,7 @@ class TFacturasController < ApplicationController
     if !invalid_t_factura && @t_factura.save
       t_factura_detalles = @t_factura.t_factura_detalles
       if t_factura_detalles.any? && t_factura_detalles.first.t_tarifa_servicio.tipo && t_factura_detalles.first.t_tarifa_servicio.tipo.downcase == 'ts'
-        @t_factura.apply_2_percent_monthly_surcharge
+        @t_factura.apply_custom_percent_monthly_surcharge(TConfiguracionRecargoT.take.tasa)
       end
       #Condicion para aplicar nota de  crédito
       if @t_factura.es_ts?
