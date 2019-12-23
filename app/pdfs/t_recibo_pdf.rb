@@ -129,7 +129,7 @@ class TReciboPdf < PdfHelper
       # stroke_bounds
       text_box "<b>Referencia:</b>
       <b>CIP/RUC:</b> #{@t_empresa.try(:rif)}#{@t_persona.try(:cedula)}
-      <b>Resolucion:</b> #{@t_factura.t_resolucion.nil? ? "No posee resolucion" : @t_recibo.t_factura.resolucion}
+      <b>Resolucion:</b> #{@t_factura.t_resolucion.nil? ? "No posee resolucion" : @t_factura.t_resolucion.resolucion}
       ", inline_format: true, at: [5, cursor], :align => :justify
 
     end
