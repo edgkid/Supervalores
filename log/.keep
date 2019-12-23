@@ -2172,6 +2172,7 @@ TRecibo.includes([t_factura_detales: :t_tarifa_servicio], :t_factura ).where("ex
 
 
 show del recibo, agregar boton del pdf
+
 hay facturas sin resolucion ni cliente, arreglar y agregar en la amtriz de errores
 14155
 
