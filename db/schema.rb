@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_20_183646) do
+ActiveRecord::Schema.define(version: 2019_12_22_052758) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,13 @@ ActiveRecord::Schema.define(version: 2019_12_20_183646) do
     t.index ["t_periodo_id"], name: "index_t_conf_fac_automaticas_on_t_periodo_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_conf_fac_automaticas_on_t_tipo_cliente_id"
     t.index ["user_id"], name: "index_t_conf_fac_automaticas_on_user_id"
+  end
+
+  create_table "t_configuracion_recargo_ts", force: :cascade do |t|
+    t.string "nombre"
+    t.decimal "tasa"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "t_contactos", force: :cascade do |t|

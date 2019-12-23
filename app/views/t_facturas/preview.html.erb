@@ -134,16 +134,23 @@
       <i class="fa fa-trash"></i>
       Eliminar Factura
     <% end if current_user.is_admin? %>
-    <button type="button" class="btn btn-info"><i class="fa fa-envelope"></i> Enviar al Correo</button>
+
+    <% if can? :send_email, TFactura %>
+      <button type="button" class="btn btn-info"><i class="fa fa-envelope"></i> Enviar al Correo</button>
+    <% end %>
     
-    <%= link_to generar_pdf_t_factura_path(@t_factura, format:'pdf'), target: "_blank", class: 'btn btn-primary' do %>
-      <i class="fa fa-download"></i>
-      Generar PDF
+    <% if can? :generate_pdf, TFactura %>
+      <%= link_to generar_pdf_t_factura_path(@t_factura, format:'pdf'), target: "_blank", class: 'btn btn-primary' do %>
+        <i class="fa fa-download"></i>
+        Generar PDF
+      <% end %>
     <% end %>
 
-    <%= link_to new_t_factura_t_recibo_path(@t_factura), class: 'btn btn-success' do %>
-      <i class="fa fa-credit-card"></i>
-      Realizar Recibo
+    <% if can? :create, TRecibo %>
+      <%= link_to new_t_factura_t_recibo_path(@t_factura), class: 'btn btn-success' do %>
+        <i class="fa fa-credit-card"></i>
+        Realizar Recibo
+      <% end %>
     <% end %>
   </div>
 </div>

@@ -51,6 +51,9 @@ class TRolsController < ApplicationController
   end
 
   def destroy
+    @t_rol.destroy
+
+    redirect_to t_rols_path
   end
 
   private

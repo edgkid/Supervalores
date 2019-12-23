@@ -13,10 +13,7 @@ class AdminUserDatatable < ApplicationDatatable
           records_list.last.merge!({ "#{attribute}": record.send(attribute) })
         end
       end
-      records_list.last.merge!({
-        DT_RowId: url_with_or_without_parent_resource_for(
-          record.try(params[:parent_resource] || ''), record)
-      })
+      records_list.last.merge!({DT_RowId: url_for([:admin, record])})
     end
     records_list
   end

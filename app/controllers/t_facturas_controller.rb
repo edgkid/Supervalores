@@ -39,10 +39,18 @@ class TFacturasController < ApplicationController
 
     @t_factura.t_cliente = t_empresa.try(:t_cliente) || t_persona.try(:t_cliente) || t_otro.try(:t_cliente)
 
-    if @t_factura.save
+    @t_factura.t_factura_detalles.empty? ? invalid_t_factura = true : invalid_t_factura = false
+
+    if !@t_factura.t_cliente
+      if !@t_factura.t_resolucion
+        without_client = true
+      end
+    end
+
+    if !invalid_t_factura && @t_factura.save
       t_factura_detalles = @t_factura.t_factura_detalles
       if t_factura_detalles.any? && t_factura_detalles.first.t_tarifa_servicio.tipo && t_factura_detalles.first.t_tarifa_servicio.tipo.downcase == 'ts'
-        @t_factura.apply_2_percent_monthly_surcharge
+        @t_factura.apply_custom_percent_monthly_surcharge(TConfiguracionRecargoT.take.try(:tasa) || 0)
       end
       #Condicion para aplicar nota de  crédito
       if @t_factura.es_ts?
@@ -69,6 +77,12 @@ class TFacturasController < ApplicationController
     else
       @notice = @t_factura.errors
       @notice.messages[:t_resolucion] -= [@notice.messages[:t_resolucion].first]
+      if invalid_t_factura
+        @notice.messages[:t_factura] << '|Debe agregar al menos un servicio'
+      end
+      if without_client
+        @notice.messages[:t_factura] << '|Debe seleccionar un cliente'
+      end
       @do_not_use_plain_select2 = true
       render 'new', params[:dynamic_attributes]
     end

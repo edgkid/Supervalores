@@ -115,16 +115,19 @@
               delete_route: t_factura_t_recibo_path(@t_factura, @t_recibo), delete_text: "Borrar",
               button_size: "xs"
             %>
-              <% unless @t_recibo.t_nota_creditos.where.not(status: "Usada").count == 0 %>
-                <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do %>
-                  <i class="fa fa-download">
-                    Generar Notas de Credito
-                  </i>
-                <% end %>
+            <% unless @t_recibo.t_nota_creditos.where.not(status: "Usada").count == 0 %>
+              <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do %>
+                <i class="fa fa-download">
+                  Generar Notas de Credito
+                </i>
               <% end %>
-            <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf'), target: "_blank", class: 'btn btn-primary' do %>
-              <i class="fa fa-download"></i>
-              Generar Recibo
+            <% end %>
+
+            <% if can? :generate_receipt, TRecibo %>
+              <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf'), target: "_blank", class: 'btn btn-primary' do %>
+                <i class="fa fa-download"></i>
+                Generar Recibo
+              <% end %>
             <% end %>
           <% else %>
 

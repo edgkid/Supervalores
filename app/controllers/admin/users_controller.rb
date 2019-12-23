@@ -45,7 +45,7 @@ class Admin::UsersController < ApplicationController
     end
 
     if @user.update(user_params)
-      redirect_to @user, notice: 'Usuario actualizado correctamente.'
+      redirect_to [:admin, @user], notice: 'Usuario actualizado correctamente.'
     else
       @notice = @user.errors
       render 'edit'
@@ -53,8 +53,9 @@ class Admin::UsersController < ApplicationController
   end
 
   def destroy
+    @user.t_rol_usuarios.each { |ru| ru.destroy }
     @user.delete
-    redirect_to users_path, notice: 'Usuario eliminado exitosamente'
+    redirect_to admin_users_path, notice: 'Usuario eliminado exitosamente'
   end
 
   private

@@ -274,12 +274,12 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  # namespace :admin do
-  #   resources :users
-  # end
-  scope module: 'admin' do
+  namespace :admin do
     resources :users
   end
+  # scope module: 'admin' do
+  #   resources :users
+  # end
   resources :t_caja, only: :index do
     get 'get_total', on: :collection
   end
@@ -373,6 +373,7 @@ Rails.application.routes.draw do
     end
   end
   resources :t_modulos, only: :index
+  resources :t_configuracion_recargo_ts
 
   get "redirect" => "t_tipo_clientes#redirect"
 end

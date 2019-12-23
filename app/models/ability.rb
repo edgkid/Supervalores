@@ -14,6 +14,7 @@ class Ability
         t_rol.t_modulo_rols.each do |modulo_rol|
           modulo_rol.t_permisos.each do |t_permiso|
             can :read_reports, TFactura if can? :read, TFactura
+            can :preview, TFactura if can? :read, TFactura
             can t_permiso.nombre.to_sym, modulo_rol.t_modulo.nombre.constantize # if t_permiso.estatus
           end
         end # if t_rol.estatus

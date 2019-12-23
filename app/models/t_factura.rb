@@ -204,7 +204,7 @@ class TFactura < ApplicationRecord
     end
   end
 
-  def apply_2_percent_monthly_surcharge
+  def apply_custom_percent_monthly_surcharge(rate)
     scheduler = Rufus::Scheduler.singleton
 
     if self.t_estatus.descripcion.downcase == 'disponible'
@@ -214,7 +214,7 @@ class TFactura < ApplicationRecord
         if t_factura.t_estatus.descripcion.downcase == 'disponible'
           t_recibos = t_factura.t_recibos
           unless t_recibos.any? && t_recibos.last.pago_pendiente <= 0
-            generate_surcharge(0.02, j0b)
+            generate_surcharge(rate, j0b)
             puts "Recargo del 2\% generado!"
           else
             terminate = true
