@@ -26,7 +26,7 @@
 class User < ApplicationRecord
 	mount_uploader :picture, PictureUploader
 
-  has_many :t_rol_usuarios, dependent: :destroy
+  	has_many :t_rol_usuarios, dependent: :destroy
 	has_many :t_rols, through: :t_rol_usuarios
 	has_many :t_clientes, dependent: :destroy
 	has_many :t_facturas, dependent: :destroy
@@ -40,41 +40,46 @@ class User < ApplicationRecord
 	devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable, :timeoutable
 
-  validates :email,
-            presence: {
-              message: "|El email no debe estar vacío y debe contener un formato válido"
-            }
+  	validates :email,
+	    presence: {
+	      message: "|El email no debe estar vacío y debe contener un formato válido"
+	    }
 
 	validates :password,
             presence: { message: "|La contraseña no debe estar vacía." },
-						confirmation: { message: "|La confirmación de contraseña debe coincidir." },
+			confirmation: { message: "|La confirmación de contraseña debe coincidir." },
 						#format: { message: "|La contraseña debe contener al menos una mayúscula, una minúscula y un número (mínimo 6 caracteres).",
 						#with: /\A(?=.*[A-Z])(?=.*\d).{6,12}\z/ },
             allow_blank: true
 
 	validates :nombre,
             presence: { message: "|El nombre no puede estar vacío." },
-						format: {
-              message: "|El nombre solo acepta caracteres alfabéticos.",
-							with: /\A[A-ZÁ-ÚÑ][a-zá-úñ]+\z/
-						}
+			format: {
+  						message: "|El nombre solo acepta caracteres alfabéticos.",
+						# with: /\A[A-ZÁ-ÚÑ][a-zá-úñ]+\z/
+						with: /\A[a-zA-Z]+\z/
+					}
 
-  validates :apellido,
+  	validates :apellido,
             presence: { message: "|El apellido no puede estar vacío." },
             format: {
-              message: "|El apellido solo acepta caracteres alfabéticos.",
-              with: /\A(?!.*\s\s)(?!.*'')(?!.*\s\.)(?!.*[a-zá-úñ][A-ZÁ-ÚÑ])[A-ZÁ-ÚÑ][a-zá-úñA-ZÁ-Ú' ]+\z/
-            }
+		                message: "|El apellido solo acepta caracteres alfabéticos.",
+		                # with: /\A(?!.*\s\s)(?!.*'')(?!.*\s\.)(?!.*[a-zá-úñ][A-ZÁ-ÚÑ])[A-ZÁ-ÚÑ][a-zá-úñA-ZÁ-Ú' ]+\z/
+		                with: /\A[a-zA-Z]+\z/
+            		}
+
+    # validates_format_of :nombre, :apellido, :with => /^[a-z]+$/i
+
 
 	def nombre_completo
 		"#{nombre} #{apellido}"
 	end
 
-  def has_role?(t_rol_name)
-    t_rols.any? {|t_rol| t_rol.nombre == t_rol_name}
-  end
+  	def has_role?(t_rol_name)
+    	t_rols.any? {|t_rol| t_rol.nombre == t_rol_name}
+  	end
 
-  def is_admin?
-    has_role?("Administrador")
-  end
+  	def is_admin?
+    	has_role?("Administrador")
+  	end
 end
