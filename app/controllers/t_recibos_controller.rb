@@ -132,6 +132,10 @@ class TRecibosController < ApplicationController
           "TOTAL" => 0)
     end 
     
+    starting_time = Time.now
+
+
+
     query_years = []
     query_years << Date.today.strftime("%Y").to_i if (params[:from].blank? && params[:to].blank?)
     starting_year = params[:from].to_i
@@ -198,6 +202,10 @@ class TRecibosController < ApplicationController
         end 
       end
     end
+
+    ending_time = Time.now
+
+    @elapsed_time = ending_time - starting_time 
     
     @monto_final = 0
     @servicio_mes_monto.each{|e| @monto_final += e["TOTAL"]}

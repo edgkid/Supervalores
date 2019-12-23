@@ -2164,7 +2164,7 @@ factura.id 11
 i = 0
 
 while i < 10
-factura.apply_2_percent_monthly_surcharge
+factura.apply_custom_percent_monthly_surcharge(0.02)
 i += 1
 end
 
