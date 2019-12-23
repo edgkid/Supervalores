@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_22_052758) do
+ActiveRecord::Schema.define(version: 2019_12_23_025513) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -416,6 +416,8 @@ ActiveRecord::Schema.define(version: 2019_12_22_052758) do
     t.bigint "t_factura_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "cantidad"
+    t.decimal "precio_unitario"
     t.index ["t_factura_id"], name: "index_t_recargo_facturas_on_t_factura_id"
     t.index ["t_recargo_id"], name: "index_t_recargo_facturas_on_t_recargo_id"
   end

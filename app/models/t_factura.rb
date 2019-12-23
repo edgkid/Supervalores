@@ -40,6 +40,8 @@ class TFactura < ApplicationRecord
 
   has_many :t_factura_detalles, dependent: :destroy
   accepts_nested_attributes_for :t_factura_detalles, allow_destroy: true
+  has_many :t_recargo_facturas, dependent: :destroy
+  accepts_nested_attributes_for :t_recargo_facturas, allow_destroy: true
   has_many :t_recibos, dependent: :destroy
   has_many :t_email_masivos, dependent: :destroy
   has_many :t_nota_creditos, dependent: :destroy

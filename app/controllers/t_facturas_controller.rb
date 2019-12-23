@@ -41,6 +41,13 @@ class TFacturasController < ApplicationController
 
     @t_factura.t_factura_detalles.empty? ? invalid_t_factura = true : invalid_t_factura = false
 
+    params[:t_recargo_facturas_attributes].each do |t_recargo_factura|
+      @t_factura.t_recargo_facturas.build(
+        cantidad: t_recargo_factura[:cantidad],
+        precio_unitario: t_recargo_factura[:precio_unitario]
+      )
+    end
+
     if !@t_factura.t_cliente
       if !@t_factura.t_resolucion
         without_client = true
@@ -48,6 +55,7 @@ class TFacturasController < ApplicationController
     end
 
     if !invalid_t_factura && @t_factura.save
+      debugger
       t_factura_detalles = @t_factura.t_factura_detalles
       if t_factura_detalles.any? && t_factura_detalles.first.t_tarifa_servicio.tipo && t_factura_detalles.first.t_tarifa_servicio.tipo.downcase == 'ts'
         @t_factura.apply_custom_percent_monthly_surcharge(TConfiguracionRecargoT.take.try(:tasa) || 0)
@@ -382,6 +390,10 @@ class TFacturasController < ApplicationController
         t_factura_detalles_attributes: [
           :id, :cantidad, :cuenta_desc, :_destroy,
           :precio_unitario, :t_tarifa_servicio_id
+        ],
+        t_recargo_facturas_attributes: [
+          :id, :cantidad, :_destroy,
+          :precio_unitario, :t_recargo_id
         ]
       )
     end
