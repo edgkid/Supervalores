@@ -120,7 +120,7 @@ class TClientesController < ApplicationController
   end
 
   def new
-    @do_not_use_plain_select2 = true    
+    # @do_not_use_plain_select2 = true    
     @registro = TCliente.new
     @registro.t_estatus_id = 2
     @registro.es_prospecto = true
