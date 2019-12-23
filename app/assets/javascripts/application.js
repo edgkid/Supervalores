@@ -25,6 +25,7 @@
 //= require vendor/datapicker/bootstrap-datepicker.js
 //= require vendor/chartJs/Chart.min.js
 //= require vendor/iCheck/icheck.min.js
+//= require vendor/jasny/jasny-bootstrap.min.js
 //= require_tree .
 
 Number.prototype.toFixedDown = function(digits) {
@@ -37,4 +38,25 @@ function allowOnlyNumbers(thys) {
   var value = thys.value;
   console.log(value);
   $(thys).val(value.replace(/[^\d.\-]+/, ''));
+}
+
+function getDynamicElementID(element) {
+  var str = element.attr('name'),
+      open_square_brackets = 0,
+      close_square_brackets = 0,
+      stop = false,
+      id = '';
+
+  for (var i = 0; i < str.length; i++) {
+    if (str.charAt(i) === '[') { open_square_brackets++; }
+    if (str.charAt(i) === ']') {
+      close_square_brackets++;
+      if (close_square_brackets >= 2) { stop = true; }
+    }
+    if (open_square_brackets >= 2 && !stop) {
+      id += str.charAt(i);
+    }
+  }
+
+  return id.slice(1);
 }

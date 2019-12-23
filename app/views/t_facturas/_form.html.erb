@@ -143,14 +143,15 @@
             </select>
             <input class="recargo-descripcion" name="dynamic_attributes[t_recargo][descripcions][]" type="hidden">
             <input class="recargo-id" name="dynamic_attributes[t_recargo][ids][]" type="hidden">
+            <input class="t_recargo_ids" name="dynamic_attributes[t_recargo][descripcions][]" type="hidden">
           </td>
           <td class="descripcion-cell"></td>
           <td class="quantity-cell">
-            <input class="quantity quantity-input" data-quantity="1" min="0" style="height: 28px; width: 100%;" type="number" value="1">
+            <input class="quantity quantity-input" data-quantity="1" min="0" name="t_recargo_facturas_attributes[][cantidad]" style="height: 28px; width: 100%;" type="number" value="1">
             <input class="recargo-quantity" name="dynamic_attributes[t_recargo][quantities][]" type="hidden" value="1">
           </td>
           <td class="price-cell">
-            <input class="price recargo-input" min="0" step="0.01" style="height: 28px; width: 100%;" type="number">
+            <input class="price recargo-input" min="0" step="0.01" name="t_recargo_facturas_attributes[][precio_unitario]" style="height: 28px; width: 100%;" type="number">
             <input class="recargo-price" name="dynamic_attributes[t_recargo][prices][]" type="hidden">
           </td>
           <td class="surcharge-subtotal-cell" style="color: aqua; text-align: center;"></td>
