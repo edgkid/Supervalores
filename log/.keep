@@ -2170,3 +2170,34 @@ end
 
 TRecibo.includes([t_factura_detales: :t_tarifa_servicio], :t_factura ).where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')}) and t_facturas.pendiente_fact = 0")
 
+
+show del recibo, agregar boton del pdf
+hay facturas sin resolucion ni cliente, arreglar y agregar en la amtriz de errores
+14155
+
+al crear un cliente como admin cxc no muestra las opciones de tipo de cliente, pero al guardarlo y editarlo si muestra, otro problema es que no cambian las opciones al cambair de natural a juridoco y viceversa
+
+Otro problema es que esta permitiendo guardar resoluciones duplicadas, es decir, con el mismo numero de resolucion
+
+Las resolucuones pueden tener mismo numero pero no anio, es decir, resolcuion 001-2018 y 001-2019 son diferentes
+
+codigo en cliente no se muestra
+
+error al crear cliente
+
+cliente 3444 de test de tesoreria
+
+las facturas se estan generando multiples veces cuando el usuario solo lo hace 1 vez
+
+  EN el index de recibos, cambiar justificacion y ponerle nombre del dueno de la factura, para que de esta manera sea mas comodo buscarlo con el filtro
+
+  en la pantalla de crear factura se quiere agregar otr filtro en dond se pueda buscar por cliente, nombre de cliente
+
+  acomodar los permisos debido a que de adminCxC no puede crear facturas
+
+  datatable error a la hora de usar el filtro de usuariops
+
+  Informe de recaudacion, se quiere un total
+
+error de datatables en el informe de presupuesto, filtros
+
