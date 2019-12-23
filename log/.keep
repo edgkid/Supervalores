@@ -2168,3 +2168,5 @@ factura.apply_custom_percent_monthly_surcharge(0.02)
 i += 1
 end
 
+TRecibo.includes([t_factura_detales: :t_tarifa_servicio], :t_factura ).where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')}) and t_facturas.pendiente_fact = 0")
+

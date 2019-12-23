@@ -134,8 +134,6 @@ class TRecibosController < ApplicationController
     
     starting_time = Time.now
 
-
-
     query_years = []
     query_years << Date.today.strftime("%Y").to_i if (params[:from].blank? && params[:to].blank?)
     starting_year = params[:from].to_i
