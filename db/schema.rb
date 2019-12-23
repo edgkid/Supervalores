@@ -471,7 +471,6 @@ ActiveRecord::Schema.define(version: 2019_12_20_183646) do
     t.string "codigo"
     t.bigint "t_tipo_cliente_id"
     t.string "resolucion"
-    t.string "estado_seri"
     t.index ["t_cliente_id"], name: "index_t_resolucions_on_t_cliente_id"
     t.index ["t_estatus_id"], name: "index_t_resolucions_on_t_estatus_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_resolucions_on_t_tipo_cliente_id"
