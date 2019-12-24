@@ -12,6 +12,9 @@
               %button.btn.btn-secondary.disabled{:type => "submit", :disabled => true, :id => "search_with_years"}
                 %i.fa.fa-search{"aria-hidden" => "true"}
               %button.btn.btn-default{:onclick => "javascript:window.print()", :type => "button", :id => "print_all"} Imprimir
+  .row 
+    .col-md-12
+      = "Ha pasado #{@elapsed_time}"
               
   .row
     .col-md-6

@@ -152,8 +152,8 @@ class TFacturaPdf < PdfHelper
         "#{fd.cantidad}", 
         "#{fd.t_tarifa_servicio.nombre}", 
         "#{fd.cuenta_desc}", 
-        "#{fd.precio_unitario}", 
-        "#{fd.precio_unitario * fd.cantidad}", 
+        "#{fd.precio_unitario.round(2)}", 
+        "#{(fd.precio_unitario * fd.cantidad).round(2)}", 
         45, 150, 200, 80, :center)
     end
 
@@ -273,13 +273,13 @@ class TFacturaPdf < PdfHelper
         big_table_for_3_with_widths_and_alignment_and_height(
         "#{recibo.id}", 
         "#{recibo.created_at.strftime("%d-%m-%Y")}", 
-        "#{recibo.pago_recibido}",
+        "#{recibo.pago_recibido.round(2)}",
         195, 200, :center, 20)
 
         recibos_monto_total += recibo.pago_recibido
       end
 
-      data = [[bold("Total Recibos:"), bold("#{recibos_monto_total}")]]
+      data = [[bold("Total Recibos:"), bold("#{recibos_monto_total.round(2)}")]]
       table(data, :column_widths => [200, 160],
         :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
     end
@@ -295,16 +295,16 @@ class TFacturaPdf < PdfHelper
 
     move_down 20
 
-    data = [[bold("Total Recibos:"), bold("#{recibos_monto_total}")]]
+    data = [[bold("Total Recibos:"), bold("#{recibos_monto_total.round(2)}")]]
     table(data, :column_widths => [200, 160],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
-    data = [[bold("Total Factura:"), bold("#{@t_factura.total_factura}")]]
+    data = [[bold("Total Factura:"), bold("#{@t_factura.total_factura.round(2)}")]]
     table(data, :column_widths => [200, 160],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
-    data = [[bold("Pendiente:"), bold("#{@t_factura.pendiente_total}")]]
+    data = [[bold("Pendiente:"), bold("#{@t_factura.pendiente_total.round(2)}")]]
     table(data, :column_widths => [200, 160],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
-    data = [[bold("Total Crédito a Favor:"), bold("#{monto_credito}")]]
+    data = [[bold("Total Crédito a Favor:"), bold("#{monto_credito.round(2)}")]]
     table(data, :column_widths => [200, 160],
       :cell_style => {:inline_format => true, :border_width => 0.1, :align => :center,:height => 20}, width: 360, :position => :right )
 
