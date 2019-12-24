@@ -7,7 +7,7 @@ function deleteCheckedRows() {
     if ($(this).hasClass('deletable-servicio')) {
       serviceId = $(this).parent().siblings('.select-cell').children('select').val();
       $('#services-to-destroy').append(`
-        <input type="text" name="services_to_destroy[]" value="${serviceId}">
+        <input type="hidden" name="services_to_destroy[]" value="${serviceId}">
       `);
       $(this).parent().parent().remove();
     } else {

@@ -3,7 +3,8 @@ class TFacturasController < ApplicationController
   before_action :set_dynamic_attributes, only: [:edit]
   load_and_authorize_resource except: [
     :pagadas, :informe_recaudacion, :informe_ingresos_diarios, :informe_ingresos_presupuesto,
-    :informe_cuentas_x_cobrar, :informe_presupuestario, :informe_por_tipos_de_ingreso]
+    :informe_cuentas_x_cobrar, :informe_presupuestario, :informe_por_tipos_de_ingreso,
+    :recaudacion_total, :total_pagadas, :total_cuentas_x_cobrar]
   before_action :authorize_user_to_read_reports, only: [
     :pagadas, :informe_recaudacion, :informe_ingresos_diarios, :informe_ingresos_presupuesto,
     :informe_cuentas_x_cobrar, :informe_presupuestario, :informe_por_tipos_de_ingreso]

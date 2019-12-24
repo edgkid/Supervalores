@@ -17,10 +17,8 @@ class AdminUserDatatable < ApplicationDatatable
         email: record.email,
         last_sign_in_at: record.last_sign_in_at,
         estatus: record.estatus,
-        DT_RowId: url_for(
-          # TFactura.find(record.t_factura_id), TRecibo.find(record.id))
-          TRecibo.find(record.id).t_factura.try(:t_resolucion).try(:t_cliente) ||
-          TRecibo.find(record.id).t_factura.t_cliente
+        DT_RowId: url_with_or_without_parent_resource_for(
+          record.try(params[:parent_resource] || ''), [:admin, record]
         )
       }
     end
