@@ -3,7 +3,7 @@ class TResolucionsController < ApplicationController
   
   before_action :seleccionar_resolucion, only: [:show, :edit, :update, :destroy]
 
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:get_type_client]
 
   def index
     @usar_dataTables = true
