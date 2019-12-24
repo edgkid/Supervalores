@@ -13,4 +13,14 @@
 class TRecargoFactura < ApplicationRecord
   belongs_to :t_recargo
   belongs_to :t_factura
+
+  validates :t_recargo_id, presence: {
+    message: "|El recargo debe estar asociado a la factura."
+  }
+  validates :cantidad, presence: {
+    message: "|Debe indicar una cantidad de recargos."
+  }
+  validates :precio_unitario, presence: {
+    message: "|Debe indicar el precio del recargo."
+  }
 end

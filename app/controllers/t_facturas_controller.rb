@@ -21,11 +21,9 @@ class TFacturasController < ApplicationController
   def create
     @t_factura = TFactura.new(t_factura_params)
     @t_factura.user = current_user
-    @t_factura.recargo = @t_factura.calculate_total_surcharge(true)
     @t_factura.recargo_desc = '-'
     @t_factura.itbms = 0
     @t_factura.importe_total = 0
-    @t_factura.pendiente_fact = @t_factura.calculate_pending_payment
     @t_factura.pendiente_ts = 0
     @t_factura.tipo = '-'
     @t_factura.next_fecha_recargo = Date.today + 1.month
@@ -44,9 +42,13 @@ class TFacturasController < ApplicationController
     params[:t_recargo_facturas_attributes].each do |t_recargo_factura|
       @t_factura.t_recargo_facturas.build(
         cantidad: t_recargo_factura[:cantidad],
-        precio_unitario: t_recargo_factura[:precio_unitario]
+        precio_unitario: t_recargo_factura[:precio_unitario],
+        t_recargo_id: t_recargo_factura[:id]
       )
     end
+
+    @t_factura.recargo = @t_factura.calculate_total_surcharge
+    @t_factura.pendiente_fact = @t_factura.calculate_pending_payment
 
     if !@t_factura.t_cliente
       if !@t_factura.t_resolucion
@@ -55,7 +57,6 @@ class TFacturasController < ApplicationController
     end
 
     if !invalid_t_factura && @t_factura.save
-      debugger
       t_factura_detalles = @t_factura.t_factura_detalles
       if t_factura_detalles.any? && t_factura_detalles.first.t_tarifa_servicio.tipo && t_factura_detalles.first.t_tarifa_servicio.tipo.downcase == 'ts'
         @t_factura.apply_custom_percent_monthly_surcharge(TConfiguracionRecargoT.take.try(:tasa) || 0)
@@ -386,7 +387,7 @@ class TFacturasController < ApplicationController
     def t_factura_params
       params.require(:t_factura).permit(
         :fecha_notificacion, :fecha_vencimiento, :recargo_desc,
-        :t_resolucion_id, :t_periodo_id, :total_factura, {t_recargo_ids: []},
+        :t_resolucion_id, :t_periodo_id, :total_factura,
         t_factura_detalles_attributes: [
           :id, :cantidad, :cuenta_desc, :_destroy,
           :precio_unitario, :t_tarifa_servicio_id

@@ -81,14 +81,15 @@
       </tr>
     <% end %>
 
-    <% @t_factura.t_recargos.each do |r| %>
+    <% @t_factura.t_recargo_facturas.each do |r| %>
+
       <tr>
-        <td></td>
+        <td><%= r.cantidad %></td>
         <td>Recargo</td>
-        <td><%= r.descripcion %></td>
-        <td><%= r.tasa * 100 %></td>
-        <td><%= number_to_balboa(r.tasa * @t_factura.calculate_services_total_price, false) %></td>
-        <td><%= '' %></td>
+        <td><%= r.t_recargo.descripcion %></td>
+        <td><%= r.precio_unitario * 100 %></td>
+        <td><%= number_to_balboa(r.precio_unitario * @t_factura.calculate_services_total_price, false) %></td>
+        <td><%= number_to_balboa(r.precio_unitario * r.cantidad * @t_factura.calculate_services_total_price, false) %></td>
       </tr>
     <% end %>
   </tbody>

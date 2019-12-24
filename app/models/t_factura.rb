@@ -82,30 +82,20 @@ class TFactura < ApplicationRecord
     sum
   end
 
-  def calculate_total_surcharge_rate(before_save = false)
-    if before_save
-      sum = 0
-      self.t_recargos.each { |t_recargo| sum += t_recargo.tasa }
-      sum
-    else
-      self.t_recargos.sum(:tasa)
+  def calculate_total_surcharge_rate
+    sum = 0
+    self.t_recargo_facturas.each do |t_recargo_factura|
+      sum += t_recargo_factura.cantidad * t_recargo_factura.precio_unitario
     end
+    sum
   end
 
-  def calculate_total_surcharge(before_save = false)
-    if before_save
-      calculate_total_surcharge_rate(true) * calculate_services_total_price
-    else
-      calculate_total_surcharge_rate * calculate_services_total_price
-    end
+  def calculate_total_surcharge
+    calculate_total_surcharge_rate * calculate_services_total_price
   end
 
-  def calculate_total(before_save = false)
-    if before_save
-      calculate_services_total_price + calculate_total_surcharge(true)
-    else
-      calculate_services_total_price + calculate_total_surcharge
-    end
+  def calculate_total
+    calculate_services_total_price + calculate_total_surcharge
   end
 
   def self.count_invoices_by_month(month_number)

@@ -111,9 +111,9 @@ class TConfFacAutomatica < ApplicationRecord
         )
       end
 
-      t_factura.recargo = t_factura.calculate_total_surcharge(true)
+      t_factura.recargo = t_factura.calculate_total_surcharge
       t_factura.pendiente_fact = t_factura.calculate_pending_payment(true)
-      t_factura.total_factura = t_factura.calculate_total(true)
+      t_factura.total_factura = t_factura.calculate_total
 
       if t_factura.save!
         puts "\n" * 5 + '¡Facturas automáticas creadas!' + "\n"
