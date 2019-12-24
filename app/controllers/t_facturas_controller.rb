@@ -45,7 +45,7 @@ class TFacturasController < ApplicationController
         precio_unitario: t_recargo_factura[:precio_unitario],
         t_recargo_id: t_recargo_factura[:id]
       )
-    end
+    end if params[:t_recargo_facturas_attributes]
 
     @t_factura.recargo = @t_factura.calculate_total_surcharge
     @t_factura.pendiente_fact = @t_factura.calculate_pending_payment
@@ -122,21 +122,7 @@ class TFacturasController < ApplicationController
       end if !params[:services_to_destroy].blank?
       @t_factura.t_recargo_ids - params[:surcharges_to_destroy].map {|id| id.to_i} if !params[:surcharges_to_destroy].blank?
 
-      t_recibos = @t_factura.t_recibos
-
-      if (ultimo_recibo = t_recibos.find_by(ultimo_recibo: true))
-        t_recibos.each do |t_recibo|
-          t_recibo.pago_pendiente +=
-            @t_factura.total_factura - old_t_factura.total_factura
-          t_recibo.save
-        end
-        ultimo_recibo.recargo_x_pagar +=
-          @t_factura.recargo - old_t_factura.recargo
-        ultimo_recibo.servicios_x_pagar +=
-          (@t_factura.total_factura - @t_factura.recargo) -
-          (old_t_factura.total_factura - old_t_factura.recargo)
-        ultimo_recibo.save
-      end
+      @t_factura.update_receipts(old_t_factura)
 
       redirect_to t_facturas_path
     else

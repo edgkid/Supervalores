@@ -94,7 +94,7 @@ class TTarifaServiciosController < ApplicationController
     def t_tarifa_servicio_params
       params.require(:t_tarifa_servicio).permit(
         :codigo, :descripcion, :nombre,
-        :clase, :precio, :estatus
+        :clase, :precio, :estatus, :tipo
       )
     end
 

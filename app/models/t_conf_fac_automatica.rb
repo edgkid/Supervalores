@@ -94,12 +94,20 @@ class TConfFacAutomatica < ApplicationRecord
         monto_emision: 0,
         justificacion: configuracion_actual.nombre_ciclo_facturacion,
         automatica: true,
-        t_estatus: TEstatus.find_by(descripcion: 'Disponible') || TEstatus.first.id,
+        t_estatus: TEstatus.find_by(descripcion: 'Disponible') || TEstatus.first.try(:id),
         t_periodo: configuracion_actual.t_periodo,
-        t_recargos: configuracion_actual.t_recargos,
+        # t_recargos: configuracion_actual.t_recargos,
         t_resolucion: t_resolucion,
         user: configuracion_actual.user
       )
+
+      configuracion_actual.t_recargos.each do |t_recargo|
+        t_factura.t_recargo_facturas.build(
+          cantidad: 1,
+          precio_unitario: t_recargo.tasa,
+          t_recargo: t_recargo
+        )
+      end
 
       configuracion_actual.t_tarifa_servicios.each do |t_tarifa_servicio|
         t_factura.t_factura_detalles.build(
