@@ -421,7 +421,8 @@ class TClientesController < ApplicationController
     when 'select-cedula'
       view = ViewClient.where('identificacion = ?', search).take
       @t_cliente = TCliente.find(view.id)
-      case @t_cliente.persona.class.to_s
+      persona = @t_cliente.persona
+      case persona.class.to_s
       when 'TPersona'
         @t_persona = persona
       when 'TEmpresa'
@@ -429,7 +430,18 @@ class TClientesController < ApplicationController
         @without_client = true unless @t_cliente
       end
     when 'select-cliente'
-      puts 'Select cliente!'
+      #view = ViewClient.where('razon_social = ?', search).take
+      #debugger
+      #@t_cliente = TCliente.find(view.id)
+      @t_cliente = TCliente.find(search)
+      persona = @t_cliente.persona
+      case persona.class.to_s
+      when 'TPersona'
+        @t_persona = persona
+      when 'TEmpresa'
+        @t_empresa = persona
+        @without_client = true unless @t_cliente
+      end
     end if search != ''
 
     if @t_persona.class.to_s == 'TEmpresa'

@@ -3,8 +3,8 @@ var attribute = '<%= @attribute %>',
     codigo = '<%= @t_cliente ? @t_cliente.codigo : "" %>',
     cedula = '<%= @t_persona ? @t_persona.cedula : "" %>',
     rif = '<%= @t_empresa ? @t_empresa.rif : "" %>',
+    razon_social = '<%= @t_empresa.try(:razon_social) || "#{@t_persona.try(:nombre)} #{@t_persona.try(:apellido)}" %>',
     zeroLength = false;
-    // razon_social = '<%#= @t_cliente.razon_social %>';
 
 var data = [
   <% @t_cliente.t_resolucions.each do |t_resolucion| %>
@@ -60,6 +60,8 @@ switch(attribute) {
       $('#select2-select-cedula-container').text('');
       $('#select2-select-cedula-container').attr('title', '');
     <% end %>
+    $('#select2-select-cliente-container').text(razon_social);
+    $('#select2-select-cliente-container').attr('title', razon_social);
 
     $('#select-codigo-input').val($('#select-codigo').val());
     $('#select-cedula-input').val($('#select2-select-cedula-container').text());
@@ -86,6 +88,8 @@ switch(attribute) {
 
     $('#select2-select-codigo-container').text(codigo);
     $('#select2-select-codigo-container').attr('title', codigo);
+    $('#select2-select-cliente-container').text(razon_social);
+    $('#select2-select-cliente-container').attr('title', razon_social);
 
     $('#select-codigo-input').val($('#select2-select-codigo-container').text());
     $('#select-cedula-input').val($('#select-cedula').val());
@@ -101,9 +105,11 @@ switch(attribute) {
       $('#select2-select-cedula-container').text(rif);
       $('#select2-select-cedula-container').attr('title', rif);
     <% end %>
+    $('#select2-select-cliente-container').text(razon_social);
+    $('#select2-select-cliente-container').attr('title', razon_social);
 
-    // amount = Number(<%= @t_tarifa.monto if @t_tarifa %>),
-    // surcharge = Number(<%= @t_tarifa.recargo if @t_tarifa %>),
+    // amount = Number(<%#= @t_tarifa.monto if @t_tarifa %>),
+    // surcharge = Number(<%#= @t_tarifa.recargo if @t_tarifa %>),
     // totalRate = amount + (amount * surcharge);
 
     // $('#rate-amount').text(amount);
@@ -113,7 +119,28 @@ switch(attribute) {
     // $('#total').text(Number($('#total').text()) /*+ totalRate*/);
     break;
   case 'select-cliente':
-    
+    if (zeroLength) {
+      $('#select-resolucion').empty();
+      $('#select-resolucion').change();
+    } else {
+      $('#select-resolucion').empty().append('<option></option>').select2({ data: data, placeholder: 'Seleccione' });
+    }
+
+    $('#select2-select-codigo-container').text(codigo);
+    $('#select2-select-codigo-container').attr('title', codigo);
+    <% if @t_cliente && @t_persona %>
+      $('#select2-select-cedula-container').text(cedula);
+      $('#select2-select-cedula-container').attr('title', cedula);
+    <% elsif @t_empresa %>
+      $('#select2-select-cedula-container').text(rif);
+      $('#select2-select-cedula-container').attr('title', rif);
+    <% else %>
+      $('#select2-select-cedula-container').text('');
+      $('#select2-select-cedula-container').attr('title', '');
+    <% end %>
+
+    $('#select-codigo-input').val($('#select2-select-codigo-container').text());
+    $('#select-cedula-input').val($('#select-cedula').val());
     break;
 }
 
