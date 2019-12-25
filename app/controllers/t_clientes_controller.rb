@@ -2,7 +2,8 @@ class TClientesController < ApplicationController
   # include TClientesHelper
 
   respond_to :js, only: [:find]
-  respond_to :json, only: [:all_clients, :find_by_codigo, :find_by_resolucion, :find_by_cedula]
+  respond_to :json, only: [:all_clients, :find_by_codigo, :find_by_resolucion,
+    :find_by_cedula, :find_by_razon_social]
   before_action :seleccionar_cliente, only: [:show, :edit, :update, :destroy, :nueva_resolucion, :nueva_empresa]
   before_action :usar_dataTables_en, only: [:index, :show, :edit, :estado_cuenta, :nueva_resolucion]
   before_action :dataTables_resolucion, only: [:show, :edit, :nueva_resolucion]
@@ -17,7 +18,7 @@ class TClientesController < ApplicationController
       OR COALESCE(e.rif, o.identificacion, p.cedula) ILIKE ?
       OR COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido)) ILIKE ?
       ", "%#{search}%", "%#{search}%", "%#{search}%"
-    ).first(20)
+    )
   end
 
   def index
@@ -379,7 +380,7 @@ class TClientesController < ApplicationController
   def find_by_cedula
     search = parametros_de_busqueda[:search]
 
-    personas = ViewClient.where('identificacion ILIKE ?', "%#{search}%").first(15)
+    personas = ViewClient.where('identificacion ILIKE ?', "%#{search}%").first(50)
     
     respond_with personas
     # respond_with TCliente.where('razon_social LIKE ?', "%#{search}%").first(10)
@@ -387,7 +388,14 @@ class TClientesController < ApplicationController
 
   def find_by_resolucion
     search = parametros_de_busqueda[:search]
-    respond_with TResolucion.where('resolucion ILIKE ?', "%#{search}%").first(15)
+    respond_with TResolucion.where('resolucion ILIKE ?', "%#{search}%").first(50)
+  end
+
+  def find_by_razon_social
+    search = parametros_de_busqueda[:search]
+
+    clientes = ViewClient.where("razon_social ILIKE ?", "%#{search}%").first(50)
+    respond_with clientes
   end
 
   def find

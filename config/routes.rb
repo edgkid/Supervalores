@@ -353,6 +353,7 @@ Rails.application.routes.draw do
     get 'find_by_codigo', as: :find_by_codigo
     get 'find_by_resolucion', as: :find_by_resolucion
     get 'find_by_cedula', as: :find_by_cedula
+    get 'find_by_razon_social', as: :find_by_razon_social
     get 'find', as: :find
   end
   get 'clientes/:id/resolucion/:resolucion' => 't_clientes#mostrar_resolucion'

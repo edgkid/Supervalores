@@ -40,16 +40,18 @@ class TFacturasController < ApplicationController
 
     @t_factura.t_factura_detalles.empty? ? invalid_t_factura = true : invalid_t_factura = false
 
-    params[:t_recargo_facturas_attributes].each do |t_recargo_factura|
-      @t_factura.t_recargo_facturas.build(
-        cantidad: t_recargo_factura[:cantidad],
-        precio_unitario: t_recargo_factura[:precio_unitario],
-        t_recargo_id: t_recargo_factura[:id]
+    invalid_t_recargo = false
+    params[:t_recargo_facturas_attributes].each do |t_recargo_factura_param|
+      t_recargo_factura = @t_factura.t_recargo_facturas.build(
+        cantidad: t_recargo_factura_param[:cantidad],
+        precio_unitario: t_recargo_factura_param[:precio_unitario],
+        t_recargo_id: t_recargo_factura_param[:id]
       )
+      invalid_t_recargo = true if t_recargo_factura.invalid?
     end if params[:t_recargo_facturas_attributes]
 
-    @t_factura.recargo = @t_factura.calculate_total_surcharge
-    @t_factura.pendiente_fact = @t_factura.calculate_pending_payment
+    @t_factura.recargo = @t_factura.calculate_total_surcharge unless invalid_t_recargo
+    @t_factura.pendiente_fact = @t_factura.calculate_pending_payment unless invalid_t_recargo
 
     if !@t_factura.t_cliente
       if !@t_factura.t_resolucion
@@ -57,7 +59,7 @@ class TFacturasController < ApplicationController
       end
     end
 
-    if !invalid_t_factura && @t_factura.save
+    if !invalid_t_factura && !invalid_t_recargo && @t_factura.save
       t_factura_detalles = @t_factura.t_factura_detalles
       if t_factura_detalles.any? && t_factura_detalles.first.t_tarifa_servicio.tipo && t_factura_detalles.first.t_tarifa_servicio.tipo.downcase == 'ts'
         @t_factura.apply_custom_percent_monthly_surcharge(TConfiguracionRecargoT.take.try(:tasa) || 0)
@@ -89,6 +91,9 @@ class TFacturasController < ApplicationController
       @notice.messages[:t_resolucion] -= [@notice.messages[:t_resolucion].first]
       if invalid_t_factura
         @notice.messages[:t_factura] << '|Debe agregar al menos un servicio'
+      end
+      if invalid_t_recargo
+        @notice.messages[:t_factura] << '|El recargo no es válido'
       end
       if without_client
         @notice.messages[:t_factura] << '|Debe seleccionar un cliente'

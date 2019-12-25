@@ -103,6 +103,29 @@ $(document).ready(function(){
     minimumInputLength: 1
   });
 
+  $("#select-cliente").select2({
+    ajax: {
+      url: '<%= "#{t_clientes_find_by_razon_social_path}" %>',
+      dataType: 'json',
+      data: function (params) {
+        var query = {
+          search: params.term
+        }
+
+        return query;
+      },
+      processResults: function (data) {
+        return {
+          results: $.map(data, function(persona, i) {
+            return { id: persona.id, text: persona.razon_social } 
+          })
+        };
+      },
+      delay: 250
+    },
+    placeholder: 'Seleccione'
+  });
+
   $('.search-client').change(function(e, resolucion_id) {
     $.ajax({
       url: '<%= "#{t_clientes_find_path}" %>',
