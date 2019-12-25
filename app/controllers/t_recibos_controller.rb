@@ -4,6 +4,9 @@ class TRecibosController < ApplicationController
   before_action :set_t_recibo, only: [:show, :destroy, :generar_pdf]
   before_action :set_necessary_objects, only: [:new, :create, :show]
 
+  load_and_authorize_resource except: [:pago_recibido_total, :generar_pdf,
+    :generar_reporte_pdf]
+
   def new
     @last_t_recibo = TRecibo.find(params[:recibo_id]) if params[:recibo_id]
     @t_recibo = TRecibo.new

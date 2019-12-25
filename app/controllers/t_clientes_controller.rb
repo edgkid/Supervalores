@@ -428,6 +428,8 @@ class TClientesController < ApplicationController
         @t_empresa = persona
         @without_client = true unless @t_cliente
       end
+    when 'select-cliente'
+      puts 'Select cliente!'
     end if search != ''
 
     if @t_persona.class.to_s == 'TEmpresa'

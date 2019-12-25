@@ -1,6 +1,6 @@
 class TTipoClientesController < ApplicationController
   before_action :seleccionar_tipo_cliente, only: [:show, :edit, :update, :destroy]
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:clients_index]
 
   def informe
     @usar_dataTables = true

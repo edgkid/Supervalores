@@ -1,7 +1,7 @@
 class TTarifaServiciosController < ApplicationController
   before_action :set_t_tarifa_servicio, only: [:edit, :update, :show, :destroy]
   respond_to :json, only: [:all_services]
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:tramites]
 
   def all_services
     search = parametros_de_busqueda[:search]
