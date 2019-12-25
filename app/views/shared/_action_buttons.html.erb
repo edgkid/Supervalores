@@ -19,7 +19,7 @@ btn_size = defined?(button_size) ? "btn-#{button_size}" : "btn-xs"
       <i class="glyphicon glyphicon-pencil"></i> <%= edit_text if defined?(edit_text) %>
     <% end if defined?(edit_route) %>
     
-    <%= button_tag type: :summit, class: "btn btn-primary #{btn_size}", title: 'Guardar cambios', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
+    <%= button_tag type: :summit, onclick: 'disableSubmitButton();', class: "btn btn-primary #{btn_size}", id: 'submitButton', title: 'Guardar cambios', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
       <i class="glyphicon glyphicon-floppy-saved"></i> <%= save_text if defined?(save_text) %>
     <% end if defined?(save_form) %>
     
@@ -30,3 +30,9 @@ btn_size = defined?(button_size) ? "btn-#{button_size}" : "btn-xs"
     <% end if defined?(delete_route) %>
   </div>
 </div>
+
+<script type="text/javascript">
+  function disableSubmitButton() {
+    $('#submitButton').prop('disabled', true);
+  }
+</script>

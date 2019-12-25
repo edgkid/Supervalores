@@ -13,7 +13,7 @@ function deleteCheckedRows() {
     } else {
       surchargeId = $(this).parent().siblings('.select-surcharge-cell').children('select').val();
       $('#surcharges-to-destroy').append(`
-        <input type="text" name="surcharges_to_destroy[]" value="${surchargeId}">
+        <input type="hidden" name="surcharges_to_destroy[]" value="${surchargeId}">
       `);
       $(this).parent().parent().remove();
     }
