@@ -310,6 +310,7 @@ Rails.application.routes.draw do
       get 'total_cuentas_x_cobrar'
       get 'informe_presupuestario'
       get 'informe_por_tipos_de_ingreso'
+      get 'estado_de_cuenta'
     end
   end
   resources :t_conf_fac_automaticas
