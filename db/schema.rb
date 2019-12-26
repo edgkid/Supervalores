@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_23_025513) do
+ActiveRecord::Schema.define(version: 2019_12_26_005016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -480,7 +480,6 @@ ActiveRecord::Schema.define(version: 2019_12_23_025513) do
     t.string "codigo"
     t.bigint "t_tipo_cliente_id"
     t.string "resolucion"
-    t.string "estado_seri"
     t.index ["t_cliente_id"], name: "index_t_resolucions_on_t_cliente_id"
     t.index ["t_estatus_id"], name: "index_t_resolucions_on_t_estatus_id"
     t.index ["t_tipo_cliente_id"], name: "index_t_resolucions_on_t_tipo_cliente_id"

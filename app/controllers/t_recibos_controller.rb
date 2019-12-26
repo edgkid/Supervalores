@@ -44,7 +44,7 @@ class TRecibosController < ApplicationController
   def index
     @usar_dataTables = true
     @attributes_to_display = [
-      :id, :fecha_pago, :t_metodo_pago, :justificacion,
+      :id, :fecha_pago, :forma_pago, :razon_social,
       :pago_recibido, :pago_pendiente, :monto_acreditado
     ]
 
