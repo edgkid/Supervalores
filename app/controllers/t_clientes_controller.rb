@@ -191,11 +191,11 @@ class TClientesController < ApplicationController
         @notice = @registro.persona.errors
         format.html { render :new }
         format.json { render json: @registro.persona.errors, status: :unprocessable_entity }
-      elsif !@registro.es_prospecto && !@resolucion.valid?
+      elsif !@registro.es_prospecto && @resolucion != nil && !@resolucion.valid?
         @notice = @resolucion.errors
         format.html { render :new }
         format.json { render json: @resolucion.errors, status: :unprocessable_entity }
-      elsif !@registro.es_prospecto && !@resolucion.usar_cliente && !@contacto.valid?
+      elsif !@registro.es_prospecto && @resolucion != nil && !@resolucion.usar_cliente && !@contacto.valid?
         @notice = @contacto.errors
         format.html { render :new }
         format.json { render json: @contacto.errors, status: :unprocessable_entity }
@@ -298,11 +298,11 @@ class TClientesController < ApplicationController
         @notice = @registro.persona.errors
         format.html { render :edit }
         format.json { render json: @registro.persona.errors, status: :unprocessable_entity }
-      elsif !@registro.es_prospecto && !@resolucion.valid?
+      elsif !@registro.es_prospecto && @resolucion != nil && !@resolucion.valid?
         @notice = @resolucion.errors
         format.html { render :edit }
         format.json { render json: @resolucion.errors, status: :unprocessable_entity }
-      elsif !@registro.es_prospecto && !@resolucion.usar_cliente && !@contacto.valid?
+      elsif !@registro.es_prospecto && @resolucion != nil && !@resolucion.usar_cliente && !@contacto.valid?
         @notice = @contacto.errors
         format.html { render :edit }
         format.json { render json: @contacto.errors, status: :unprocessable_entity }
