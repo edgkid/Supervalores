@@ -107,12 +107,19 @@
   </div>
   <div class="col-sm-6">
     <h2 style="margin-top: 0;">Importe Debido</h2>
-
     <table class="table">
       <tbody>
         <tr>
-          <th>Total:</th>
-          <td style="text-align: right;"><%= number_to_balboa(@t_factura.total_factura) %></td>
+          <th>Últimos pagos:</th>
+          <td style="text-align: right;"><%= number_to_balboa(@t_factura.t_recibos.sum(:pago_recibido)) %></td>
+        </tr>
+        <tr>
+          <th>Total de items:</th>
+          <td style="text-align: right;"><%= number_to_balboa(@t_factura.t_factura_detalles.sum(:precio_unitario)) %></td>
+        </tr>
+        <tr>
+          <th>Total a pagar:</th>
+          <td style="text-align: right;"><%= number_to_balboa(@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) %></td>
         </tr>
       </tbody>
     </table>

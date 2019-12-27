@@ -12,12 +12,13 @@ class TEstadoCuentaPdf < PdfHelper
 
   # Constructor
   # def initialize(t_factura, t_recibo, view)
-  def initialize(t_cliente, nombre_recaudador)
+  def initialize(t_cliente, t_resolucion ,nombre_recaudador)
     super()
     # @t_recibo     = t_recibo
     # @t_factura    = t_factura
     # @t_resolucion = @t_factura.t_resolucion
     @t_cliente    = t_cliente
+    @t_resolucion = t_resolucion
     @t_empresa    = @t_cliente.persona.try(:rif)            ? @t_cliente.persona : nil
     @t_persona    = @t_cliente.persona.try(:cedula)         ? @t_cliente.persona : nil
     @t_otro       = @t_cliente.persona.try(:identificacion) ? @t_cliente.persona : nil
@@ -122,8 +123,8 @@ class TEstadoCuentaPdf < PdfHelper
       cip_ruc = @t_cliente.persona.rif
     end
 
-
-    text "Nuestro cliente <b>#{nombre}</b> con C.I.P/R.U.C. <b>#{cip_ruc} RUC</b> y número de resolución <b>#{} N_RESOLUCION</b>, se mantiene paz y salvo hasta la fecha, con respecto a las cuentas que mantiene en la <b>Superintendencia del Mercado de Valores de la República de Panamá.</b>", inline_format: true
+    # debugger
+    text "Nuestro cliente <b>#{nombre}</b> con C.I.P/R.U.C <b>#{cip_ruc}</b> y número de resolución <b>#{@t_resolucion.resolucion}</b>, se mantiene paz y salvo hasta la fecha, con respecto a las cuentas que mantiene en la <b>Superintendencia del Mercado de Valores de la República de Panamá.</b>", inline_format: true
 
     move_down 15
     text "Dado a los #{DateTime.now.strftime('%d')} dia(s) del mes de #{@meses.first[DateTime.now.strftime('%m').to_i]} de #{DateTime.now.strftime('%Y')}."

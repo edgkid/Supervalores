@@ -122,7 +122,8 @@ class TFacturaPdf < PdfHelper
 
     bounding_box([185, 644], :width => 165, :height => 100) do
       # stroke_bounds
-      text_box "<b>Para Cliente:</b> #{@t_empresa.try(:razon_social) || @t_persona.try(:full_name) || @t_otro.try(:razon_social)}
+      text_box "<b>Nombre del Cliente:</b> #{@t_empresa.try(:razon_social) || @t_persona.try(:full_name) || @t_otro.try(:razon_social)}
+      <b>Número de Cliente:</b> #{@t_cliente.id}
       <b>Resolución:</b> #{@t_resolucion ? @t_resolucion.resolucion : 'Sin Resolución'}
       <b>CIP/RUC:</b> #{@t_empresa.try(:rif) || @t_persona.try(:cedula) || @t_otro.try(:identificacion)}
       <b>Teléfono:</b> #{@t_empresa.try(:telefono) || @t_persona.try(:telefono) || @t_otro.try(:telefono)}
@@ -132,7 +133,7 @@ class TFacturaPdf < PdfHelper
 
     bounding_box([370, 644], :width => 165, :height => 100) do
       # stroke_bounds
-      text_box "<b>Factura:</b> #{@t_factura.id}
+      text_box "<b>Número de Factura:</b> #{@t_factura.id}
       <b>Estado:</b> #{@t_factura.t_estatus.descripcion}
       <b>Importe debido:</b> #{@t_factura.created_at.strftime('%d/%m/%Y %I:%M:%S %p')}
       <b>Fecha de vencimiento:</b> #{@t_factura.fecha_vencimiento.strftime('%d/%m/%Y')}
