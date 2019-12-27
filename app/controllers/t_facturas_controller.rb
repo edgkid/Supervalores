@@ -66,7 +66,8 @@ class TFacturasController < ApplicationController
       end
       #Condicion para aplicar nota de  crédito
       if @t_factura.es_ts?
-        @t_nota_credito = @t_factura.t_cliente.t_nota_creditos.where(status:"Sin Usar").first
+        @t_nota_credito = @t_factura.t_resolucion.t_cliente.t_nota_creditos.where(status: "Sin Usar").order("created_at ASC").first
+        # @t_nota_credito = @t_factura.t_cliente.t_nota_creditos.where(status:"Sin Usar").first
         unless @t_nota_credito.nil?
           @t_nota_credito.t_factura_id = @t_factura.id
           @t_nota_credito.status = "Usada"
@@ -130,7 +131,8 @@ class TFacturasController < ApplicationController
 
       @t_factura.update_receipts(old_t_factura)
 
-      redirect_to t_facturas_path
+      # redirect_to t_facturas_path 
+      redirect_to preview_t_factura_path(@t_factura)
     else
       @notice = @t_factura.errors
       @do_not_use_plain_select2 = true

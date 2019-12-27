@@ -120,15 +120,15 @@ class TReciboPdf < PdfHelper
     
       poly_name = "#{@t_persona.try(:nombre)} #{@t_persona.try(:apellido)} #{@t_empresa.try(:razon_social)}"
 
-      text_box "<b>Cliente:</b> #{@t_cliente.codigo}
+      text_box "<b>Número de Cliente:</b> #{@t_cliente.id}
+      <b>Código de Cliente:</b> #{@t_cliente.codigo}
       <b>Nombre:</b> #{poly_name.strip!}
       ", inline_format: true, at: [5, cursor], :align => :justify
     end
 
     bounding_box([185, 644], :width => 165, :height => 40) do
       # stroke_bounds
-      text_box "<b>Referencia:</b>
-      <b>CIP/RUC:</b> #{@t_empresa.try(:rif)}#{@t_persona.try(:cedula)}
+      text_box "<b>CIP/RUC:</b> #{@t_empresa.try(:rif)}#{@t_persona.try(:cedula)}
       <b>Resolucion:</b> #{@t_factura.t_resolucion.nil? ? "No posee resolucion" : @t_factura.t_resolucion.resolucion}
       ", inline_format: true, at: [5, cursor], :align => :justify
 
@@ -210,6 +210,16 @@ class TReciboPdf < PdfHelper
       bold("#{@t_factura.pendiente_total.round(2)}"),
       110, 110, 20, :center)
 
+    table_for_2_with_widths_and_height_and_alignment_to_the_right(
+      bold("Monto Acreditado:"),
+      bold("#{(@t_factura.monto_pendiente_para_pdf - @t_recibo.pago_recibido).round(2).abs}"),
+      110, 110, 20, :center)
+    
+    table_for_2_with_widths_and_height_and_alignment_to_the_right(
+      bold("Crédito Total:"),
+      bold("#{@t_factura.t_nota_creditos.any? ? @t_factura.t_nota_creditos.sum(:monto).round(2) : @t_factura.t_resolucion.t_cliente.t_nota_creditos.sum(:monto).round(2)}"),
+      110, 110, 20, :center)
+
     stroke do
       move_down 10
       horizontal_rule
@@ -263,25 +273,30 @@ class TReciboPdf < PdfHelper
     
       poly_name = "#{@t_persona.try(:nombre)} #{@t_persona.try(:apellido)} #{@t_empresa.try(:razon_social)}"
 
-      text_box "<b>Cliente:</b> #{@t_cliente.codigo}
+      text_box "<b>Número de Cliente:</b> #{@t_cliente.id}
+      <b>Código de Cliente:</b> #{@t_cliente.codigo}
       <b>Nombre:</b> #{poly_name.strip!}
       ", inline_format: true, at: [5, cursor], :align => :justify
     end
 
     bounding_box([185, 644], :width => 165, :height => 40) do
       # stroke_bounds
-      text_box "<b>Referencia:</b>
-      <b>CIP/RUC:</b> #{@t_empresa.try(:rif)}#{@t_persona.try(:cedula)}
+      text_box "<b>CIP/RUC:</b> #{@t_empresa.try(:rif)}#{@t_persona.try(:cedula)}
+      <b>Resolucion:</b> #{@t_factura.t_resolucion.nil? ? "No posee resolucion" : @t_factura.t_resolucion.resolucion}
       ", inline_format: true, at: [5, cursor], :align => :justify
+
     end
+
 
     bounding_box([370, 644], :width => 165, :height => 40) do
       # stroke_bounds
-      text_box "<b>Recibo:</b> #{@t_recibo.id}
+      text_box "<b>Número Recibo:</b> #{@t_recibo.id}
+      <b>Número Factura:</b> #{@t_factura.id}
       <b>Estado:</b> #{(@t_recibo.pago_pendiente <= 0) ? 'Pagado' : 'Sin Pagar'}
       <b>Fecha:</b> #{@t_recibo.created_at.strftime('%d/%m/%Y %I:%M:%S %p')}
       ", inline_format: true, at: [5, cursor], :align => :justify
     end
+
 
     big_table_for_5_with_widths_and_alignment(
       bold("Cantidad"), 
@@ -345,7 +360,17 @@ class TReciboPdf < PdfHelper
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
       bold("Saldo Pendiente:"),
-      bold("#{@t_factura.pendiente_total}"),
+      bold("#{@t_factura.pendiente_total.round(2)}"),
+      110, 110, 20, :center)
+
+    table_for_2_with_widths_and_height_and_alignment_to_the_right(
+      bold("Monto Acreditado:"),
+      bold("#{(@t_factura.monto_pendiente_para_pdf - @t_recibo.pago_recibido).round(2).abs}"),
+      110, 110, 20, :center)
+    
+    table_for_2_with_widths_and_height_and_alignment_to_the_right(
+      bold("Crédito Total:"),
+      bold("#{@t_factura.t_nota_creditos.any? ? @t_factura.t_nota_creditos.sum(:monto).round(2) : @t_factura.t_resolucion.t_cliente.t_nota_creditos.sum(:monto).round(2)}"),
       110, 110, 20, :center)
 
     stroke do
@@ -361,7 +386,6 @@ class TReciboPdf < PdfHelper
         
         <b>IMPORTANTE:</b> Verifique que el nombre en el presente recibo haya sido escrito de la forma correcta. En caso de una devolución, la misma se realizará a nombre de quien aparece en este recibo de pago.", inline_format: true, at: [5, cursor], :align => :justify
     end
-
 
     text_box "Recibido por _____________________________", at: [350,cursor + 70], inline_format: true
 
@@ -402,21 +426,25 @@ class TReciboPdf < PdfHelper
     
       poly_name = "#{@t_persona.try(:nombre)} #{@t_persona.try(:apellido)} #{@t_empresa.try(:razon_social)}"
 
-      text_box "<b>Cliente:</b> #{@t_cliente.codigo}
+      text_box "<b>Número de Cliente:</b> #{@t_cliente.id}
+      <b>Código de Cliente:</b> #{@t_cliente.codigo}
       <b>Nombre:</b> #{poly_name.strip!}
       ", inline_format: true, at: [5, cursor], :align => :justify
     end
 
     bounding_box([185, 644], :width => 165, :height => 40) do
       # stroke_bounds
-      text_box "<b>Referencia:</b>
-      <b>CIP/RUC:</b> #{@t_empresa.try(:rif)}#{@t_persona.try(:cedula)}
+      text_box "<b>CIP/RUC:</b> #{@t_empresa.try(:rif)}#{@t_persona.try(:cedula)}
+      <b>Resolucion:</b> #{@t_factura.t_resolucion.nil? ? "No posee resolucion" : @t_factura.t_resolucion.resolucion}
       ", inline_format: true, at: [5, cursor], :align => :justify
+
     end
+
 
     bounding_box([370, 644], :width => 165, :height => 40) do
       # stroke_bounds
-      text_box "<b>Recibo:</b> #{@t_recibo.id}
+      text_box "<b>Número Recibo:</b> #{@t_recibo.id}
+      <b>Número Factura:</b> #{@t_factura.id}
       <b>Estado:</b> #{(@t_recibo.pago_pendiente <= 0) ? 'Pagado' : 'Sin Pagar'}
       <b>Fecha:</b> #{@t_recibo.created_at.strftime('%d/%m/%Y %I:%M:%S %p')}
       ", inline_format: true, at: [5, cursor], :align => :justify
@@ -449,10 +477,7 @@ class TReciboPdf < PdfHelper
         "#{r.tasa * @t_factura.calculate_services_total_price}", 
         "",
         45, 130, 240, 70, :center)
-    end    
-    #######
-    #Loop here plz
-    #######
+    end  
 
     move_down 30
 
@@ -488,7 +513,17 @@ class TReciboPdf < PdfHelper
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
       bold("Saldo Pendiente:"),
-      bold("#{@t_factura.pendiente_total}"),
+      bold("#{@t_factura.pendiente_total.round(2)}"),
+      110, 110, 20, :center)
+
+    table_for_2_with_widths_and_height_and_alignment_to_the_right(
+      bold("Monto Acreditado:"),
+      bold("#{(@t_factura.monto_pendiente_para_pdf - @t_recibo.pago_recibido).round(2).abs}"),
+      110, 110, 20, :center)
+    
+    table_for_2_with_widths_and_height_and_alignment_to_the_right(
+      bold("Crédito Total:"),
+      bold("#{@t_factura.t_nota_creditos.any? ? @t_factura.t_nota_creditos.sum(:monto).round(2) : @t_factura.t_resolucion.t_cliente.t_nota_creditos.sum(:monto).round(2)}"),
       110, 110, 20, :center)
 
     stroke do
@@ -497,6 +532,7 @@ class TReciboPdf < PdfHelper
     end
 
     move_down 20
+
     bounding_box([0, cursor], :width => bounds.width, :height => 70) do
         # stroke_bounds
         text_box "<b>Cajero(a):</b> #{@current_user.nombre} #{@current_user.apellido}                                                                                                                                 

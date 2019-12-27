@@ -18,7 +18,7 @@
           <h3 class="col-sm-4">Facturas y Recibos Registrados</h3>
 
           <div class="col-md-1">            
-            <a id="btn-paz-y-saldo" target="_blank" href="#" class="fa fa-download btn btn-primary hide" style="position: relative;z-index: 1;">Generar Paz y Salvo</a>
+            <a id="btn-paz-y-saldo" target="_blank" href="#" class="fa fa-download btn btn-primary" style="position: relative;z-index: 1;">Generar Paz y Salvo</a>
           </div>
           <div class="col-sm-4 col-form-label">
             <%= label_tag("Resolución:", nil, class: "text-right") %>
@@ -80,12 +80,8 @@
         })
           .done(function (data) {
             if (data.procesado) {
-              if (data.mostrar_paz_y_salvo) {
-                $("#btn-paz-y-saldo").removeClass("hide")
-              } else {
-                $("#btn-paz-y-saldo").addClass("hide")
-              }
-              $("#btn-paz-y-saldo").attr("href", "/clientes/"+data.cliente_id+"/generar_pdf.pdf?client_code="+data.cliente_codigo)
+              
+              $("#btn-paz-y-saldo").attr("href", "/clientes/"+data.cliente_id+"/generar_pdf.pdf?resolution_id="+$('#select-cliente-resolucion').val())
               footer.empty().append($("<tr />")
                 .append($("<td />"))
                 .append($("<td />"))

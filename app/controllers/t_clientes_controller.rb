@@ -487,9 +487,11 @@ class TClientesController < ApplicationController
   end
 
   def generar_pdf
+    
     current_user_full_name = "#{current_user.nombre} #{current_user.apellido}" 
-    @t_cliente = TCliente.find_by_codigo(params[:client_code])
-    pdf = TEstadoCuentaPdf.new(@t_cliente, current_user_full_name)
+    @t_resolucion = TResolucion.find(params[:resolution_id])
+    @t_cliente = @t_resolucion.t_cliente
+    pdf = TEstadoCuentaPdf.new(@t_cliente, @t_resolucion, current_user_full_name)
     send_data(
       pdf.render,
       filename: "estado_cuenta.pdf",
