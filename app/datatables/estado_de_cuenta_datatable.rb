@@ -25,10 +25,10 @@ class EstadoDeCuentaDatatable < ApplicationDatatable
         t_presupuesto: record[:cuenta],
         servicio_nombre: record[:nombre],
         servicio_descripcion: record[:descripcion],
-        total_factura: record.total_factura,
-        debito: record[:pago_recibido],
-        credito: record[:monto_acreditado],
-        saldo: record[:pago_pendiente],
+        total_factura: number_to_balboa(record.total_factura, false),
+        debito: number_to_balboa(record[:pago_recibido], false),
+        credito: number_to_balboa(record[:monto_acreditado], false),
+        saldo: number_to_balboa(record[:pago_pendiente], false),
         DT_RowId: url_for({
           id: record.id, controller: 't_facturas', action: 'preview', only_path: true
         })

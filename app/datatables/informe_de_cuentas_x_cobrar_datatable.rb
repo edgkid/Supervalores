@@ -19,12 +19,12 @@ class InformeDeCuentasXCobrarDatatable < ApplicationDatatable
         descripcion: record.descripcion,
         cantidad_clientes: record.cantidad_clientes,
         cantidad_facturas: record.cantidad_facturas,
-        dias_0_30: record.dias_0_30.truncate(2),
-        dias_31_60: record.dias_31_60.truncate(2),
-        dias_61_90: record.dias_61_90.truncate(2),
-        dias_91_120: record.dias_91_120.truncate(2),
-        dias_mas_de_120: record.dias_mas_de_120.truncate(2),
-        total: record.total.truncate(2),
+        dias_0_30: number_to_balboa(record.dias_0_30.truncate(2), false),
+        dias_31_60: number_to_balboa(record.dias_31_60.truncate(2), false),
+        dias_61_90: number_to_balboa(record.dias_61_90.truncate(2), false),
+        dias_91_120: number_to_balboa(record.dias_91_120.truncate(2), false),
+        dias_mas_de_120: number_to_balboa(record.dias_mas_de_120.truncate(2), false),
+        total: number_to_balboa(record.total.truncate(2), false),
         DT_RowId: url_for({
           id: record.id, controller: 't_tipo_clientes', action: 'clients_index', only_path: true
         })

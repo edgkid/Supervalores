@@ -35,8 +35,8 @@ class TCajaController < ApplicationController
     pagado = dataTable.get_raw_records.sum("COALESCE(t_recibos.pago_recibido, 0)")
     results = {
       procesado: true,
-      total: total,
-      pagado: pagado
+      total: view_context.number_to_balboa(total, false),
+      pagado: view_context.number_to_balboa(pagado, false)
     }
     render json: results
   end

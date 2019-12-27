@@ -18,9 +18,9 @@ class TReciboDatatable < ApplicationDatatable
         fecha_pago: record.fecha_pago,
         forma_pago: record.forma_pago,
         razon_social: record.razon_social,
-        pago_recibido: record.pago_recibido,
-        pago_pendiente: record.pago_pendiente,
-        monto_acreditado: record.monto_acreditado,
+        pago_recibido: number_to_balboa(record.pago_recibido, false),
+        pago_pendiente: number_to_balboa(record.pago_pendiente, false),
+        monto_acreditado: number_to_balboa(record.monto_acreditado, false),
         DT_RowId: url_with_or_without_parent_resource_for(
           TFactura.find(record.t_factura_id), TRecibo.find(record.id)
         )

@@ -24,7 +24,7 @@ class InformeDeRecaudacionDatatable < ApplicationDatatable
         fecha_notificacion: record.fecha_notificacion.strftime('%d/%m/%Y'),
         forma_pago: record.forma_pago,
         estado: record.estado,
-        total_factura: record.total_factura,
+        total_factura: number_to_balboa(record.total_factura, false),
         DT_RowId: url_for({
           id: record.id, controller: 't_facturas', action: 'preview', only_path: true
         })

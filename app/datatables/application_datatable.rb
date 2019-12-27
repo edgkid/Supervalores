@@ -1,6 +1,7 @@
 class ApplicationDatatable < AjaxDatatablesRails::ActiveRecord
   extend Forwardable
   def_delegator :@view, :url_for
+  def_delegator :@view, :number_to_balboa
 
   def initialize(params, opts = {})
     @view = opts[:view_context]

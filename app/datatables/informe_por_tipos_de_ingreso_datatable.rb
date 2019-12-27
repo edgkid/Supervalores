@@ -22,7 +22,7 @@ class InformePorTiposDeIngresoDatatable < ApplicationDatatable
         cliente: record.razon_social,
         metodo_pago: record.forma_pago,
         estado: record.estado,
-        importe: record.total_factura.truncate(2),
+        importe: number_to_balboa(record.total_factura.truncate(2), false),
         DT_RowId: url_with_or_without_parent_resource_for(
           TFactura.find(record.id), TRecibo.find(record.t_recibo_id)
         )

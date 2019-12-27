@@ -24,19 +24,19 @@ class InformeDeIngresosPresupuestoDatatable < ApplicationDatatable
       {
         codigo: record.codigo,
         anio_pago: record.anio_pago.to_i,
-        pago_enero: record.pago_enero || 0,
-        pago_febrero: record.pago_febrero || 0,
-        pago_marzo: record.pago_marzo || 0,
-        pago_abril: record.pago_abril || 0,
-        pago_mayo: record.pago_mayo || 0,
-        pago_junio: record.pago_junio || 0,
-        pago_julio: record.pago_julio || 0,
-        pago_agosto: record.pago_agosto || 0,
-        pago_septiembre: record.pago_septiembre || 0,
-        pago_octubre: record.pago_octubre || 0,
-        pago_noviembre: record.pago_noviembre || 0,
-        pago_diciembre: record.pago_diciembre || 0,
-        total: record.total
+        pago_enero: number_to_balboa(record.pago_enero || 0, false),
+        pago_febrero: number_to_balboa(record.pago_febrero || 0, false),
+        pago_marzo: number_to_balboa(record.pago_marzo || 0, false),
+        pago_abril: number_to_balboa(record.pago_abril || 0, false),
+        pago_mayo: number_to_balboa(record.pago_mayo || 0, false),
+        pago_junio: number_to_balboa(record.pago_junio || 0, false),
+        pago_julio: number_to_balboa(record.pago_julio || 0, false),
+        pago_agosto: number_to_balboa(record.pago_agosto || 0, false),
+        pago_septiembre: number_to_balboa(record.pago_septiembre || 0, false),
+        pago_octubre: number_to_balboa(record.pago_octubre || 0, false),
+        pago_noviembre: number_to_balboa(record.pago_noviembre || 0, false),
+        pago_diciembre: number_to_balboa(record.pago_diciembre || 0, false),
+        total: number_to_balboa(record.total, false)
       }
     end
   end

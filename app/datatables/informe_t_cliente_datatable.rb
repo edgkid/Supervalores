@@ -20,7 +20,7 @@ class InformeTClienteDatatable < ApplicationDatatable
         fecha_notificacion: record.fecha_notificacion,
         fecha_vencimiento: record.fecha_vencimiento,
         recargo: record.recargo,
-        total_factura: record.total_factura,
+        total_factura: number_to_balboa(record.total_factura),
         DT_RowId: url_for({
           id: record.t_factura_id, controller: 't_facturas', action: 'preview', only_path: true
         })

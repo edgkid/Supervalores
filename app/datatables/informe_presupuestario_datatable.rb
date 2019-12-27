@@ -12,7 +12,7 @@ class InformePresupuestarioDatatable < ApplicationDatatable
       {
         codigo: record.try(:codigo),
         descripcion: record.try(:descripcion),
-        pago_pendiente: record.pago_pendiente.truncate(2)
+        pago_pendiente: number_to_balboa(record.pago_pendiente.truncate(2), false)
       }
     end
   end

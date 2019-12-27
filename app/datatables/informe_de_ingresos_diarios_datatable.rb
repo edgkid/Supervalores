@@ -24,7 +24,7 @@ class InformeDeIngresosDiariosDatatable < ApplicationDatatable
         razon_social: record.razon_social,
         tipo_cliente: record.tipo_cliente,
         detalle: record.justificacion,
-        monto: record.pago_recibido.truncate(2),
+        monto: number_to_balboa(record.pago_recibido.truncate(2), false),
         DT_RowId: url_with_or_without_parent_resource_for(
           TFactura.find(record.t_factura_id), TRecibo.find(record.id)
         )

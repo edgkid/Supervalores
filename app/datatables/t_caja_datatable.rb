@@ -23,8 +23,8 @@ class TCajaDatatable < ApplicationDatatable
         t_cliente: t_empresa.try(:razon_social) || t_persona.try(:nombre_completo) || t_otro.try(:razon_social),
         t_resolucion: record.t_factura.t_resolucion.resolucion,
         fecha_pago: record.fecha_pago,
-        pago_pendiente: record.pago_pendiente.truncate(2),
-        pago_recibido: record.pago_recibido.truncate(2),
+        pago_pendiente: number_to_balboa(record.pago_pendiente.truncate(2), false),
+        pago_recibido: number_to_balboa(record.pago_recibido.truncate(2), false),
         user: record.user.nombre_completo,
         DT_RowId: url_for([record.t_factura, record])
       }

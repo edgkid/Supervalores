@@ -215,7 +215,7 @@ class TFacturasController < ApplicationController
       procesado: true,
       total: total
     }
-    render json: results
+    render json: view_context.number_to_balboa(total, false)
   end
 
   def informe_recaudacion
@@ -268,7 +268,7 @@ class TFacturasController < ApplicationController
     total = t_facturas.where("razon_social ILIKE ?", "%#{params[:razon_social]}%").sum(:total_factura).truncate(2)
     results = {
       procesado: true,
-      total: total
+      total: view_context.number_to_balboa(total, false)
     }
 
     render json: results
@@ -346,7 +346,7 @@ class TFacturasController < ApplicationController
       }),
       view_context: view_context
     )
-    total = dataTable.get_raw_records.sum(:total).truncate(2)
+    total = view_context.number_to_balboa(dataTable.get_raw_records.sum(:total).truncate(2), false)
     results = {
       procesado: true,
       total: total
@@ -430,9 +430,9 @@ class TFacturasController < ApplicationController
     saldo = dataTable.get_raw_records.sum(:pago_pendiente).truncate(2)
     results = {
       procesado: true,
-      debito: debito,
-      credito: credito,
-      saldo: saldo
+      debito: view_context.number_to_balboa(debito, false),
+      credito: view_context.number_to_balboa(credito, false),
+      saldo: view_context.number_to_balboa(saldo, false)
     }
     render json: results
   end
