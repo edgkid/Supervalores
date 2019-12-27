@@ -374,6 +374,72 @@ class TFacturasController < ApplicationController
     end
   end
 
+  def estado_de_cuenta
+    @usar_dataTables = true
+    @useDataTableFooter = true
+    @do_not_use_plain_select2 = true
+    @no_cache = true
+
+    @attributes_to_display = [
+      :fecha_notificacion, :fecha_vencimiento, :t_factura_id, :t_recibo_id,
+      :t_presupuesto, :servicio_nombre, :servicio_descripcion, :debito,
+      :credito, :saldo
+    ]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: EstadoDeCuentaDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+
+  def filtrar_estado_de_cuenta
+    dataTable = EstadoDeCuentaDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    debito = dataTable.get_raw_records.sum(:pago_recibido).truncate(2)
+    credito = dataTable.get_raw_records.sum(:monto_acreditado).truncate(2)
+    saldo = dataTable.get_raw_records.sum(:pago_pendiente).truncate(2)
+    results = {
+      procesado: true,
+      debito: debito,
+      credito: credito,
+      saldo: saldo
+    }
+    render json: results
+  end
+
+  def mostrar_datos_del_cliente
+    t_clientes = TCliente
+      .select(:id, :codigo, "
+        res.resolucion,
+        COALESCE(e.rif, o.identificacion, p.cedula) ide,
+        COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido)) rs,
+        COALESCE(e.direccion_empresa, p.direccion) direccion,
+        COALESCE(e.telefono, p.telefono, o.telefono) telefono,
+        COALESCE(e.email, p.email, o.email) email")
+      .joins("
+        LEFT OUTER JOIN t_empresas e ON e.id = t_clientes.persona_id AND t_clientes.persona_type = 'TEmpresa'
+        LEFT OUTER JOIN t_personas p ON p.id = t_clientes.persona_id AND t_clientes.persona_type = 'TPersona'
+        LEFT OUTER JOIN t_otros    o ON o.id = t_clientes.persona_id AND t_clientes.persona_type = 'TOtro'
+        LEFT OUTER JOIN t_resolucions res ON res.t_cliente_id = t_clientes.id")
+    if params[:attribute] == 'select-cliente'
+      @t_cliente = t_clientes.find_by(id: params[:t_cliente_id])
+    elsif params[:attribute] == 'select-codigo'
+      @t_cliente = t_clientes.find_by(codigo: params[:codigo])
+    elsif params[:attribute] == 'select-cedula'
+      @t_cliente = t_clientes
+        .where("COALESCE(e.rif, o.identificacion, p.cedula) = ?", params[:identificacion]).take
+    end
+  end
+
   private
 
     def t_factura_params
