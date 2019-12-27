@@ -239,17 +239,36 @@ class TFacturasController < ApplicationController
   end
 
   def recaudacion_total
-    dataTable = InformeDeRecaudacionDatatable.new(
-      params.merge({
-        attributes_to_display: @attributes_to_display
-      }),
-      view_context: view_context
-    )
-    total = dataTable.get_raw_records.sum(:total_factura).truncate(2)
+    t_facturas =
+      if !params[:day].blank?
+        InformeDeRecaudacionView.where(fecha_notificacion: params[:day])
+      elsif !params[:ztart].blank? && !params[:end].blank?
+        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?', params[:ztart], params[:end])
+      elsif !params[:month_year].blank?
+        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?',
+          params[:month_year], params[:month_year].to_date.at_end_of_month.strftime('%d/%m/%Y'))
+      elsif !params[:bimonthly].blank?
+        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?',
+          params[:bimonthly], (params[:bimonthly].to_date + 1.month).at_end_of_month.strftime('%d/%m/%Y'))
+      elsif !params[:quarterly].blank?
+        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?',
+          params[:quarterly], (params[:quarterly].to_date + 2.months).at_end_of_month.strftime('%d/%m/%Y'))
+      elsif !params[:biannual].blank?
+        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?',
+          params[:biannual], (params[:biannual].to_date + 5.months).at_end_of_month.strftime('%d/%m/%Y'))
+      elsif !params[:year].blank?
+        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?',
+          params[:year], params[:year].to_date.at_end_of_year.strftime('%d/%m/%Y'))
+      else
+        InformeDeRecaudacionView.all
+      end
+
+    total = t_facturas.where("razon_social ILIKE ?", "%#{params[:razon_social]}%").sum(:total_factura).truncate(2)
     results = {
       procesado: true,
       total: total
     }
+
     render json: results
   end
 

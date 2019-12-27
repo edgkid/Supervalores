@@ -311,7 +311,7 @@ class TRecibosController < ApplicationController
 
     def set_necessary_objects
       @t_recibos = @t_factura.t_recibos
-      @t_nota_creditos = @t_factura.t_nota_creditos.any? ? @t_factura.t_nota_creditos : @t_factura.t_resolucion.t_cliente.t_nota_creditos
+      @t_nota_creditos = @t_factura.t_nota_creditos.any? ? @t_factura.t_nota_creditos : @t_factura.t_resolucion.try(:t_cliente).try(:t_nota_creditos) || @t_factura.t_cliente.try(:t_nota_creditos)
       # @t_nota_creditos = @t_factura.t_nota_creditos
       # @pending_payment = @t_factura.pendiente_total.truncate(2)
       if @t_factura.t_recibos.any?
