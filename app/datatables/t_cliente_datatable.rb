@@ -33,6 +33,6 @@ class TClienteDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    ViewClient.all.order(created_at: :desc)
+    ViewClient.where(estatus: 'Disponible').order(created_at: :desc)
   end
 end

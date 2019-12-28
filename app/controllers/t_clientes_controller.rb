@@ -374,13 +374,15 @@ class TClientesController < ApplicationController
 
   def find_by_codigo
     search = parametros_de_busqueda[:search]
-    respond_with ViewClient.where('codigo ILIKE ?', "%#{search}%").first(15)
+    respond_with ViewClient.where('codigo ILIKE ?', "%#{search}%")
+      .where(estatus: 'Disponible').first(50)
   end
 
   def find_by_cedula
     search = parametros_de_busqueda[:search]
 
-    personas = ViewClient.where('identificacion ILIKE ?', "%#{search}%").first(50)
+    personas = ViewClient.where('identificacion ILIKE ?', "%#{search}%")
+      .where(estatus: 'Disponible').first(50)
     
     respond_with personas
     # respond_with TCliente.where('razon_social LIKE ?', "%#{search}%").first(10)
@@ -388,13 +390,15 @@ class TClientesController < ApplicationController
 
   def find_by_resolucion
     search = parametros_de_busqueda[:search]
-    respond_with TResolucion.where('resolucion ILIKE ?', "%#{search}%").first(50)
+    respond_with TResolucion.where('resolucion ILIKE ?', "%#{search}%")
+      .where(estatus: 'Disponible').first(50)
   end
 
   def find_by_razon_social
     search = parametros_de_busqueda[:search]
 
-    clientes = ViewClient.where("razon_social ILIKE ?", "%#{search}%").first(50)
+    clientes = ViewClient.where("razon_social ILIKE ?", "%#{search}%")
+      .where(estatus: 'Disponible').first(50)
     respond_with clientes
   end
 
