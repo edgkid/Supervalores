@@ -273,6 +273,7 @@ Rails.application.routes.draw do
   get 'dashboard/access_denied' => 'dashboard#access_denied'
 
   devise_for :users
+  # devise_for :users, controllers: { sessions: 'users/sessions' }
 
   namespace :admin do
     resources :users

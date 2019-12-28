@@ -36,6 +36,7 @@ function getTotal(target, data = '', total = 0) {
       total += Number($(this).data(data));
     }
   });
+  //console.log(`Total: ${total}`);
   return total;
 }
 
@@ -71,8 +72,10 @@ function setSubTotal(thys, isQuantity = true) {
   $(thys).parent().siblings().each(function () {
     if ($(this).hasClass(selfClass)) {
       if (isQuantity) {
-        price = Number($(this).children().first().data('price'));
+        // price = Number($(this).children().first().data('price'));
+        price = $(this).children("input.price").val();
         // alert('price: ' + price);
+        // console.log(price);
       } else {
         quantity = Number($(this).children().first().val());
         // console.log($(this).children().first());
@@ -150,7 +153,7 @@ function setDynamicClientData(inputClass, dynamicData) {
       case 'select-codigo-input':
         // alert($(this).attr('id'));
         // alert(dynamicData.t_cliente.resolucion_id);
-        console.log(dynamicData.t_cliente);
+        // console.log(dynamicData.t_cliente);
         var data = [{ id: dynamicData.t_cliente.codigo_select, text: dynamicData.t_cliente.codigo_select},]
 
         var option = new Option(dynamicData.t_cliente.cedula, dynamicData.t_cliente.cedula, true, true);
