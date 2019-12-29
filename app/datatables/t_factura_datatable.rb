@@ -17,6 +17,8 @@ class TFacturaDatatable < ApplicationDatatable
 
   def data
     records.map do |record|
+      t_factura = find_t_factura(record.id)
+      update_status_to_pending(t_factura) if overdue_invoice?(t_factura) && !paid?(t_factura)
       {
         id: record.id,
         t_cliente: record[:razon_social],
@@ -55,4 +57,22 @@ class TFacturaDatatable < ApplicationDatatable
         COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido))
       ")
   end
+
+  private
+
+    def update_status_to_pending(t_factura)
+      t_factura.update_attribute(:t_estatus_id, TEstatus.find_by(descripcion: 'Pago Pendiente').id)
+    end
+
+    def paid?(t_factura)
+      t_factura.t_estatus.descripcion == 'Cancelada' ? true : false
+    end
+
+    def overdue_invoice?(t_factura)
+      Date.today > t_factura.fecha_vencimiento ? true : false
+    end
+
+    def find_t_factura(t_factura_id)
+      TFactura.find(t_factura_id)
+    end
 end

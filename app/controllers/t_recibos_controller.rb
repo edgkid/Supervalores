@@ -29,6 +29,7 @@ class TRecibosController < ApplicationController
         t_nota_credito.monto_original =  @t_recibo.monto_acreditado
         t_nota_credito.save!
       end
+      @t_recibo.t_factura.update_attribute(:t_estatus_id, TEstatus.find_by(descripcion: 'Cancelada').id) if @t_recibo.pago_pendiente <= 0
       # generar_pdf
       redirect_to new_t_factura_t_recibo_path(@t_factura, show_pdf: true, recibo_id: @t_recibo.id), notice: 'Recibo creado exitosamente'
     else
