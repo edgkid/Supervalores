@@ -37,9 +37,40 @@ class EstadoDeCuentaDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    if params[:t_cliente_id].blank?
+    # t_clientes = TCliente
+    #   .select(:id, :codigo, "
+    #     COALESCE(e.rif, o.identificacion, p.cedula) ide,
+    #     COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido)) rs")
+    #   .joins("
+    #     LEFT OUTER JOIN t_empresas e ON e.id = t_clientes.persona_id AND t_clientes.persona_type = 'TEmpresa'
+    #     LEFT OUTER JOIN t_personas p ON p.id = t_clientes.persona_id AND t_clientes.persona_type = 'TPersona'
+    #     LEFT OUTER JOIN t_otros    o ON o.id = t_clientes.persona_id AND t_clientes.persona_type = 'TOtro'")
+
+    # debugger
+
+    # t_cliente_id = 
+    #   if params[:attribute] == 'select-cliente'
+    #     t_clientes.where("
+    #       COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido)) = ?",
+    #       params[:val]).take.id
+    #   elsif params[:attribute] == 'select-codigo'
+    #     t_clientes.where(codigo: params[:val]).take.id
+    #   elsif params[:attribute] == 'select-cedula'
+    #     t_clientes.where("COALESCE(e.rif, o.identificacion, p.cedula) = ?",
+    #       params[:val]).take.id
+    #   end
+
+    # if !t_cliente_id.blank?
+    #   EstadoDeCuentaView.where('t_cliente_id = ?', t_cliente_id)
+    # else
+    #   EstadoDeCuentaView.all
+    # end
+
+    if params[:t_cliente_id].blank? && params[:t_cliente_id2].blank?
       EstadoDeCuentaView.all
-    else
+    elsif !params[:t_cliente_id2].blank?
+      EstadoDeCuentaView.where('t_cliente_id = ?', params[:t_cliente_id2])
+    elsif !params[:t_cliente_id].blank?
       EstadoDeCuentaView.where('t_cliente_id = ?', params[:t_cliente_id])
     end
   end

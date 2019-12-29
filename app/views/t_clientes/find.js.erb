@@ -63,6 +63,21 @@ switch(attribute) {
     $('#select2-select-cliente-container').text(razon_social);
     $('#select2-select-cliente-container').attr('title', razon_social);
 
+
+    // create the option and append to Select2
+    // var option = new Option(data.full_name, data.id, true, true);
+    // studentSelect.append(option).trigger('change');
+
+    // // manually trigger the `select2:select` event
+    // studentSelect.trigger({
+    //     type: 'select2:select',
+    //     params: {
+    //         data: data
+    //     }
+    // });
+
+
+
     $('#select-codigo-input').val($('#select-codigo').val());
     $('#select-cedula-input').val($('#select2-select-cedula-container').text());
     break;

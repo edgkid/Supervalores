@@ -73,12 +73,17 @@
     $.extend({
       useDataInAjaxCall: function (d) {
         d.t_cliente_id = $('#select-cliente').val();
+        d.t_cliente_id2 = $('#t_cliente_id2').val();
+        // d.attribute = $('#select-cliente').data('attribute');
+        // d.val = $(`#${$('#select-cliente').data('attribute')}`).val();
       },
       useDataTableFooter: function (footer) {
         $.ajax({
           url: "<%= filtrar_estado_de_cuenta_t_facturas_path %>",
           data: {
-            t_cliente_id: $('#select-cliente').val()
+            t_cliente_id: $('#select-cliente').val(),
+            t_cliente_id2: $('#t_cliente_id2').val(),
+            attribute: $('#select-cliente').data('attribute')
           }
         })
         .done(function (data) {
@@ -101,29 +106,10 @@
       }
     });
 
-    // $("#select-cliente-resolucion").select2({
-    //   ajax: {
-    //     url: '<%= "#{get_cliente_saldo_url}" %>',
-    //     dataType: 'json',
-    //     data: function (params) {
-    //       var query = {
-    //         t_cliente_id: $("#t_cliente_id").val()
-    //       }
-    //       return query;
-    //     },
-    //     processResults: function (data) {
-    //       return {
-    //         results: $.map(data, function(resolucion, i) {
-    //           return { id: resolucion[1], text: resolucion[0] } 
-    //         })
-    //       };
-    //     },
-    //     delay: 250
-    //   },
-    //   placeholder: 'Seleccione'
-    // });
-
     $(document).on('change', '.search-client', function () {
+      // console.log($(this).attr('id'));
+      // window.attr = $(this).attr('id');
+      $('#select-cliente').data('attribute', $(this).attr('id'));
       $.ajax({
         url: '<%= mostrar_datos_del_cliente_t_facturas_path %>',
         contentType: "application/json",
@@ -135,6 +121,7 @@
           attribute: $(this).attr('id')
         }
       }).done(function () {
+        console.log($('#select-cliente').data('attribute'));
         refreshTable();
       });
     });
