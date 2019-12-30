@@ -5,7 +5,7 @@ class TFacturasController < ApplicationController
     :pagadas, :informe_recaudacion, :informe_ingresos_diarios, :informe_ingresos_presupuesto,
     :informe_cuentas_x_cobrar, :informe_presupuestario, :informe_por_tipos_de_ingreso,
     :recaudacion_total, :total_pagadas, :total_cuentas_x_cobrar, :estado_de_cuenta,
-    :filtrar_estado_de_cuenta]
+    :filtrar_estado_de_cuenta, :total_por_tipos_de_ingreso]
   before_action :authorize_user_to_read_reports, only: [
     :pagadas, :informe_recaudacion, :informe_ingresos_diarios, :informe_ingresos_presupuesto,
     :informe_cuentas_x_cobrar, :informe_presupuestario, :informe_por_tipos_de_ingreso,
@@ -444,7 +444,7 @@ class TFacturasController < ApplicationController
 
   def informe_por_tipos_de_ingreso
     @usar_dataTables = true
-    # @useDataTableFooter = true
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @no_cache = true
 
@@ -462,6 +462,21 @@ class TFacturasController < ApplicationController
         view_context: view_context)
       }
     end
+  end
+
+  def total_por_tipos_de_ingreso
+    dataTable = InformePorTiposDeIngresoDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    total = dataTable.get_raw_records.sum(:total_factura)
+    results = {
+      procesado: true,
+      total: view_context.number_to_balboa(total, false)
+    }
+    render json: results
   end
 
   def estado_de_cuenta

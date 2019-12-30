@@ -113,6 +113,38 @@
         d.quarterly = $('#quarterly').val();
         d.biannual = $('#biannual').val();
         d.year = $('#year').val();
+      },
+      useDataTableFooter: function (footer) {
+        $.ajax({
+          url: '<%= total_por_tipos_de_ingreso_t_facturas_path %>',
+          contentType: "application/json",
+          type: 'get',
+          data: {
+            // razon_social: $("#ajax-datatable_filter").children("label").children("input").val(),
+            day: $('#day').val(),
+            ztart: $('#start').val(),
+            end: $('#end').val(),
+            month_year: $('#month-year').val(),
+            bimonthly: $('#bimonthly').val(),
+            quarterly: $('#quarterly').val(),
+            biannual: $('#biannual').val(),
+            year: $('#year').val()
+          }
+        })
+        .done(function (data) {
+          if (data.procesado) {
+            footer.empty().append($("<tr />")
+              .append($("<td />").html("<b>Total</b>"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />").html(data.total))
+            )
+          }
+        });
       }
     });
 

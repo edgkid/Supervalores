@@ -314,6 +314,7 @@ Rails.application.routes.draw do
       get 'informe_presupuestario'
       get 'total_presupuestario'
       get 'informe_por_tipos_de_ingreso'
+      get 'total_por_tipos_de_ingreso'
       get 'estado_de_cuenta'
       get 'filtrar_estado_de_cuenta'
       get 'mostrar_datos_del_cliente'
