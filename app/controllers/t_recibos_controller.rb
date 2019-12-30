@@ -5,7 +5,9 @@ class TRecibosController < ApplicationController
   before_action :set_necessary_objects, only: [:new, :create, :show]
 
   load_and_authorize_resource except: [:pago_recibido_total, :generar_pdf,
-    :generar_reporte_pdf]
+    :generar_reporte_pdf, :comparativa_ingresos, :comparativa_ingresos_no_datatables]
+  before_action :authorize_user_to_read_reports, only: [:comparativa_ingresos,
+    :comparativa_ingresos_no_datatables]
 
   def new
     @last_t_recibo = TRecibo.find(params[:recibo_id]) if params[:recibo_id]
@@ -296,6 +298,10 @@ class TRecibosController < ApplicationController
       params.require(:t_recibo).permit(
         :pago_recibido, :justificacion, :num_cheque, :t_metodo_pago_id
       )
+    end
+
+    def authorize_user_to_read_reports
+      authorize! :read_reports, TRecibo
     end
 
     def set_preview_data
