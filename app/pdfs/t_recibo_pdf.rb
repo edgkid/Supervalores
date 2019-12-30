@@ -217,8 +217,10 @@ class TReciboPdf < PdfHelper
     
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
       bold("Crédito Total:"),
-      bold("#{@t_factura.t_nota_creditos.any? ? @t_factura.t_nota_creditos.sum(:monto).round(2) : @t_factura.t_resolucion.t_cliente.t_nota_creditos.sum(:monto).round(2)}"),
+      bold("#{@t_factura.t_nota_creditos.any? ? @t_factura.t_nota_creditos.sum(:monto).round(2) : @t_factura.t_resolucion.nil? ? 0 : @t_factura.t_resolucion.t_cliente.t_nota_creditos.sum(:monto).round(2)}"),
       110, 110, 20, :center)
+
+    
 
     stroke do
       move_down 10
@@ -370,7 +372,7 @@ class TReciboPdf < PdfHelper
     
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
       bold("Crédito Total:"),
-      bold("#{@t_factura.t_nota_creditos.any? ? @t_factura.t_nota_creditos.sum(:monto).round(2) : @t_factura.t_resolucion.t_cliente.t_nota_creditos.sum(:monto).round(2)}"),
+      bold("#{@t_factura.t_nota_creditos.any? ? @t_factura.t_nota_creditos.sum(:monto).round(2) : @t_factura.t_resolucion.nil? ? 0 : @t_factura.t_resolucion.t_cliente.t_nota_creditos.sum(:monto).round(2)}"),
       110, 110, 20, :center)
 
     stroke do
@@ -523,7 +525,7 @@ class TReciboPdf < PdfHelper
     
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
       bold("Crédito Total:"),
-      bold("#{@t_factura.t_nota_creditos.any? ? @t_factura.t_nota_creditos.sum(:monto).round(2) : @t_factura.t_resolucion.t_cliente.t_nota_creditos.sum(:monto).round(2)}"),
+      bold("#{@t_factura.t_nota_creditos.any? ? @t_factura.t_nota_creditos.sum(:monto).round(2) : @t_factura.t_resolucion.nil? ? 0 : @t_factura.t_resolucion.t_cliente.t_nota_creditos.sum(:monto).round(2)}"),
       110, 110, 20, :center)
 
     stroke do
