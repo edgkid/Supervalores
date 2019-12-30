@@ -186,6 +186,7 @@ class TFacturasController < ApplicationController
 
   def pagadas
     @usar_dataTables = true
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @no_cache = true
 
@@ -212,12 +213,12 @@ class TFacturasController < ApplicationController
       }),
       view_context: view_context
     )
-    total = dataTable.get_raw_records.count
+    total = dataTable.get_raw_records.sum(:total_factura)
     results = {
       procesado: true,
-      total: total
+      total: view_context.number_to_balboa(total, false)
     }
-    render json: view_context.number_to_balboa(total, false)
+    render json: results
   end
 
   def informe_recaudacion
@@ -278,6 +279,7 @@ class TFacturasController < ApplicationController
 
   def informe_ingresos_diarios
     @usar_dataTables = true
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @no_cache = true
 
@@ -297,8 +299,24 @@ class TFacturasController < ApplicationController
     end
   end
 
+  def total_ingresos_diarios
+    dataTable = InformeDeIngresosDiariosDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    total = dataTable.get_raw_records.sum(:pago_recibido)
+    results = {
+      procesado: true,
+      total: view_context.number_to_balboa(total, false)
+    }
+    render json: results
+  end
+
   def informe_ingresos_presupuesto
     @usar_dataTables = true
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @no_cache = true
 
@@ -317,6 +335,33 @@ class TFacturasController < ApplicationController
         view_context: view_context)
       }
     end
+  end
+
+  def total_ingresos_presupuesto
+    dataTable = InformeDeIngresosPresupuestoDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    raw_records = dataTable.get_raw_records
+    results = {
+      procesado: true,
+      total_enero: view_context.number_to_balboa(raw_records.sum(:pago_enero), false),
+      total_febrero: view_context.number_to_balboa(raw_records.sum(:pago_febrero), false),
+      total_marzo: view_context.number_to_balboa(raw_records.sum(:pago_marzo), false),
+      total_abril: view_context.number_to_balboa(raw_records.sum(:pago_abril), false),
+      total_mayo: view_context.number_to_balboa(raw_records.sum(:pago_mayo), false),
+      total_junio: view_context.number_to_balboa(raw_records.sum(:pago_junio), false),
+      total_julio: view_context.number_to_balboa(raw_records.sum(:pago_julio), false),
+      total_agosto: view_context.number_to_balboa(raw_records.sum(:pago_agosto), false),
+      total_septiembre: view_context.number_to_balboa(raw_records.sum(:pago_septiembre), false),
+      total_octubre: view_context.number_to_balboa(raw_records.sum(:pago_octubre), false),
+      total_noviembre: view_context.number_to_balboa(raw_records.sum(:pago_noviembre), false),
+      total_diciembre: view_context.number_to_balboa(raw_records.sum(:pago_diciembre), false),
+      gran_total: view_context.number_to_balboa(raw_records.sum(:total), false)
+    }
+    render json: results
   end
 
   def informe_cuentas_x_cobrar
@@ -365,7 +410,7 @@ class TFacturasController < ApplicationController
 
   def informe_presupuestario
     @usar_dataTables = true
-    # @useDataTableFooter = true
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @no_cache = true
 
@@ -380,6 +425,21 @@ class TFacturasController < ApplicationController
         view_context: view_context)
       }
     end
+  end
+
+  def total_presupuestario
+    dataTable = InformePresupuestarioDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    total = dataTable.get_raw_records.sum(&:pago_pendiente)
+    results = {
+      procesado: true,
+      total: view_context.number_to_balboa(total, false)
+    }
+    render json: results
   end
 
   def informe_por_tipos_de_ingreso

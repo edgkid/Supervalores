@@ -71,10 +71,10 @@
         .done(function (data) {
           if (data.procesado) {
             footer.empty().append($("<tr />")
+              .append($("<td />").html("<b>Total</b>"))
               .append($("<td />"))
               .append($("<td />"))
               .append($("<td />"))
-              .append($("<td />").html("Total"))
               .append($("<td />").html(data.total))
               .append($("<td />").html(data.pagado))
               .append($("<td />"))
