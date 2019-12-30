@@ -341,7 +341,11 @@ Rails.application.routes.draw do
   get 'get_cliente_saldo' => 't_resolucions#cliente_saldo'
   
   resources :t_tipo_clientes, path: "tipos_de_clientes" do
-    get 'informe', on: :collection
+    collection do
+      get 'informe'
+      get 'total_meses'
+      get 'total_facturas'
+    end
     get 'clients_index', on: :member
   end
   resources :t_tipo_personas, path: "tipos_de_personas"

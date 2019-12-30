@@ -129,6 +129,42 @@
         d.quarterly = $('#quarterly').val();
         d.biannual = $('#biannual').val();
         d.year = $('#year').val();
+      },
+      useDataTableFooter: function (footer) {
+        $.ajax({
+          url: "<%= total_meses_t_tipo_clientes_path %>",
+          data: {
+            day: $('#day').val(),
+            ztart: $('#start').val(),
+            end: $('#end').val(),
+            month_year: $('#month-year').val(),
+            bimonthly: $('#bimonthly').val(),
+            quarterly: $('#quarterly').val(),
+            biannual: $('#biannual').val(),
+            year: $('#year').val()
+          }
+        })
+        .done(function (data) {
+          if (data.procesado) {
+            footer.empty().append($("<tr />")
+              .append($("<td />").html("<b>Gran Total</b>"))
+              .append($("<td />"))
+              .append($("<td />").html(data.total_enero))
+              .append($("<td />").html(data.total_febrero))
+              .append($("<td />").html(data.total_marzo))
+              .append($("<td />").html(data.total_abril))
+              .append($("<td />").html(data.total_mayo))
+              .append($("<td />").html(data.total_junio))
+              .append($("<td />").html(data.total_julio))
+              .append($("<td />").html(data.total_agosto))
+              .append($("<td />").html(data.total_septiembre))
+              .append($("<td />").html(data.total_octubre))
+              .append($("<td />").html(data.total_noviembre))
+              .append($("<td />").html(data.total_diciembre))
+              .append($("<td />").html(data.gran_total))
+            )
+          }
+        });
       }
     });
 

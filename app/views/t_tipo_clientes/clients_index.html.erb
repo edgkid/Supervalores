@@ -122,6 +122,36 @@
         d.quarterly = $('#quarterly').val();
         d.biannual = $('#biannual').val();
         d.year = $('#year').val();
+      },
+      useDataTableFooter: function (footer) {
+        $.ajax({
+          url: "<%= total_facturas_t_tipo_clientes_path %>",
+          data: {
+            t_tipo_cliente_id: '<%= @t_tipo_cliente.id %>',
+            day: $('#day').val(),
+            ztart: $('#start').val(),
+            end: $('#end').val(),
+            month_year: $('#month-year').val(),
+            bimonthly: $('#bimonthly').val(),
+            quarterly: $('#quarterly').val(),
+            biannual: $('#biannual').val(),
+            year: $('#year').val()
+          }
+        })
+        .done(function (data) {
+          if (data.procesado) {
+            footer.empty()
+              .append($("<tr />")
+              .append($("<td />").html("<b>Gran Total</b>"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />").html(data.total_recargos))
+              .append($("<td />").html(data.total_facturas))
+            )
+          }
+        });
       }
     });
 

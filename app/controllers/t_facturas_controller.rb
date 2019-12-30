@@ -348,10 +348,17 @@ class TFacturasController < ApplicationController
       }),
       view_context: view_context
     )
-    total = view_context.number_to_balboa(dataTable.get_raw_records.sum(:total).truncate(2), false)
+    raw_records = dataTable.get_raw_records
     results = {
       procesado: true,
-      total: total
+      total_clientes: raw_records.sum(:cantidad_clientes),
+      total_facturas: raw_records.sum(:cantidad_facturas),
+      total_0_30: view_context.number_to_balboa(raw_records.sum(:dias_0_30), false),
+      total_31_60: view_context.number_to_balboa(raw_records.sum(:dias_31_60), false),
+      total_61_90: view_context.number_to_balboa(raw_records.sum(:dias_61_90), false),
+      total_91_120: view_context.number_to_balboa(raw_records.sum(:dias_91_120), false),
+      total_dias_mas_de_120: view_context.number_to_balboa(raw_records.sum(:dias_mas_de_120), false),
+      total: view_context.number_to_balboa(raw_records.sum(:total), false)
     }
     render json: results
   end

@@ -4,6 +4,7 @@ class TTipoClientesController < ApplicationController
 
   def informe
     @usar_dataTables = true
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @attributes_to_display = [
       :tipo_cliente, :anio_pago, :pago_enero, :pago_febrero, :pago_marzo,
@@ -22,9 +23,37 @@ class TTipoClientesController < ApplicationController
     end
   end
 
+  def total_meses
+    dataTable = InformeTTipoClienteDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display
+      }),
+      view_context: view_context
+    )
+    raw_records = dataTable.get_raw_records
+    results = {
+      procesado: true,
+      total_enero: view_context.number_to_balboa(raw_records.sum(:pago_enero), false),
+      total_febrero: view_context.number_to_balboa(raw_records.sum(:pago_febrero), false),
+      total_marzo: view_context.number_to_balboa(raw_records.sum(:pago_marzo), false),
+      total_abril: view_context.number_to_balboa(raw_records.sum(:pago_abril), false),
+      total_mayo: view_context.number_to_balboa(raw_records.sum(:pago_mayo), false),
+      total_junio: view_context.number_to_balboa(raw_records.sum(:pago_junio), false),
+      total_julio: view_context.number_to_balboa(raw_records.sum(:pago_julio), false),
+      total_agosto: view_context.number_to_balboa(raw_records.sum(:pago_agosto), false),
+      total_septiembre: view_context.number_to_balboa(raw_records.sum(:pago_septiembre), false),
+      total_octubre: view_context.number_to_balboa(raw_records.sum(:pago_octubre), false),
+      total_noviembre: view_context.number_to_balboa(raw_records.sum(:pago_noviembre), false),
+      total_diciembre: view_context.number_to_balboa(raw_records.sum(:pago_diciembre), false),
+      gran_total: view_context.number_to_balboa(raw_records.sum(:total), false)
+    }
+    render json: results
+  end
+
   def clients_index
     @t_tipo_cliente = TTipoCliente.find(params[:id])
     @usar_dataTables = true
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @attributes_to_display = [
       :identificacion, :razon_social, :resolucion, :fecha_notificacion,
@@ -41,6 +70,24 @@ class TTipoClientesController < ApplicationController
         view_context: view_context)
       }
     end
+  end
+
+  def total_facturas
+    @t_tipo_cliente = TTipoCliente.find(params[:t_tipo_cliente_id])
+    dataTable = InformeTClienteDatatable.new(
+      params.merge({
+        attributes_to_display: @attributes_to_display,
+        t_tipo_cliente_id: @t_tipo_cliente.id
+      }),
+      view_context: view_context
+    )
+    raw_records = dataTable.get_raw_records
+    results = {
+      procesado: true,
+      total_recargos: view_context.number_to_balboa(raw_records.sum(:recargo), false),
+      total_facturas: view_context.number_to_balboa(raw_records.sum(:total_factura), false)
+    }
+    render json: results
   end
 
   def index
