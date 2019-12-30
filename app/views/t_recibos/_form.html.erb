@@ -133,7 +133,7 @@
           <tr>
             <th>Total a pagar:</th>
             <td style="text-align: right;"><%= (@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) >= 0 ? number_to_balboa(@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) : 0 %></td>
-            
+
           </tr>
         </tbody>
       </table>
@@ -291,10 +291,7 @@
                 button_size: "xs"
               %>
             <% end %>
-            <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf'), id: "", target: "_blank", class: 'btn btn-primary' do %>
-              <i class="fa fa-download"></i>
-              Generar Recibo
-            <% end %>
+            
             <% unless @t_recibo.t_nota_creditos.where.not(status: "Usada").count == 0 %>
               <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do %>
                 <i class="fa fa-download">
