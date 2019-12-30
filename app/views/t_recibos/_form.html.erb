@@ -15,6 +15,14 @@
   </div>
 </div>
 
+<% if params[:action] == "new" %>
+  <div align="center" class="row">
+    <div class="col-sm-12">
+      <h3>FACTURA</h3>
+    </div>
+  </div>
+<% end %>
+
 <hr>
 
 <div class="row">
@@ -40,13 +48,140 @@
   </div>
 </div>
 
-<hr>
+
 <% if (@is_show && @t_factura.t_recibos.any?)%>
-  <h3 align="center">RECIBO</h3>
+  <hr>
+    <h3 align="center">RECIBO</h3>
+  <hr>
 <% elsif @t_factura.t_recibos.any?%>
-  <h3 align="center">RECIBOS</h3>
+  <hr>
+    <h3 align="center">RECIBOS</h3>
+  <hr>
 <% end %>
 <hr>
+
+<% if params[:action] == "new"%>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Cantidad</th>
+        <th>Ítem</th>
+        <th>Descripción</th>
+        <!-- <th>Tasa (%)</th> -->
+        <th>Precio Unitario (B/.)</th>
+        <th>Importe (B/.)</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr>
+        <td>1</td>
+        <td><%#= @t_tarifa.nombre %></td>
+        <td><%#= @t_tarifa.descripcion %></td>
+        <td><%#= number_to_balboa(@t_tarifa.monto, false) %></td>
+        <td><%#= number_to_balboa(@t_tarifa.monto, false) %></td>
+      </tr> -->
+      <% @t_factura.t_factura_detalles.each do |fd| %>
+        <tr>
+          <td><%= fd.cantidad %></td>
+          <td><%= fd.t_tarifa_servicio.nombre %></td>
+          <td><%= "#{fd.t_tarifa_servicio.descripcion} | #{fd.t_tarifa_servicio.codigo} | #{fd.cuenta_desc}" %></td>
+          <!-- <td>N/A</td> -->
+          <td><%= number_to_balboa(fd.precio_unitario, false) %></td>
+          <td><%= number_to_balboa(fd.precio_unitario * fd.cantidad, false) %></td>
+           
+        </tr>
+      <% end %>
+
+      <% @t_factura.t_recargo_facturas.each do |r| %>
+
+        <tr>
+          <td><%= r.cantidad %></td>
+          <td>Recargo</td>
+          <td><%= r.t_recargo.descripcion %></td>
+          <!-- <td><%#= r.precio_unitario * 100 %></td> -->
+          <td><%= number_to_balboa(r.precio_unitario * @t_factura.calculate_services_total_price, false) %></td>
+          <td><%= number_to_balboa(r.precio_unitario * r.cantidad * @t_factura.calculate_services_total_price, false) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div align="justify" class="card-body card-header">
+          <p class="card-text">
+            Mediante la ley 67 de 1 de septiembre de 2011 publicada en la Gaceta Oficial No. 26863-A de 2 de septiembre de 2011, se crea la Superintendencia del Mercado de Valores como un organismo autónomo del Estado, con personería jurídica, patrimonio propio e independencia administrativa, presupuestaria y financiera, con competencia privativa para regular y supervisar a los emisores, sociedades de inversiones, intermediarios y demás participantes del mercados de valores.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <h2 style="margin-top: 0;">Importe Debido</h2>
+      <table class="table">
+        <tbody>
+          <tr>
+            <th>Últimos pagos:</th>
+            <td style="text-align: right;"><%= number_to_balboa(@t_factura.t_recibos.sum(:pago_recibido)) %></td>
+          </tr>
+          <tr>
+            <th>Total de items:</th>
+            <td style="text-align: right;"><%= number_to_balboa(@t_factura.t_factura_detalles.sum(:precio_unitario)) %></td>
+          </tr>
+          <tr>
+            <th>Total a pagar:</th>
+            <td style="text-align: right;"><%= (@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) >= 0 ? number_to_balboa(@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) : 0 %></td>
+            
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div align="center" class="col-sm-12">
+      <%= link_to new_t_factura_path, class: 'btn btn-default' do %>
+        <i class="fa fa-credit-card"></i>
+        Crear Otra
+      <% end %>
+      <%= link_to edit_t_factura_path(@t_factura), class: 'btn btn-warning' do %>
+        <i class="fa fa-edit"></i>
+        Editar Factura
+      <% end %>
+
+      <% if can? :destroy, TFactura %>
+        <%= link_to @t_factura, method: :delete, data: { confirm: '¿Está seguro de querer eliminar esta factura?' }, class: 'btn btn-danger' do %>
+          <i class="fa fa-trash"></i>
+          Eliminar Factura
+        <% end %>
+      <% end %>
+
+      <% if can? :send_email, TFactura %>
+        <button type="button" class="btn btn-info"><i class="fa fa-envelope"></i> Enviar al Correo</button>
+      <% end %>
+      
+      <% if can? :generate_pdf, TFactura %>
+        <%= link_to generar_pdf_t_factura_path(@t_factura, format:'pdf'), target: "_blank", class: 'btn btn-primary' do %>
+          <i class="fa fa-download"></i>
+          Generar PDF
+        <% end %>
+      <% end %>
+
+      <% if can? :create, TRecibo %>
+        <%= link_to new_t_factura_t_recibo_path(@t_factura), class: 'btn btn-success' do %>
+          <i class="fa fa-credit-card"></i>
+          Realizar Recibo
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <br>
+<% end %>  
 
 <%= render 't_recibos' if !@is_show && @t_recibos.any? %>
 <% if !@is_show && @t_nota_creditos.any? %>

@@ -3,6 +3,7 @@
     <tr>
       <th>#</th>
       <th>Recibo</th>
+      <th>Estatus</th>
       <th>Monto</th>
     </tr>
   </thead>
@@ -11,6 +12,7 @@
       <tr>
         <td><%= t_nota_credito.id %></td>
         <td><%= t_nota_credito.t_recibo_id %></td>
+        <td><%= t_nota_credito.status %></td>
         <td><%=number_to_balboa(t_nota_credito.monto) %></td>
       </tr>
     <% end %>
