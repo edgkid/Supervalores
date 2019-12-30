@@ -8,6 +8,7 @@ class TClientesController < ApplicationController
   before_action :usar_dataTables_en, only: [:index, :show, :edit, :estado_cuenta, :nueva_resolucion]
   before_action :dataTables_resolucion, only: [:show, :edit, :nueva_resolucion]
   before_action :seleccionar_resolucion, only: [:mostrar_resolucion]
+  before_action :authorize_user_to_read_reports, only: [:tramites]
   # before_action :clients_with_resolutions, only: :find_by_codigo
   # before_action :companies_with_clients_with_resolutions, only: :find_by_cedula
 
@@ -582,6 +583,10 @@ class TClientesController < ApplicationController
         :descripcion,
         :created_at,
       ]
+    end
+
+    def authorize_user_to_read_reports
+      authorize! :read_reports, TCliente
     end
 
     # def clients_with_resolutions

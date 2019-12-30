@@ -1,6 +1,8 @@
 class TTipoClientesController < ApplicationController
   before_action :seleccionar_tipo_cliente, only: [:show, :edit, :update, :destroy]
-  load_and_authorize_resource except: [:clients_index]
+  load_and_authorize_resource except: [:clients_index, :total_meses, :total_facturas,
+    :informe]
+  before_action :authorize_user_to_read_reports, only: [:informe]
 
   def informe
     @usar_dataTables = true
@@ -167,5 +169,9 @@ class TTipoClientesController < ApplicationController
 
     def t_tipo_cliente_params
       params.require(:t_tipo_cliente).permit(:codigo, :descripcion, :t_tipo_cliente_tipo_id, :t_periodo_id, :estatus, :t_tarifa_id)
+    end
+
+    def authorize_user_to_read_reports
+      authorize! :read_reports, TTipoCliente
     end
 end
