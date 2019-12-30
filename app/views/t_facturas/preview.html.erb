@@ -119,7 +119,7 @@
         </tr>
         <tr>
           <th>Total a pagar:</th>
-          <td style="text-align: right;"><%= number_to_balboa(@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) %></td>
+          <td style="text-align: right;"><%= (@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) >= 0 ? number_to_balboa(@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) : 0 %></td>
         </tr>
       </tbody>
     </table>
