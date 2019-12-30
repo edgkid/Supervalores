@@ -13,10 +13,15 @@ class TPermiso < ApplicationRecord
   has_many :t_permiso_modulo_rols, dependent: :destroy
   has_many :t_modulo_rols, through: :t_permiso_modulo_rols
 
-  PERMISOS = [
-    'create',
-    'read',
-    'update',
-    'destroy'
+  PERMISOS = %w[create read update destroy]
+
+  PERMISOS_ESPECIALES = [
+    # Permisos especiales para la factura
+    'generate_pdf',
+    'send_email',
+    # Permiso especial para el recibo
+    'generate_receipt',
+    # Permiso especial para la lectura de reportes
+    'read_reports'
   ]
 end
