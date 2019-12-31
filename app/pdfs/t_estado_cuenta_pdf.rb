@@ -122,9 +122,20 @@ class TEstadoCuentaPdf < PdfHelper
       nombre = @t_cliente.persona.razon_social
       cip_ruc = @t_cliente.persona.rif
     end
+    paz_y_salvo = true
+    
+    @t_resolucion.t_facturas.each do |factura|
+      saldo = (factura.t_recibos.sum(:pago_recibido) - factura.total_factura)
+      if saldo >= 0
+        paz_y_salvo = true
+      else
+        paz_y_salvo = false
+      end
+      break if paz_y_salvo == false
+    end
 
     # debugger
-    text "Nuestro cliente <b>#{nombre}</b> con C.I.P/R.U.C <b>#{cip_ruc}</b> y número de resolución <b>#{@t_resolucion.resolucion}</b>, se mantiene paz y salvo hasta la fecha, con respecto a las cuentas que mantiene en la <b>Superintendencia del Mercado de Valores de la República de Panamá.</b>", inline_format: true
+    text "Nuestro cliente <b>#{nombre}</b> con C.I.P/R.U.C <b>#{cip_ruc}</b> y número de resolución <b>#{@t_resolucion.resolucion}</b>, #{paz_y_salvo ? "" : "no "}se mantiene paz y salvo hasta la fecha, con respecto a las cuentas que mantiene en la <b>Superintendencia del Mercado de Valores de la República de Panamá.</b>", inline_format: true
 
     move_down 15
     text "Dado a los #{DateTime.now.strftime('%d')} dia(s) del mes de #{@meses.first[DateTime.now.strftime('%m').to_i]} de #{DateTime.now.strftime('%Y')}."
