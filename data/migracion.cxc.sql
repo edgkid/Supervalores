@@ -558,81 +558,65 @@ GROUP BY prediction_id, codigo, t_estatus_id, created_at, updated_at, persona_id
 ORDER BY prediction_id;
 
 CREATE MATERIALIZED VIEW resoluciones_normalizadas AS
-SELECT 	
-	  rw.client_id t_cliente_id
-	, rw.resolucion
-	, CONCAT('CxC-', rw.prev_client_id) codigo
-	, rw.prediction_id
-	, ('Resolución de migración ' || rw.original) descripcion
-	, COALESCE(rw.fecha_resolucion, '1971-01-01') created_at
-	, COALESCE(rw.fecha_resolucion, '1971-01-01') updated_at
-	, rw.prev_client_id
-	, 2 t_estatus_id
-	, rw.tipo_client_id t_tipo_cliente_id
-	, rw.num_licencia
-FROM (
+SELECT
+	ctc.*
+FROM (	
 	SELECT 
-		row_number() OVER (ORDER BY 1, 2) AS prediction_id
-		, rns.resolucion
-		, rns.original
-		, rns.client_id
-		, rns.tipo_client_id
-		, rns.fecha_resolucion
-		, rns.num_licencia
-		, rns.prev_client_id
-		FROM (
-			SELECT
-			dt.resolucion
-		, dt.client_id		
-		, dt.original
-		, '' || dt.num_licencia num_licencia
-		, COALESCE(dt.fecha_resolucion, CURRENT_DATE) fecha_resolucion
-		, dt.tipo_client_id
-		, dt.prev_client_id
-		FROM (
-			SELECT
-				ctc.client_id
-				, ctc.resolucion
-				, ctc.num_licencia
-				, ctc.fecha_resolucion
-				, ctc.original
-				, ctc.tipo_client_id
-				, ctc.prev_client_id
-			FROM (	
-				SELECT 
-						cli.client_id
-					, cli.original[ 1 ] as original
-					, cli.num_licencia[ 1 ]
-					, trim(cli.resolucion) resolucion
-					, cli.fecha_resolucion[ 1 ]
-					, CASE WHEN cli.tipo_client_id[1] IS NULL THEN 1 ELSE cli.tipo_client_id[1] END tipo_client_id
-					, s.prev_client_id
-				FROM (
-						SELECT 
-							cns.prediction_id as "client_id"
-							, CASE WHEN ctcs.resolucion = '0' THEN '0 > ' || string_agg(CAST(cns.prev_client_id AS VARCHAR), '|') ELSE ctcs.resolucion END resolucion
-							, array_agg(DISTINCT ttcs.id) tipo_client_id
-							, array_agg(DISTINCT ctcs.resolucion) original
-							, array_agg(DISTINCT ctcs.fecha_resolucion) fecha_resolucion
-							, array_agg(DISTINCT cns.prev_client_id) prev_client_id
-							, array_agg(DISTINCT ctcs.num_licencia) num_licencia														
-						FROM clientes_normalizados cns
-						LEFT JOIN cxc_t_clientes ctcs ON ctcs.idt_clientes = cns.prev_client_id
-						LEFT JOIN cxc_t_tipo_cliente cttc ON ctcs.idt_tipo_cliente = cttc.idt_tipo_cliente
-						LEFT JOIN t_tipo_clientes ttcs on TRIM(UPPER(cttc.descripcion)) = ttcs.descripcion
-						GROUP BY cns.prediction_id, ctcs.resolucion
-				) cli,
-				UNNEST (cli.prev_client_id) s ( prev_client_id )
-			) ctc
-		) dt
-	) rns
-) rw;
+			cli.resolucion
+		, cli.prediction_id
+		, ('' || cli.num_licencias [ 1 ]) num_licencia
+		, cli.tipo_client_ids [ 1 ] t_tipo_cliente_id
+		, cli.originales
+		, CONCAT('CxC-', cli.prediction_id ) codigo
+		, CONCAT('Resolución de migración ', cli.originales) descripcion
+		, COALESCE(cli.fecha_resolucion [ 1 ], '1971-01-01') created_at
+		, COALESCE(cli.fecha_resolucion [ 1 ], '1971-01-01') updated_at	
+		, 2 t_estatus_id
+		, s.prev_client_id
+		, c.client_id t_cliente_id
+	FROM (
+		SELECT
+			CASE WHEN cxccli.resolucion = '0' OR cxccli.resolucion = 'SMV N' THEN
+					cxccli.resolucion || ' > ' || UPPER (TRIM ( cxccli.nombre )) || ' ' || UPPER (
+					TRIM ( cxccli.apellido )) 
+				ELSE TRIM ( cxccli.resolucion ) 
+			END resolucion,
+			ROW_NUMBER () OVER ( ORDER BY 1 ) AS prediction_id,
+			ARRAY_AGG ( DISTINCT cxccli.idt_clientes ) prev_client_ids,
+			ARRAY_AGG ( DISTINCT cns.prediction_id ) client_ids,
+			ARRAY_AGG ( DISTINCT cxccli.num_licencia ) num_licencias,
+			ARRAY_AGG ( DISTINCT cxccli.fecha_resolucion ) fecha_resolucion,
+			ARRAY_AGG ( DISTINCT ttcs.ID ) tipo_client_ids,
+			STRING_AGG ( DISTINCT TRIM ( cxccli.resolucion ), ' | ') originales 
+		FROM
+			cxc_t_clientes cxccli
+			LEFT JOIN clientes_normalizados cns ON cxccli.idt_clientes = cns.prev_client_id
+			LEFT JOIN cxc_t_tipo_cliente cttc ON cxccli.idt_tipo_cliente = cttc.idt_tipo_cliente
+			LEFT JOIN t_tipo_clientes ttcs ON TRIM (
+			UPPER ( cttc.descripcion )) = ttcs.descripcion 
+		GROUP BY 1 
+		) cli,
+		UNNEST ( cli.prev_client_ids ) s ( prev_client_id ),
+		UNNEST ( cli.client_ids ) c (client_id )
+) ctc;
 
 INSERT INTO t_resolucions (resolucion, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia)
-SELECT resolucion, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia
-FROM resoluciones_normalizadas
-GROUP by prediction_id, resolucion, codigo, descripcion, created_at, updated_at, t_cliente_id, t_estatus_id, t_tipo_cliente_id, num_licencia
-ORDER BY prediction_id;
+SELECT 
+  dt.resolucion
+, dt.codigo
+, dt.descripcion
+, dt.created_at
+, dt.updated_at
+, dt.t_cliente_ids [1]
+, dt.t_estatus_id
+, dt.t_tipo_cliente_id
+, dt.num_licencia
+FROM (
+	SELECT resolucion, codigo, descripcion, created_at, updated_at, array_agg(t_cliente_id) t_cliente_ids, t_estatus_id, t_tipo_cliente_id, num_licencia
+	FROM resoluciones_normalizadas
+	GROUP by prediction_id, resolucion, codigo, descripcion, created_at, updated_at, t_estatus_id, t_tipo_cliente_id, num_licencia
+	ORDER BY prediction_id
+) dt;
 
 UPDATE t_clientes 
 	SET prospecto_at = CURRENT_TIMESTAMP

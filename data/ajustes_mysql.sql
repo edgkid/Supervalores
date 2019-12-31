@@ -43,3 +43,42 @@ SELECT cli.idt_clientes, matsh.`ID_CASA_VALOR` AS codigo
 FROM t_clientes cli
 JOIN t_cliente_matsh matsh ON cli.idt_clientes = matsh.idt_clientes
 ON DUPLICATE KEY UPDATE t_clientes.codigo = VALUES(codigo);
+
+UPDATE t_clientes SET apellido = 'ROJAS BERBEY', nombre = 'ROBERTO EDUARDO' WHERE idt_clientes in (1687,2807);
+UPDATE t_clientes SET apellido = '0', nombre = 'PROFUTURO ADM. DE PENSIONES DE FONDOS Y CENSANTIAS, S.A.' WHERE idt_clientes in (116,192);
+UPDATE t_clientes SET apellido = 'MARQUEZ DOMINGUEZ', nombre = 'EILEEN MARIE' WHERE idt_clientes in (1428,2707);
+UPDATE t_clientes SET apellido = 'HERNANDEZ A', nombre = 'JORGE E.' WHERE idt_clientes in (1256,1257);
+UPDATE t_clientes SET apellido = 'D.V. 66', nombre = 'MORENO & MORENO' WHERE idt_clientes in (3325,3330);
+UPDATE t_clientes SET apellido = '0', nombre = 'TEL-PAN COMUNICATIONS' WHERE idt_clientes in (3295,3298);
+UPDATE t_clientes SET apellido = 'DV.4', nombre = 'FORESTAL LLANO GRANDE' WHERE idt_clientes in (3304,3305);
+UPDATE t_clientes SET apellido = 'DV.80', nombre = 'PRIVAL MULTISTRATEGY INCOME AND GROWTH FUND, S.A' WHERE idt_clientes in (225,226,227);
+UPDATE t_clientes SET apellido = 'MOCK CHONG', nombre = 'INGOBERT' WHERE idt_clientes in (1475,2169,2535);
+UPDATE t_clientes SET apellido = 'VINCENSINI ENDARA', nombre = 'JUAN ANGEL' WHERE idt_clientes in (1856,2964);
+UPDATE t_clientes SET apellido = 'DV.1', nombre = 'PREMIER CENTRAL AMERICAN BOND FUND, S.A.' WHERE idt_clientes in (217,218,219,221,223,224,3709);
+UPDATE t_clientes SET apellido = 'ROCA JIMENO', nombre = 'JUAN ANTONIO' WHERE idt_clientes in (2762,2793,3233);
+UPDATE t_clientes SET apellido = 'NIKOLAUS ROMER', nombre = 'SIEGFRIED' WHERE idt_clientes in (2737,2816);
+UPDATE t_clientes SET apellido = 'GONZALEZ GARRIDO', nombre = 'KATERING IVETH' WHERE idt_clientes in (1207,2874);
+UPDATE t_clientes SET apellido = 'DV.0', nombre = 'Banco Aliado, S.A.' WHERE idt_clientes in (3968,4028);
+UPDATE t_clientes SET apellido = 'CHU DE GARCIA', nombre = 'EDILTRUDIS DAVIS' WHERE idt_clientes in (2786,3053);
+UPDATE t_clientes SET apellido = 'ALVANO CASADEMUNT', nombre = 'RAMON ALVANO' WHERE idt_clientes in (2724,2834);
+UPDATE t_clientes SET apellido = 'DV.7', nombre = 'PRIMA SOCIEDAD DE INVERSION INMOBILIARIA, S.A. (A) (C)' WHERE idt_clientes in (241,627);
+UPDATE t_clientes SET apellido = 'DV.20', nombre = 'GRUPO ALIADO, S.A.' WHERE idt_clientes in (4025,4084);
+UPDATE t_clientes SET apellido = 'BIRBRAGHER LIMPO', nombre = 'FERNANDO' WHERE idt_clientes in (826,2501);
+UPDATE t_clientes SET apellido = 'DV.38', nombre = 'DESARROLLO INMOBILIAR DEL ESTE, S.A.' WHERE idt_clientes in (598,3599);
+UPDATE t_clientes SET apellido = 'DV.51', nombre = 'Grupo Mundial Tenedora, S.A.' WHERE idt_clientes in (3576,3710);
+UPDATE t_clientes SET apellido = 'DV.0', nombre = 'Banco Internacional de Costa Rica, S.A.' WHERE idt_clientes in (595,606);
+UPDATE t_clientes SET apellido = 'NISSIM KAMKHAJI', nombre = 'DANIEL' WHERE idt_clientes in (3077,3220);
+UPDATE t_clientes SET apellido = 'DV.96', nombre = 'BANCO LA HIPOTECARIA, S.A.' WHERE idt_clientes in (3477,3489);
+UPDATE t_clientes SET apellido = 'DV.38', nombre = 'INMOBILIARIA DON ANTONIO, S.A.' WHERE idt_clientes in (3758,3875);
+UPDATE t_clientes SET apellido = 'ESPINOSA QUINTERO', nombre = 'ISEL IVETH' WHERE idt_clientes in (1287,2987);
+UPDATE t_clientes SET apellido = 'LEON GARCIA', nombre = 'JUAN PABLO ANDRES' WHERE idt_clientes in (1357,1358);
+UPDATE t_clientes SET apellido = 'BARBOSA', nombre = 'IGNACIO JOSE' WHERE idt_clientes in (783,1283);
+UPDATE t_clientes SET apellido = 'DV.10', nombre = 'CORPORACION BELLA VISTA DE FINANZAS, S.A.' WHERE idt_clientes in (3021,3598);
+UPDATE t_clientes SET apellido = 'DV.20', nombre = 'Banvivienda Leasing and Factoring, S.A' WHERE idt_clientes in (664,3578);
+UPDATE t_clientes SET apellido = 'DV.2', nombre = 'AEGIS ASSET' WHERE idt_clientes in (119,120);
+UPDATE t_clientes SET apellido = 'PENA DIAZ', nombre = 'SANTIAGO' WHERE idt_clientes in (1586,2732);
+UPDATE t_clientes SET apellido = 'ESPINO HERNANDEZ', nombre = 'LARISSA MERCEDES' WHERE idt_clientes in (3182,3452);
+UPDATE t_clientes SET apellido = 'MESA SIERRA', nombre = 'JORGE HUMBERTO' WHERE idt_clientes in (3161,3396);
+UPDATE t_clientes SET apellido = 'VASQUEZ BENÃTEZ', nombre = 'JOSE ELIAS' WHERE idt_clientes in (2125,2953);
+UPDATE t_clientes SET apellido = 'DV.60', nombre = 'Dolphy Plaza Comercial, S.A.' WHERE idt_clientes in (3165,3577);
+UPDATE t_clientes SET apellido = 'DV.12', nombre = 'Hipotecaria Metrocredit, S.A.' WHERE idt_clientes in (597,613);
