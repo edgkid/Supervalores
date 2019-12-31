@@ -115,12 +115,12 @@ SELECT
 	, dt.updated_at
 	, dt.prev_id
 FROM (
-	SELECT 1 estatus, 0 para, 'Inactivo' descripcion, '#FF0000FF' color, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id
+	SELECT 1 estatus, 0 para, 'Inactivo' descripcion, '#FF0000FF' color, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, -1 prev_id
 	UNION ALL SELECT 1, 0, 'Disponible', '#00FF00FF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
-	UNION ALL SELECT 1, 2, 'Con Factura', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
-	UNION ALL SELECT 1, 2, 'Con Recibo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
-	UNION ALL SELECT 1, 2, 'Pago Pendiente', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
-	UNION ALL SELECT 1, 2, 'Paz y Salvo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
+	UNION ALL SELECT 1, 2, 'Con Factura', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, -2
+	UNION ALL SELECT 1, 2, 'Con Recibo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, -3
+	UNION ALL SELECT 1, 2, 'Pago Pendiente', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, -4
+	UNION ALL SELECT 1, 2, 'Paz y Salvo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, -5
 	UNION ALL (SELECT 1, 1, descripcion, '#00000000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, id FROM cxc_t_estatus_fac)
 ) dt;
 
@@ -229,25 +229,28 @@ SELECT
 FROM (
 	SELECT
 		row_num AS prediction_id,
-		rw.codigo,
 		rw.rif,
+		rw.codigos [1] codigo,
+		rw.num_licencias [1] num_licencia,
 		rw.dv,
-		rw.razon_social,
+		rw.razones_sociales [1] razon_social,
 		TRIM (REPLACE ( rw.direccion, 'Desconocida,', '' )) direccion,
 		TRIM (REPLACE ( rw.fax, '0, ', '' )) fax,
 		TRIM (REPLACE ( rw.web, '0, ', '' )) web,
 		TRIM (REPLACE ( rw.telefono, '0, ', '' )) telefono,
 		TRIM (REPLACE ( rw.email, 'desconocido@svm.com,', '' )) email,
-		tipo_valor_id [ 1 ] tipo_valor_id,
-		sector_economico_id [ 1 ] sector_economico_id,
-		fecha_registro [ 1 ] fecha_registro,
+		rw.tipo_valor_id [ 1 ] tipo_valor_id,
+		rw.sector_economico_id [ 1 ] sector_economico_id,
+		rw.fecha_registro [ 1 ] fecha_registro,
+		rw.estauses [1] estatus_id,
 		rw.prev_ids 
 	FROM (
 		SELECT 
-			ROW_NUMBER() OVER ( ORDER BY ens.razon_social ) AS row_num,
-			ens.razon_social,
-			string_agg (DISTINCT ens.codigo, '|' ) AS codigo,
-			string_agg (DISTINCT ens.rif, '|' ) AS rif,
+			ROW_NUMBER() OVER ( ORDER BY 2,3,4 ) AS row_num,
+			ens.rif,
+			array_agg (DISTINCT ens.codigo) as codigos,
+			array_agg (DISTINCT ens.num_licencia) num_licencias,
+			array_agg (DISTINCT ens.razon_social) AS razones_sociales,
 			string_agg (DISTINCT CAST ( ens.dv AS VARCHAR ), '|' ) AS dv,
 			string_agg (DISTINCT CAST ( ens.prev_id AS VARCHAR ), '|' ) AS prev_ids,
 			string_agg (DISTINCT ens.resolucion, '|' ) AS resoluciones,
@@ -258,11 +261,13 @@ FROM (
 			string_agg (DISTINCT ens.email, ', ' ) AS email,
 			ARRAY_AGG (DISTINCT ens.tipo_valor_id ) AS tipo_valor_id,
 			ARRAY_AGG (DISTINCT ens.sector_economico_id ) AS sector_economico_id,
-			ARRAY_AGG (DISTINCT ens.fecha_registro ) AS fecha_registro 			
+			ARRAY_AGG (DISTINCT ens.fecha_registro ) AS fecha_registro,
+			ARRAY_AGG (DISTINCT ens.estatus ) AS estauses 			
 		FROM (
 			SELECT
 				dt.codigo,
 				dt.rif,
+				dt.num_licencia,
 				CASE
 					WHEN dt.count_res = 1 THEN CAST(dt.res[1] as integer)
 					ELSE 0
@@ -282,10 +287,12 @@ FROM (
 				COALESCE ( tese.ID, 1 ) sector_economico_id,
 				dt.prev_id,
 				dt.resolucion,
+				dt.estatus,
 				dt.fecha_registro
 			FROM (
 				SELECT
 					ctcs.codigo,
+					ctcs.num_licencia,
 					CASE WHEN TRIM
 							( ctcs.cedula ) = '' 
 							OR TRIM ( ctcs.cedula ) = '0'
@@ -324,6 +331,7 @@ FROM (
 					ctcs.fax AS fax,
 					ctcs.web AS web,
 					ctcs.fecha_registro AS fecha_registro,
+					ctcs.estatus,
 					ctcs.idt_clientes AS prev_id
 					, ctcs.resolucion
 					, NOT ( ctcs.idt_tipo_cliente IN ( 1, 2, 3, 13, 16, 21 ) ) es_empresa
@@ -338,7 +346,7 @@ FROM (
 		WHERE
 			dt.es_empresa = TRUE 
 		) ens 
-		GROUP BY 2 
+		GROUP BY 2
 		) rw 
 	) pp,
 	UNNEST (string_to_array( pp.prev_ids, '|' )) s ( prev_client_id );
@@ -354,8 +362,9 @@ SELECT pp.*, s.prev_client_id
 FROM (
 SELECT
 	rww.prediction_id,
-	rww.codigo,
 	rww.cedula,
+	rww.codigo,
+	rww.num_licencia,
 	rww.nombre,
 	rww.apellido,	
 	cast(rww.empresa as BIGINT) t_empresa_id,
@@ -364,143 +373,153 @@ SELECT
 	rww.email,
 	rww.direccion,
 	rww.fecha_registro,
+	rww.estatus_id,
 	rww.prev_ids
 FROM (
 	SELECT 
 		dtt.prediction_id,
 		dtt.prev_ids,
-		dtt.nombre,
-		dtt.codigo,
+		dtt.nombres [ 1 ] nombre,
+		dtt.codigos [1] codigo,
 		dtt.cedula,
-		dtt.apellido,		
+		dtt.num_licencias [1] num_licencia,
+		dtt.apellidos [ 1 ] apellido,		
 		null empresa,
 		dtt.cargo,
 		trim(replace(dtt.telefono, '0,', '')) telefono,
 		trim(replace(dtt.email, 'desconocido@svm.com,', '')) email,
 		trim(replace(dtt.direccion, 'Desconocida,', '')) direccion,
-		fecha_registro [ 1 ] fecha_registro
-	FROM (
-SELECT
-	row_number() OVER (ORDER BY pns.nombre, pns.apellido) AS prediction_id
-	, pns.nombre	
-	, pns.apellido
-	, string_agg(distinct pns.codigo, ', ') as codigo
-	, string_agg(distinct pns.cedula, ', ') as cedula
-	, string_agg(distinct pns.cargo, ', ') as cargo
-	, string_agg(distinct pns.telefono, ', ') as telefono
-	, string_agg(distinct pns.email, ', ') as email
-	, string_agg(distinct pns.direccion, ', ') as direccion
-	, ARRAY_AGG(distinct pns.fecha_registro) as fecha_registro
-	, string_agg(distinct CAST(pns.prev_id as VARCHAR), '|') as prev_ids
-FROM (
-SELECT
-	 CASE
-		WHEN rw.apellido IS NOT NULL THEN rw.nombre
-		WHEN rw.count_res = 3 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[3]
-		WHEN rw.count_res = 1 
-			OR rw.count_res = 2 
-			OR rw.count_res = 3 
-			OR (rw.count_res = 4 AND lower(trim(rw.res[2])) = 'de' AND lower(trim(rw.res[3])) = 'la')
-			OR (rw.count_res = 4 AND lower(trim(rw.res[2])) = 'del')
-			OR (rw.count_res = 5 AND lower(trim(rw.res[2])) = 'de')
-		THEN rw.res[1]
-		WHEN rw.count_res = 4 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[4]
-		WHEN rw.count_res = 4 OR rw.count_res = 5 THEN rw.res[1] || ' ' || rw.res[2]
-		WHEN rw.count_res = 6 AND lower(trim(rw.res[1])) = 'de' AND lower(trim(rw.res[2])) = 'la' THEN rw.res[6]
-		WHEN rw.count_res = 6 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[6] || ' ' || rw.res[5]
-		WHEN rw.count_res = 6 OR rw.count_res = 7 THEN rw.res[1] || ' ' || rw.res[2] || ' ' || rw.res[3]
-		WHEN rw.count_res = 8 THEN rw.res[1] || ' ' || rw.res[2] || ' ' || rw.res[3] || ' ' || rw.res[4]
-		ELSE null 
-	END nombre
-, CASE 
-		WHEN rw.apellido IS NOT NULL THEN rw.apellido
-		WHEN rw.count_res = 1 THEN ''
-		WHEN rw.count_res = 2 THEN rw.res[2] 
-		WHEN rw.count_res = 3 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[1] || ' ' || rw.res[2]
-		WHEN rw.count_res = 3 THEN rw.res[2] || ' ' || rw.res[3]
-		WHEN rw.count_res = 4 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[3] || ' ' || rw.res[1] || ' ' || rw.res[2]
-		WHEN rw.count_res = 4 AND (
-				(lower(trim(rw.res[2])) = 'de' AND lower(trim(rw.res[3])) = 'la') 
-			OR lower(trim(rw.res[2])) = 'del') THEN rw.res[2] || ' ' || rw.res[3] || ' ' || rw.res[4]
-		WHEN rw.count_res = 4 THEN rw.res[3] || ' ' || rw.res[4]
-		WHEN rw.count_res = 5 AND lower(trim(res[2])) = 'de' THEN rw.res[2] || ' ' || rw.res[3] || ' ' || rw.res[4] || ' ' || rw.res[5]
-		WHEN rw.count_res = 5 THEN rw.res[3] || ' ' || rw.res[4] || rw.res[5]
-		WHEN rw.count_res = 6 AND lower(trim(rw.res[1])) = 'de' AND lower(trim(rw.res[2])) = 'la' THEN rw.res[4]|| ' ' || rw.res[5] || ' ' || rw.res[1] || ' ' || rw.res[2] || ' ' || rw.res[3]
-		WHEN rw.count_res = 6 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[4] || ' ' || rw.res[3] || ' ' || rw.res[1] || ' ' || rw.res[2]
-		WHEN rw.count_res = 6 THEN rw.res[4] || ' ' || rw.res[5] || ' ' || rw.res[6]
-	  WHEN rw.count_res = 7 THEN rw.res[4] || ' ' || rw.res[5] || ' ' || rw.res[6] || ' ' || rw.res[7]
-		WHEN rw.count_res = 8 THEN rw.res[5] || ' ' || rw.res[6] || ' ' || rw.res[7] || ' ' || rw.res[8]
-		ELSE null 
-	END apellido
-, rw.cedula
-, rw.codigo
-, rw.cargo
-, rw.telefono
-, rw.email
-, rw.direccion
-, rw.fecha_registro
-, rw.prev_id
-FROM (
-	SELECT
-		dt.codigo
-		, dt.cedula
-		, dt.nombre
-		, REGEXP_REPLACE(dt.apellido, '\s*-.+', '') as apellido
-		, UPPER(TRIM(dt.cargo)) cargo
-		, COALESCE(dt.telefono, '0') telefono
-		, COALESCE(dt.email, 'desconocido@svm.com') email
-		, COALESCE(dt.direccion_empresa, 'Desconocida') direccion
-		, dt.fecha_registro
-		, res
-		, array_length(res, 1) count_res
-		, dt.prev_id
+		dtt.fecha_registro [ 1 ] fecha_registro,
+		dtt.estatuses [1] estatus_id
 	FROM (
 		SELECT 
-			ctcs.codigo
+			row_number() OVER (ORDER BY 2) AS prediction_id
+			, pns.cedula	
+			, ARRAY_AGG(distinct pns.codigo) as codigos
+			, ARRAY_AGG(distinct pns.num_licencia) as num_licencias
+			, ARRAY_AGG(distinct pns.nombre) as nombres
+			, ARRAY_AGG(distinct pns.apellido) as apellidos
+			, string_agg(distinct pns.cargo, ', ') as cargo
+			, string_agg(distinct pns.telefono, ', ') as telefono
+			, string_agg(distinct pns.email, ', ') as email
+			, string_agg(distinct pns.direccion, ', ') as direccion
+			, ARRAY_AGG(distinct pns.fecha_registro) as fecha_registro
+			, ARRAY_AGG(distinct pns.estatus) as estatuses
+			, string_agg(distinct CAST(pns.prev_id as VARCHAR), '|') as prev_ids
+FROM (
+SELECT
+			CASE
+				WHEN rw.apellido IS NOT NULL THEN rw.nombre
+				WHEN rw.count_res = 3 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[3]
+				WHEN rw.count_res = 1 
+					OR rw.count_res = 2 
+					OR rw.count_res = 3 
+					OR (rw.count_res = 4 AND lower(trim(rw.res[2])) = 'de' AND lower(trim(rw.res[3])) = 'la')
+					OR (rw.count_res = 4 AND lower(trim(rw.res[2])) = 'del')
+					OR (rw.count_res = 5 AND lower(trim(rw.res[2])) = 'de')
+				THEN rw.res[1]
+				WHEN rw.count_res = 4 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[4]
+				WHEN rw.count_res = 4 OR rw.count_res = 5 THEN rw.res[1] || ' ' || rw.res[2]
+				WHEN rw.count_res = 6 AND lower(trim(rw.res[1])) = 'de' AND lower(trim(rw.res[2])) = 'la' THEN rw.res[6]
+				WHEN rw.count_res = 6 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[6] || ' ' || rw.res[5]
+				WHEN rw.count_res = 6 OR rw.count_res = 7 THEN rw.res[1] || ' ' || rw.res[2] || ' ' || rw.res[3]
+				WHEN rw.count_res = 8 THEN rw.res[1] || ' ' || rw.res[2] || ' ' || rw.res[3] || ' ' || rw.res[4]
+				ELSE null 
+			END nombre
 		, CASE 
-				WHEN TRIM(ctcs.cedula) = '' OR TRIM(ctcs.cedula) = '0' THEN 'NF'||ctcs.idt_clientes
-				ELSE TRIM(ctcs.cedula) 
-			END cedula
-		, CASE 
-				WHEN TRIM(ctcs.nombre) = '' OR TRIM(ctcs.nombre) = '0' THEN NULL 
-				ELSE UPPER(TRIM(REPLACE(ctcs.nombre, '-', ' '))) 
-			END nombre		
-		, CASE 
-				WHEN TRIM(ctcs.apellido) = '' OR TRIM(ctcs.apellido) = '0' THEN NULL 
-				ELSE UPPER(TRIM(ctcs.apellido)) 
+				WHEN rw.apellido IS NOT NULL THEN rw.apellido
+				WHEN rw.count_res = 1 THEN ''
+				WHEN rw.count_res = 2 THEN rw.res[2] 
+				WHEN rw.count_res = 3 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[1] || ' ' || rw.res[2]
+				WHEN rw.count_res = 3 THEN rw.res[2] || ' ' || rw.res[3]
+				WHEN rw.count_res = 4 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[3] || ' ' || rw.res[1] || ' ' || rw.res[2]
+				WHEN rw.count_res = 4 AND (
+						(lower(trim(rw.res[2])) = 'de' AND lower(trim(rw.res[3])) = 'la') 
+					OR lower(trim(rw.res[2])) = 'del') THEN rw.res[2] || ' ' || rw.res[3] || ' ' || rw.res[4]
+				WHEN rw.count_res = 4 THEN rw.res[3] || ' ' || rw.res[4]
+				WHEN rw.count_res = 5 AND lower(trim(res[2])) = 'de' THEN rw.res[2] || ' ' || rw.res[3] || ' ' || rw.res[4] || ' ' || rw.res[5]
+				WHEN rw.count_res = 5 THEN rw.res[3] || ' ' || rw.res[4] || rw.res[5]
+				WHEN rw.count_res = 6 AND lower(trim(rw.res[1])) = 'de' AND lower(trim(rw.res[2])) = 'la' THEN rw.res[4]|| ' ' || rw.res[5] || ' ' || rw.res[1] || ' ' || rw.res[2] || ' ' || rw.res[3]
+				WHEN rw.count_res = 6 AND lower(trim(rw.res[1])) = 'de' THEN rw.res[4] || ' ' || rw.res[3] || ' ' || rw.res[1] || ' ' || rw.res[2]
+				WHEN rw.count_res = 6 THEN rw.res[4] || ' ' || rw.res[5] || ' ' || rw.res[6]
+				WHEN rw.count_res = 7 THEN rw.res[4] || ' ' || rw.res[5] || ' ' || rw.res[6] || ' ' || rw.res[7]
+				WHEN rw.count_res = 8 THEN rw.res[5] || ' ' || rw.res[6] || ' ' || rw.res[7] || ' ' || rw.res[8]
+				ELSE null 
 			END apellido
-		, CASE 
-				WHEN TRIM(ctcs.telefono) = '' OR TRIM(ctcs.telefono) = '0' THEN NULL 
-				ELSE TRIM(ctcs.telefono) 
-			END telefono
-		, CASE 
-				WHEN TRIM(ctcs.email) = '' OR TRIM(ctcs.email) = '0' THEN NULL 
-				ELSE TRIM(ctcs.email) 
-			END email
-		, CASE 
-				WHEN TRIM(ctcs.direccion_empresa) = '' OR TRIM(ctcs.direccion_empresa) = '0' THEN NULL 
-				ELSE TRIM(ctcs.direccion_empresa) 
-			END direccion_empresa
-		, CASE 
-				WHEN array_length(crg, 1) = 2 THEN crg[2] 
-				WHEN array_length(crg, 1) = 3 THEN crg[2] || '' || crg[3] 
-				WHEN array_length(crg, 1) = 4 THEN crg[2] || '' || crg[3]  || '' || crg[4] 
-				WHEN TRIM(ctcs.cargo) = '' OR TRIM(ctcs.cargo) = '0' THEN NULL 
-				ELSE TRIM(ctcs.cargo)
-			END cargo
-		, ctcs.fecha_registro as fecha_registro
-		, ctcs.idt_clientes as prev_id
-		, NOT ( ctcs.idt_tipo_cliente IN ( 1, 2, 3, 13, 16, 21 ) ) es_empresa 
-		FROM cxc_t_clientes ctcs
-		LEFT JOIN regexp_split_to_array(trim(ctcs.apellido), '(?:[-]+)') crg ON 1 = 1
-	) dt
-	LEFT JOIN regexp_split_to_array(trim(dt.nombre, ' .'), '(?:[\s,\.]+)') res ON 1 = 1
-	WHERE
-		dt.es_empresa = FALSE 
-) rw
-		) pns
-GROUP BY 2, 3, pns.fecha_registro
-ORDER BY pns.fecha_registro asc
+		, rw.cedula
+		, rw.codigo
+		, rw.cargo
+		, rw.telefono
+		, rw.email
+		, rw.direccion
+		, rw.num_licencia
+		, rw.estatus
+		, rw.fecha_registro
+		, rw.prev_id
+		FROM (
+			SELECT
+				dt.codigo
+				, dt.cedula
+				, dt.nombre
+				, REGEXP_REPLACE(dt.apellido, '\s*-.+', '') as apellido
+				, UPPER(TRIM(dt.cargo)) cargo
+				, COALESCE(dt.telefono, '0') telefono
+				, COALESCE(dt.email, 'desconocido@svm.com') email
+				, COALESCE(dt.direccion_empresa, 'Desconocida') direccion
+				, dt.fecha_registro
+				, dt.num_licencia
+				, dt.estatus
+				, res
+				, array_length(res, 1) count_res
+				, dt.prev_id
+			FROM (
+				SELECT 
+					ctcs.codigo
+				, CASE 
+						WHEN TRIM(ctcs.cedula) = '' OR TRIM(ctcs.cedula) = '0' THEN 'NF'||ctcs.idt_clientes
+						ELSE TRIM(ctcs.cedula) 
+					END cedula
+				, CASE 
+						WHEN TRIM(ctcs.nombre) = '' OR TRIM(ctcs.nombre) = '0' THEN NULL 
+						ELSE UPPER(TRIM(REPLACE(ctcs.nombre, '-', ' '))) 
+					END nombre		
+				, CASE 
+						WHEN TRIM(ctcs.apellido) = '' OR TRIM(ctcs.apellido) = '0' THEN NULL 
+						ELSE UPPER(TRIM(ctcs.apellido)) 
+					END apellido
+				, CASE 
+						WHEN TRIM(ctcs.telefono) = '' OR TRIM(ctcs.telefono) = '0' THEN NULL 
+						ELSE TRIM(ctcs.telefono) 
+					END telefono
+				, CASE 
+						WHEN TRIM(ctcs.email) = '' OR TRIM(ctcs.email) = '0' THEN NULL 
+						ELSE TRIM(ctcs.email) 
+					END email
+				, CASE 
+						WHEN TRIM(ctcs.direccion_empresa) = '' OR TRIM(ctcs.direccion_empresa) = '0' THEN NULL 
+						ELSE TRIM(ctcs.direccion_empresa) 
+					END direccion_empresa
+				, CASE 
+						WHEN array_length(crg, 1) = 2 THEN crg[2] 
+						WHEN array_length(crg, 1) = 3 THEN crg[2] || '' || crg[3] 
+						WHEN array_length(crg, 1) = 4 THEN crg[2] || '' || crg[3]  || '' || crg[4] 
+						WHEN TRIM(ctcs.cargo) = '' OR TRIM(ctcs.cargo) = '0' THEN NULL 
+						ELSE TRIM(ctcs.cargo)
+					END cargo
+				, ctcs.fecha_registro as fecha_registro
+				, ctcs.num_licencia
+				, ctcs.estatus
+				, ctcs.idt_clientes as prev_id
+				, NOT ( ctcs.idt_tipo_cliente IN ( 1, 2, 3, 13, 16, 21 ) ) es_empresa 
+				FROM cxc_t_clientes ctcs
+				LEFT JOIN regexp_split_to_array(trim(ctcs.apellido), '(?:[-]+)') crg ON 1 = 1
+			) dt
+			LEFT JOIN regexp_split_to_array(trim(dt.nombre, ' .'), '(?:[\s,\.]+)') res ON 1 = 1
+			WHERE
+				dt.es_empresa = FALSE 
+		) rw
+) pns
+GROUP BY 2
 ) dtt
 ) rww
 ) pp
@@ -518,33 +537,37 @@ SELECT
 	, CAST(s.prev_client_id as INT) prev_client_id
 FROM (
 	SELECT 
-		row_number() OVER (ORDER BY dt.t_estatus_id) AS prediction_id
-		, dt.t_estatus_id
+		row_number() OVER (ORDER BY 5) AS prediction_id
+		, dt.t_estatus_ids [1] t_estatus_id
 		, dt.created_at
 		, dt.updated_at
 		, dt."id" persona_id
 		, dt.codigo
-		, dt."type" persona_type
+		, dt."type" persona_type		
 		, dt.client_ids
 	FROM (
-		SELECT 2 "t_estatus_id"
-		, rw.fecha_registro created_at
+		SELECT 
+		  rw.fecha_registro created_at
 		, rw.fecha_registro updated_at
 		, rw.prediction_id "id"
+		, ARRAY_AGG(DISTINCT est.prediction_id) "t_estatus_ids"
 		, rw.codigo
 		, 'TEmpresa' "type"
 		, rw.prev_ids "client_ids"
 		FROM empresas_normalizadas rw
+		LEFT JOIN estatuses_normalizados est ON est.prev_id = rw.estatus_id
 		GROUP BY rw.prediction_id, rw.codigo, rw.fecha_registro, rw.prev_ids
 		UNION ALL (
-			SELECT 2 "t_estatus_id"
-			, rw.fecha_registro created_at
+			SELECT 
+			  rw.fecha_registro created_at
 			, rw.fecha_registro updated_at
 			, rw.prediction_id "id"
+			, ARRAY_AGG(DISTINCT est.prediction_id) "t_estatus_ids"
 			, rw.codigo
 			, 'TPersona' "type"
 			, rw.prev_ids "client_ids"
 			FROM personas_normalizados rw
+			LEFT JOIN estatuses_normalizados est ON est.prev_id = rw.estatus_id
 			GROUP BY rw.prediction_id, rw.codigo, rw.fecha_registro, rw.prev_ids
 		)
 	)	dt
@@ -571,19 +594,19 @@ FROM (
 		, CONCAT('Resolución de migración ', cli.originales) descripcion
 		, COALESCE(cli.fecha_resolucion [ 1 ], '1971-01-01') created_at
 		, COALESCE(cli.fecha_resolucion [ 1 ], '1971-01-01') updated_at	
-		, 2 t_estatus_id
+		, cli.t_estatus_ids [1] t_estatus_id
 		, s.prev_client_id
 		, c.client_id t_cliente_id
 	FROM (
 		SELECT
 			CASE WHEN cxccli.resolucion = '0' OR cxccli.resolucion = 'SMV N' THEN
-					cxccli.resolucion || ' > ' || UPPER (TRIM ( cxccli.nombre )) || ' ' || UPPER (
-					TRIM ( cxccli.apellido )) 
+					cxccli.resolucion || ' > ' || UPPER (TRIM ( cxccli.cedula )) 
 				ELSE TRIM ( cxccli.resolucion ) 
 			END resolucion,
 			ROW_NUMBER () OVER ( ORDER BY 1 ) AS prediction_id,
 			ARRAY_AGG ( DISTINCT cxccli.idt_clientes ) prev_client_ids,
 			ARRAY_AGG ( DISTINCT cns.prediction_id ) client_ids,
+			ARRAY_AGG ( DISTINCT cns.t_estatus_id ) t_estatus_ids,
 			ARRAY_AGG ( DISTINCT cxccli.num_licencia ) num_licencias,
 			ARRAY_AGG ( DISTINCT cxccli.fecha_resolucion ) fecha_resolucion,
 			ARRAY_AGG ( DISTINCT ttcs.ID ) tipo_client_ids,
@@ -592,8 +615,7 @@ FROM (
 			cxc_t_clientes cxccli
 			LEFT JOIN clientes_normalizados cns ON cxccli.idt_clientes = cns.prev_client_id
 			LEFT JOIN cxc_t_tipo_cliente cttc ON cxccli.idt_tipo_cliente = cttc.idt_tipo_cliente
-			LEFT JOIN t_tipo_clientes ttcs ON TRIM (
-			UPPER ( cttc.descripcion )) = ttcs.descripcion 
+			LEFT JOIN t_tipo_clientes ttcs ON TRIM (UPPER ( cttc.descripcion )) = ttcs.descripcion 
 		GROUP BY 1 
 		) cli,
 		UNNEST ( cli.prev_client_ids ) s ( prev_client_id ),
