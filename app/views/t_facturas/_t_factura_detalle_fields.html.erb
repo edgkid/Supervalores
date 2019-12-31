@@ -10,11 +10,11 @@
     <%= f.text_field :cuenta_desc, style: 'width: 100%;', class: 'descripcion' %>
   </td>
   <td class="quantity-cell">
-    <%= f.text_field :cantidad, 'data-quantity': 1, class: 'quantity', style: 'height: 28px; width: 100%;', value: 1 %>
+    <%= f.text_field :cantidad, 'data-quantity': 1, class: 'quantity only-numeric', style: 'height: 28px; width: 100%;', value: 1 %>
     <input class="service-quantity" name="dynamic_attributes[t_tarifa_servicio][quantities][]" type="hidden">
   </td>
   <td class="price-cell">
-    <%= f.text_field :precio_unitario, class: 'price', style: 'height: 28px; width: 100%;', value: 0 %>
+    <%= f.text_field :precio_unitario, class: 'price only-numeric', style: 'height: 28px; width: 100%;', value: 0 %>
     <input class="service-price" name="dynamic_attributes[t_tarifa_servicio][prices][]" type="hidden">
   </td>
   <td class="subtotal-cell" style="text-align: center;">

@@ -61,7 +61,7 @@
     </div>
     <div class="col-sm-2 input-value">
       <% if editable %>
-        <%= form.text_field :precio, class: "form-control" %>
+        <%= form.text_field :precio, class: "form-control only-numeric" %>
       <% else %>
         <%= registro.precio %>
       <% end %>
@@ -78,3 +78,9 @@
     </div>
   </div>
 <% end %>
+
+<script type="text/javascript">
+  $(document).on('keyup', '.only-numeric', function () {
+    allowOnlyNumbers(this);
+  });
+</script>

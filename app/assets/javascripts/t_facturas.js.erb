@@ -112,11 +112,11 @@ function addRecargoRowJS() {
       </td>
       <td class="descripcion-cell"></td>
       <td class="quantity-cell">
-        <input class="quantity quantity-input" data-quantity="1" min="0" style="height: 28px; width: 100%;" type="number" value="1">
+        <input class="quantity quantity-input only-numeric" data-quantity="1" style="height: 28px; width: 100%;" type="text" value="1">
         <input class="recargo-quantity" name="dynamic_attributes[t_recargo][quantities][]" type="hidden" value="1">
       </td>
       <td class="price-cell">
-        <input class="price recargo-input" min="0" step="0.01" style="height: 28px; width: 100%;" type="number">
+        <input class="price recargo-input only-numeric" style="height: 28px; width: 100%;" type="text">
         <input class="recargo-price" name="dynamic_attributes[t_recargo][prices][]" type="hidden">
       </td>
       <td class="surcharge-subtotal-cell" style="color: aqua; text-align: center;"></td>

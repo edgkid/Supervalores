@@ -23,11 +23,11 @@
     <% end %>
   </div>
   <div class="col-sm-2 col-form-label vertical-align">
-    <%= form.label :tasa, 'Tasa', step: 0.01, class: "text-right" %>
+    <%= form.label :tasa, 'Tasa', class: "text-right" %>
   </div>
   <div class="col-sm-4 input-value">
     <% if editable %>
-    <%= form.number_field :tasa, autofocus: true, autocomplete: "tasa", class: "form-control", step: ".01" %>
+    <%= form.text_field :tasa, autofocus: true, autocomplete: "tasa", class: "form-control only-numeric" %>
     <% else %>
     <%= registro.tasa %>
     <% end %>
@@ -46,3 +46,9 @@
   </div>
 </div>
 <% end %>
+
+<script type="text/javascript">
+  $(document).on('keyup', '.only-numeric', function () {
+    allowOnlyNumbers(this);
+  });
+</script>

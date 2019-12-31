@@ -18,10 +18,16 @@
     </div>
     <div class="col-sm-10 input-value">
       <% if editable %>
-        <%= form.text_field :tasa, class: "form-control" %>
+        <%= form.text_field :tasa, class: "form-control only-numeric" %>
       <% else %>
         <%= registro.tasa %>
       <% end %>
     </div>
   </div>
 <% end %>
+
+<script type="text/javascript">
+  $(document).on('keyup', '.only-numeric', function () {
+    allowOnlyNumbers(this);
+  });
+</script>
