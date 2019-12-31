@@ -32,6 +32,12 @@ class TResolucion < ApplicationRecord
 #		},
 #		:on => [:create, :update]
 
+	validates :resolucion,
+		uniqueness: {
+			message: "|Ya existe un cliente con esta resolución, use otra por favor.",
+		},
+		:on => [:create, :update]
+
 	validates :num_licencia,
 		presence: {
 				message: "|El número licencia no puede estar vacía."
