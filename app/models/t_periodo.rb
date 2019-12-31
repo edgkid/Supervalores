@@ -21,6 +21,19 @@ class TPeriodo < ApplicationRecord
 
 	has_and_belongs_to_many :tarifas
 
+  def translate_type_to_schedule
+    case self.tipo
+      when 'Quincenal' then '15d'
+      when 'Mensual' then '1month'
+      when 'Bimestral' then '2months'
+      when 'Trimestral' then '3months'
+      when 'Semestral' then '6months'
+      when 'Anual' then '1y'
+    else
+      '1month'
+    end
+  end
+
   def self.translate_period_type_to_cron(period_type)
     case period_type
       when 'Semanal' then '1w'

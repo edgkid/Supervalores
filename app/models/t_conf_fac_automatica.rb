@@ -60,7 +60,7 @@ class TConfFacAutomatica < ApplicationRecord
       scheduler.in '2s' do |j0b|
         create_invoices(j0b)
         # scheduler.schedule_every '1month' do |job|
-        # scheduler.schedule_every '5m', :tags => self.job_tag do |job|
+        # scheduler.schedule_every configuracion.t_periodo.translate_type_to_schedule, :tags => self.job_tag do |job|
         #   create_invoices(job)
         # end
       end
