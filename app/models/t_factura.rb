@@ -335,4 +335,27 @@ class TFactura < ApplicationRecord
       ultimo_recibo.save
     end
   end
+
+  def puede_tener_mas_recargos?
+    if (ultimo_recibo = self.t_recibos.find_by(ultimo_recibo: true))
+      ultimo_recibo.recargo_x_pagar < ultimo_recibo.servicios_x_pagar ? true : false
+    else
+      self.calculate_total_surcharge < self.calculate_services_total_price ? true : false
+    end
+  end
+
+  def corregir_tasa_de_recargo(tasa)
+    # Se obtiene la diferencia entre el total de los servicios menos los recargos
+    diferencia =
+      if (ultimo_recibo = self.t_recibos.find_by(ultimo_recibo: true))
+        (total_servicios = ultimo_recibo.servicios_x_pagar) - ultimo_recibo.recargo_x_pagar
+      else
+        (total_servicios = self.calculate_services_total_price) - self.calculate_total_surcharge
+      end
+    # Si el recargo (tasa * el total se los servicios) es mayor que la diferencia,
+    # entonces se retornará la tasa de la diferencia (ya que el recargo total no puede ser mayor que
+    # el total de los servicios)
+    # nuevo_precio = tasa * total_servicios > diferencia ? diferencia : tasa * total_servicios
+    tasa * total_servicios > diferencia ? ((diferencia * tasa) / total_servicios) : tasa
+  end
 end

@@ -229,7 +229,7 @@ class TFacturasController < ApplicationController
 
     @attributes_to_display = [
       :factura_id, :recibo_id, :razon_social, :res, :identificacion,
-      :fecha_notificacion, :forma_pago, :estado, :total_factura
+      :fecha_pago, :forma_pago, :pago_recibido
     ]
 
     respond_to do |format|
@@ -246,29 +246,29 @@ class TFacturasController < ApplicationController
   def recaudacion_total
     t_facturas =
       if !params[:day].blank?
-        InformeDeRecaudacionView.where(fecha_notificacion: params[:day])
+        InformeDeRecaudacionView.where(fecha_pago: params[:day])
       elsif !params[:ztart].blank? && !params[:end].blank?
-        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?', params[:ztart], params[:end])
+        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?', params[:ztart], params[:end])
       elsif !params[:month_year].blank?
-        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?',
+        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?',
           params[:month_year], params[:month_year].to_date.at_end_of_month.strftime('%d/%m/%Y'))
       elsif !params[:bimonthly].blank?
-        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?',
+        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?',
           params[:bimonthly], (params[:bimonthly].to_date + 1.month).at_end_of_month.strftime('%d/%m/%Y'))
       elsif !params[:quarterly].blank?
-        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?',
+        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?',
           params[:quarterly], (params[:quarterly].to_date + 2.months).at_end_of_month.strftime('%d/%m/%Y'))
       elsif !params[:biannual].blank?
-        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?',
+        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?',
           params[:biannual], (params[:biannual].to_date + 5.months).at_end_of_month.strftime('%d/%m/%Y'))
       elsif !params[:year].blank?
-        InformeDeRecaudacionView.where('fecha_notificacion BETWEEN ? AND ?',
+        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?',
           params[:year], params[:year].to_date.at_end_of_year.strftime('%d/%m/%Y'))
       else
         InformeDeRecaudacionView.all
       end
 
-    total = t_facturas.where("razon_social ILIKE ?", "%#{params[:razon_social]}%").sum(:total_factura).truncate(2)
+    total = t_facturas.where("razon_social ILIKE ?", "%#{params[:razon_social]}%").sum(:pago_recibido).truncate(2)
     results = {
       procesado: true,
       total: view_context.number_to_balboa(total, false)
