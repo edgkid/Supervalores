@@ -91,8 +91,8 @@ SELECT
 	row_number() OVER (ORDER BY dt.codigo) AS prediction_id
 	, dt.*
 FROM (
-SELECT '00' codigo, 'Desconocido' descripcion, 1 t_tipo_cliente_tipo_id, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 1 t_tarifa_id
-UNION ALL (SELECT cttc.codigo, cttc.descripcion, tttc.id, cttc.estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, tt."id"
+SELECT '00' codigo, 'Desconocido' descripcion, 1 t_tipo_cliente_tipo_id, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 1 t_tarifa_id, 0 prev_id
+UNION ALL (SELECT cttc.codigo, cttc.descripcion, tttc.id, cttc.estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, tt."id", cttc.idt_tipo_cliente prev_id
 	FROM t_tarifas tt
 	JOIN cxc_t_tarifa ctt on tt.nombre = ctt.nombre
 	JOIN cxc_t_tipo_cliente cttc on ctt.idt_tarifa = cttc.idt_tarifa
@@ -609,13 +609,12 @@ FROM (
 			ARRAY_AGG ( DISTINCT cns.t_estatus_id ) t_estatus_ids,
 			ARRAY_AGG ( DISTINCT cxccli.num_licencia ) num_licencias,
 			ARRAY_AGG ( DISTINCT cxccli.fecha_resolucion ) fecha_resolucion,
-			ARRAY_AGG ( DISTINCT ttcs.ID ) tipo_client_ids,
+			ARRAY_AGG ( DISTINCT cttc.prediction_id ) tipo_client_ids,
 			STRING_AGG ( DISTINCT TRIM ( cxccli.resolucion ), ' | ') originales 
 		FROM
 			cxc_t_clientes cxccli
 			LEFT JOIN clientes_normalizados cns ON cxccli.idt_clientes = cns.prev_client_id
-			LEFT JOIN cxc_t_tipo_cliente cttc ON cxccli.idt_tipo_cliente = cttc.idt_tipo_cliente
-			LEFT JOIN t_tipo_clientes ttcs ON TRIM (UPPER ( cttc.descripcion )) = ttcs.descripcion 
+			LEFT JOIN tipo_clientes_normalizados cttc ON cxccli.idt_tipo_cliente = cttc.prev_id
 		GROUP BY 1 
 		) cli,
 		UNNEST ( cli.prev_client_ids ) s ( prev_client_id ),
