@@ -62,8 +62,8 @@ SELECT
 	row_number() OVER (ORDER BY dt.descripcion) AS prediction_id
 	, dt.*
 FROM (
-	SELECT 'Desconocida' nombre, 'Desconocida' descripcion, '0' rango_monto, 0 recargo, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
-	UNION ALL (SELECT nombre, descripcion, rango_monto, recargo, estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at
+	SELECT 'Desconocida' nombre, 'Desconocida' descripcion, '0' rango_monto, 0 recargo, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id
+	UNION ALL (SELECT nombre, descripcion, rango_monto, recargo, estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, idt_tarifa prev_id
 		FROM cxc_t_tarifa)
 ) dt;
 
@@ -92,11 +92,11 @@ SELECT
 	, dt.*
 FROM (
 SELECT '00' codigo, 'Desconocido' descripcion, 1 t_tipo_cliente_tipo_id, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 1 t_tarifa_id, 0 prev_id
-UNION ALL (SELECT cttc.codigo, cttc.descripcion, tttc.id, cttc.estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, tt."id", cttc.idt_tipo_cliente prev_id
-	FROM t_tarifas tt
-	JOIN cxc_t_tarifa ctt on tt.nombre = ctt.nombre
-	JOIN cxc_t_tipo_cliente cttc on ctt.idt_tarifa = cttc.idt_tarifa
-	JOIN t_tipo_cliente_tipos tttc on TRIM(UPPER(cttc.tipo)) = tttc.descripcion
+UNION ALL (SELECT cttc.codigo, cttc.descripcion, tttc.id, cttc.estatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, COALESCE(tt."id", 1), cttc.idt_tipo_cliente prev_id
+	FROM cxc_t_tipo_cliente cttc
+	LEFT JOIN cxc_t_tarifa ctt on ctt.idt_tarifa = cttc.idt_tarifa
+	LEFT JOIN t_tarifas tt on tt.nombre = ctt.nombre
+	LEFT JOIN t_tipo_cliente_tipos tttc on TRIM(UPPER(cttc.tipo)) = tttc.descripcion
 	ORDER BY 2)
 ) dt;
 
