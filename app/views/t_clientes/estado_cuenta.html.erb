@@ -11,16 +11,23 @@
       </div>
     </div>
   </div>
+</div>
+<div class="row">
   <div class="col-12">
     <div class="ibox">
       <div class="ibox-title">
         <div class="row">
-          <h3 class="col-sm-4">Facturas y Recibos Registrados</h3>
-
-          <div class="col-md-1">            
+          <!-- <h3 class="col-sm-4">Facturas y Recibos Registrados</h3> -->
+          <h3 class="col-sm-3">Estado de Cuenta</h3>
+          <div class="col-md-2">
             <a id="btn-paz-y-saldo" target="_blank" href="#" class="fa fa-download btn btn-primary" style="position: relative;z-index: 1;">Generar Paz y Salvo</a>
           </div>
-          <div class="col-sm-4 col-form-label">
+          <div class="col-md-2" align="right">
+            <button class="btn btn-default" type="button" onclick="javascript:window.print()" style="height: 28px; padding-top: 2px;">
+              Imprimir
+            </button>
+          </div>
+          <div class="col-sm-2 col-form-label">
             <%= label_tag("Resolución:", nil, class: "text-right") %>
           </div>
           <div class="col-sm-2 input-value">
