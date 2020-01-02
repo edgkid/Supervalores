@@ -574,7 +574,7 @@ FROM (
 , UNNEST (string_to_array( pp.client_ids, '|' )) s ( prev_client_id );
 
 INSERT INTO t_clientes (codigo, t_estatus_id, created_at, updated_at, persona_id, persona_type)
-SELECT codigo, t_estatus_id, created_at, updated_at, persona_id, persona_type
+SELECT codigo, 2, created_at, updated_at, persona_id, persona_type
 FROM clientes_normalizados
 GROUP BY prediction_id, codigo, t_estatus_id, created_at, updated_at, persona_id, persona_type
 ORDER BY prediction_id;
@@ -617,6 +617,7 @@ FROM (
 			cxc_t_clientes cxccli
 			LEFT JOIN clientes_normalizados cns ON cxccli.idt_clientes = cns.prev_client_id
 			LEFT JOIN tipo_clientes_normalizados cttc ON cxccli.idt_tipo_cliente = cttc.prev_id
+			WHERE cns.prev_client_id NOT IN (3709,217,218,219,221,223,224,225,226,227,512,513,511,116,192,3341,426,319,1481,448,235,403,228,3330,3325,2842,343,3968,4028,627,241,3599,598,3710,3576,603,1759,3477,3489,3598,3021,664,3578,3165,3577) OR cxccli.estatus <> 0
 		GROUP BY 1 
 		) cli,
 		UNNEST ( cli.prev_client_ids ) s ( prev_client_id ),
