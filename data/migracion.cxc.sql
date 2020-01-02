@@ -246,7 +246,7 @@ FROM (
 		rw.prev_ids 
 	FROM (
 		SELECT 
-			ROW_NUMBER() OVER ( ORDER BY 2,3,4 ) AS row_num,
+			ROW_NUMBER() OVER ( ORDER BY 2 ) AS row_num,
 			ens.rif,
 			array_agg (DISTINCT ens.codigo) as codigos,
 			array_agg (DISTINCT ens.num_licencia) num_licencias,
@@ -293,10 +293,9 @@ FROM (
 				SELECT
 					ctcs.codigo,
 					ctcs.num_licencia,
-					CASE WHEN TRIM
-							( ctcs.cedula ) = '' 
-							OR TRIM ( ctcs.cedula ) = '0'
-							OR TRIM ( ctcs.cedula ) = '000' THEN
+					CASE WHEN TRIM(ctcs.cedula) = '' 
+							   OR TRIM(ctcs.cedula) = '0'
+								 OR TRIM(ctcs.cedula) = '000' THEN
 								'NF'||ctcs.idt_clientes ELSE TRIM ( ctcs.cedula ) 
 							END rif,
 					CASE WHEN TRIM
@@ -600,7 +599,10 @@ FROM (
 	FROM (
 		SELECT
 			CASE WHEN cxccli.resolucion = '0' OR cxccli.resolucion = 'SMV N' THEN
-					cxccli.resolucion || ' > ' || UPPER (TRIM ( cxccli.cedula )) 
+					cxccli.resolucion || ' > ' || UPPER (TRIM ( CASE 
+						WHEN TRIM(cxccli.cedula) = '' OR TRIM(cxccli.cedula) = '0' THEN 'NF'||cxccli.idt_clientes
+						ELSE TRIM(cxccli.cedula) 
+					END )) 
 				ELSE TRIM ( cxccli.resolucion ) 
 			END resolucion,
 			ROW_NUMBER () OVER ( ORDER BY 1 ) AS prediction_id,
@@ -764,7 +766,15 @@ FROM ( SELECT
 	, false automatica
 	, ctfs.idt_facturas prev_id
 FROM cxc_t_facturas ctfs
-LEFT JOIN resoluciones_normalizadas resoluciones ON ctfs.idt_clientes = resoluciones.prev_client_id
+LEFT JOIN (
+	SELECT dt.prev_client_id, dt.prediction_id[1] prediction_id
+	FROM (
+		SELECT
+			res.prev_client_id,  array_agg(res.prediction_id) prediction_id
+		FROM resoluciones_normalizadas res
+		GROUP BY res.prev_client_id
+	) dt
+) resoluciones ON ctfs.idt_clientes = resoluciones.prev_client_id
 LEFT JOIN periodos_normalizados pns on ctfs.idt_periodo = pns.prev_id
 LEFT JOIN estatuses_normalizados ens ON ctfs.estatus = ens.prev_id AND ens.prev_id != 0
 LEFT JOIN usuarios_normalizados uns ON ctfs.id_usuario = uns.prev_id 
