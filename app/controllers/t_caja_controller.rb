@@ -14,9 +14,7 @@ class TCajaController < ApplicationController
       format.html
       format.json { render json: TCajaDatatable.new(
         params.merge({
-          attributes_to_display: @attributes_to_display,
-          from: params[:from],
-          to: params[:to]
+          attributes_to_display: @attributes_to_display
         }),
         view_context: view_context)
       }
@@ -26,13 +24,11 @@ class TCajaController < ApplicationController
   def get_total
     dataTable =  TCajaDatatable.new(
       params.merge({
-        attributes_to_display: @attributes_to_display,
-        from: params[:from],
-        to: params[:to]
+        attributes_to_display: @attributes_to_display
       })
     )
-    total = dataTable.get_raw_records.sum("COALESCE(t_recibos.pago_pendiente, 0)")
-    pagado = dataTable.get_raw_records.sum("COALESCE(t_recibos.pago_recibido, 0)")
+    total = dataTable.get_raw_records.sum("COALESCE(pago_pendiente, 0)")
+    pagado = dataTable.get_raw_records.sum("COALESCE(pago_recibido, 0)")
     results = {
       procesado: true,
       total: view_context.number_to_balboa(total, false),
