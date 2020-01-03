@@ -791,7 +791,7 @@ FROM facturas_normalizadas
 GROUP by prediction_id, fecha_notificacion, fecha_vencimiento, recargo, recargo_desc, itbms, cantidad_total, importe_total, total_factura, pendiente_fact, pendiente_ts, tipo, justificacion, fecha_erroneo, next_fecha_recargo, monto_emision, created_at, updated_at, t_resolucion_id, t_periodo_id, t_estatus_id, t_leyenda_id, user_id, automatica
 ORDER BY prediction_id;
 
-SELECT SETVAL('t_facturas_id_seq', COUNT(*), true) FROM t_facturas LIMIT 1;
+SELECT SETVAL('t_facturas_id_seq', MAX(id), true) FROM t_facturas LIMIT 1;
 
 CREATE MATERIALIZED VIEW tarifa_servicios_normalizados AS
 SELECT 
@@ -881,7 +881,7 @@ INSERT INTO t_recibos (id, fecha_pago, num_cheque, pago_recibido, monto_acredita
 SELECT prediction_id, fecha_pago, num_cheque, pago_recibido, monto_acreditado, cuenta_deposito, pago_pendiente, estatus, justificacion, fecha_erroneo, created_at, updated_at, t_factura_id, t_cliente_id, t_periodo_id, t_metodo_pago_id, user_id, recargo_x_pagar, servicios_x_pagar
 FROM recibos_normalizado;
 
-SELECT SETVAL('t_recibos_id_seq', COUNT(*), true) FROM t_recibos LIMIT 1;
+SELECT SETVAL('t_recibos_id_seq', MAX(id), true) FROM t_recibos LIMIT 1;
 
 CREATE MATERIALIZED VIEW presupuesto_normalizados AS
 SELECT
