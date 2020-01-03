@@ -121,6 +121,8 @@ FROM (
 	UNION ALL SELECT 1, 2, 'Con Recibo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, -3
 	UNION ALL SELECT 1, 2, 'Pago Pendiente', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, -4
 	UNION ALL SELECT 1, 2, 'Paz y Salvo', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, -5
+	UNION ALL SELECT 1, 0, 'Inactiva', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, -6
+	UNION ALL SELECT 1, 0, 'Activa', '#FFFFFFFF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, -7
 	UNION ALL (SELECT 1, 1, descripcion, '#00000000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, id FROM cxc_t_estatus_fac)
 ) dt;
 
@@ -339,6 +341,7 @@ FROM (
 				FROM cxc_t_clientes ctcs
 				LEFT JOIN cxc_t_clientes_padre ctcp ON ctcp.idt_clientes_padre = ctcs.idt_cliente_padre 
 				LEFT JOIN regexp_matches(ctcs.apellido, '([0-9]+)') res ON 1 = 1
+				WHERE ctcs.idt_clientes NOT IN (3709,217,218,219,221,223,224,225,226,227,512,513,511,116,192,3341,426,319,1481,448,235,403,228,3330,3325,2842,343,3968,4028,627,241,3599,598,3710,3576,603,1759,3477,3489,3598,3021,664,3578,3165,3577) OR ctcs.estatus <> 0
 			) dt			
 			LEFT JOIN t_empresa_sector_economicos tese ON UPPER ( dt.sector_economico ) = tese.descripcion
 			LEFT JOIN t_empresa_tipo_valors tetv ON UPPER ( dt.tipo_valor ) = tetv.descripcion 
@@ -512,6 +515,7 @@ SELECT
 				, NOT ( ctcs.idt_tipo_cliente IN ( 1, 2, 3, 13, 16, 21 ) ) es_empresa 
 				FROM cxc_t_clientes ctcs
 				LEFT JOIN regexp_split_to_array(trim(ctcs.apellido), '(?:[-]+)') crg ON 1 = 1
+				WHERE ctcs.idt_clientes NOT IN (3709,217,218,219,221,223,224,225,226,227,512,513,511,116,192,3341,426,319,1481,448,235,403,228,3330,3325,2842,343,3968,4028,627,241,3599,598,3710,3576,603,1759,3477,3489,3598,3021,664,3578,3165,3577) OR ctcs.estatus <> 0
 			) dt
 			LEFT JOIN regexp_split_to_array(trim(dt.nombre, ' .'), '(?:[\s,\.]+)') res ON 1 = 1
 			WHERE
@@ -593,7 +597,7 @@ FROM (
 		, CONCAT('Resolución de migración ', cli.originales) descripcion
 		, COALESCE(cli.fecha_resolucion [ 1 ], '1971-01-01') created_at
 		, COALESCE(cli.fecha_resolucion [ 1 ], '1971-01-01') updated_at	
-		, cli.t_estatus_ids [1] t_estatus_id
+		, CASE WHEN cli.t_estatus_ids[1] = '0' THEN 7 ELSE 8 END t_estatus_id
 		, s.prev_client_id
 		, c.client_id t_cliente_id
 	FROM (
@@ -608,7 +612,7 @@ FROM (
 			ROW_NUMBER () OVER ( ORDER BY 1 ) AS prediction_id,
 			ARRAY_AGG ( DISTINCT cxccli.idt_clientes ) prev_client_ids,
 			ARRAY_AGG ( DISTINCT cns.prediction_id ) client_ids,
-			ARRAY_AGG ( DISTINCT cns.t_estatus_id ) t_estatus_ids,
+			ARRAY_AGG ( DISTINCT cxccli.estatus ) t_estatus_ids,
 			ARRAY_AGG ( DISTINCT cxccli.num_licencia ) num_licencias,
 			ARRAY_AGG ( DISTINCT cxccli.fecha_resolucion ) fecha_resolucion,
 			ARRAY_AGG ( DISTINCT cttc.prediction_id ) tipo_client_ids,
@@ -716,7 +720,7 @@ FROM leyendas_normalizadas;
 
 CREATE MATERIALIZED VIEW facturas_normalizadas AS
 SELECT 
-	row_number() OVER (ORDER BY dt.prev_id, dt.fecha_notificacion, dt.fecha_vencimiento, dt.recargo, dt.recargo_desc, dt.itbms, dt.cantidad_total, dt.importe_total, dt.total_factura, dt.pendiente_fact, dt.pendiente_ts, dt.tipo, dt.justificacion, dt.fecha_erroneo, dt.next_fecha_recargo, dt.monto_emision, dt.created_at, dt.updated_at, dt.t_resolucion_id, dt.t_periodo_id, dt.t_estatus_id, dt.t_leyenda_id, dt.user_id, dt.automatica) AS prediction_id
+	dt.prev_id AS prediction_id
 	, dt.fecha_notificacion
 	, dt.fecha_vencimiento
 	, dt.recargo
@@ -781,11 +785,13 @@ LEFT JOIN estatuses_normalizados ens ON ctfs.estatus = ens.prev_id AND ens.prev_
 LEFT JOIN usuarios_normalizados uns ON ctfs.id_usuario = uns.prev_id 
 )	dt; 
 
-INSERT INTO t_facturas (fecha_notificacion, fecha_vencimiento, recargo, recargo_desc, itbms, cantidad_total, importe_total, total_factura, pendiente_fact, pendiente_ts, tipo, justificacion, fecha_erroneo, next_fecha_recargo, monto_emision, created_at, updated_at, t_resolucion_id, t_periodo_id, t_estatus_id, t_leyenda_id, user_id, automatica)
-SELECT fecha_notificacion, fecha_vencimiento, recargo, recargo_desc, itbms, cantidad_total, importe_total, total_factura, pendiente_fact, pendiente_ts, tipo, justificacion, fecha_erroneo, next_fecha_recargo, monto_emision, created_at, updated_at, t_resolucion_id, t_periodo_id, t_estatus_id, t_leyenda_id, user_id, automatica
+INSERT INTO t_facturas (id, fecha_notificacion, fecha_vencimiento, recargo, recargo_desc, itbms, cantidad_total, importe_total, total_factura, pendiente_fact, pendiente_ts, tipo, justificacion, fecha_erroneo, next_fecha_recargo, monto_emision, created_at, updated_at, t_resolucion_id, t_periodo_id, t_estatus_id, t_leyenda_id, user_id, automatica)
+SELECT prediction_id, fecha_notificacion, fecha_vencimiento, recargo, recargo_desc, itbms, cantidad_total, importe_total, total_factura, pendiente_fact, pendiente_ts, tipo, justificacion, fecha_erroneo, next_fecha_recargo, monto_emision, created_at, updated_at, t_resolucion_id, t_periodo_id, t_estatus_id, t_leyenda_id, user_id, automatica
 FROM facturas_normalizadas
 GROUP by prediction_id, fecha_notificacion, fecha_vencimiento, recargo, recargo_desc, itbms, cantidad_total, importe_total, total_factura, pendiente_fact, pendiente_ts, tipo, justificacion, fecha_erroneo, next_fecha_recargo, monto_emision, created_at, updated_at, t_resolucion_id, t_periodo_id, t_estatus_id, t_leyenda_id, user_id, automatica
 ORDER BY prediction_id;
+
+SELECT SETVAL('t_facturas_id_seq', COUNT(*), true) FROM t_facturas LIMIT 1;
 
 CREATE MATERIALIZED VIEW tarifa_servicios_normalizados AS
 SELECT 
@@ -846,7 +852,8 @@ ORDER BY prediction_id;
 
 CREATE MATERIALIZED VIEW recibos_normalizado AS
 SELECT  
-  	ctre.fecha_pago
+	  ctre.idt_recibos as prediction_id
+	,	ctre.fecha_pago
   , ctre.num_cheque
   , ctre.pago_recibido
   , ctre.monto_acreditado
@@ -870,9 +877,11 @@ JOIN clientes_normalizados cns ON ctre.idt_clientes = cns.prev_client_id
 JOIN periodos_normalizados pns ON ctre.idt_periodo = pns.prev_id
 JOIN metodos_pago_normalizado mpns ON ctre.metodo_pago = mpns.forma_pago;
 
-INSERT INTO t_recibos (fecha_pago, num_cheque, pago_recibido, monto_acreditado, cuenta_deposito, pago_pendiente, estatus, justificacion, fecha_erroneo, created_at, updated_at, t_factura_id, t_cliente_id, t_periodo_id, t_metodo_pago_id, user_id, recargo_x_pagar, servicios_x_pagar)
-SELECT fecha_pago, num_cheque, pago_recibido, monto_acreditado, cuenta_deposito, pago_pendiente, estatus, justificacion, fecha_erroneo, created_at, updated_at, t_factura_id, t_cliente_id, t_periodo_id, t_metodo_pago_id, user_id, recargo_x_pagar, servicios_x_pagar
+INSERT INTO t_recibos (id, fecha_pago, num_cheque, pago_recibido, monto_acreditado, cuenta_deposito, pago_pendiente, estatus, justificacion, fecha_erroneo, created_at, updated_at, t_factura_id, t_cliente_id, t_periodo_id, t_metodo_pago_id, user_id, recargo_x_pagar, servicios_x_pagar)
+SELECT prediction_id, fecha_pago, num_cheque, pago_recibido, monto_acreditado, cuenta_deposito, pago_pendiente, estatus, justificacion, fecha_erroneo, created_at, updated_at, t_factura_id, t_cliente_id, t_periodo_id, t_metodo_pago_id, user_id, recargo_x_pagar, servicios_x_pagar
 FROM recibos_normalizado;
+
+SELECT SETVAL('t_recibos_id_seq', COUNT(*), true) FROM t_recibos LIMIT 1;
 
 CREATE MATERIALIZED VIEW presupuesto_normalizados AS
 SELECT
