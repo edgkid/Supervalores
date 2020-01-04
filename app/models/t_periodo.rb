@@ -37,7 +37,7 @@ class TPeriodo < ApplicationRecord
   def self.translate_period_type_to_cron(period_type)
     case period_type
       when 'Semanal' then '1w'
-      when 'Quincenal' then '2w'
+      when 'Quincenal' then '15d'
       when 'Mensual' then '1month'
       when 'Bimestral' then '2months'
       when 'Trimestral' then '3months'

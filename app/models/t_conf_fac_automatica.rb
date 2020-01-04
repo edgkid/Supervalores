@@ -300,7 +300,7 @@ class TConfFacAutomatica < ApplicationRecord
         # puts "Facturas con monto 0 (No creadas): #{facturas_con_monto_0}"
         t_factura_detalles = t_factura.t_factura_detalles
         if t_factura_detalles.any? && (t_factura_detalles.first.t_tarifa_servicio.tipo.nil? ? t_factura_detalles.first.t_tarifa_servicio.tipo : t_factura_detalles.first.t_tarifa_servicio.tipo.downcase ) == 'ts'
-          t_factura.apply_custom_percent_monthly_surcharge(
+          t_factura.schedule_custom_percent_monthly_surcharge(
             TConfiguracionRecargoT.take.try(:tasa) || 0
           )
         end
