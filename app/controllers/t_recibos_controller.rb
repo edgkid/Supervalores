@@ -31,7 +31,8 @@ class TRecibosController < ApplicationController
         t_nota_credito.monto_original =  @t_recibo.monto_acreditado
         t_nota_credito.save!
       end
-      @t_recibo.t_factura.update_attribute(:t_estatus_id, TEstatus.find_by(descripcion: 'Cancelada').id) if @t_recibo.pago_pendiente <= 0
+      @t_factura.update_attribute(:pendiente_fact, @t_factura.pendiente_fact - @t_recibo.pago_recibido)
+      @t_factura.update_attribute(:t_estatus_id, TEstatus.find_by(descripcion: 'Cancelada').id) if @t_recibo.pago_pendiente <= 0
       # generar_pdf
       redirect_to new_t_factura_t_recibo_path(@t_factura, show_pdf: true, recibo_id: @t_recibo.id), notice: 'Recibo creado exitosamente'
     else
@@ -74,14 +75,15 @@ class TRecibosController < ApplicationController
   end
 
   def comparativa_ingresos
+    # debugger
     # params[:print] = "not_true"
-    per_page = params[:print] == "true" ? (TRecibo.all.count) / 10 : 5
+    per_page = params[:print] == "true" ? (TRecibo.all.count) / 10 : 20
     # per_page = params[:print] == "true" ? TRecibo.all.count : 5
     @print = params[:print] unless params[:print].blank?
     # @recibos = TRecibo.all
     # @recibos = TRecibo.all#.joins(:t_factura).where("t_facturas.t_cliente_id = ?", null)
     @recibos = TRecibo.includes(t_factura: :t_factura_detalles)
-    unless params[:search_client].blank? && params[:search_client].blank?
+    unless params[:search_client].blank? #&& params[:search_client].blank?
       personas = TPersona.where("cedula like ?", "%#{params[:search_client]}%")
       clientes_naturales = TCliente.where(persona_id: personas.ids, persona_type: "TPersona")
 
@@ -115,28 +117,7 @@ class TRecibosController < ApplicationController
   end
 
   def comparativa_ingresos_no_datatables
-    @tarifas_servicios = TTarifaServicio.where.not(estatus: 0)
-    # @tarifas_servicios = TTarifaServicio.where(descripcion: ["Multas Supervision"])
-    # @tarifas_servicios = TTarifaServicio.all
-    @servicio_mes_monto = []
     montos = []
-    @tarifas_servicios.each do |tarifa_servicio|
-      @servicio_mes_monto.push(
-          "SERVICIO" => "#{tarifa_servicio.descripcion}",
-          "ENERO" => 0,
-          "FEBRERO" => 0,
-          "MARZO" => 0,
-          "ABRIL" => 0,
-          "MAYO" => 0,
-          "JUNIO" => 0,
-          "JULIO" => 0,
-          "AGOSTO" => 0,
-          "SEPTIEMBRE" => 0,
-          "OCTUBRE" => 0,
-          "NOVIEMBRE" => 0,
-          "DICIEMBRE" => 0,
-          "TOTAL" => 0)
-    end 
     
     starting_time = Time.now
 
@@ -152,60 +133,151 @@ class TRecibosController < ApplicationController
     
     @resoluciones = TResolucion.joins(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).includes(t_facturas: [{t_factura_detalles: :t_tarifa_servicio}, :t_recibos]).where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')})")
 
-    # @resoluciones = TResolucion.where("id < 20")
+    starting_time = Time.now
+    @servicio_mes_monto = []
+    @tarifas_servicios = TTarifaServicio.where.not(estatus: 0)
+    @tarifas_servicios.each do |tarifa_servicio|
 
-    @resoluciones.each do |resolucion|
-      next if resolucion.t_facturas.count == 0
-      resolucion.t_facturas.each do |factura|
-        next if (factura.t_recibos.count == 0 || factura.pendiente_fact > 0)
+      @servicio_mes_monto.push(
+          "SERVICIO" => "#{tarifa_servicio.descripcion}",
+          "ENERO" => 0,
+          "FEBRERO" => 0,
+          "MARZO" => 0,
+          "ABRIL" => 0,
+          "MAYO" => 0,
+          "JUNIO" => 0,
+          "JULIO" => 0,
+          "AGOSTO" => 0,
+          "SEPTIEMBRE" => 0,
+          "OCTUBRE" => 0,
+          "NOVIEMBRE" => 0,
+          "DICIEMBRE" => 0,
+          "TOTAL" => 0)
 
-        next unless query_years.include?(factura.t_recibos.order(:fecha_pago).last.fecha_pago.strftime("%Y").to_i)
+      mes = 1
+      while mes != 12
 
-        factura.t_factura_detalles.each do |factura_detalle|
+        monto_recibos = TRecibo.where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')}) and extract(month from Date(t_recibos.fecha_pago)) in (#{mes})").joins(:t_factura => [:t_factura_detalles => :t_tarifa_servicio]).where(:t_factura_detalles => {:t_tarifa_servicio_id => tarifa_servicio.id}).sum(:pago_recibido)
 
-          next if factura_detalle.t_tarifa_servicio.estatus == 0
+        @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == tarifa_servicio.descripcion}.first
 
-          mes = factura.t_recibos.order(:fecha_pago).last.fecha_pago.strftime("%m")
-          @selected_mes_monto = nil
-          @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == factura_detalle.t_tarifa_servicio.descripcion}.first
-          # debugger if @selected_mes_monto.nil?
-          next if @selected_mes_monto.blank?
+        case mes
+          when 1
+            @selected_mes_monto["ENERO"] += monto_recibos
+          when 2
+            @selected_mes_monto["FEBRERO"] += monto_recibos
+          when 3
+            @selected_mes_monto["MARZO"] += monto_recibos
+          when 4
+            @selected_mes_monto["ABRIL"] += monto_recibos
+          when 5
+            @selected_mes_monto["MAYO"] += monto_recibos
+          when 6
+            @selected_mes_monto["JUNIO"] += monto_recibos
+          when 7
+            @selected_mes_monto["JULIO"] += monto_recibos
+          when 8
+            @selected_mes_monto["AGOSTO"] += monto_recibos
+          when 9
+            @selected_mes_monto["SEPTIEMBRE"] += monto_recibos
+          when 10
+            @selected_mes_monto["OCTUBRE"] += monto_recibos
+          when 11
+            @selected_mes_monto["NOVIEMBRE"] += monto_recibos
+          when 12
+            @selected_mes_monto["DICIEMBRE"] += monto_recibos
+        end
 
-          case mes
-            when "01"
-              @selected_mes_monto["ENERO"] += factura_detalle.precio_unitario
-            when "02"
-              @selected_mes_monto["FEBRERO"] += factura_detalle.precio_unitario
-            when "03"
-              @selected_mes_monto["MARZO"] += factura_detalle.precio_unitario
-            when "04"
-              @selected_mes_monto["ABRIL"] += factura_detalle.precio_unitario
-            when "05"
-              @selected_mes_monto["MAYO"] += factura_detalle.precio_unitario
-            when "06"
-              @selected_mes_monto["JUNIO"] += factura_detalle.precio_unitario
-            when "07"
-              @selected_mes_monto["JULIO"] += factura_detalle.precio_unitario
-            when "08"
-              @selected_mes_monto["AGOSTO"] += factura_detalle.precio_unitario
-            when "09"
-              @selected_mes_monto["SEPTIEMBRE"] += factura_detalle.precio_unitario
-            when "10"
-              @selected_mes_monto["OCTUBRE"] += factura_detalle.precio_unitario
-            when "11"
-              @selected_mes_monto["NOVIEMBRE"] += factura_detalle.precio_unitario
-            when "12"
-              @selected_mes_monto["DICIEMBRE"] += factura_detalle.precio_unitario
-          end
+        @selected_mes_monto["TOTAL"] += monto_recibos
 
-          @selected_mes_monto["TOTAL"] += factura_detalle.precio_unitario
-
-          # debugger
-          # ap @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == factura_detalle.t_tarifa_servicio.descripcion}.first
-
-        end 
+        mes += 1
       end
-    end
+    end 
+
+    # @servicio_mes_monto.push(
+    #       "SERVICIO" => "TARIFAS DE SUPERVISION",
+    #       "ENERO" => 0,
+    #       "FEBRERO" => 0,
+    #       "MARZO" => 0,
+    #       "ABRIL" => 0,
+    #       "MAYO" => 0,
+    #       "JUNIO" => 0,
+    #       "JULIO" => 0,
+    #       "AGOSTO" => 0,
+    #       "SEPTIEMBRE" => 0,
+    #       "OCTUBRE" => 0,
+    #       "NOVIEMBRE" => 0,
+    #       "DICIEMBRE" => 0,
+    #       "TOTAL" => 0)
+
+    # @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"].include?("Supervision")}
+    # @selected_mes_monto.each do |categoria_tarifa_servicio|
+    #   grouped_to = @servicio_mes_monto.select{|e| e["SERVICIO"] == "TARIFAS DE SUPERVISION"}.first
+    #   grouped_to["ENERO"] =+ categoria_tarifa_servicio["ENERO"]
+
+    # end
+
+    ending_time = Time.now
+
+    @elapsed_time = ending_time - starting_time
+
+    # @recibos.find_each(batch_size: 500) do |recibo|
+    #   recibo.t_factura.t_factura_detalles.first.t_tarifa_servicio.descripcion
+    # end
+
+
+    # @resoluciones.each do |resolucion|
+    #   next if resolucion.t_facturas.count == 0
+    #   resolucion.t_facturas.each do |factura|
+    #     next if (factura.t_recibos.count == 0 || factura.pendiente_fact > 0)
+
+    #     next unless query_years.include?(factura.t_recibos.order(:fecha_pago).last.fecha_pago.strftime("%Y").to_i)
+
+    #     factura.t_factura_detalles.each do |factura_detalle|
+
+    #       next if factura_detalle.t_tarifa_servicio.estatus == 0
+
+    #       mes = factura.t_recibos.order(:fecha_pago).last.fecha_pago.strftime("%m")
+    #       @selected_mes_monto = nil
+    #       @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == factura_detalle.t_tarifa_servicio.descripcion}.first
+    #       # debugger if @selected_mes_monto.nil?
+    #       next if @selected_mes_monto.blank?
+
+    #       case mes
+    #         when "01"
+    #           @selected_mes_monto["ENERO"] += factura_detalle.precio_unitario
+    #         when "02"
+    #           @selected_mes_monto["FEBRERO"] += factura_detalle.precio_unitario
+    #         when "03"
+    #           @selected_mes_monto["MARZO"] += factura_detalle.precio_unitario
+    #         when "04"
+    #           @selected_mes_monto["ABRIL"] += factura_detalle.precio_unitario
+    #         when "05"
+    #           @selected_mes_monto["MAYO"] += factura_detalle.precio_unitario
+    #         when "06"
+    #           @selected_mes_monto["JUNIO"] += factura_detalle.precio_unitario
+    #         when "07"
+    #           @selected_mes_monto["JULIO"] += factura_detalle.precio_unitario
+    #         when "08"
+    #           @selected_mes_monto["AGOSTO"] += factura_detalle.precio_unitario
+    #         when "09"
+    #           @selected_mes_monto["SEPTIEMBRE"] += factura_detalle.precio_unitario
+    #         when "10"
+    #           @selected_mes_monto["OCTUBRE"] += factura_detalle.precio_unitario
+    #         when "11"
+    #           @selected_mes_monto["NOVIEMBRE"] += factura_detalle.precio_unitario
+    #         when "12"
+    #           @selected_mes_monto["DICIEMBRE"] += factura_detalle.precio_unitario
+    #       end
+
+    #       @selected_mes_monto["TOTAL"] += factura_detalle.precio_unitario
+
+    #       # debugger
+    #       # ap @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == factura_detalle.t_tarifa_servicio.descripcion}.first
+
+    #     end 
+    #   end
+    # end
 
     ending_time = Time.now
 

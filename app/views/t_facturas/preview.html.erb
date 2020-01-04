@@ -110,17 +110,18 @@
     <table class="table">
       <tbody>
         <tr>
-          <th>Últimos pagos:</th>
-          <td style="text-align: right;"><%= number_to_balboa(@t_factura.t_recibos.sum(:pago_recibido)) %></td>
-        </tr>
-        <tr>
-          <th>Total de items:</th>
-          <td style="text-align: right;"><%= number_to_balboa(@t_factura.t_factura_detalles.sum(:precio_unitario)) %></td>
-        </tr>
-        <tr>
-          <th>Total a pagar:</th>
-          <td style="text-align: right;"><%= (@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) >= 0 ? number_to_balboa(@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) : 0 %></td>
-        </tr>
+            <th>Últimos pagos:</th>
+            <td style="text-align: right;"><%= number_to_balboa(@t_factura.t_recibos.sum(:pago_recibido)) %></td>
+          </tr>
+          <tr>
+            <th>Total de items:</th>
+            <td style="text-align: right;"><%= number_to_balboa(@t_factura.calcular_total_factura) %></td>
+          </tr>
+          <tr>
+            <th>Pendiente a pagar:</th>
+            <td style="text-align: right;"><%= @t_factura.calcular_saldo_pendiente >= 0 ? number_to_balboa(@t_factura.calcular_saldo_pendiente) : 0 %></td>
+
+          </tr>
       </tbody>
     </table>
   </div>

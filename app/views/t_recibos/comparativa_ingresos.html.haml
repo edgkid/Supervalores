@@ -62,7 +62,7 @@
                 %td
                   = recibo.t_cliente.persona_type == "TPersona" ? recibo.t_cliente.persona.nombre : recibo.t_cliente.persona.razon_social
                 %td
-                  = recibo.pago_recibido
+                  = number_with_delimiter(recibo.pago_recibido, :delimiter => ',')
       - else
         %div
           %p No se encontraron registros.

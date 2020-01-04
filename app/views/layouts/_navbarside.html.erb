@@ -169,29 +169,33 @@
             <span class="fa arrow"></span>
           </a>
           <ul class="nav nav-second-level">
+            <% if can? :read_reports, TFactura %>
+              <li><%= link_to 'Informe de Recaudación', informe_recaudacion_t_facturas_path %></li>
+            <% end %>
+            <% if can? :read_reports, TTipoCliente %>
+              <li><%= link_to 'Ingresos por Tipos de Cliente', informe_t_tipo_clientes_path %></li>
+            <% end %>
+            <% if can? :read_reports, TFactura %>
+              <li><%= link_to 'Ingresos de Presupuesto por Cuenta', informe_ingresos_presupuesto_t_facturas_path %></li>
+              <li><%= link_to 'Consolidado de Ingresos Diarios', informe_ingresos_diarios_t_facturas_path %></li>
+              <li><%= link_to 'Cuentas por Cobrar Antiguedad Regulados', informe_cuentas_x_cobrar_t_facturas_path %></li>
+              <li><%= link_to 'Cuentas por Cobrar Presupuestario', informe_presupuestario_t_facturas_path %></li>
+              <li><%= link_to 'Informe por Tipos de Ingreso', informe_por_tipos_de_ingreso_t_facturas_path %></li>
+            <% end %>
             <% if can? :read_reports, TRecibo %>
               <li><%= link_to 'Caja', t_caja_index_path %></li>
               <li><%= link_to 'Comparativa de Ingresos por Tarifas y Clientes', comparativa_ingresos_t_recibos_path %></li>
               <li><%= link_to 'Comparativa de Ingresos por Tarifas y Clientes 2', comparativa_ingresos_no_datatables_t_recibos_path %></li>
             <% end %>
             <% if can? :read_reports, TCliente %>
-              <li><%= link_to 'Trámites de Clientes Registrados', tramites_t_clientes_path %></li>
-            <% end %>
-            <% if can? :read_reports, TTipoCliente %>
-              <li><%= link_to 'Informe de Tipos de Cliente', informe_t_tipo_clientes_path %></li>
+              <li><%= link_to 'Estadística Trámites de Clientes Registrados', tramites_t_clientes_path %></li>
             <% end %>
             <% if can? :read_reports, TTarifaServicio %>
-              <li><%= link_to 'Trámites de Tarifas Registradas', tramites_t_tarifa_servicios_path %></li>
+              <li><%= link_to 'Estadística Trámites de Tarifas Registradas', tramites_t_tarifa_servicios_path %></li>
             <% end %>
             <% if can? :read_reports, TFactura %>
               <li><%= link_to 'Facturas Pagadas', pagadas_t_facturas_path %></li>
-              <li><%= link_to 'Informe de Recaudación', informe_recaudacion_t_facturas_path %></li>
-              <li><%= link_to 'Informe Consolidado de Ingresos Diarios', informe_ingresos_diarios_t_facturas_path %></li>
-              <li><%= link_to 'Informe de Presupuesto por Cuenta Diario', informe_ingresos_presupuesto_t_facturas_path %></li>
-              <li><%= link_to 'Informe por Grupo de Regulado', informe_cuentas_x_cobrar_t_facturas_path %></li>
-              <li><%= link_to 'Informe Presupuestario', informe_presupuestario_t_facturas_path %></li>
-              <li><%= link_to 'Informe por Tipos de Ingreso', informe_por_tipos_de_ingreso_t_facturas_path %></li>
-              <li><%= link_to 'Estado de Cuenta', estado_de_cuenta_t_facturas_path %></li>
+              <!--li><%#= link_to 'Estado de Cuenta', estado_de_cuenta_t_facturas_path %></li-->
             <% end %>
           </ul>
         </li>

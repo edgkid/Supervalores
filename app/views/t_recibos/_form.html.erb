@@ -49,19 +49,11 @@
 </div>
 
 
-<% if (@is_show && @t_factura.t_recibos.any?)%>
-  <hr>
-    <h3 align="center">RECIBO</h3>
-  <hr>
-<% elsif @t_factura.t_recibos.any?%>
-  <hr>
-    <h3 align="center">RECIBOS</h3>
-  <hr>
-<% end %>
 <hr>
 
-<% if params[:action] == "new"%>
 
+<% if params[:action] == "new"%>
+  <hr>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -128,11 +120,11 @@
           </tr>
           <tr>
             <th>Total de items:</th>
-            <td style="text-align: right;"><%= number_to_balboa(@t_factura.t_factura_detalles.sum(:precio_unitario)) %></td>
+            <td style="text-align: right;"><%= number_to_balboa(@t_factura.calcular_total_factura) %></td>
           </tr>
           <tr>
-            <th>Total a pagar:</th>
-            <td style="text-align: right;"><%= (@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) >= 0 ? number_to_balboa(@t_factura.t_factura_detalles.sum(:precio_unitario) - @t_factura.t_recibos.sum(:pago_recibido)) : 0 %></td>
+            <th>Pendiente a pagar:</th>
+            <td style="text-align: right;"><%= @t_factura.calcular_saldo_pendiente >= 0 ? number_to_balboa(@t_factura.calcular_saldo_pendiente) : 0 %></td>
 
           </tr>
         </tbody>
@@ -180,7 +172,62 @@
     </div>
   </div>
 
+<% if (@is_show && @t_factura.t_recibos.any?)%>
+  <hr>
+    <h3 align="center">RECIBO</h3>
+<% elsif @t_factura.t_recibos.any?%>
+  <hr>
+    <h3 align="center">RECIBOS</h3>
+<% end %>
+
   <br>
+
+<% else %>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Cantidad</th>
+        <th>Ítem</th>
+        <th>Descripción</th>
+        <!-- <th>Tasa (%)</th> -->
+        <th>Precio Unitario (B/.)</th>
+        <th>Importe (B/.)</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr>
+        <td>1</td>
+        <td><%#= @t_tarifa.nombre %></td>
+        <td><%#= @t_tarifa.descripcion %></td>
+        <td><%#= number_to_balboa(@t_tarifa.monto, false) %></td>
+        <td><%#= number_to_balboa(@t_tarifa.monto, false) %></td>
+      </tr> -->
+      <% @t_factura.t_factura_detalles.each do |fd| %>
+        <tr>
+          <td><%= fd.cantidad %></td>
+          <td><%= fd.t_tarifa_servicio.nombre %></td>
+          <td><%= "#{fd.t_tarifa_servicio.descripcion} | #{fd.t_tarifa_servicio.codigo} | #{fd.cuenta_desc}" %></td>
+          <!-- <td>N/A</td> -->
+          <td><%= number_to_balboa(fd.precio_unitario, false) %></td>
+          <td><%= number_to_balboa(fd.precio_unitario * fd.cantidad, false) %></td>
+           
+        </tr>
+      <% end %>
+
+      <% @t_factura.t_recargo_facturas.each do |r| %>
+
+        <tr>
+          <td><%= r.cantidad %></td>
+          <td>Recargo</td>
+          <td><%= r.t_recargo.descripcion %></td>
+          <!-- <td><%#= r.precio_unitario * 100 %></td> -->
+          <td><%= number_to_balboa(r.precio_unitario * @t_factura.calculate_services_total_price, false) %></td>
+          <td><%= number_to_balboa(r.precio_unitario * r.cantidad * @t_factura.calculate_services_total_price, false) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% end %>  
 
 <%= render 't_recibos' if !@is_show && @t_recibos.any? %>

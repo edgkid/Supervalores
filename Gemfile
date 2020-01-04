@@ -40,9 +40,14 @@ gem 'rufus-scheduler', '~> 3.6'
 gem 'prawn-table'
 gem 'prawn'
 
+# gem 'ruby-oci8'
+# gem 'activerecord-oracle_enhanced-adapter', '~> 5.2.0'
+
 gem 'will_paginate', '~> 3.1.1'
 gem 'will_paginate-bootstrap' 
+
 gem "haml-rails", "~> 2.0"
+
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'

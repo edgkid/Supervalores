@@ -160,12 +160,14 @@ class TFactura < ApplicationRecord
       ).first_or_create!
     )
 
-    new_surcharge = t_factura_actual.calculate_services_total_price * rate
-    t_factura_actual.recargo += new_surcharge
-    t_factura_actual.total_factura += new_surcharge
-    t_factura_actual.save
+    update_surcharges(rate, t_factura_actual)
 
-    t_factura_actual.update_receipts(old_t_factura)
+    # new_surcharge = t_factura_actual.calculate_services_total_price * rate
+    # t_factura_actual.recargo += new_surcharge
+    # t_factura_actual.total_factura += new_surcharge
+    # t_factura_actual.save
+
+    # t_factura_actual.update_receipts(old_t_factura)
 
     # if t_recibos.any?
     #   t_recibo = t_recibos.last
@@ -233,7 +235,7 @@ class TFactura < ApplicationRecord
 
     if self.t_estatus.descripcion.downcase == 'disponible'
       # scheduler.at "#{self.fecha_vencimiento + 1.day} 0000" do |j0b|
-      scheduler.in "2s" do |j0b|
+      scheduler.in "15s" do |j0b|
         terminate = false
         t_factura = TFactura.find(self.id)
         if t_factura.t_estatus.descripcion.downcase == 'disponible'
@@ -245,7 +247,7 @@ class TFactura < ApplicationRecord
           #   terminate = true
           # end
           unless t_recibos.any? && t_recibos.find_by(ultimo_recibo: true).pago_pendiente <= 0
-            generate_surcharge(rate, j0b)
+            generate_surcharge(t_factura.corregir_tasa_de_recargo(rate), j0b) if t_factura.puede_tener_mas_recargos?
             puts "Recargo del #{rate * 100}\% generado!"
           else
             terminate = true
@@ -260,14 +262,14 @@ class TFactura < ApplicationRecord
           j0b.kill if j0b.running?
         end
 
-        scheduler.schedule_every '1month' do |job|
-        # scheduler.schedule_every '20s' do |job|
+        # scheduler.schedule_every '1month' do |job|
+        scheduler.schedule_every '15s' do |job|
           terminate = false
           t_factura = TFactura.find(self.id)
           if t_factura.t_estatus.descripcion.downcase == 'disponible'
             t_recibos = t_factura.t_recibos
             unless t_recibos.any? && t_recibos.find_by(ultimo_recibo: true).pago_pendiente <= 0
-              generate_surcharge(rate, job)
+              generate_surcharge(t_factura.corregir_tasa_de_recargo(rate), job) if t_factura.puede_tener_mas_recargos?
               puts "Recargo del #{rate * 100}\% generado!"
             else
               terminate = true
@@ -284,6 +286,12 @@ class TFactura < ApplicationRecord
         end
       end
     end
+  end
+
+  def method_name
+    is_January = self.fecha_vencimiento.month == 1
+    
+    
   end
 
   def calculate_credit_balance
@@ -314,7 +322,7 @@ class TFactura < ApplicationRecord
     self.t_recibos.order("created_at ASC").first(self.t_recibos.count - 1).each do |recibo|
       monto_pendiente += recibo.pago_recibido
     end
-    monto_final = self.total_factura - monto_pendiente
+    monto_final = self.calcular_total_factura - monto_pendiente
     monto_final < 0 ? 0 : monto_final
   end
 
@@ -324,16 +332,36 @@ class TFactura < ApplicationRecord
     if (ultimo_recibo = t_recibos.find_by(ultimo_recibo: true))
       t_recibos.each do |t_recibo|
         t_recibo.pago_pendiente +=
-          self.total_factura - old_t_factura.total_factura
+          (self.total_factura - old_t_factura.total_factura)
         t_recibo.save
       end
       ultimo_recibo.recargo_x_pagar +=
         self.recargo - old_t_factura.recargo
       ultimo_recibo.servicios_x_pagar +=
-        (self.total_factura - self.recargo) -
-        (old_t_factura.total_factura - old_t_factura.recargo)
+        ((self.total_factura - self.recargo) -
+        (old_t_factura.total_factura - old_t_factura.recargo))
       ultimo_recibo.save
     end
+  end
+
+  def update_surcharges(rate, t_factura_actual = self)
+    t_recibos = t_factura_actual.t_recibos
+
+    if (ultimo_recibo = t_recibos.find_by(ultimo_recibo: true))
+      new_surcharge_price = ultimo_recibo.servicios_x_pagar * rate
+      t_recibos.each do |t_recibo|
+        t_recibo.recargo_x_pagar += new_surcharge_price
+        t_recibo.pago_pendiente += new_surcharge_price
+        t_recibo.save
+      end
+    else
+      new_surcharge_price = t_factura_actual.calculate_services_total_price * rate
+      t_factura_actual.recargo += new_surcharge_price
+      t_factura_actual.total_factura += new_surcharge_price
+      t_factura_actual.pendiente_fact += new_surcharge_price
+    end
+
+    t_factura_actual.save
   end
 
   def puede_tener_mas_recargos?
@@ -356,6 +384,15 @@ class TFactura < ApplicationRecord
     # entonces se retornará la tasa de la diferencia (ya que el recargo total no puede ser mayor que
     # el total de los servicios)
     # nuevo_precio = tasa * total_servicios > diferencia ? diferencia : tasa * total_servicios
-    tasa * total_servicios > diferencia ? ((diferencia * tasa) / total_servicios) : tasa
+    tasa * total_servicios > diferencia ? (diferencia / total_servicios) : tasa
+  end
+
+  def calcular_saldo_pendiente
+    #Calcula el saldo pendiente, tomando en consideracion los t_factura_detalles junto a los t_recargo_facturas y los recibos asociados
+    self.t_factura_detalles.sum(:precio_unitario) + (self.t_factura_detalles.sum(:precio_unitario) * self.t_recargo_facturas.sum(:precio_unitario)) - self.t_recibos.sum(:pago_recibido)
+  end
+
+  def calcular_total_factura
+    self.t_factura_detalles.sum(:precio_unitario) + (self.t_factura_detalles.sum(:precio_unitario) * self.t_recargo_facturas.sum(:precio_unitario))
   end
 end
