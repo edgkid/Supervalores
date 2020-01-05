@@ -32,7 +32,11 @@ class TRecibosController < ApplicationController
         t_nota_credito.save!
       end
       @t_factura.update_attribute(:pendiente_fact, @t_factura.pendiente_fact - @t_recibo.pago_recibido)
-      @t_factura.update_attribute(:t_estatus_id, TEstatus.find_by(descripcion: 'Cancelada').id) if @t_recibo.pago_pendiente <= 0
+      if @t_recibo.pago_pendiente <= 0
+        @t_factura.update_attribute(:t_estatus_id, TEstatus.find_by(descripcion: 'Cancelada').id)
+      else
+        @t_factura.update_attribute(:t_estatus_id, TEstatus.find_by(descripcion: 'Pago Pendiente').id)
+      end
       # generar_pdf
       redirect_to new_t_factura_t_recibo_path(@t_factura, show_pdf: true, recibo_id: @t_recibo.id), notice: 'Recibo creado exitosamente'
     else

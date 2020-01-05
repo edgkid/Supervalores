@@ -127,15 +127,15 @@
   <%= render partial: "script.js" %>
 
   $(document).ready(function(){
-    var i = 1;
+    //var i = 1;
 
     // Añade una fila a la tabla con un select que contiene una lista de los recargos
     function addRecargoRow() {
       $('#total-row').before(`
-        <tr id="recargo${i}" style="background-color: #1C84C6;">
+        <tr id="recargo${window.i}" style="background-color: #1C84C6;">
           <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
           <td class="select-surcharge-cell">
-            <select class="select-recargo" data-first_time="true" id="t_recargo${i}" name="t_factura[t_recargo_ids][]" style="width: 100%;">
+            <select class="select-recargo" data-first_time="true" id="t_recargo${window.i}" name="t_factura[t_recargo_ids][]" style="width: 100%;">
               <option></option>
               <% TRecargo.all.each do |t_recargo| %>
                 <option data-rate="<%= t_recargo.tasa %>" value="<%= t_recargo.id %>"><%= t_recargo.descripcion %></option>
@@ -158,7 +158,7 @@
         </tr>
       `);
       // $(`#t_recargo${i}`).append("<%#= escape_javascript(render('t_recargos/all_t_recargos_in_options')) %>");
-      $(`#t_recargo${i}`).select2({ placeholder: 'Seleccione' });
+      $(`#t_recargo${window.i}`).select2({ placeholder: 'Seleccione' });
       // $(`#t_recargo${i}`).select2({
       //   ajax: {
       //     url: '/t_recargos/find_by_descripcion',
@@ -181,7 +181,7 @@
       //   },
       //   placeholder: 'Seleccione'
       // });
-      i++;
+      window.i++;
     }
     $('#add-recargo-row').click(function () {
       addRecargoRow();

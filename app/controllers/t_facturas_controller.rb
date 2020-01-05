@@ -128,7 +128,20 @@ class TFacturasController < ApplicationController
 
   def update
     old_t_factura = @t_factura.dup
-    if @t_factura.update(t_factura_params)
+
+    invalid_t_recargo = false
+    ids_de_recargos = @t_factura.t_recargo_ids
+    params[:t_recargo_facturas_attributes].each do |t_recargo_factura_param|
+      next if ids_de_recargos.include?(t_recargo_factura_param[:id].to_i)
+      t_recargo_factura = @t_factura.t_recargo_facturas.build(
+        cantidad: t_recargo_factura_param[:cantidad],
+        precio_unitario: t_recargo_factura_param[:precio_unitario],
+        t_recargo_id: t_recargo_factura_param[:id]
+      )
+      invalid_t_recargo = true if t_recargo_factura.invalid?
+    end if params[:t_recargo_facturas_attributes]
+
+    if !invalid_t_recargo && @t_factura.update(t_factura_params)
       params[:services_to_destroy].each do |t_tarifa_servicio_id|
         @t_factura.t_factura_detalles.find_by(t_tarifa_servicio_id: t_tarifa_servicio_id).try(:destroy)
       end if !params[:services_to_destroy].blank?
@@ -141,6 +154,9 @@ class TFacturasController < ApplicationController
     else
       @notice = @t_factura.errors
       @do_not_use_plain_select2 = true
+      if invalid_t_recargo
+        @notice.messages[:t_factura] << '|El recargo no es válido'
+      end
       render 'edit', params[:dynamic_attributes]
     end
   end

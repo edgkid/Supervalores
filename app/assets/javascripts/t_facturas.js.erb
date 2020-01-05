@@ -95,13 +95,13 @@ function setSubTotal(thys, isQuantity = true) {
   });
 }
 
-var i = 1;
+window.i = 1;
 function addRecargoRowJS() {
   $('#total-row').before(`
-    <tr id="recargo${i}" style="background-color: #1C84C6;">
+    <tr id="recargo${window.i}" style="background-color: #1C84C6;">
       <td><input class="deletable deletable-recargo" type="checkbox" name="deletable"></td>
       <td class="select-surcharge-cell">
-        <select class="select-recargo" data-first_time="true" id="t_recargo${i}" name="t_factura[t_recargo_ids][]" style="width: 100%;">
+        <select class="select-recargo" data-first_time="true" id="t_recargo${window.i}" name="t_factura[t_recargo_ids][]" style="width: 100%;">
           <option></option>
           <% TRecargo.all.each do |t_recargo| %>
             <option data-rate="<%= t_recargo.tasa %>" value="<%= t_recargo.id %>"><%= t_recargo.descripcion %></option>
@@ -109,21 +109,22 @@ function addRecargoRowJS() {
         </select>
         <input class="recargo-descripcion" name="dynamic_attributes[t_recargo][descripcions][]" type="hidden">
         <input class="recargo-id" name="dynamic_attributes[t_recargo][ids][]" type="hidden">
+        <input class="t_recargo_ids" name="t_recargo_facturas_attributes[][id]" type="hidden">
       </td>
       <td class="descripcion-cell"></td>
       <td class="quantity-cell">
-        <input class="quantity quantity-input only-numeric" data-quantity="1" style="height: 28px; width: 100%;" type="text" value="1">
+        <input class="quantity quantity-input only-numeric" data-quantity="1" name="t_recargo_facturas_attributes[][cantidad]" style="height: 28px; width: 100%;" type="text" value="1">
         <input class="recargo-quantity" name="dynamic_attributes[t_recargo][quantities][]" type="hidden" value="1">
       </td>
       <td class="price-cell">
-        <input class="price recargo-input only-numeric" style="height: 28px; width: 100%;" type="text">
+        <input class="price recargo-input only-numeric" name="t_recargo_facturas_attributes[][precio_unitario]" style="height: 28px; width: 100%;" type="text">
         <input class="recargo-price" name="dynamic_attributes[t_recargo][prices][]" type="hidden">
       </td>
       <td class="surcharge-subtotal-cell" style="color: aqua; text-align: center;"></td>
     </tr>
   `);
-  $(`#t_recargo${i}`).select2({ placeholder: 'Seleccione' });
-  i++;
+  $(`#t_recargo${window.i}`).select2({ placeholder: 'Seleccione' });
+  window.i++;
 }
 
 // function cleanAllSurcharges() {
