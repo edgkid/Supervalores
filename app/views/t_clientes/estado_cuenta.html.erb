@@ -40,7 +40,7 @@
       <div class="ibox-content">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover dataTables clickable"
-            data-source="<%= estados_de_cuenta_path(format: :json) %>" id="ajax-datatable">
+            data-source="<%= estados_de_cuenta_path(format: :json, cuentas_x_cobrar: false) %>" id="ajax-datatable">
             <thead>
               <tr>
                 <th>N° Factura</th>
@@ -60,10 +60,19 @@
             <tbody></tbody>
           </table>
         </div>
+        <br>
+        <%= render 'cuentas_x_cobrar_x_cliente' %>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  #ajax-datatable2_length, #ajax-datatable2_filter,
+  #ajax-datatable2_info, #ajax-datatable2_paginate {
+    display: none;
+  }
+</style>
 
 <script>
   <%= render partial: "t_facturas/script.js" %>
@@ -85,26 +94,26 @@
             t_resolucion_id: $('#select-cliente-resolucion').val()
           }
         })
-          .done(function (data) {
-            if (data.procesado) {
-              
-              $("#btn-paz-y-saldo").attr("href", "/clientes/"+data.cliente_id+"/generar_pdf.pdf?resolution_id="+$('#select-cliente-resolucion').val())
-              footer.empty().append($("<tr />")
-                .append($("<td />"))
-                .append($("<td />"))
-                .append($("<td />"))
-                .append($("<td />").html("Total"))
-                .append($("<td />").html(data.total))
-                .append($("<td />").html(data.por_pagar))
-                .append($("<td />"))
-                .append($("<td />"))
-                .append($("<td />").html(data.total_pago_recibido))
-                .append($("<td />").html(data.total_monto_acreditado))
-                .append($("<td />"))
-                .append($("<td />"))
-              )
-            }
-          });
+        .done(function (data) {
+          if (data.procesado) {
+            
+            $("#btn-paz-y-saldo").attr("href", "/clientes/"+data.cliente_id+"/generar_pdf.pdf?resolution_id="+$('#select-cliente-resolucion').val())
+            footer.empty().append($("<tr />")
+              .append($("<td />").html("<b>Total</b>"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />").html(data.total))
+              .append($("<td />").html(data.por_pagar))
+              .append($("<td />"))
+              .append($("<td />"))
+              .append($("<td />").html(data.total_pago_recibido))
+              .append($("<td />").html(data.total_monto_acreditado))
+              .append($("<td />"))
+              .append($("<td />"))
+            )
+          }
+        });
       }
     });
 
@@ -132,12 +141,56 @@
 
     refreshTable = function () {
       $("#ajax-datatable").DataTable().ajax.reload();
+      $("#ajax-datatable2").DataTable().ajax.reload();
     }
 
     $("#btn-refresh-table").click(refreshTable);
     $('#select-codigo').change(refreshTable);
     $('#select-cliente-resolucion').change(refreshTable);
-  
-});
 
+    $('#ajax-datatable2').DataTable({
+      order: [[ 0, "desc" ]],
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: $('#ajax-datatable2').data('source'),
+        data: function ( d ) {
+          if(jQuery["useDataInAjaxCall"]) {
+            jQuery.useDataInAjaxCall(d)
+          }
+        }
+      },
+      pagingType: 'full_numbers',
+      columns: [
+        <% @attributes_to_display2.each do |attribute| %>
+          {data: '<%= attribute.to_s %>'},
+        <% end if @attributes_to_display %>
+      ],
+
+      pageLength: 25,
+      responsive: true,
+      language: {
+        processing:     "Procesando...",
+        search:         "Buscar&nbsp;:",
+        lengthMenu:    "Mostrar _MENU_ registros",
+        info:           "De _TOTAL_ registro(s) <br/> Se muestran del _START_ al _END_.",
+        infoEmpty:      "No existen registros por mostrar",
+        infoFiltered:   "No existen registros por mostrar",
+        infoPostFix:    "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords:    "",
+        emptyTable:     "",
+        paginate: {
+          first:      "Primero",
+          previous:   "Anterior",
+          next:       "Siguiente",
+          last:       "Último"
+        },
+        aria: {
+          sortAscending:  ": Activar para ordenar la columna de manera ascendente",
+          sortDescending: ": Activar para ordenar la columna de manera descendente"
+        }
+      }
+    });
+  });
 </script>

@@ -48,30 +48,37 @@ class TClientesController < ApplicationController
   def estado_cuenta
     @do_not_use_plain_select2 = true   
     @useDataTableFooter = true
+
     @attributes_to_display = [
-      :numero,
-      :fecha_notificacion,
-      :fecha_vencimiento,
-      :recargo,
-      :total_factura,
-      :pendiente_fact,
-      :tipo,
-      :numero_recibo,
-      :debito,
-      :credito,
-      :saldo,
-      :usuario,
+      :numero, :fecha_notificacion, :fecha_vencimiento, :recargo,
+      :total_factura, :pendiente_fact, :tipo, :numero_recibo,
+      :debito, :credito, :saldo, :usuario,
+    ]
+
+    @attributes_to_display2 = [
+      :dias_0_30, :dias_31_60, :dias_61_90, :dias_91_120,
+      :dias_mas_de_120, :total
     ]
 
     respond_to do |format|
       format.html
-      format.json { render json: EstadoCuentaDatatable.new(
-        params.merge({
-          attributes_to_display: @attributes_to_display,
-          t_resolucion_id: params[:t_resolucion_id]
-        }),
-        view_context: view_context)
-      }
+      if params[:cuentas_x_cobrar] == 'true'
+        format.json { render json: CuentasXCobrarXClienteDatatable.new(
+          params.merge({
+            attributes_to_display: @attributes_to_display,
+            t_resolucion_id: params[:t_resolucion_id]
+          }),
+          view_context: view_context)
+        }
+      else
+        format.json { render json: EstadoCuentaDatatable.new(
+          params.merge({
+            attributes_to_display: @attributes_to_display,
+            t_resolucion_id: params[:t_resolucion_id]
+          }),
+          view_context: view_context)
+        }
+      end
     end
   end
 

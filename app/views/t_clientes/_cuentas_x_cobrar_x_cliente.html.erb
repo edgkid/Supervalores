@@ -1,0 +1,16 @@
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover dataTables clickable"
+    data-source="<%= estados_de_cuenta_path(format: :json, cuentas_x_cobrar: true) %>" id="ajax-datatable2">
+    <thead>
+      <tr>
+        <th>0-30 días</th>
+        <th>31-60 días</th>
+        <th>61-90 días</th>
+        <th>91-120 días</th>
+        <th>120+ días</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>

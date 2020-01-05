@@ -31,7 +31,7 @@ class TFacturasController < ApplicationController
     @t_factura.tipo = '-'
     @t_factura.next_fecha_recargo = Date.today + 1.month
     @t_factura.monto_emision = 0
-    @t_factura.t_estatus = TEstatus.find_by(descripcion: 'Disponible') || TEstatus.first
+    @t_factura.t_estatus = TEstatus.find_by(descripcion: 'Facturada')# || TEstatus.first
 
     ced_pas_ruc = params[:dynamic_attributes][:t_cliente][:cedula]
     t_empresa = TEmpresa.find_by(rif: ced_pas_ruc)
