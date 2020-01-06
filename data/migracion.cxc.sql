@@ -796,14 +796,27 @@ SELECT SETVAL('t_facturas_id_seq', MAX(id), true) FROM t_facturas LIMIT 1;
 CREATE MATERIALIZED VIEW tarifa_servicios_normalizados AS
 SELECT 
 	row_number() OVER (ORDER BY dt.prev_id, dt.codigo, dt.descripcion, dt.nombre, dt.clase, dt.precio, dt.estatus, dt.created_at, dt.updated_at) AS prediction_id
-	, dt.codigo, dt.descripcion, dt.nombre, dt.clase, dt.precio, dt.estatus, dt.created_at, dt.updated_at, dt.prev_id
-FROM (SELECT '0000' codigo, 'Desconocida' descripcion, 'Desconocido' nombre, 'Desconocido' clase, 0 precio, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id
-UNION ALL (SELECT ctts.codigo codigo, TRIM(ctts.descripcion) descripcion, TRIM(ctts.nombre) nombre, ctts.clase clase, ctts.precio precio, ctts.estatus estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, ctts.idt_tarifa_servicios prev_id FROM cxc_t_tarifa_servicios ctts)) dt;
+	, dt.tipo, dt.codigo, dt.descripcion, dt.nombre, dt.clase, dt.precio, dt.estatus, dt.created_at, dt.updated_at, dt.prev_id
+FROM (SELECT '0000' codigo, 'Desconocida' descripcion, 'Desconocido' nombre, 'Desconocido' clase, 0 precio, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id, '' tipo
+UNION ALL (
+	SELECT 
+		ctts.codigo codigo
+		, TRIM(ctts.descripcion) descripcion
+		, TRIM(ctts.nombre) nombre
+		, ctts.clase clase
+		, ctts.precio precio
+		, ctts.estatus estatus
+		, CURRENT_TIMESTAMP created_at
+		, CURRENT_TIMESTAMP updated_at
+		, ctts.idt_tarifa_servicios prev_id
+		, CASE WHEN ctts.nombre~'.*(TR\s)' THEN 'TR' WHEN ctts.nombre~'.*(TS\s)' THEN 'TS' ELSE '' END tipo
+	FROM cxc_t_tarifa_servicios ctts	
+	)) dt;
 
-INSERT INTO t_tarifa_servicios (codigo, descripcion, nombre, clase, precio, estatus, created_at, updated_at)
-SELECT codigo, descripcion, nombre, clase, precio, estatus, created_at, updated_at
+INSERT INTO t_tarifa_servicios (codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at)
+SELECT codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at
 FROM tarifa_servicios_normalizados
-GROUP by prediction_id, codigo, descripcion, nombre, clase, precio, estatus, created_at, updated_at
+GROUP by prediction_id, codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at
 ORDER BY prediction_id;
 
 CREATE MATERIALIZED VIEW factura_detalle_normalizado AS
@@ -818,13 +831,16 @@ INSERT INTO t_factura_detalles (cantidad, cuenta_desc, precio_unitario, created_
 SELECT cantidad, cuenta_desc, precio_unitario, created_at, updated_at, t_factura_id, t_tarifa_servicio_id
 FROM factura_detalle_normalizado;
 
+/*
 UPDATE t_facturas
 SET monto_emision = dt.monto
 FROM (
 	SELECT tfds.t_factura_id, SUM(COALESCE(tfds.cantidad, 0) * COALESCE(tfds.precio_unitario, 0)) monto
 	FROM t_factura_detalles tfds
-	GROUP BY tfds.t_factura_id) dt
+	GROUP BY tfds.t_factura_id
+) dt
 WHERE dt.t_factura_id = t_facturas.id;
+*/
 
 CREATE MATERIALIZED VIEW metodos_pago_normalizado AS
 SELECT 
@@ -882,6 +898,16 @@ SELECT prediction_id, fecha_pago, num_cheque, pago_recibido, monto_acreditado, c
 FROM recibos_normalizado;
 
 SELECT SETVAL('t_recibos_id_seq', MAX(id), true) FROM t_recibos LIMIT 1;
+
+UPDATE t_recibos SET ultimo_recibo = false;
+
+UPDATE t_recibos SET ultimo_recibo = TRUE
+FROM (
+	SELECT t_factura_id, array_agg(id ORDER BY id DESC) ids
+	FROM t_recibos
+	GROUP BY t_factura_id
+) dt
+WHERE dt.ids[1] = t_recibos.id;
 
 CREATE MATERIALIZED VIEW presupuesto_normalizados AS
 SELECT
