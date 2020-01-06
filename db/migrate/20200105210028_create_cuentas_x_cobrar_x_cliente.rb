@@ -41,6 +41,7 @@ class CreateCuentasXCobrarXCliente < ActiveRecord::Migration[5.2]
           ELSE 0
           END dias_mas_de_120
         FROM t_facturas f
+        INNER JOIN t_estatuses est ON f.t_estatus_id = est.id
         INNER JOIN t_resolucions res ON res.id = f.t_resolucion_id
         INNER JOIN t_clientes c ON c.id = res.t_cliente_id
         LEFT OUTER JOIN t_empresas e ON e.id = c.persona_id AND c.persona_type = 'TEmpresa'
@@ -48,7 +49,9 @@ class CreateCuentasXCobrarXCliente < ActiveRecord::Migration[5.2]
         LEFT OUTER JOIN t_otros    o ON o.id = c.persona_id AND c.persona_type = 'TOtro'
         LEFT OUTER JOIN t_recibos rec ON f.id = rec.t_factura_id
 
-        WHERE rec.ultimo_recibo = true OR rec.t_factura_id IS NULL
+        WHERE
+            rec.ultimo_recibo = true OR rec.t_factura_id IS NULL AND
+            (est.descripcion = 'Facturada' OR est.descripcion = 'Pago Pendiente')
       )
       SELECT
         t_cliente_id,

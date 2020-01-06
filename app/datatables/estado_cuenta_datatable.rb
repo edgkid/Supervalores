@@ -33,13 +33,13 @@ class EstadoCuentaDatatable < ApplicationDatatable
                 fecha_notificacion: factura.fecha_notificacion,
                 fecha_vencimiento: factura.fecha_vencimiento,
                 recargo: factura.calculate_total_surcharge,
-                total_factura: factura.total_factura,
-                pendiente_fact: factura.calculate_pending_payment,
+                total_factura: number_to_balboa(factura.total_factura, false),
+                pendiente_fact: number_to_balboa(factura.pendiente_fact, false),
                 tipo: factura.tipo,
                 numero_recibo: recibo.id,
-                debito: recibo.pago_recibido,
-                credito: recibo.monto_acreditado,
-                saldo: recibo.pago_pendiente,
+                debito: number_to_balboa(recibo.pago_recibido, false),
+                credito: number_to_balboa(recibo.monto_acreditado, false),
+                saldo: number_to_balboa(recibo.pago_pendiente, false),
                 usuario: recibo.user.nombre_completo,
                 DT_RowId: url_for({
                   id: factura.id, controller: 't_facturas', action: 'preview', only_path: true
@@ -53,9 +53,9 @@ class EstadoCuentaDatatable < ApplicationDatatable
               numero: factura.id,
               fecha_notificacion: factura.fecha_notificacion,
               fecha_vencimiento: factura.fecha_vencimiento,
-              recargo: factura.calculate_total_surcharge,
-              total_factura: factura.total_factura,
-              pendiente_fact: factura.calculate_pending_payment,
+              recargo: number_to_balboa(factura.calculate_total_surcharge, false),
+              total_factura: number_to_balboa(factura.total_factura, false),
+              pendiente_fact: number_to_balboa(factura.pendiente_fact, false),
               tipo: factura.tipo,
               numero_recibo: 'N/A',
               debito: 'N/A',
@@ -75,13 +75,14 @@ class EstadoCuentaDatatable < ApplicationDatatable
 
   def get_raw_records
     t_resolucion_id = params[:t_resolucion_id] == nil || params[:t_resolucion_id] == "" ? nil : params[:t_resolucion_id]
-    TFactura.includes(
-      {t_recibos: :user}
-    )
-    .left_joins(
-      {t_recibos: :user}, 
-      {t_resolucion: :t_cliente}
-    )
-    .where('t_resolucions.id = ?', t_resolucion_id)
+    TFactura
+      .joins(:t_estatus)
+      .includes(t_recibos: :user)
+      .left_joins({t_recibos: :user}, {t_resolucion: :t_cliente})
+      .where("
+        t_resolucions.id = ? AND
+        (t_estatuses.descripcion = ? OR
+        t_estatuses.descripcion = ?)",
+        t_resolucion_id, 'Facturada', 'Pago Pendiente')
   end
 end
