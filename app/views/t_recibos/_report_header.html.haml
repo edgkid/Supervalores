@@ -1,0 +1,22 @@
+#period-form-container.row
+  .col-md-2
+    %select#periodo-select{:name => "periodo", :style => "width: 100%;"}
+      %option{:value => ""}
+      %option{:value => "sin_filtro"} Sin Filtro
+      %option{:value => "diario"} Diario
+      %option{:value => "semanal"} Semanal
+      %option{:value => "mensual"} Mensual
+      %option{:value => "bimestral"} Bimestral
+      %option{:value => "trimestral"} Trimestral
+      %option{:value => "semestral"} Semestral
+      %option{:value => "anual"} Anual
+  .col-md-10
+    .row
+      #period-selects-container.col{:align => "center"}
+        = render 'period_selects', periodo: nil
+      .col
+        %button#execute.btn.btn-primary Ejecutar
+        %button.btn.btn-default{:onclick => "javascript:window.print()", :type => "button"}
+          Imprimir
+
+

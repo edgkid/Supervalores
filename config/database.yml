@@ -26,7 +26,7 @@ default: &default
 development:
   <<: *default
 
-  database: supervalores_development
+  database: supervalores_january_6
 
 
   # The specified database role being used to connect to postgres.

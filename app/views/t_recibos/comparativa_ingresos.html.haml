@@ -1,5 +1,6 @@
 .wrapper.wrapper-content.animated.fadeInRight
   = hidden_field_tag :print_condition, @print
+
   .row
     .col-md-12
       = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do
@@ -14,6 +15,32 @@
               = form_tag comparativa_ingresos_t_recibos_path, target: "_blank" do
                 = hidden_field_tag :print, false
                 = submit_tag("Mostrar Todo", :id => "print_every_page", class: "fa fa-download btn btn-primary")
+  - console
+  .row
+    .col-md-12
+      %a.btn.btn-default{"data-target" => "#filtros", "data-toggle" => "collapse", :href => "#"} Filtros Avanzados
+      = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do
+        %br
+        .panel.collapse.pl-3.pr-3.mb-3{id: 'filtros'}
+          .row.mt-2
+            .col-md-3
+              = label_tag "PERIODO"
+              = select_tag :requirement_by_year, options_for_select([['- Seleccionar -', ''], ["Diario", 1], ["Semanal", 2],["Mensual", 3], ["Anual", 4]]), class: 'form-control'
+            .col-md-3
+              = label_tag "DESDE"
+              = select_tag :from, options_for_select(@available_years), class: 'form-control'
+            .col-md-3
+              = label_tag "HASTA"
+              = text_field :date, :class => 'datepicker'
+
+            .col-md-3
+              = label_tag "ASIGNADO"
+              = select_tag :requirement_employee, options_for_select(["3"]), class: 'form-control'
+          %br
+          .row.mb-2
+            .col-md-12
+              %button.btn.mt-1.btn-primary.pull-xs-right{:type => "submit"} Buscar
+              %button.btn.mt-1.mr-1.h-42.btn-default.btn-outline.pull-xs-right.clear_form Cancelar
   .row
     .col-md-6
       = image_tag "logoSMV.png", width: '150px'

@@ -79,6 +79,7 @@ class TRecibosController < ApplicationController
   end
 
   def comparativa_ingresos
+    @available_years = TRecibo.years_options
     # debugger
     # params[:print] = "not_true"
     per_page = params[:print] == "true" ? (TRecibo.all.count) / 10 : 20
