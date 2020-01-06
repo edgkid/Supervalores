@@ -263,7 +263,6 @@ class TFactura < ApplicationRecord
   def update_surcharges(rate, t_factura_actual = self)
     t_recibos = t_factura_actual.t_recibos
 
-    debugger
     if (ultimo_recibo = t_recibos.find_by(ultimo_recibo: true))
       new_surcharge_price = ultimo_recibo.servicios_x_pagar * rate
       t_recibos.each do |t_recibo|

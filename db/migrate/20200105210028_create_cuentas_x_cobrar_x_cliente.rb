@@ -50,7 +50,7 @@ class CreateCuentasXCobrarXCliente < ActiveRecord::Migration[5.2]
         LEFT OUTER JOIN t_recibos rec ON f.id = rec.t_factura_id
 
         WHERE
-            rec.ultimo_recibo = true OR rec.t_factura_id IS NULL AND
+            (rec.ultimo_recibo = true OR rec.t_factura_id IS NULL) AND
             (est.descripcion = 'Facturada' OR est.descripcion = 'Pago Pendiente')
       )
       SELECT
