@@ -27,7 +27,7 @@ class CuentasXCobrarXClienteDatatable < ApplicationDatatable
     if params[:t_resolucion_id].blank?
       CuentasXCobrarXClienteView.all
     else
-      CuentasXCobrarXClienteView.where(t_cliente_id: TResolucion.find(params[:t_resolucion_id]).t_cliente.id)
+      CuentasXCobrarXClienteView.where(t_resolucion_id: params[:t_resolucion_id])
     end
   end
 end
