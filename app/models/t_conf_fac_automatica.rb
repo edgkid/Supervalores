@@ -134,7 +134,7 @@ class TConfFacAutomatica < ApplicationRecord
         monto_emision: 0,
         justificacion: configuracion_actual.nombre_ciclo_facturacion,
         automatica: true,
-        t_estatus: TEstatus.find_by(descripcion: 'Disponible'),
+        t_estatus: TEstatus.find_by(descripcion: 'Facturada'),
         t_periodo: configuracion_actual.t_periodo,
         # t_recargos: configuracion_actual.t_recargos,
         t_resolucion: t_resolucion,

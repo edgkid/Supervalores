@@ -124,7 +124,9 @@ class TFactura < ApplicationRecord
 
   def generate_surcharge(rate, job)
     t_factura_actual = TFactura.find(self.id)
-    if t_factura_actual.t_estatus.descripcion != 'Disponible'
+
+    estatus_fac = t_factura_actual.t_estatus.descripcion
+    if estatus_fac.downcase != 'facturada' && estatus_fac.downcase != 'pago pendiente'
       terminate_job(job)
     else
       puts 'Job is up yet!'
@@ -162,7 +164,8 @@ class TFactura < ApplicationRecord
   def schedule_surcharge(t_recargo)
     scheduler = Rufus::Scheduler.singleton
 
-    if self.t_estatus.descripcion == 'Disponible'
+    estatus_fac = self.t_estatus.descripcion
+    if estatus_fac.downcase == 'facturada' && estatus_fac.downcase == 'pago pendiente'
       scheduler.at "#{self.fecha_vencimiento + 1.day} 0000" do |job1|
       # scheduler.in '10s' do |job1|
         t_recargo_actual = TRecargo.find(t_recargo.id)
@@ -181,11 +184,11 @@ class TFactura < ApplicationRecord
   def schedule_custom_percent_monthly_surcharge(rate)
     scheduler = Rufus::Scheduler.singleton
 
-    if self.t_estatus.descripcion.downcase == 'disponible'
+    if self.t_estatus.descripcion.downcase == 'facturada'
       # El primer recargo se aplicará un día después de la fecha de vencimiento a las 00:00.
       # scheduler.at "#{self.fecha_vencimiento + 1.day} 0000" do |j0b|
       scheduler.in "15s" do |job1|
-        find_invoice_and_generate_surcharge(job1)
+        find_invoice_and_generate_surcharge(rate, job1)
 
         t_factura = find_self
         # El siguiente recargo se hará dependiendo de si fue en enero o no.
@@ -196,7 +199,7 @@ class TFactura < ApplicationRecord
           # Los siguientes recargos se harán cada mes
           scheduler.schedule_every '1month' do |job3|
           # scheduler.schedule_every '15s' do |job3|
-            find_invoice_and_generate_surcharge(job3)
+            find_invoice_and_generate_surcharge(rate, job3)
           end
         end
       end
@@ -245,7 +248,7 @@ class TFactura < ApplicationRecord
     if (ultimo_recibo = t_recibos.find_by(ultimo_recibo: true))
       t_recibos.each do |t_recibo|
         t_recibo.pago_pendiente +=
-          (self.total_factura - old_t_factura.total_factura)
+          (self.pendiente_fact - ultimo_recibo.pago_pendiente)
         t_recibo.save
       end
       ultimo_recibo.recargo_x_pagar +=
@@ -260,6 +263,7 @@ class TFactura < ApplicationRecord
   def update_surcharges(rate, t_factura_actual = self)
     t_recibos = t_factura_actual.t_recibos
 
+    debugger
     if (ultimo_recibo = t_recibos.find_by(ultimo_recibo: true))
       new_surcharge_price = ultimo_recibo.servicios_x_pagar * rate
       t_recibos.each do |t_recibo|
@@ -275,6 +279,26 @@ class TFactura < ApplicationRecord
     end
 
     t_factura_actual.save
+  end
+
+  def update_deleted_surcharge(rate)
+    t_recibos = self.t_recibos
+
+    if (ultimo_recibo = t_recibos.find_by(ultimo_recibo: true))
+      new_surcharge_price = ultimo_recibo.servicios_x_pagar * rate
+      t_recibos.each do |t_recibo|
+        t_recibo.recargo_x_pagar -= new_surcharge_price
+        t_recibo.pago_pendiente -= new_surcharge_price
+        t_recibo.save
+      end
+    else
+      new_surcharge_price = self.calculate_services_total_price * rate
+      self.recargo -= new_surcharge_price
+      self.total_factura -= new_surcharge_price
+      self.pendiente_fact -= new_surcharge_price
+    end
+
+    self.save
   end
 
   def puede_tener_mas_recargos?
@@ -311,9 +335,10 @@ class TFactura < ApplicationRecord
 
   private
 
-    def find_invoice_and_generate_surcharge(job)
+    def find_invoice_and_generate_surcharge(rate, job)
       t_factura = find_self
-      if t_factura.t_estatus.descripcion.downcase == 'disponible'
+      estatus_fac = t_factura.t_estatus.descripcion
+      if estatus_fac.downcase == 'facturada' || estatus_fac.downcase == 'pago pendiente'
         t_recibos = t_factura.t_recibos
         unless t_recibos.any? && t_recibos.find_by(ultimo_recibo: true).pago_pendiente <= 0
           generate_surcharge(t_factura.corregir_tasa_de_recargo(rate), job) if t_factura.puede_tener_mas_recargos?

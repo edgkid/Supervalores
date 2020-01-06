@@ -147,12 +147,20 @@ class TFacturasController < ApplicationController
       end if !params[:services_to_destroy].blank?
 
       params[:surcharges_to_destroy].each do |t_recargo_id|
+        @t_factura.update_deleted_surcharge(
+          @t_factura.t_recargo_facturas.find_by(t_recargo_id: t_recargo_id).precio_unitario
+        )
         @t_factura.t_recargo_facturas.find_by(t_recargo_id: t_recargo_id).try(:destroy)
       end if !params[:surcharges_to_destroy].blank?
 
       @t_factura.t_recargo_ids - params[:surcharges_to_destroy].map {|id| id.to_i} if !params[:surcharges_to_destroy].blank?
 
       @t_factura.update_receipts(old_t_factura)
+      params[:t_recargo_facturas_attributes].each do |t_recargo_factura_param|
+        next if ids_de_recargos.include?(t_recargo_factura_param[:id].to_i)
+        debugger
+        @t_factura.update_surcharges(t_recargo_factura_param[:precio_unitario].to_d)
+      end if params[:t_recargo_facturas_attributes]
 
       # redirect_to t_facturas_path 
       redirect_to preview_t_factura_path(@t_factura)
