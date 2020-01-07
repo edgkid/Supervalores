@@ -2,7 +2,7 @@ class InformeTTipoClienteDatatable < ApplicationDatatable
   def view_columns
     @view_columns ||= {
       tipo_cliente: { source: "InformePorTiposDeClienteView.descripcion" },
-      anio_pago: { source: "InformePorTiposDeClienteView.anio_pago" },
+      anio_pago: { source: "InformePorTiposDeClienteView.fecha_pago" },
       pago_enero: { source: "InformePorTiposDeClienteView.pago_enero" },
       pago_febrero: { source: "InformePorTiposDeClienteView.pago_febrero" },
       pago_marzo: { source: "InformePorTiposDeClienteView.pago_marzo" },
@@ -23,7 +23,7 @@ class InformeTTipoClienteDatatable < ApplicationDatatable
     records.map do |record|
       {
         tipo_cliente: record.descripcion,
-        anio_pago: record.anio_pago.to_i,
+        anio_pago: record.fecha_pago.to_i,
         pago_enero: number_to_balboa(record.pago_enero || 0, false),
         pago_febrero: number_to_balboa(record.pago_febrero || 0, false),
         pago_marzo: number_to_balboa(record.pago_marzo || 0, false),
@@ -45,11 +45,46 @@ class InformeTTipoClienteDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    if !params[:year].blank?
-      InformePorTiposDeClienteView.where('anio_pago = ?',
-        params[:year].to_date.strftime('%Y'))
-    else
-      InformePorTiposDeClienteView.all
-    end
+    t_tipo_clientes =
+      if params[:day]
+        InformePorTiposDeClienteView.where(fecha_pago: params[:day])
+      elsif params[:ztart] && params[:end]
+        InformePorTiposDeClienteView.where('fecha_pago BETWEEN ? AND ?', params[:ztart], params[:end])
+      elsif params[:month_year]
+        InformePorTiposDeClienteView.where('fecha_pago BETWEEN ? AND ?',
+          params[:month_year], params[:month_year].to_date.at_end_of_month.strftime('%d/%m/%Y'))
+      elsif params[:bimonthly]
+        InformePorTiposDeClienteView.where('fecha_pago BETWEEN ? AND ?',
+          params[:bimonthly], (params[:bimonthly].to_date + 1.month).at_end_of_month.strftime('%d/%m/%Y'))
+      elsif params[:quarterly]
+        InformePorTiposDeClienteView.where('fecha_pago BETWEEN ? AND ?',
+          params[:quarterly], (params[:quarterly].to_date + 2.months).at_end_of_month.strftime('%d/%m/%Y'))
+      elsif params[:biannual]
+        InformePorTiposDeClienteView.where('fecha_pago BETWEEN ? AND ?',
+          params[:biannual], (params[:biannual].to_date + 5.months).at_end_of_month.strftime('%d/%m/%Y'))
+      elsif params[:year]
+        InformePorTiposDeClienteView.where('fecha_pago BETWEEN ? AND ?',
+          params[:year], params[:year].to_date.at_end_of_year.strftime('%d/%m/%Y'))
+      else
+        InformePorTiposDeClienteView.all
+      end
+
+    t_tipo_clientes
+      .select("
+        id, descripcion, extract(year from fecha_pago) fecha_pago,
+        SUM(pago_enero) pago_enero,
+        SUM(pago_febrero) pago_febrero,
+        SUM(pago_marzo) pago_marzo,
+        SUM(pago_abril) pago_abril,
+        SUM(pago_mayo) pago_mayo,
+        SUM(pago_junio) pago_junio,
+        SUM(pago_julio) pago_julio,
+        SUM(pago_agosto) pago_agosto,
+        SUM(pago_septiembre) pago_septiembre,
+        SUM(pago_octubre) pago_octubre,
+        SUM(pago_noviembre) pago_noviembre,
+        SUM(pago_diciembre) pago_diciembre,
+        SUM(total) total")
+      .group("id, descripcion, extract(year from fecha_pago)")
   end
 end
