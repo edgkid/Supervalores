@@ -93,8 +93,8 @@
           <td>Recargo</td>
           <td><%= r.t_recargo.descripcion %></td>
           <!-- <td><%#= r.precio_unitario * 100 %></td> -->
-          <td><%= number_to_balboa(r.precio_unitario * @t_factura.calculate_services_total_price, false) %></td>
-          <td><%= number_to_balboa(r.precio_unitario * r.cantidad * @t_factura.calculate_services_total_price, false) %></td>
+          <td><%= number_to_balboa(r.monto / r.cantidad, false) %></td>
+          <td><%= number_to_balboa(r.monto, false) %></td>
         </tr>
       <% end %>
     </tbody>
@@ -222,8 +222,8 @@
           <td>Recargo</td>
           <td><%= r.t_recargo.descripcion %></td>
           <!-- <td><%#= r.precio_unitario * 100 %></td> -->
-          <td><%= number_to_balboa(r.precio_unitario * @t_factura.calculate_services_total_price, false) %></td>
-          <td><%= number_to_balboa(r.precio_unitario * r.cantidad * @t_factura.calculate_services_total_price, false) %></td>
+          <td><%= number_to_balboa(r.monto / r.cantidad, false) %></td>
+          <td><%= number_to_balboa(r.monto, false) %></td>
         </tr>
       <% end %>
     </tbody>

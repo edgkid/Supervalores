@@ -141,14 +141,6 @@ class TConfFacAutomatica < ApplicationRecord
         user: configuracion_actual.user
       )
 
-      configuracion_actual.t_recargos.each do |t_recargo|
-        t_factura.t_recargo_facturas.build(
-          cantidad: 1,
-          precio_unitario: t_recargo.tasa,
-          t_recargo: t_recargo
-        )
-      end
-
       configuracion_actual.t_tarifa_servicios.each do |t_tarifa_servicio|
         t_factura.t_factura_detalles.build(
           cantidad: 1,
@@ -156,6 +148,15 @@ class TConfFacAutomatica < ApplicationRecord
           precio_unitario: t_tarifa_servicio.precio,
           t_factura: t_factura,
           t_tarifa_servicio: t_tarifa_servicio
+        )
+      end
+
+      configuracion_actual.t_recargos.each do |t_recargo|
+        t_factura.t_recargo_facturas.build(
+          cantidad: 1,
+          precio_unitario: t_recargo.tasa,
+          monto: t_factura.calculate_services_total_price * t_recargo.tasa,
+          t_recargo: t_recargo
         )
       end
       #Si una configuracion automatica no tiene servicios (tarifa_servicios) no se crearan facturas_detalles, lo cual ocasionara que el bloque de abajo genere error, es necesario validar para que las configuraciones automaticas tengan servicios

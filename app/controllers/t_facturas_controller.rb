@@ -15,9 +15,9 @@ class TFacturasController < ApplicationController
     @do_not_use_plain_select2 = true
     @t_factura = TFactura.new
     # @t_factura.t_factura_detalles.build
-    @t_recargos = TRecargo.all
-    @t_clientes = TCliente.first(10)
-    @t_resolucions = TResolucion.first(10)
+    # @t_recargos = TRecargo.all
+    # @t_clientes = TCliente.first(10)
+    # @t_resolucions = TResolucion.first(10)
     @no_cache = true
   end
 
@@ -47,6 +47,8 @@ class TFacturasController < ApplicationController
       t_recargo_factura = @t_factura.t_recargo_facturas.build(
         cantidad: t_recargo_factura_param[:cantidad],
         precio_unitario: t_recargo_factura_param[:precio_unitario],
+        monto: @t_factura.calculate_services_total_price *
+               t_recargo_factura_param[:precio_unitario].to_d,
         t_recargo_id: t_recargo_factura_param[:id]
       )
       invalid_t_recargo = true if t_recargo_factura.invalid?
@@ -128,16 +130,29 @@ class TFacturasController < ApplicationController
 
   def update
     old_t_factura = @t_factura.dup
+    precios_y_cantidades = []
+
+    t_factura_params[:t_factura_detalles_attributes].each do |_, attribute|
+      precios_y_cantidades << [attribute[:precio_unitario], attribute[:cantidad]]
+    end
+    precios_y_cantidades.map! {|pr_c| pr_c[0].to_d * pr_c[1].to_i}
+    precios_y_cantidades.sum
 
     invalid_t_recargo = false
     ids_de_recargos = @t_factura.t_recargo_ids
+    if (ultimo_t_recibo = @t_factura.t_recibos.find_by(ultimo_recibo: true))
+      servicios_x_pagar = precios_y_cantidades[0] - ultimo_t_recibo.pago_pendiente
+    end
     params[:t_recargo_facturas_attributes].each do |t_recargo_factura_param|
       next if ids_de_recargos.include?(t_recargo_factura_param[:id].to_i)
       t_recargo_factura = @t_factura.t_recargo_facturas.build(
         cantidad: t_recargo_factura_param[:cantidad],
         precio_unitario: t_recargo_factura_param[:precio_unitario],
+        monto: (servicios_x_pagar || precios_y_cantidades[0]) *
+               t_recargo_factura_param[:precio_unitario].to_d,
         t_recargo_id: t_recargo_factura_param[:id]
       )
+      debugger
       invalid_t_recargo = true if t_recargo_factura.invalid?
     end if params[:t_recargo_facturas_attributes]
 
