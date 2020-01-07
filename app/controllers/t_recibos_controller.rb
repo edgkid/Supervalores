@@ -79,6 +79,7 @@ class TRecibosController < ApplicationController
   end
 
   def comparativa_ingresos
+    # debugger
     @available_years = TRecibo.years_options
     # debugger
     # params[:print] = "not_true"
@@ -87,37 +88,65 @@ class TRecibosController < ApplicationController
     @print = params[:print] unless params[:print].blank?
     # @recibos = TRecibo.all
     # @recibos = TRecibo.all#.joins(:t_factura).where("t_facturas.t_cliente_id = ?", null)
-    @recibos = TRecibo.includes(t_factura: :t_factura_detalles)
-    unless params[:search_client].blank? #&& params[:search_client].blank?
-      personas = TPersona.where("cedula like ?", "%#{params[:search_client]}%")
-      clientes_naturales = TCliente.where(persona_id: personas.ids, persona_type: "TPersona")
+    @recibos = TRecibo.includes(t_factura: :t_factura_detalles).distinct
 
-      empresas = TEmpresa.where("rif like ?", "%#{params[:search_client]}%")
-      clientes_juridicos = TCliente.where(persona_id: empresas.ids, persona_type: "TEmpresa")
-
-      @recibos = TRecibo.where(t_cliente_id: clientes_naturales.ids + clientes_juridicos.ids)
+    unless params[:day].blank?
+      @recibos = @recibos.where(fecha_pago: Date.parse(params[:day])).distinct
     end
+
+    unless (params[:from].blank? || params[:to].blank?)
+      @recibos = @recibos.where("fecha_pago BETWEEN ? AND ?", params[:from], params[:to]).distinct
+    end
+
+    unless params[:month].blank?
+      @recibos = @recibos.where("extract(month from Date(fecha_pago)) = #{params[:month]}").distinct
+    end
+
+    unless params[:year].blank?
+      @recibos = @recibos.where("extract(year from Date(fecha_pago)) = #{params[:year]}").distinct
+    end
+
+    unless params[:search_client].blank?
+      personas_naturales_ids = TPersona.joins(:t_cliente).where("lower(nombre) like ?", "%#{params[:search_client].downcase}%").pluck(:"t_clientes.id")
+      personas_juridicas_ids = TEmpresa.joins(:t_cliente).where("lower(razon_social) like ?", "%#{params[:search_client].downcase}%").pluck(:"t_clientes.id")
+      @recibos = @recibos.where(t_cliente_id: personas_naturales_ids + personas_juridicas_ids).distinct
+    end
+    # debugger
+    unless params[:search_service].blank?
+      @recibos = @recibos.joins(t_factura: [t_factura_detalles: :t_tarifa_servicio]).where("lower(t_tarifa_servicios.descripcion) like ?", "%#{params[:search_service].downcase}%").distinct
+    end
+
+
+    # unless params[:search_client].blank? #&& params[:search_client].blank?
+    #   personas = TPersona.where("cedula like ?", "%#{params[:search_client]}%")
+    #   clientes_naturales = TCliente.where(persona_id: personas.ids, persona_type: "TPersona")
+
+    #   empresas = TEmpresa.where("rif like ?", "%#{params[:search_client]}%")
+    #   clientes_juridicos = TCliente.where(persona_id: empresas.ids, persona_type: "TEmpresa")
+
+    #   @recibos = TRecibo.where(t_cliente_id: clientes_naturales.ids + clientes_juridicos.ids)
+    # end
     # resolucion.t_facturas.joins(:t_factura_detalles).order("t_factura_detalles.cuenta_desc").each do |factura|
 
     @recibos = @recibos.paginate(page: params[:page], per_page: per_page)
-    @usar_dataTables = true
-    @useDataTableFooter = true
-    @do_not_use_plain_select2 = true
-    @no_cache = true
+    # @usar_dataTables = true
+    # @useDataTableFooter = true
+    # @do_not_use_plain_select2 = true
+    # @no_cache = true
 
-    @attributes_to_display = [
-      :id, :fecha_pago, :detalle_factura, :nombre_servicio,
-      :descripcion_servicio, :identificacion, :razon_social, :pago_recibido
-    ]
+    # @attributes_to_display = [
+    #   :id, :fecha_pago, :detalle_factura, :nombre_servicio,
+    #   :descripcion_servicio, :identificacion, :razon_social, :pago_recibido
+    # ]
 
     respond_to do |format|
       format.html
-      format.json { render json: ComparativaIngresosDatatable.new(
-        params.merge({
-          attributes_to_display: @attributes_to_display
-        }),
-        view_context: view_context)
-      }
+      # format.json { render json: ComparativaIngresosDatatable.new(
+      #   params.merge({
+      #     attributes_to_display: @attributes_to_display
+      #   }),
+      #   view_context: view_context)
+      # }
     end
   end
 

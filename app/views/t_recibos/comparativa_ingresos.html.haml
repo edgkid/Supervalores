@@ -15,7 +15,6 @@
               = form_tag comparativa_ingresos_t_recibos_path, target: "_blank" do
                 = hidden_field_tag :print, false
                 = submit_tag("Mostrar Todo", :id => "print_every_page", class: "fa fa-download btn btn-primary")
-  - console
   .row
     .col-md-12
       %a.btn.btn-default{"data-target" => "#filtros", "data-toggle" => "collapse", :href => "#"} Filtros Avanzados
@@ -25,17 +24,42 @@
           .row.mt-2
             .col-md-3
               = label_tag "PERIODO"
-              = select_tag :requirement_by_year, options_for_select([['- Seleccionar -', ''], ["Diario", 1], ["Semanal", 2],["Mensual", 3], ["Anual", 4]]), class: 'form-control'
+              .input
+                = select_tag :filter_option, options_for_select([ ['- Seleccionar -', ''], ["Diario", 1], ["Rango", 2], ["Mensual", 3], ["Anual", 4] ]), {id: "test_id"}
+          .row.mt-2.hide
+            .col-md-3
+              = label_tag "DIA"
+              .input-append.date.datepicker{"data-date" => Date.today.strftime("%d-%m-%Y"), "data-date-format" => "dd-mm-yyyy"}
+                %span.add-on
+                  = text_field_tag :day, params[:day], class: 'form-control'
+                
+          .row.mt-2
             .col-md-3
               = label_tag "DESDE"
-              = select_tag :from, options_for_select(@available_years), class: 'form-control'
+              .input-append.date.datepicker{"data-date" => Date.today.strftime("%d-%m-%Y"), "data-date-format" => "dd-mm-yyyy"}
+                %span.add-on
+                  = text_field_tag :from, params[:from], class: 'form-control'
+                
             .col-md-3
               = label_tag "HASTA"
-              = text_field :date, :class => 'datepicker'
-
+              .input-append.date.datepicker{"data-date" => Date.today.strftime("%d-%m-%Y"), "data-date-format" => "dd-mm-yyyy"}
+                %span.add-on
+                  = text_field_tag :to, params[:to], class: 'form-control'
+                
+          .row.md-2
             .col-md-3
-              = label_tag "ASIGNADO"
-              = select_tag :requirement_employee, options_for_select(["3"]), class: 'form-control'
+              = label_tag "MES"
+              .input-append.date.month-datepicker{"data-date" => Date.today.strftime("%m-%Y"), "data-date-format" => "mm-yyyy"}
+                %span.add-on
+                  = text_field_tag :month, params[:month], class: 'form-control'
+                
+          .row.md-2
+            .col-md-3
+              = label_tag "AÑO"
+              .input-append.date.year-datepicker{}
+                %span.add-on
+                  = text_field_tag :year, params[:year], class: 'form-control'
+                
           %br
           .row.mb-2
             .col-md-12
@@ -78,7 +102,7 @@
                 %td
                   = recibo.fecha_pago.strftime("%Y-%m-%d")
                 %td
-                  = recibo.t_factura.t_factura_detalles.first.cuenta_desc.titleize
+                  = recibo.t_factura.t_factura_detalles.count > 1 ? recibo.t_factura.t_factura_detalles.where.not("lower(cuenta_desc) like ?", "%#{("recargo").downcase}%").first.cuenta_desc.titleize : recibo.t_factura.t_factura_detalles.first.cuenta_desc.titleize
                 %td
                   = recibo.t_factura.t_factura_detalles.first.t_tarifa_servicio.codigo
                 %td
@@ -100,7 +124,7 @@
         = will_paginate @recibos
 :javascript
   $(document).ready(function(){
-  
+    
     $(document).on('click', '#print_every_page', function() {
       $('#print').val("true")
     });
@@ -111,8 +135,24 @@
 
     $('.datepicker').datepicker({
       autoclose: true,
-      format: "dd/mm/yyyy"
+      format: "dd/mm/yyyy",
+      clearBtn: true
     });
+
+    $('.month-datepicker').datepicker({
+      autoclose: true,
+      format: "mm/yyyy",
+      viewMode: "months", 
+      minViewMode: "months"
+    });
+
+    $('.year-datepicker').datepicker({
+      autoclose: true,
+      format: "yyyy",
+      viewMode: "years", 
+      minViewMode: "years"
+    });
+
 
     $("#client-select").select2({
       ajax: {
