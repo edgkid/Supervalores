@@ -86,35 +86,44 @@ class TClientesController < ApplicationController
     t_resolucion_id = params[:t_resolucion_id]
     if t_resolucion_id != ""
       resolucion = TResolucion.find(t_resolucion_id)
-      sum_total = TFactura.left_joins(
-          {t_recibos: :user}, 
-          {t_resolucion: :t_cliente}
-        )
-        .where('t_resolucions.id = ?', params[:t_resolucion_id])
+      sum_total = TFactura
+        .joins(:t_estatus)
+        .left_joins({t_recibos: :user}, {t_resolucion: :t_cliente})
+        .where("
+          t_resolucions.id = ? AND
+          (t_estatuses.descripcion = ? OR
+          t_estatuses.descripcion = ?)",
+          params[:t_resolucion_id], 'Facturada', 'Pago Pendiente')
         .sum("t_facturas.total_factura")
 
-      sum_pago_recibido = TFactura.left_joins(
-          {t_recibos: :user}, 
-          {t_resolucion: :t_cliente}
-        )
-        .where('t_resolucions.id = ?', params[:t_resolucion_id])
+      sum_pago_recibido = TFactura
+        .joins(:t_estatus)
+        .left_joins({t_recibos: :user}, {t_resolucion: :t_cliente})
+        .where("
+          t_resolucions.id = ? AND
+          (t_estatuses.descripcion = ? OR
+          t_estatuses.descripcion = ?)",
+          params[:t_resolucion_id], 'Facturada', 'Pago Pendiente')
         .sum("COALESCE(t_recibos.pago_recibido, 0)")
 
-      sum_monto_acreditado = TFactura.left_joins(
-          {t_recibos: :user}, 
-          {t_resolucion: :t_cliente}
-        )
-        .where('t_resolucions.id = ?', params[:t_resolucion_id])
+      sum_monto_acreditado = TFactura
+        .joins(:t_estatus)
+        .left_joins({t_recibos: :user}, {t_resolucion: :t_cliente})
+        .where("
+          t_resolucions.id = ? AND
+          (t_estatuses.descripcion = ? OR
+          t_estatuses.descripcion = ?)",
+          params[:t_resolucion_id], 'Facturada', 'Pago Pendiente')
         .sum("COALESCE(t_recibos.monto_acreditado, 0)")
     
       deuda = sum_total - sum_pago_recibido
       render json: {
         procesado: true,
-        total: sum_total,
+        total: view_context.number_to_balboa(sum_total, false),
         mostrar_paz_y_salvo: sum_total > 0 && deuda == 0,
-        por_pagar: deuda,
-        total_pago_recibido: sum_pago_recibido,
-        total_monto_acreditado: sum_monto_acreditado,
+        por_pagar: view_context.number_to_balboa(deuda, false),
+        total_pago_recibido: view_context.number_to_balboa(sum_pago_recibido, false),
+        total_monto_acreditado: view_context.number_to_balboa(sum_monto_acreditado, false),
         cliente_id: resolucion.t_cliente.id,
         cliente_codigo: resolucion.t_cliente.codigo
       }

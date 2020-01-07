@@ -3,7 +3,7 @@ class CreateCuentasXCobrarXCliente < ActiveRecord::Migration[5.2]
     self.connection.execute %Q( CREATE OR REPLACE VIEW cuentas_x_cobrar_x_cliente_view AS
       WITH dias_agrupados AS(
         SELECT
-          f.id, rec.id t_recibo_id, c.id t_cliente_id, f.fecha_notificacion,
+          f.id, res.id t_resolucion_id,
           COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido)) razon_social,
           CASE
           WHEN (rec.pago_pendiente IS NULL AND (CURRENT_DATE - f.fecha_notificacion BETWEEN 0 AND 30))
@@ -50,17 +50,17 @@ class CreateCuentasXCobrarXCliente < ActiveRecord::Migration[5.2]
         LEFT OUTER JOIN t_recibos rec ON f.id = rec.t_factura_id
 
         WHERE
-            rec.ultimo_recibo = true OR rec.t_factura_id IS NULL AND
+            (rec.ultimo_recibo = true OR rec.t_factura_id IS NULL) AND
             (est.descripcion = 'Facturada' OR est.descripcion = 'Pago Pendiente')
       )
       SELECT
-        t_cliente_id,
+        t_resolucion_id,
         SUM(dias_0_30) dias_0_30, SUM(dias_31_60) dias_31_60, SUM(dias_61_90) dias_61_90,
         SUM(dias_91_120) dias_91_120, SUM(dias_mas_de_120) dias_mas_de_120,
         (SUM(dias_0_30) + SUM(dias_31_60) + SUM(dias_61_90) + SUM(dias_91_120) + SUM(dias_mas_de_120)) total
       FROM dias_agrupados
 
-      GROUP BY t_cliente_id;
+      GROUP BY t_resolucion_id;
     )
   end
 
