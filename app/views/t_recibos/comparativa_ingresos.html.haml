@@ -1,9 +1,8 @@
 .wrapper.wrapper-content.animated.fadeInRight
   = hidden_field_tag :print_condition, @print
-
   .row
     .col-md-12
-      = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do
+      = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do 
         .form-group
           .input-group.search
             = text_field_tag :search_client, params[:search_client], placeholder: 'Nombre del cliente', class: 'form-control mr-3'
@@ -26,14 +25,14 @@
               = label_tag "PERIODO"
               .input
                 = select_tag :filter_option, options_for_select([ ['- Seleccionar -', ''], ["Diario", 1], ["Rango", 2], ["Mensual", 3], ["Anual", 4] ]), {id: "test_id"}
-          .row.mt-2.hide
+          .row.mt-2.hide{:class => "day"}
             .col-md-3
               = label_tag "DIA"
               .input-append.date.datepicker{"data-date" => Date.today.strftime("%d-%m-%Y"), "data-date-format" => "dd-mm-yyyy"}
                 %span.add-on
                   = text_field_tag :day, params[:day], class: 'form-control'
-                
-          .row.mt-2
+
+          .row.mt-2.hide{:class => "from_to"}
             .col-md-3
               = label_tag "DESDE"
               .input-append.date.datepicker{"data-date" => Date.today.strftime("%d-%m-%Y"), "data-date-format" => "dd-mm-yyyy"}
@@ -46,14 +45,14 @@
                 %span.add-on
                   = text_field_tag :to, params[:to], class: 'form-control'
                 
-          .row.md-2
+          .row.mt-2.hide{:class => "month"}
             .col-md-3
               = label_tag "MES"
               .input-append.date.month-datepicker{"data-date" => Date.today.strftime("%m-%Y"), "data-date-format" => "mm-yyyy"}
                 %span.add-on
                   = text_field_tag :month, params[:month], class: 'form-control'
                 
-          .row.md-2
+          .row.mt-2.hide{:class => "year"}
             .col-md-3
               = label_tag "AÑO"
               .input-append.date.year-datepicker{}
@@ -102,16 +101,13 @@
                 %td
                   = recibo.fecha_pago.strftime("%Y-%m-%d")
                 %td
-                  = recibo.t_factura.t_factura_detalles.count > 1 ? recibo.t_factura.t_factura_detalles.where.not("lower(cuenta_desc) like ?", "%#{("recargo").downcase}%").first.cuenta_desc.titleize : recibo.t_factura.t_factura_detalles.first.cuenta_desc.titleize
+                  
                 %td
                   = recibo.t_factura.t_factura_detalles.first.t_tarifa_servicio.codigo
                 %td
                   = recibo.t_factura.t_factura_detalles.first.t_tarifa_servicio.descripcion
 
-                %td
-                  = recibo.t_cliente.persona_type == "TPersona" ? recibo.t_cliente.persona.cedula : recibo.t_cliente.persona.rif
-                %td
-                  = recibo.t_cliente.persona_type == "TPersona" ? recibo.t_cliente.persona.nombre : recibo.t_cliente.persona.razon_social
+
                 %td
                   = number_with_delimiter(recibo.pago_recibido, :delimiter => ',')
       - else

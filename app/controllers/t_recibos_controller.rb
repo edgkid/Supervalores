@@ -9,6 +9,7 @@ class TRecibosController < ApplicationController
   before_action :authorize_user_to_read_reports, only: [:comparativa_ingresos,
     :comparativa_ingresos_no_datatables]
 
+
   def new
     @last_t_recibo = TRecibo.find(params[:recibo_id]) if params[:recibo_id]
     @t_recibo = TRecibo.new
@@ -83,7 +84,7 @@ class TRecibosController < ApplicationController
     @available_years = TRecibo.years_options
     # debugger
     # params[:print] = "not_true"
-    per_page = params[:print] == "true" ? (TRecibo.all.count) / 10 : 20
+    per_page = params[:print] == "true" ? TRecibo.all.count / 15 : TRecibo.all.count / 15
     # per_page = params[:print] == "true" ? TRecibo.all.count : 5
     @print = params[:print] unless params[:print].blank?
     # @recibos = TRecibo.all
@@ -116,7 +117,8 @@ class TRecibosController < ApplicationController
       @recibos = @recibos.joins(t_factura: [t_factura_detalles: :t_tarifa_servicio]).where("lower(t_tarifa_servicios.descripcion) like ?", "%#{params[:search_service].downcase}%").distinct
     end
 
-
+    @recibos = @recibos.includes(t_factura: [:t_cliente, t_factura_detalles: :t_tarifa_servicio]).paginate(page: params[:page], per_page: per_page)
+    # @recibos = @recibos.includes(t_factura: [t_factura_detalles: :t_tarifa_servicio, :t_cliente])
     # unless params[:search_client].blank? #&& params[:search_client].blank?
     #   personas = TPersona.where("cedula like ?", "%#{params[:search_client]}%")
     #   clientes_naturales = TCliente.where(persona_id: personas.ids, persona_type: "TPersona")
@@ -128,7 +130,9 @@ class TRecibosController < ApplicationController
     # end
     # resolucion.t_facturas.joins(:t_factura_detalles).order("t_factura_detalles.cuenta_desc").each do |factura|
 
-    @recibos = @recibos.paginate(page: params[:page], per_page: per_page)
+    # @recibos = @recibos.paginate(page: params[:page], per_page: per_page)
+
+    
     # @usar_dataTables = true
     # @useDataTableFooter = true
     # @do_not_use_plain_select2 = true
@@ -141,6 +145,7 @@ class TRecibosController < ApplicationController
 
     respond_to do |format|
       format.html
+
       # format.json { render json: ComparativaIngresosDatatable.new(
       #   params.merge({
       #     attributes_to_display: @attributes_to_display
