@@ -25,7 +25,8 @@ class CuentasXCobrarXClienteDatatable < ApplicationDatatable
 
   def get_raw_records
     if params[:t_resolucion_id].blank?
-      CuentasXCobrarXClienteView.all
+      # CuentasXCobrarXClienteView.all
+      CuentasXCobrarXClienteView.where(t_resolucion_id: nil)
     else
       CuentasXCobrarXClienteView.where(t_resolucion_id: params[:t_resolucion_id])
     end
