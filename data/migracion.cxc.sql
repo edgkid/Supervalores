@@ -746,7 +746,7 @@ SELECT
 	, dt.automatica
 	, dt.prev_id
 FROM ( SELECT
-	CURRENT_TIMESTAMP fecha_notificacion
+		COALESCE(ctfs.fecha_factura, '1971-01-01') fecha_notificacion
 	, ctfs.fecha_vencimiento fecha_vencimiento
 	, ctfs.recargo recargo
 	, UPPER(TRIM(ctfs.recargo_desc)) recargo_desc
@@ -792,6 +792,14 @@ GROUP by prediction_id, fecha_notificacion, fecha_vencimiento, recargo, recargo_
 ORDER BY prediction_id;
 
 SELECT SETVAL('t_facturas_id_seq', MAX(id), true) FROM t_facturas LIMIT 1;
+
+UPDATE t_facturas
+SET created_at = dt.created_at, updated_at = dt.updated_at
+FROM (
+	SELECT prediction_id, created_at, updated_at
+	FROM facturas_normalizadas
+) dt
+WHERE id = dt.prediction_id;
 
 CREATE MATERIALIZED VIEW tarifa_servicios_normalizados AS
 SELECT 
@@ -908,6 +916,14 @@ FROM (
 	GROUP BY t_factura_id
 ) dt
 WHERE dt.ids[1] = t_recibos.id;
+
+UPDATE t_recibos
+SET created_at = dt.created_at, updated_at = dt.updated_at
+FROM (
+	SELECT prediction_id, created_at, updated_at
+	FROM recibos_normalizado
+) dt
+WHERE id = dt.prediction_id;
 
 CREATE MATERIALIZED VIEW presupuesto_normalizados AS
 SELECT

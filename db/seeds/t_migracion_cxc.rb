@@ -162,6 +162,6 @@ else
 end
 # Los delete, update e insert mediante SQL, agregarlos en /data/migracion.cxc.sql
 
-TTarifaServicio.group_by_budget_code(File.dirname(__FILE__) + "/../../data/prospecto.csv")
-TTarifaServicio.group_by_budget_code(File.dirname(__FILE__) + "/../../data/regulado.csv")
+TTarifaServicio.match_code_by_budget_code_from_csv(File.dirname(__FILE__) + "/../../data/prospecto.csv")
+TTarifaServicio.match_code_by_budget_code_from_csv(File.dirname(__FILE__) + "/../../data/regulado.csv")
 
