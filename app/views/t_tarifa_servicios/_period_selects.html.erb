@@ -1,0 +1,14 @@
+<% case periodo %>
+<% when nil %>
+  Seleccione un periodo
+<% when 'sin_filtro' %>
+  Sin Filtro
+<% when 'rango' %>
+  <div class="input-daterange input-group" id="datepicker">
+    <input class="form-control-sm form-control datepicker year" id="start" type="text" name="start" placeholder="Seleccione el año" readonly>
+    <span class="input-group-addon">al</span>
+    <input class="form-control-sm form-control datepicker year" id="end" type="text" name="end" placeholder="Seleccione el año" readonly>
+  </div>
+<% when 'anual' %>
+  <input class="datepicker" id="year" type="text" name="year" placeholder="Seleccione el año" readonly>
+<% end %>
