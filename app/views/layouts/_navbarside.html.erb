@@ -192,6 +192,7 @@
             <% end %>
             <% if can? :read_reports, TTarifaServicio %>
               <li><%= link_to 'Estadística Trámites de Tarifas Registradas', tramites_t_tarifa_servicios_path %></li>
+              <li><%= link_to 'Informe Trámites de Tarifas Registradas', informe_t_tarifa_servicios_path %></li>
             <% end %>
             <% if can? :read_reports, TFactura %>
               <li><%= link_to 'Facturas Pagadas', pagadas_t_facturas_path %></li>
