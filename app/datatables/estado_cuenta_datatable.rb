@@ -82,7 +82,8 @@ class EstadoCuentaDatatable < ApplicationDatatable
       .where("
         t_resolucions.id = ? AND
         (t_estatuses.descripcion = ? OR
+        t_estatuses.descripcion = ? OR
         t_estatuses.descripcion = ?)",
-        t_resolucion_id, 'Facturada', 'Pago Pendiente')
+        t_resolucion_id, 'Facturada', 'Pago Pendiente','Cancelada')
   end
 end
