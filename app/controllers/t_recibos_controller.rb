@@ -190,7 +190,6 @@ class TRecibosController < ApplicationController
     @servicio_mes_monto = []
     @tarifas_servicios = TTarifaServicio.where.not(estatus: 0)
     @tarifas_servicios.each do |tarifa_servicio|
-
       @servicio_mes_monto.push(
           "SERVICIO" => "#{tarifa_servicio.descripcion}",
           "ENERO" => 0,
@@ -206,43 +205,86 @@ class TRecibosController < ApplicationController
           "NOVIEMBRE" => 0,
           "DICIEMBRE" => 0,
           "TOTAL" => 0)
+    end
 
+    @tarifas_servicios.each do |tarifa_servicio|
+
+      @recargos = @servicio_mes_monto.select{|e| e["SERVICIO"].downcase.include?("recargo") }.first
+      recibos = TRecibo.where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')})").joins(:t_factura => [:t_factura_detalles => :t_tarifa_servicio]).where(:t_factura_detalles => {:t_tarifa_servicio_id => tarifa_servicio.id}).includes(t_factura: [:t_factura_detalles, :t_recargo_facturas])
+      # debugger
+      # debugger
       mes = 1
-      while mes != 12
+      while mes < 12
+        # debugger
+        # recibos = TRecibo.where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')}) and extract(month from Date(t_recibos.fecha_pago)) in (#{mes})").joins(:t_factura => [:t_factura_detalles => :t_tarifa_servicio]).where(:t_factura_detalles => {:t_tarifa_servicio_id => tarifa_servicio.id}).includes(t_factura: [:t_factura_detalles, :t_recargo_facturas])
 
-        monto_recibos = TRecibo.where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')}) and extract(month from Date(t_recibos.fecha_pago)) in (#{mes})").joins(:t_factura => [:t_factura_detalles => :t_tarifa_servicio]).where(:t_factura_detalles => {:t_tarifa_servicio_id => tarifa_servicio.id}).sum(:pago_recibido)
+        recibos.where("extract(month from Date(t_recibos.fecha_pago)) = #{mes}").each do |recibo|
+        # recibos.each do |recibo|
+          # debugger
+          monto_de_servicio = recibo.pago_recibido
+          recargos_a_cancelar = 0
+          # debugger
+          if recibo.ultimo_recibo
+            # debugger
+            # break if recibo.recargo_x_pagar.nil?
+            recargos_a_cancelar = recibo.recargo_x_pagar.nil? ? 0 : recibo.recargo_x_pagar
+            # recargos_a_cancelar = 1000
+            # monto_de_servicio = 300
+            # sobrante = 700
+            if recibo.pago_recibido >= recargos_a_cancelar
+              monto_de_servicio = monto_de_servicio - recargos_a_cancelar
+            elsif recibo.pago_recibido < recargos_a_cancelar
+              monto_de_servicio = 0
+              recargos_a_cancelar = recibo.pago_recibido
+            end
+          end
 
-        @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == tarifa_servicio.descripcion}.first
 
-        case mes
-          when 1
-            @selected_mes_monto["ENERO"] += monto_recibos
-          when 2
-            @selected_mes_monto["FEBRERO"] += monto_recibos
-          when 3
-            @selected_mes_monto["MARZO"] += monto_recibos
-          when 4
-            @selected_mes_monto["ABRIL"] += monto_recibos
-          when 5
-            @selected_mes_monto["MAYO"] += monto_recibos
-          when 6
-            @selected_mes_monto["JUNIO"] += monto_recibos
-          when 7
-            @selected_mes_monto["JULIO"] += monto_recibos
-          when 8
-            @selected_mes_monto["AGOSTO"] += monto_recibos
-          when 9
-            @selected_mes_monto["SEPTIEMBRE"] += monto_recibos
-          when 10
-            @selected_mes_monto["OCTUBRE"] += monto_recibos
-          when 11
-            @selected_mes_monto["NOVIEMBRE"] += monto_recibos
-          when 12
-            @selected_mes_monto["DICIEMBRE"] += monto_recibos
+          @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == tarifa_servicio.descripcion}.first
+
+          case mes
+            when 1
+              @selected_mes_monto["ENERO"] += monto_de_servicio
+              @recargos["ENERO"] += recargos_a_cancelar 
+            when 2
+              @selected_mes_monto["FEBRERO"] += monto_de_servicio
+              @recargos["FEBRERO"] += recargos_a_cancelar 
+            when 3
+              @selected_mes_monto["MARZO"] += monto_de_servicio
+              @recargos["MARZO"] += recargos_a_cancelar 
+            when 4
+              @selected_mes_monto["ABRIL"] += monto_de_servicio
+              @recargos["ABRIL"] += recargos_a_cancelar 
+            when 5
+              @selected_mes_monto["MAYO"] += monto_de_servicio
+              @recargos["MAYO"] += recargos_a_cancelar 
+            when 6
+              @selected_mes_monto["JUNIO"] += monto_de_servicio
+              @recargos["JUNIO"] += recargos_a_cancelar 
+            when 7
+              @selected_mes_monto["JULIO"] += monto_de_servicio
+              @recargos["JULIO"] += recargos_a_cancelar 
+            when 8
+              @selected_mes_monto["AGOSTO"] += monto_de_servicio
+              @recargos["AGOSTO"] += recargos_a_cancelar 
+            when 9
+              @selected_mes_monto["SEPTIEMBRE"] += monto_de_servicio
+              @recargos["SEPTIEMBRE"] += recargos_a_cancelar 
+            when 10
+              @selected_mes_monto["OCTUBRE"] += monto_de_servicio
+              @recargos["OCTUBRE"] += recargos_a_cancelar 
+            when 11
+              @selected_mes_monto["NOVIEMBRE"] += monto_de_servicio
+              @recargos["NOVIEMBRE"] += recargos_a_cancelar 
+            when 12
+              @selected_mes_monto["DICIEMBRE"] += monto_de_servicio
+              @recargos["DICIEMBRE"] += recargos_a_cancelar 
+          end
+
+          @selected_mes_monto["TOTAL"] += monto_de_servicio
+          @recargos["TOTAL"] += recargos_a_cancelar 
+          # debugger
         end
-
-        @selected_mes_monto["TOTAL"] += monto_recibos
-
         mes += 1
       end
     end 

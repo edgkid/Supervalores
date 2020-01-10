@@ -66,36 +66,36 @@
               %td
                 = tarifa_servicio.descripcion
               %td
-                = selected_mes_monto["ENERO"].round(2)
+                = number_with_delimiter(selected_mes_monto["ENERO"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["FEBRERO"].round(2)
+                = number_with_delimiter(selected_mes_monto["FEBRERO"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["MARZO"].round(2)
+                = number_with_delimiter(selected_mes_monto["MARZO"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["ABRIL"].round(2)
+                = number_with_delimiter(selected_mes_monto["ABRIL"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["MAYO"].round(2)
+                = number_with_delimiter(selected_mes_monto["MAYO"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["JUNIO"].round(2)
+                = number_with_delimiter(selected_mes_monto["JUNIO"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["JULIO"].round(2)
+                = number_with_delimiter(selected_mes_monto["JULIO"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["AGOSTO"].round(2)
+                = number_with_delimiter(selected_mes_monto["AGOSTO"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["SEPTIEMBRE"].round(2)
+                = number_with_delimiter(selected_mes_monto["SEPTIEMBRE"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["OCTUBRE"].round(2)
+                = number_with_delimiter(selected_mes_monto["OCTUBRE"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["NOVIEMBRE"].round(2)
+                = number_with_delimiter(selected_mes_monto["NOVIEMBRE"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["DICIEMBRE"].round(2)
+                = number_with_delimiter(selected_mes_monto["DICIEMBRE"].round(2), :delimiter => ',')
               %td
-                = selected_mes_monto["TOTAL"].round(2)
+                = number_with_delimiter(selected_mes_monto["TOTAL"].round(2), :delimiter => ',')
           %tr{:style => "font-size: x-small"}
             %td{:colspan => "12"}
               = "Total acumulado"
             %td{:colspan => "2"} 
-              = @monto_final.round(2)
+              = number_with_delimiter(@monto_final.round(2), :delimiter => ',')
 
 :javascript
   $(document).ready(function(){
