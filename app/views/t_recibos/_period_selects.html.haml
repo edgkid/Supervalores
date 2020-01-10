@@ -1,0 +1,22 @@
+- case periodo
+- when nil
+  Seleccione un periodo
+- when 'sin_filtro'
+  Sin Filtro
+- when 'diario'
+  %input#day.datepicker{:name => "day", :placeholder => "Seleccione el día", :readonly => "readonly", :type => "text"}/
+- when 'semanal'
+  #datepicker.input-daterange.input-group
+    %input#start.form-control-sm.form-control{:name => "start", :readonly => "readonly", :type => "text", :value => "#{Date.today.strftime('%d/%m/%Y')}"}/
+    %span.input-group-addon al
+    %input#end.form-control-sm.form-control{:name => "end", :readonly => "readonly", :type => "text", :value => "#{(Date.today + 6.days).strftime('%d/%m/%Y')}"}/
+- when 'mensual'
+  %input#month-year.datepicker.month-view{:name => "month-year", :placeholder => "Seleccione el mes y año", :readonly => "readonly", :type => "text"}/
+- when 'bimestral'
+  %input#bimonthly.datepicker.month-view{:name => "bimonthly", :placeholder => "Seleccione el mes y año", :readonly => "readonly", :type => "text"}/
+- when 'trimestral'
+  %input#quarterly.datepicker.month-view{:name => "quarterly", :placeholder => "Seleccione el mes y año", :readonly => "readonly", :type => "text"}/
+- when 'semestral'
+  %input#biannual.datepicker.month-view{:name => "biannual", :placeholder => "Seleccione el mes y año", :readonly => "readonly", :type => "text"}/
+- when 'anual'
+  %input#year.datepicker{:name => "year", :placeholder => "Seleccione el año", :readonly => "readonly", :type => "text"}/

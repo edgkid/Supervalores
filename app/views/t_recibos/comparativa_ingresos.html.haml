@@ -2,7 +2,7 @@
   = hidden_field_tag :print_condition, @print
   .row
     .col-md-12
-      = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do
+      = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do 
         .form-group
           .input-group.search
             = text_field_tag :search_client, params[:search_client], placeholder: 'Nombre del cliente', class: 'form-control mr-3'
@@ -14,6 +14,56 @@
               = form_tag comparativa_ingresos_t_recibos_path, target: "_blank" do
                 = hidden_field_tag :print, false
                 = submit_tag("Mostrar Todo", :id => "print_every_page", class: "fa fa-download btn btn-primary")
+  .row
+    .col-md-12
+      %a.btn.btn-default{"data-target" => "#filtros", "data-toggle" => "collapse", :href => "#"} Filtros Avanzados
+      = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do
+        %br
+        .panel.collapse.pl-3.pr-3.mb-3{id: 'filtros'}
+          .row.mt-2
+            .col-md-3
+              = label_tag "PERIODO"
+              .input
+                = select_tag :filter_option, options_for_select([ ['- Seleccionar -', ''], ["Diario", 1], ["Rango", 2], ["Mensual", 3], ["Anual", 4] ]), {id: "test_id"}
+          .row.mt-2.hide{:class => "day"}
+            .col-md-3
+              = label_tag "DIA"
+              .input-append.date.datepicker{"data-date" => Date.today.strftime("%d-%m-%Y"), "data-date-format" => "dd-mm-yyyy"}
+                %span.add-on
+                  = text_field_tag :day, params[:day], class: 'form-control'
+
+          .row.mt-2.hide{:class => "from_to"}
+            .col-md-3
+              = label_tag "DESDE"
+              .input-append.date.datepicker{"data-date" => Date.today.strftime("%d-%m-%Y"), "data-date-format" => "dd-mm-yyyy"}
+                %span.add-on
+                  = text_field_tag :from, params[:from], class: 'form-control'
+                
+            .col-md-3
+              = label_tag "HASTA"
+              .input-append.date.datepicker{"data-date" => Date.today.strftime("%d-%m-%Y"), "data-date-format" => "dd-mm-yyyy"}
+                %span.add-on
+                  = text_field_tag :to, params[:to], class: 'form-control'
+                
+          .row.mt-2.hide{:class => "month"}
+            .col-md-3
+              = label_tag "MES"
+              .input-append.date.month-datepicker{"data-date" => Date.today.strftime("%m-%Y"), "data-date-format" => "mm-yyyy"}
+                %span.add-on
+                  = text_field_tag :month, params[:month], class: 'form-control'
+                
+          .row.mt-2.hide{:class => "year"}
+            .col-md-3
+              = label_tag "AÑO"
+              .input-append.date.year-datepicker{}
+                %span.add-on
+                  = text_field_tag :year, params[:year], class: 'form-control'
+                
+          %br
+          .row.mb-2
+            .col-md-12
+              %button.btn.mt-1.btn-primary.pull-xs-right{:type => "submit"} Buscar
+              %button.btn.mt-1.mr-1.h-42.btn-default.btn-outline.pull-xs-right.clear_form Cancelar
   .row
     .col-md-6
       = image_tag "logoSMV.png", width: '150px'
@@ -51,7 +101,11 @@
                 %td
                   = recibo.fecha_pago.strftime("%Y-%m-%d")
                 %td
-                  = recibo.t_factura.t_factura_detalles.first.cuenta_desc.titleize
+                  - if recibo.t_factura.t_factura_detalles.select{|e| e.cuenta_desc.downcase.exclude?("recargo")}.first.nil?
+                    = recibo.t_factura.t_factura_detalles.first.cuenta_desc.titleize
+                  - else
+                    
+                    = recibo.t_factura.t_factura_detalles.select{|e| e.cuenta_desc.downcase.exclude?("recargo")}.first.cuenta_desc.titleize
                 %td
                   = recibo.t_factura.t_factura_detalles.first.t_tarifa_servicio.codigo
                 %td
@@ -73,7 +127,7 @@
         = will_paginate @recibos
 :javascript
   $(document).ready(function(){
-  
+    
     $(document).on('click', '#print_every_page', function() {
       $('#print').val("true")
     });
@@ -84,8 +138,26 @@
 
     $('.datepicker').datepicker({
       autoclose: true,
-      format: "dd/mm/yyyy"
+      format: "dd/mm/yyyy",
+      clearBtn: true
     });
+
+    $('.month-datepicker').datepicker({
+      autoclose: true,
+      format: "mm/yyyy",
+      viewMode: "months", 
+      minViewMode: "months",
+      clearBtn: true
+    });
+
+    $('.year-datepicker').datepicker({
+      autoclose: true,
+      format: "yyyy",
+      viewMode: "years", 
+      minViewMode: "years",
+      clearBtn: true
+    });
+
 
     $("#client-select").select2({
       ajax: {

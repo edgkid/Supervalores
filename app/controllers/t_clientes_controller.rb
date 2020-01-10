@@ -493,6 +493,7 @@ class TClientesController < ApplicationController
   end
 
   def total
+    # debugger
     dataTable =  TTramitesDatatable.new(
       params.merge({
         attributes_to_display: @attributes_to_display

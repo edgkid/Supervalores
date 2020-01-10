@@ -141,4 +141,6 @@ class TRecibo < ApplicationRecord
     
     # order("name_#{I18n.locale}").pluck(:id, "name_#{I18n.locale}", :value).map{ |e| [e[1], e[0], {"data-value" => e[2]} ] }
   end
+
+
 end
