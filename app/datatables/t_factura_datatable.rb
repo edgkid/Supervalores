@@ -48,9 +48,13 @@ class TFacturaDatatable < ApplicationDatatable
         LEFT JOIN t_clientes c ON c.id = res.t_cliente_id OR c.id = t_facturas.t_cliente_id
         LEFT JOIN t_empresas e ON e.id = c.persona_id AND c.persona_type = 'TEmpresa'
         LEFT JOIN t_personas p ON p.id = c.persona_id AND c.persona_type = 'TPersona'
-        LEFT JOIN t_otros    o ON o.id = c.persona_id AND c.persona_type = 'TOtro'")
+        LEFT JOIN t_otros    o ON o.id = c.persona_id AND c.persona_type = 'TOtro'
+        INNER JOIN t_estatuses est ON t_facturas.t_estatus_id = est.id")
       .where(
-        automatica: (params[:automatica] && params[:automatica] == 'true') ? true : false)
+        "automatica = ? AND
+        (est.descripcion ILIKE 'Facturada' OR
+        est.descripcion ILIKE 'Pago Pendiente')",
+        (params[:automatica] && params[:automatica] == 'true') ? true : false)
       .group("
         t_facturas.id, res.resolucion, t_facturas.fecha_notificacion, t_facturas.fecha_vencimiento,
         COALESCE(rec.recargo_x_pagar, t_facturas.recargo), t_facturas.total_factura,
