@@ -223,10 +223,11 @@ class TRecibosController < ApplicationController
           # debugger
           monto_de_servicio = recibo.pago_recibido
           recargos_a_cancelar = 0
-
-          unless recibo.t_factura.t_recargo_facturas.blank?
+          # debugger
+          if recibo.ultimo_recibo
             # debugger
-            recargos_a_cancelar = (recibo.t_factura.t_recargo_facturas.sum(:precio_unitario) * recibo.t_factura.t_factura_detalles.sum(:precio_unitario)).to_f
+            # break if recibo.recargo_x_pagar.nil?
+            recargos_a_cancelar = recibo.recargo_x_pagar.nil? ? 0 : recibo.recargo_x_pagar
             # recargos_a_cancelar = 1000
             # monto_de_servicio = 300
             # sobrante = 700

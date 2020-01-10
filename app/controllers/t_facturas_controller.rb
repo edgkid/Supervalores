@@ -152,7 +152,7 @@ class TFacturasController < ApplicationController
                t_recargo_factura_param[:precio_unitario].to_d,
         t_recargo_id: t_recargo_factura_param[:id]
       )
-      debugger
+      # debugger
       invalid_t_recargo = true if t_recargo_factura.invalid?
     end if params[:t_recargo_facturas_attributes]
 
