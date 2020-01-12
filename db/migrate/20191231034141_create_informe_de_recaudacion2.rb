@@ -2,7 +2,7 @@ class CreateInformeDeRecaudacion2 < ActiveRecord::Migration[5.2]
   def self.up
     self.connection.execute %Q( CREATE OR REPLACE VIEW informe_de_recaudacion_view AS
       SELECT
-        rec.id, f.id t_factura_id, rec.fecha_pago, mp.forma_pago,
+        rec.id, f.id t_factura_id, f.t_estatus_id factura_t_estatus_id, rec.fecha_pago, mp.forma_pago,
         COALESCE(e.rif, o.identificacion, p.cedula) identificacion,
         COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido)) razon_social,
         res.resolucion, rec.pago_recibido, rec.pago_pendiente, rec.monto_acreditado

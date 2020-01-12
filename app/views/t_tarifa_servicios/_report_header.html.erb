@@ -1,12 +1,19 @@
+<%
+  estatuses = opciones_de_estatus(true, 1, false)
+  estatuses.insert(0, ["Todos", -1])
+  estatuses.insert(0, ["", ""])
+%>
 <% if filters %>
   <div class="row" id="period-form-container">
     <div class="col-md-2">
-      <select id="periodo-select" name="periodo" style="width: 100%;">
-        <option value=""></option>
-        <option value="sin_filtro">Sin Filtro</option>
-        <option value="rango">Rango</option>
-        <option value="anual">Anual</option>
-      </select> 
+      <div class="row">
+        <select id="periodo-select" name="periodo" style="width: 100%;">
+          <option value=""></option>
+          <option value="sin_filtro">Sin Filtro</option>
+          <option value="rango">Rango</option>
+          <option value="anual">Anual</option>
+        </select> 
+      </div>
     </div>
     <div class="col-md-10">
       <div class="row">

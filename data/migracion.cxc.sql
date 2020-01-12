@@ -104,6 +104,11 @@ INSERT INTO t_tipo_clientes (codigo, descripcion, t_tipo_cliente_tipo_id, estatu
 SELECT codigo, descripcion, t_tipo_cliente_tipo_id, estatus, created_at, updated_at, t_tarifa_id
 FROM tipo_clientes_normalizados;
 
+UPDATE t_tipo_clientes SET descripcion = 'ADMINISTRADOR DE INVERSIONES' WHERE codigo = '6';
+UPDATE t_tipo_clientes SET descripcion = 'EJECUTIVO PRINCIPAL' WHERE codigo = '3';
+UPDATE t_tipo_clientes SET descripcion = 'EJECUTIVO PRINCIPAL DE ADMINISTRACION DE INVERSION' WHERE codigo = '2';
+
+
 CREATE MATERIALIZED VIEW estatuses_normalizados AS
 SELECT
 	row_number() OVER (ORDER BY 1, 2) AS prediction_id
@@ -621,7 +626,7 @@ FROM (
 			cxc_t_clientes cxccli
 			LEFT JOIN clientes_normalizados cns ON cxccli.idt_clientes = cns.prev_client_id
 			LEFT JOIN tipo_clientes_normalizados cttc ON cxccli.idt_tipo_cliente = cttc.prev_id
-			WHERE cns.prev_client_id NOT IN (3709,217,218,219,221,223,224,225,226,227,512,513,511,116,192,3341,426,319,1481,448,235,403,228,3330,3325,2842,343,3968,4028,627,241,3599,598,3710,3576,603,1759,3477,3489,3598,3021,664,3578,3165,3577) OR cxccli.estatus <> 0
+			WHERE cxccli.prospecto = 0 AND (cns.prev_client_id NOT IN (3709,217,218,219,221,223,224,225,226,227,512,513,511,116,192,3341,426,319,1481,448,235,403,228,3330,3325,2842,343,3968,4028,627,241,3599,598,3710,3576,603,1759,3477,3489,3598,3021,664,3578,3165,3577) OR cxccli.estatus <> 0)
 		GROUP BY 1 
 		) cli,
 		UNNEST ( cli.prev_client_ids ) s ( prev_client_id ),

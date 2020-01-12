@@ -2,8 +2,33 @@ class TTarifaServiciosController < ApplicationController
   before_action :set_t_tarifa_servicio, only: [:edit, :update, :show, :destroy]
   respond_to :json, only: [:all_services]
   load_and_authorize_resource except: [:tramites]
+  
+  
+  def estadistica_cuentas_x_cobrar
+    @usar_dataTables = true
+    @useDataTableFooter = false
+    @do_not_use_plain_select2 = true
+    @attributes_to_display = [
+      :codigo_nombre,
+      :total_cantidad,
+      :total_monto,
+      :anio,
+      :anio_cantidad,
+      :anio_monto
+    ]
 
-  def informe
+    respond_to do |format|
+      format.html
+      format.json { render json: EstadisticaDeCuentasXCobrarDatatable.new(
+        params.merge({
+          attributes_to_display: @attributes_to_display
+        }),
+        view_context: view_context)
+      }
+    end
+  end
+  
+  def informe_tramites_tarifas_registradas
     @usar_dataTables = true
     @useDataTableFooter = false
     @do_not_use_plain_select2 = true

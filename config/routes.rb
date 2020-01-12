@@ -330,7 +330,8 @@ Rails.application.routes.draw do
   end
   resources :t_tarifa_servicios do
     collection do
-      get 'informe'
+      get 'informe_tramites_tarifas_registradas'
+      get 'estadistica_cuentas_x_cobrar'
       get 'all_services'
       get 'tramites'
     end

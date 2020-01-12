@@ -291,26 +291,29 @@ class TFacturasController < ApplicationController
   end
 
   def recaudacion_total
+    ignore_status_id = 10
     t_facturas =
       if !params[:day].blank?
-        InformeDeRecaudacionView.where(fecha_pago: params[:day])
+        InformeDeRecaudacionView.where('factura_t_estatus_id <> ? and fecha_pago = ?', 
+          ignore_status_id, params[:day])
       elsif !params[:ztart].blank? && !params[:end].blank?
-        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?', params[:ztart], params[:end])
+        InformeDeRecaudacionView.where('factura_t_estatus_id <> ? and fecha_pago BETWEEN ? AND ?',
+          ignore_status_id, params[:ztart], params[:end])
       elsif !params[:month_year].blank?
-        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?',
-          params[:month_year], params[:month_year].to_date.at_end_of_month.strftime('%d/%m/%Y'))
+        InformeDeRecaudacionView.where('factura_t_estatus_id <> ? and fecha_pago BETWEEN ? AND ?',
+          ignore_status_id, params[:month_year], params[:month_year].to_date.at_end_of_month.strftime('%d/%m/%Y'))
       elsif !params[:bimonthly].blank?
-        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?',
-          params[:bimonthly], (params[:bimonthly].to_date + 1.month).at_end_of_month.strftime('%d/%m/%Y'))
+        InformeDeRecaudacionView.where('factura_t_estatus_id <> ? and fecha_pago BETWEEN ? AND ?',
+          ignore_status_id, params[:bimonthly], (params[:bimonthly].to_date + 1.month).at_end_of_month.strftime('%d/%m/%Y'))
       elsif !params[:quarterly].blank?
-        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?',
-          params[:quarterly], (params[:quarterly].to_date + 2.months).at_end_of_month.strftime('%d/%m/%Y'))
+        InformeDeRecaudacionView.where('factura_t_estatus_id <> ? and fecha_pago BETWEEN ? AND ?',
+          ignore_status_id, params[:quarterly], (params[:quarterly].to_date + 2.months).at_end_of_month.strftime('%d/%m/%Y'))
       elsif !params[:biannual].blank?
-        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?',
-          params[:biannual], (params[:biannual].to_date + 5.months).at_end_of_month.strftime('%d/%m/%Y'))
+        InformeDeRecaudacionView.where('factura_t_estatus_id <> ? and fecha_pago BETWEEN ? AND ?',
+          ignore_status_id, params[:biannual], (params[:biannual].to_date + 5.months).at_end_of_month.strftime('%d/%m/%Y'))
       elsif !params[:year].blank?
-        InformeDeRecaudacionView.where('fecha_pago BETWEEN ? AND ?',
-          params[:year], params[:year].to_date.at_end_of_year.strftime('%d/%m/%Y'))
+        InformeDeRecaudacionView.where('factura_t_estatus_id <> ? and fecha_pago BETWEEN ? AND ?',
+          ignore_status_id, params[:year], params[:year].to_date.at_end_of_year.strftime('%d/%m/%Y'))
       else
         InformeDeRecaudacionView.all
       end

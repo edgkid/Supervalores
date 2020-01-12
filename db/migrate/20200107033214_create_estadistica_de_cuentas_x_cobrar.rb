@@ -1,6 +1,6 @@
-class CreateInformeTramitesTarifasRegistradas < ActiveRecord::Migration[5.2]
+class CreateEstadisticaDeCuentasXCobrar < ActiveRecord::Migration[5.2]
   def self.up
-    self.connection.execute %Q( CREATE OR REPLACE VIEW informe_tramites_tarifas_registradas AS
+    self.connection.execute %Q( CREATE OR REPLACE VIEW estadistica_cuentas_x_cobrar AS
       SELECT 
         pp.id
         , pp.nombre
@@ -39,6 +39,7 @@ class CreateInformeTramitesTarifasRegistradas < ActiveRecord::Migration[5.2]
               FROM ((t_tarifa_servicios ts
                 JOIN t_factura_detalles fd ON ((fd.t_tarifa_servicio_id = ts.id)))
                 JOIN t_facturas f ON ((fd.t_factura_id = f.id)))
+              WHERE f.t_estatus_id = 10
             ) dt
             GROUP BY 1,2,3
             ORDER BY 1,2,3 desc
