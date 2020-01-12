@@ -29,15 +29,15 @@ module ApplicationHelper
   end
     
   def opciones_de_estatus usar_db=false, para=0, incluir_globales=true
-      if usar_db
-          if incluir_globales
-              return TEstatus.where("(para = 0 OR para = #{para}) AND estatus = 1").order(:descripcion).pluck :descripcion, :id
-          else
-              return TEstatus.where("para = #{para} AND estatus = 1").order(:descripcion).pluck :descripcion, :id
-          end
+    if usar_db
+      if incluir_globales
+        return TEstatus.where("(para = 0 OR para = #{para}) AND estatus = 1").order(:descripcion).pluck :descripcion, :id
       else
-          return [["Disponible", 1], ["Inactivo", 0]]
-      end        
+        return TEstatus.where("para = #{para} AND estatus = 1").order(:descripcion).pluck :descripcion, :id
+      end
+    else
+      return [["Disponible", 1], ["Inactivo", 0]]
+    end        
   end
 
   def estatus_text estatus
@@ -58,7 +58,7 @@ module ApplicationHelper
 
   def opciones_de_tipos_de_clientes tipo_persona_id = nil
     if tipo_persona_id.to_s == "2"
-      return TTipoCliente.where(estatus: 1, id: [9, 10, 11]).order(:descripcion).pluck :descripcion, :id
+      return TTipoCliente.where(estatus: 1, codigo: ['6', '3', '2']).order(:descripcion).pluck :descripcion, :id
     end
     return TTipoCliente.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
   end

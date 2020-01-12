@@ -117,7 +117,8 @@
           <%= render 't_resolucions/form_fields', 
               editable: true,
               registro: resolucion,
-              ignorar_cliente: resolucion.t_cliente == nil
+              ignorar_cliente: resolucion.t_cliente == nil,
+              puede_cambiar_tipo_persona: true
         %>
         </div>
         <div id="info_contacto" class="<%= resolucion.usar_cliente ? " hide" : "" %>" style="margin-top: 0.5em;">
@@ -172,7 +173,7 @@
           <%= fields_for registro do |form| %>
           <%= form.hidden_field :id %>
           <% end %>
-          <%= render 't_resolucions/form_fields', registro: resolucion, editable: editable %>
+          <%= render 't_resolucions/form_fields', registro: resolucion, editable: editable, puede_cambiar_tipo_persona: true %>
           <div id="info_contacto" class="<%= resolucion.usar_cliente ? " hide" : "" %>">
             <hr />
             <h3 class="text-center">Contacto de resolución</h3>

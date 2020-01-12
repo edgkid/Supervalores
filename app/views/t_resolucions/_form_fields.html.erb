@@ -1,5 +1,6 @@
 <%
   bloquear_cliente = registro.t_cliente != nil
+  cambiar_tipo_persona = defined?(puede_cambiar_tipo_persona) && puede_cambiar_tipo_persona
 %>
 <%= fields_for registro do |form| %>
 
@@ -122,7 +123,7 @@
         dataType: 'json',
         data: function (params) {
           var query = {
-            tipo_persona: <%= registro.t_cliente == nil ? '$("#select-tipo-persona").val()'.html_safe  : "\"#{registro.t_cliente.tipo_persona_id}\"".html_safe %>
+            tipo_persona: <%= cambiar_tipo_persona || registro.t_cliente == nil ? '$("#select-tipo-persona").val()'.html_safe  : "\"#{registro.t_cliente.tipo_persona_id}\"".html_safe %>
           }
           return query;
         },
