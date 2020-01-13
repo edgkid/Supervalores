@@ -2202,3 +2202,10 @@ las facturas se estan generando multiples veces cuando el usuario solo lo hace 1
 
 error de datatables en el informe de presupuesto, filtros
 
+
+13 segundos
+9 segundos
+
+
+factura.schedule_custom_percent_monthly_surcharge(0.02)
+
