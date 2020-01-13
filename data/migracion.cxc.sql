@@ -987,5 +987,15 @@ FROM cuentas_financieras_normalizadas
 GROUP BY prediction_id, codigo_presupuesto, codigo_financiero, descripcion_financiera, descripcion_presupuestaria, created_at, updated_at, t_tarifa_servicio_group_id, t_presupuesto_id
 ORDER BY prediction_id;
 
+DELETE FROM t_factura_detalles
+USING (SELECT id FROM t_facturas where t_resolucion_id is null) dt
+WHERE t_factura_id = dt.id;
+
+DELETE FROM t_recibos
+USING (SELECT id FROM t_facturas where t_resolucion_id is null) dt
+WHERE t_factura_id = dt.id;
+
+DELETE FROM t_facturas where t_resolucion_id is null;
+
 -- Ultimo registro
 INSERT INTO schema_migrations VALUES('0');

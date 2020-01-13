@@ -252,9 +252,10 @@ class TFactura < ApplicationRecord
           (self.pendiente_fact - ultimo_recibo.pago_pendiente)
         t_recibo.save
       end
-      ultimo_recibo.recargo_x_pagar +=
+      
+      ultimo_recibo.recargo_x_pagar = (ultimo_recibo.recargo_x_pagar || 0)
         self.recargo - old_t_factura.recargo
-      ultimo_recibo.servicios_x_pagar +=
+      ultimo_recibo.servicios_x_pagar = (ultimo_recibo.servicios_x_pagar || 0)
         ((self.total_factura - self.recargo) -
         (old_t_factura.total_factura - old_t_factura.recargo))
       ultimo_recibo.save
