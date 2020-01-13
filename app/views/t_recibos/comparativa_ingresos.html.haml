@@ -1,6 +1,6 @@
 .wrapper.wrapper-content.animated.fadeInRight
   = hidden_field_tag :print_condition, @print
-  .row
+  .row.no-print
     .col-md-12
       = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do 
         .form-group
@@ -11,10 +11,8 @@
               %button.btn.btn-secondary{:type => "submit"}
                 %i.fa.fa-search{"aria-hidden" => "true"}
               %button.btn.btn-default{:onclick => "javascript:window.print()", :type => "button", :id => "print_all"} Imprimir
-              = form_tag comparativa_ingresos_t_recibos_path, target: "_blank" do
-                = hidden_field_tag :print, false
-                = submit_tag("Mostrar Todo", :id => "print_every_page", class: "fa fa-download btn btn-primary")
-  .row
+
+  .row.no-print
     .col-md-12
       %a.btn.btn-default{"data-target" => "#filtros", "data-toggle" => "collapse", :href => "#"} Filtros Avanzados
       = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do
@@ -104,7 +102,7 @@
                   - if recibo.t_factura.t_factura_detalles.select{|e| e.cuenta_desc.downcase.exclude?("recargo")}.first.nil?
                     = recibo.t_factura.t_factura_detalles.first.cuenta_desc.titleize
                   - else
-                    
+
                     = recibo.t_factura.t_factura_detalles.select{|e| e.cuenta_desc.downcase.exclude?("recargo")}.first.cuenta_desc.titleize
                 %td
                   = recibo.t_factura.t_factura_detalles.first.t_tarifa_servicio.codigo
@@ -257,11 +255,5 @@
       refreshTable();
     });
   });
-%style{:media => "print", :type => "text/css"}
-  :cdata
-    @media print {
-    \#period-form-container {display:none;}
-    \#ajax-datatable_length {display:none;}
-    \#ajax-datatable_filter {display:none;}
-    \#ajax-datatable_paginate {display:none;}
-    }
+
+

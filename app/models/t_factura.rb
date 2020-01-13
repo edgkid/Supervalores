@@ -162,7 +162,7 @@ class TFactura < ApplicationRecord
   end
 
   def schedule_surcharge(t_recargo)
-    scheduler = Rufus::Scheduler.singleton
+    scheduler = Rufus::Scheduler.singleton(:max_work_threads => 5)
 
     estatus_fac = self.t_estatus.descripcion
     if estatus_fac.downcase == 'facturada' || estatus_fac.downcase == 'pago pendiente'
@@ -188,7 +188,7 @@ class TFactura < ApplicationRecord
     if self.t_estatus.descripcion.downcase == 'facturada' || self.t_estatus.descripcion.downcase == 'pago pendiente'
       # El primer recargo se aplicará un día después de la fecha de vencimiento a las 00:00.
       # scheduler.at "#{self.fecha_vencimiento + 1.day} 0000" do |j0b|
-      scheduler.in "2s" do |job1|
+      scheduler.in "10" do |job1|
         find_invoice_and_generate_surcharge(rate, job1)
 
         t_factura = find_self

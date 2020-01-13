@@ -44,7 +44,7 @@
     .col-lg-12
       %table.table.table-striped.table-bordered.table-hover
         %thead
-          %tr{:style => "font-size: x-small"}
+          %tr{:style => "font-size: xx-small"}
             %th Tarifa de servicio  
             %th Enero
             %th Febrero
@@ -62,7 +62,8 @@
         %tbody
           - @tarifas_servicios.each do |tarifa_servicio|
             - selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == tarifa_servicio.descripcion}.first
-            %tr{:style => "font-size: x-small"}
+            - next if selected_mes_monto["TOTAL"] == 0
+            %tr{:style => "font-size: xx-small"}
               %td
                 = tarifa_servicio.descripcion
               %td

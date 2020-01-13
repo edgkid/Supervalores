@@ -190,6 +190,7 @@ class TRecibosController < ApplicationController
     @servicio_mes_monto = []
     @tarifas_servicios = TTarifaServicio.where.not(estatus: 0)
     @tarifas_servicios.each do |tarifa_servicio|
+      
       @servicio_mes_monto.push(
           "SERVICIO" => "#{tarifa_servicio.descripcion}",
           "ENERO" => 0,
@@ -208,17 +209,16 @@ class TRecibosController < ApplicationController
     end
 
     @tarifas_servicios.each do |tarifa_servicio|
-
+      # debugger if tarifa_servicio.id == 73
       @recargos = @servicio_mes_monto.select{|e| e["SERVICIO"].downcase.include?("recargo") }.first
       recibos = TRecibo.where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')})").joins(:t_factura => [:t_factura_detalles => :t_tarifa_servicio]).where(:t_factura_detalles => {:t_tarifa_servicio_id => tarifa_servicio.id}).includes(t_factura: [:t_factura_detalles, :t_recargo_facturas])
-      # debugger
-      # debugger
       mes = 1
-      while mes < 12
+      while mes <= 12
         # debugger
         # recibos = TRecibo.where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')}) and extract(month from Date(t_recibos.fecha_pago)) in (#{mes})").joins(:t_factura => [:t_factura_detalles => :t_tarifa_servicio]).where(:t_factura_detalles => {:t_tarifa_servicio_id => tarifa_servicio.id}).includes(t_factura: [:t_factura_detalles, :t_recargo_facturas])
-
+        # debugger if tarifa_servicio.id == 46863
         recibos.where("extract(month from Date(t_recibos.fecha_pago)) = #{mes}").each do |recibo|
+          # debugger if recibo.id == 46863
         # recibos.each do |recibo|
           # debugger
           monto_de_servicio = recibo.pago_recibido
@@ -241,7 +241,7 @@ class TRecibosController < ApplicationController
 
 
           @selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == tarifa_servicio.descripcion}.first
-
+          # debugger# if tarifa_servicio.id == 73
           case mes
             when 1
               @selected_mes_monto["ENERO"] += monto_de_servicio

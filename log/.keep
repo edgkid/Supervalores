@@ -2209,3 +2209,15 @@ error de datatables en el informe de presupuesto, filtros
 
 factura.schedule_custom_percent_monthly_surcharge(0.02)
 
+default: &default
+adapter: postgresql
+encoding: unicode
+pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: sm_development
+
+test:
+  <<: *default
+  database: sm_test

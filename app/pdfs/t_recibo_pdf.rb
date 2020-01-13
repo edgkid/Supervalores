@@ -212,7 +212,7 @@ class TReciboPdf < PdfHelper
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
       bold("Monto Acreditado:"),
-      bold("#{(@t_factura.monto_pendiente_para_pdf - @t_recibo.pago_recibido).round(2).abs}"),
+      bold("#{@t_recibo.monto_acreditado}"),
       110, 110, 20, :center)
     
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
@@ -367,7 +367,7 @@ class TReciboPdf < PdfHelper
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
       bold("Monto Acreditado:"),
-      bold("#{(@t_factura.monto_pendiente_para_pdf - @t_recibo.pago_recibido).round(2).abs}"),
+      bold("#{@t_recibo.monto_acreditado}"),
       110, 110, 20, :center)
     
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
@@ -520,7 +520,7 @@ class TReciboPdf < PdfHelper
 
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
       bold("Monto Acreditado:"),
-      bold("#{(@t_factura.monto_pendiente_para_pdf - @t_recibo.pago_recibido).round(2).abs}"),
+      bold("#{@t_recibo.monto_acreditado}"),
       110, 110, 20, :center)
     
     table_for_2_with_widths_and_height_and_alignment_to_the_right(
