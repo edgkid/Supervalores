@@ -127,10 +127,18 @@ class TRecibosController < ApplicationController
     recibos_ids = recibos_ids.uniq
 
     if recibos_ids.blank?
-      @recibos = @recibos.includes(t_factura: [t_factura_detalles: :t_tarifa_servicio]).includes(t_cliente: :persona).paginate(page: params[:page], per_page: per_page)
+      @recibos = TRecibo.where(id: [40765, 40764]).paginate(page: params[:page], per_page: per_page)
+      # debugger
+      @total_pagos_recibidos = TRecibo.where(id: recibos_ids).sum(:pago_recibido)
+      # @recibos = @recibos.includes(t_factura: [t_factura_detalles: :t_tarifa_servicio]).includes(t_cliente: :persona).paginate(page: params[:page], per_page: per_page)
     else
-      @recibos = TRecibo.where(id: recibos_ids).includes(t_factura: [t_factura_detalles: :t_tarifa_servicio]).includes(t_cliente: :persona).paginate(page: params[:page], per_page: per_page)
+      @recibos = TRecibo.where(id: [40765, 40764]).paginate(page: params[:page], per_page: per_page)
+      # @recibos = TRecibo.where(id: recibos_ids).includes(t_factura: [t_factura_detalles: :t_tarifa_servicio]).includes(t_cliente: :persona).paginate(page: params[:page], per_page: per_page)
+      # debugger
+      @total_pagos_recibidos = TRecibo.where(id: recibos_ids).sum(:pago_recibido)
     end
+
+    # 
     
     # @recibos = @recibos.includes(t_factura: [t_factura_detalles: :t_tarifa_servicio, :t_cliente])
     # unless params[:search_client].blank? #&& params[:search_client].blank?

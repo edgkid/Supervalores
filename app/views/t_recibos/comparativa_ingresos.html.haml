@@ -89,7 +89,7 @@
               %th Servicio
               %th Descripcion del Servicio
               %th CÉD / PAS / RUC
-              %th Razón Social
+              %th Razón Social / Nombre
               %th Pago Recibido
           %tbody
             - @recibos.each do |recibo|
@@ -113,8 +113,16 @@
                   = recibo.t_cliente.persona_type == "TPersona" ? recibo.t_cliente.persona.cedula : recibo.t_cliente.persona.rif
                 %td
                   = recibo.t_cliente.persona_type == "TPersona" ? recibo.t_cliente.persona.nombre : recibo.t_cliente.persona.razon_social
-                %td
+                %td.pull-right
                   = number_with_delimiter(recibo.pago_recibido, :delimiter => ',')
+            %tr
+              %td{:colspan => "6"}
+              %td
+                %b
+                  = "Total"
+              %b
+                %td.pull-right
+                  = number_with_delimiter(@total_pagos_recibidos, :delimiter => ',')
       - else
         %div
           %p No se encontraron registros.
