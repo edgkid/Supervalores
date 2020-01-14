@@ -94,13 +94,15 @@ namespace :db do
 
   def generate_surcharge
     #5 y 8
+    # heroku run rake db:custom_surcharge_smv_test --remote test
+
     tipo_de_cliente = 13
     facturas = TFactura.joins(:t_resolucion).where(:t_resolucions => {t_tipo_cliente_id: tipo_de_cliente})
     # puts "#{facturas.ids}"
     facturas_procesadas = 0
     facturas_pagadas_completamente = 0
     facturas.each do |factura|
-      sleep(0.5)
+      sleep(0.1)
       # debugger
       unless factura.t_recibos.blank?
         # debugger if factura.t_recibos.order("created_at ASC").last.nil?
