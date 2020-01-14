@@ -84,60 +84,81 @@ class TRecibosController < ApplicationController
     @available_years = TRecibo.years_options
     # debugger
     # params[:print] = "not_true"
-    per_page = params[:print] == "true" ? TRecibo.all.count / 4 : TRecibo.all.count / 4
+    
     # per_page = params[:print] == "true" ? TRecibo.all.count : 5
     # @print = params[:print] unless params[:print].blank?
     # @recibos = TRecibo.all
     # @recibos = TRecibo.all#.joins(:t_factura).where("t_facturas.t_cliente_id = ?", null)
-    @recibos = TRecibo.all
-    recibos_ids = []
-    unless params[:day].blank?
-      ids = @recibos.where(fecha_pago: Date.parse(params[:day])).distinct.map(&:id)
-      recibos_ids += ids
-    end
+    if params[:filter] == "true"
+      @recibos = TRecibo.all
+      recibos_ids = []
+      unless params[:day].blank?
+        ids = @recibos.where(fecha_pago: Date.parse(params[:day])).distinct.map(&:id)
+        recibos_ids += ids
+      end
 
-    unless (params[:from].blank? || params[:to].blank?)
-      ids = @recibos.where("fecha_pago BETWEEN ? AND ?", params[:from], params[:to]).distinct.map(&:id)
-      recibos_ids += ids
-    end
+      unless (params[:from].blank? || params[:to].blank?)
+        ids = @recibos.where("fecha_pago BETWEEN ? AND ?", params[:from], params[:to]).distinct.map(&:id)
+        recibos_ids += ids
+      end
 
-    unless params[:month].blank?
-      ids = @recibos.where("extract(month from Date(fecha_pago)) = #{params[:month]}").distinct.map(&:id)
-      recibos_ids += ids
-    end
+      unless params[:month].blank?
+        # recibos = TRecibo.where("extract(year from date(fecha_pago)) in (2019)").where("extract(month from date(fecha_pago)) = 01").count 
 
-    unless params[:year].blank?
-      ids = @recibos.where("extract(year from Date(fecha_pago)) = #{params[:year]}").distinct.map(&:id)
-      recibos_ids += ids
-    end
+        ids = @recibos.where("extract(year from Date(fecha_pago)) = #{params[:month].partition("/").last}").where("extract(month from Date(fecha_pago)) = #{params[:month].partition("/").first}").distinct.map(&:id)
+        recibos_ids += ids
+      end
 
-    unless params[:search_client].blank?
-      personas_naturales_ids = TPersona.joins(:t_cliente).where("lower(nombre) like ?", "%#{params[:search_client].downcase}%").pluck(:"t_clientes.id")
-      personas_juridicas_ids = TEmpresa.joins(:t_cliente).where("lower(razon_social) like ?", "%#{params[:search_client].downcase}%").pluck(:"t_clientes.id")
-      ids = @recibos.where(t_cliente_id: personas_naturales_ids + personas_juridicas_ids).distinct.map(&:id)
-      recibos_ids += ids
-    end
-    # debugger
-    unless params[:search_service].blank?
-      # @recibos = @recibos.joins(t_factura: [t_factura_detalles: :t_tarifa_servicio]).where("lower(t_tarifa_servicios.descripcion) like ?", "%#{params[:search_service].downcase}%").distinct
-      ids = @recibos = @recibos.joins(t_factura: [t_factura_detalles: :t_tarifa_servicio]).where("lower(t_tarifa_servicios.descripcion) like ?", "%#{params[:search_service].downcase}%").distinct.map(&:id)
-      recibos_ids += ids
-    end
+      unless params[:year].blank?
+        ids = @recibos.where("extract(year from Date(fecha_pago)) = #{params[:year]}").distinct.map(&:id)
+        recibos_ids += ids
+      end
 
-    recibos_ids = recibos_ids.uniq
-
-    if recibos_ids.blank?
-      @recibos = TRecibo.where(id: [40765, 40764]).paginate(page: params[:page], per_page: per_page)
+      unless params[:search_client].blank?
+        personas_naturales_ids = TPersona.joins(:t_cliente).where("lower(nombre) like ?", "%#{params[:search_client].downcase}%").pluck(:"t_clientes.id")
+        personas_juridicas_ids = TEmpresa.joins(:t_cliente).where("lower(razon_social) like ?", "%#{params[:search_client].downcase}%").pluck(:"t_clientes.id")
+        ids = @recibos.where(t_cliente_id: personas_naturales_ids + personas_juridicas_ids).distinct.map(&:id)
+        recibos_ids += ids
+      end
       # debugger
-      @total_pagos_recibidos = TRecibo.where(id: recibos_ids).sum(:pago_recibido)
-      # @recibos = @recibos.includes(t_factura: [t_factura_detalles: :t_tarifa_servicio]).includes(t_cliente: :persona).paginate(page: params[:page], per_page: per_page)
+      unless params[:search_service].blank?
+        # @recibos = @recibos.joins(t_factura: [t_factura_detalles: :t_tarifa_servicio]).where("lower(t_tarifa_servicios.descripcion) like ?", "%#{params[:search_service].downcase}%").distinct
+        ids = @recibos = @recibos.joins(t_factura: [t_factura_detalles: :t_tarifa_servicio]).where("lower(t_tarifa_servicios.descripcion) like ?", "%#{params[:search_service].downcase}%").distinct.map(&:id)
+        recibos_ids += ids
+      end
+
+      recibos_ids = recibos_ids.uniq
+
+      if recibos_ids.blank?
+
+        # @recibos = TRecibo.where(id: [40765, 40764]).paginate(page: params[:page], per_page: per_page)
+        # debugger
+        @recibos = nil
+        # @total_pagos_recibidos = TRecibo.where(id: @recibos.ids).sum(:pago_recibido)
+        # @recibos = @recibos.includes(t_factura: [t_factura_detalles: :t_tarifa_servicio]).includes(t_cliente: :persona)
+        # per_page = @recibos.count
+        # @recibos.paginate(page: params[:page], per_page: per_page) unless @recibos.nil?
+        
+      else
+        # debugger
+        # @recibos = TRecibo.where(id: [40765, 40764]).paginate(page: params[:page], per_page: per_page)
+        @recibos = TRecibo.where(id: recibos_ids).includes(t_factura: [t_factura_detalles: :t_tarifa_servicio]).includes(t_cliente: :persona)
+
+        per_page = @recibos.count
+        @recibos.paginate(page: params[:page], per_page: per_page) unless @recibos.nil?
+
+        @total_pagos_recibidos = 0
+
+        @recibos.each do |recibo|
+          @total_pagos_recibidos += recibo.pago_recibido
+        end
+        # debugger
+        # @total_pagos_recibidos = TRecibo.where(id: @recibos.ids).sum(:pago_recibido)
+      end
     else
-      @recibos = TRecibo.where(id: [40765, 40764]).paginate(page: params[:page], per_page: per_page)
-      # @recibos = TRecibo.where(id: recibos_ids).includes(t_factura: [t_factura_detalles: :t_tarifa_servicio]).includes(t_cliente: :persona).paginate(page: params[:page], per_page: per_page)
-      # debugger
-      @total_pagos_recibidos = TRecibo.where(id: recibos_ids).sum(:pago_recibido)
+      @recibos = nil  
     end
-
+    
     # 
     
     # @recibos = @recibos.includes(t_factura: [t_factura_detalles: :t_tarifa_servicio, :t_cliente])

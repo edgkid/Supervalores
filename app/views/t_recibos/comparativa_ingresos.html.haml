@@ -5,6 +5,7 @@
       = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do 
         .form-group
           .input-group.search
+            = hidden_field_tag :filter, true
             = text_field_tag :search_client, params[:search_client], placeholder: 'Nombre del cliente', class: 'form-control mr-3'
             = text_field_tag :search_service, params[:search_service], placeholder: 'Nombre del servicio', class: 'form-control'
             .input-group-btn
@@ -16,6 +17,7 @@
     .col-md-12
       %a.btn.btn-default{"data-target" => "#filtros", "data-toggle" => "collapse", :href => "#"} Filtros Avanzados
       = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do
+        = hidden_field_tag :filter, true
         %br
         .panel.collapse.pl-3.pr-3.mb-3{id: 'filtros'}
           .row.mt-2
@@ -79,7 +81,7 @@
       %hr/
   .row
     .col-lg-12
-      - if TFactura.count > 0
+      - unless @recibos.nil? || @recibos.count == 0 || params[:filter].nil?
         %table.table.table-striped.table-bordered.table-hover
           %thead
             %tr
@@ -97,7 +99,7 @@
                 %td
                   = recibo.id
                 %td
-                  = recibo.fecha_pago.strftime("%Y-%m-%d")
+                  = recibo.fecha_pago.strftime("%d-%m-%Y")
                 %td
                   - if recibo.t_factura.t_factura_detalles.select{|e| e.cuenta_desc.downcase.exclude?("recargo")}.first.nil?
                     = recibo.t_factura.t_factura_detalles.first.cuenta_desc.titleize
@@ -112,24 +114,23 @@
                 %td
                   = recibo.t_cliente.persona_type == "TPersona" ? recibo.t_cliente.persona.cedula : recibo.t_cliente.persona.rif
                 %td
-                  = recibo.t_cliente.persona_type == "TPersona" ? recibo.t_cliente.persona.nombre : recibo.t_cliente.persona.razon_social
-                %td.pull-right
-                  = number_with_delimiter(recibo.pago_recibido, :delimiter => ',')
+                  = recibo.t_cliente.persona_type == "TPersona" ? recibo.t_cliente.persona.full_name  : recibo.t_cliente.persona.razon_social
+                %td{:align => "right"}
+                  = number_with_precision(recibo.pago_recibido, :delimiter => ',', precision: 2)
             %tr
               %td{:colspan => "6"}
-              %td
-                %b
-                  = "Total"
-              %b
-                %td.pull-right
-                  = number_with_delimiter(@total_pagos_recibidos, :delimiter => ',')
+              
+              %td{:style => "font-weight:bold", :align => "right"}
+                = "Total"
+              %td{:style => "font-weight:bold", :align => "right"}
+                = number_with_precision(@total_pagos_recibidos, :delimiter => ',', precision: 2)
       - else
         %div
           %p No se encontraron registros.
 .row.no-gutters.mt-20
   .col-md-12
     %nav.text-center{"aria-label" => "Page navigation "}
-      - unless @recibos.first.nil?
+      - unless @recibos.nil? || @recibos.count == 0 || params[:filter] == "true"
         = will_paginate @recibos
 :javascript
   $(document).ready(function(){
