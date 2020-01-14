@@ -10,10 +10,10 @@ namespace :db do
   end
 
   def clear_and_reset(classname)
-  print "#{classname},"
-  classname.classify.constantize.unscoped.destroy_all
-  table = (classname == "Attachment") ? "attachment_names" : classname.tableize
-  ActiveRecord::Base.connection.reset_pk_sequence!(table)
+    print "#{classname},"
+    classname.classify.constantize.unscoped.destroy_all
+    table = (classname == "Attachment") ? "attachment_names" : classname.tableize
+    ActiveRecord::Base.connection.reset_pk_sequence!(table)
   end
 
   def load_countries
@@ -94,17 +94,21 @@ namespace :db do
 
   def generate_surcharge
     #5 y 8
-    tipo_de_cliente = 13
+    tipo_de_cliente = 12
     facturas = TFactura.joins(:t_resolucion).where(:t_resolucions => {t_tipo_cliente_id: tipo_de_cliente})
     # puts "#{facturas.ids}"
     facturas_procesadas = 0
+    facturas_pagadas_completamente = 0
     facturas.each do |factura|
-      sleep(0.05)
+      sleep(0.5)
       # debugger
       unless factura.t_recibos.blank?
         # debugger if factura.t_recibos.order("created_at ASC").last.nil?
         ultimo_recibo = factura.t_recibos.order("created_at ASC").last
-        next if ultimo_recibo.pago_pendiente == 0
+        if ultimo_recibo.pago_pendiente == 0
+          facturas_pagadas_completamente += 1
+          next
+        end
         ultimo_recibo.recargo_x_pagar = 0
         ultimo_recibo.servicios_x_pagar = 0
         ultimo_recibo.save!
@@ -112,11 +116,13 @@ namespace :db do
       factura.t_recibos.last
       factura.fecha_vencimiento = Date.strptime("12-10-2019", "%d-%m-%Y")
       # factura.save!
+      # debugger
       factura.schedule_custom_percent_monthly_surcharge(0.02)
       facturas_procesadas += 1
       puts "#{facturas_procesadas} de #{facturas.count} || Factura Actual ID: #{factura.id}"
     end
-    puts "facturas procesadas: #{facturas_procesadas}"
+    sleep(5)
+    puts "Recargos Generados: #{facturas_procesadas} || Facturas Sin Pendiente: #{facturas_pagadas_completamente}"
     # puts "facturas con estatuses validos: #{facturas.where(t_estatus_id: [1,2,4, 5, 8,9, 10]).count}"
     # puts "#{facturas.ids}"
   end
