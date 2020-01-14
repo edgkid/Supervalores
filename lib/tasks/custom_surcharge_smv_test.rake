@@ -94,7 +94,7 @@ namespace :db do
 
   def generate_surcharge
     #5 y 8
-    tipo_de_cliente = 12
+    tipo_de_cliente = 13
     facturas = TFactura.joins(:t_resolucion).where(:t_resolucions => {t_tipo_cliente_id: tipo_de_cliente})
     # puts "#{facturas.ids}"
     facturas_procesadas = 0
@@ -114,7 +114,7 @@ namespace :db do
         ultimo_recibo.save!
       end
       factura.t_recibos.last
-      factura.fecha_vencimiento = Date.strptime("12-10-2019", "%d-%m-%Y")
+      # factura.fecha_vencimiento = Date.strptime("12-10-2019", "%d-%m-%Y")
       # factura.save!
       # debugger
       factura.schedule_custom_percent_monthly_surcharge(0.02)
