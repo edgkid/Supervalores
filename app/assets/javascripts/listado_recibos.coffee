@@ -66,6 +66,22 @@ $(document).ready ->
 			$('.year').addClass("hide")
 			$('#year').val(null)
 
-	
+	$('.datepicker').datepicker
+	  autoclose: true
+	  format: 'dd/mm/yyyy'
+	  clearBtn: true
+	$('.month-datepicker').datepicker
+	  autoclose: true
+	  format: 'mm/yyyy'
+	  viewMode: 'months'
+	  minViewMode: 'months'
+	  clearBtn: true
+	$('.year-datepicker').datepicker
+	  autoclose: true
+	  format: 'yyyy'
+	  viewMode: 'years'
+	  minViewMode: 'years'
+	  clearBtn: true
+
 
 	
