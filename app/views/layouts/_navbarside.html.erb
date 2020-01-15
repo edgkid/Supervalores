@@ -185,11 +185,11 @@
             <% if can? :read_reports, TRecibo %>
               <li><%= link_to 'Caja', t_caja_index_path %></li>
               <li><%= link_to 'Listado de Recibos', listado_recibos_t_recibos_path %></li>
-              <li><%= link_to 'Comparativa de Ingresos por Tarifas y Clientes 2', comparativa_ingresos_no_datatables_t_recibos_path %></li>
+              <li><%= link_to 'Comparativa de Ingresos por Tarifas y Clientes', comparativa_ingresos_no_datatables_t_recibos_path %></li>
             <% end %>
             <% if can? :read_reports, TCliente %>
               <li><%= link_to 'Estadística Trámites de Clientes Registrados', tramites_t_clientes_path %></li>
-            <% end %>
+            <% end %> 
             <% if can? :read_reports, TTarifaServicio %>
               <li><%= link_to 'Estadística Trámites de Tarifas Registradas', tramites_t_tarifa_servicios_path %></li>
               <li><%= link_to 'Informe Trámites de Tarifas Registradas', informe_tramites_tarifas_registradas_t_tarifa_servicios_path %></li>

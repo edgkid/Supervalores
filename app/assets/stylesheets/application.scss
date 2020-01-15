@@ -153,10 +153,20 @@ form label.opcional:after {
   margin-left: 10px;
 }
 
+
+
 @media print
 {    
     .no-print, .no-print *
     {
         display: none !important;
+
     }
+
+    .only-visible-while-printing, .only-visible-while-printing *
+    {
+        display: block !important;
+    } 
 }
+
+

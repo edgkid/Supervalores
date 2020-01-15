@@ -1,4 +1,4 @@
-.wrapper.wrapper-content.animated.fadeInRight
+.wrapper.wrapper-content.animated.fadeInRight.mr-3
   .row.d-print-none
     .col-md-12
       = form_tag(comparativa_ingresos_no_datatables_t_recibos_path, class: "", method: :get) do
@@ -46,19 +46,19 @@
         %thead
           %tr{:style => "font-size: xx-small"}
             %th Tarifa de servicio  
-            %th Enero
-            %th Febrero
-            %th Marzo
-            %th Abril
-            %th Mayo
-            %th Junio
-            %th Julio
-            %th Agosto
-            %th Septiembre
-            %th Octubre
-            %th Noviembre
-            %th Diciembre
-            %th Total
+            %th{:style => "text-align: right"} Enero
+            %th{:style => "text-align: right"} Febrero
+            %th{:style => "text-align: right"} Marzo
+            %th{:style => "text-align: right"} Abril
+            %th{:style => "text-align: right"} Mayo
+            %th{:style => "text-align: right"} Junio
+            %th{:style => "text-align: right"} Julio
+            %th{:style => "text-align: right"} Agosto
+            %th{:style => "text-align: right"} Septiembre
+            %th{:style => "text-align: right"} Octubre
+            %th{:style => "text-align: right"} Noviembre
+            %th{:style => "text-align: right"} Diciembre
+            %th{:style => "text-align: right"} Total
         %tbody
           - @tarifas_servicios.each do |tarifa_servicio|
             - selected_mes_monto = @servicio_mes_monto.select{|e| e["SERVICIO"] == tarifa_servicio.descripcion}.first
@@ -66,37 +66,64 @@
             %tr{:style => "font-size: xx-small"}
               %td
                 = tarifa_servicio.descripcion
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["ENERO"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["FEBRERO"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["MARZO"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["ABRIL"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["MAYO"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["JUNIO"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["JULIO"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["AGOSTO"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["SEPTIEMBRE"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["OCTUBRE"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["NOVIEMBRE"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["DICIEMBRE"].round(2), :delimiter => ',')
-              %td
+              %td{:align => "right"}
                 = number_with_delimiter(selected_mes_monto["TOTAL"].round(2), :delimiter => ',')
           %tr{:style => "font-size: x-small"}
-            %td{:colspan => "12"}
-              = "Total acumulado"
-            %td{:colspan => "2"} 
+            %td
+              = "Totales acumulados"
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["ENERO"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["FEBRERO"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["MARZO"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["ABRIL"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["MAYO"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["JUNIO"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["JULIO"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["AGOSTO"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["SEPTIEMBRE"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["OCTUBRE"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["NOVIEMBRE"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
+              = number_with_delimiter(@totales["DICIEMBRE"].round(2), :delimiter => ',')
+            %td{:style => "font-weight:bold", :align => "right"}
               = number_with_delimiter(@monto_final.round(2), :delimiter => ',')
+%style{:media => "print", :type => "text/css"}
+  @page {size: landscape; margin: 0.03cm;}
+
 
 :javascript
   $(document).ready(function(){
