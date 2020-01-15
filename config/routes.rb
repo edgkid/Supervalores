@@ -323,7 +323,7 @@ Rails.application.routes.draw do
   resources :t_conf_fac_automaticas
   resources :t_recibos, only: :index do
     collection do
-      get 'comparativa_ingresos'
+      get 'listado_recibos'
       get 'comparativa_ingresos_no_datatables'
       get 'pago_recibido_total'
     end

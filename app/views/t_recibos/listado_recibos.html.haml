@@ -1,8 +1,8 @@
 .wrapper.wrapper-content.animated.fadeInRight
   = hidden_field_tag :print_condition, @print
-  .row.no-print
-    .col-md-12
-      = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do 
+  = form_tag(listado_recibos_t_recibos_path, class: "", method: :get) do 
+    .row.no-print
+      .col-md-12
         .form-group
           .input-group.search
             = hidden_field_tag :filter, true
@@ -12,11 +12,10 @@
               %button.btn.btn-secondary{:type => "submit"}
                 %i.fa.fa-search{"aria-hidden" => "true"}
               %button.btn.btn-default{:onclick => "javascript:window.print()", :type => "button", :id => "print_all"} Imprimir
-
-  .row.no-print
-    .col-md-12
-      %a.btn.btn-default{"data-target" => "#filtros", "data-toggle" => "collapse", :href => "#"} Filtros Avanzados
-      = form_tag(comparativa_ingresos_t_recibos_path, class: "", method: :get) do
+    .row.no-print
+      .col-md-12
+        %a.btn.btn-default{"data-target" => "#filtros", "data-toggle" => "collapse", :href => "#"} Filtros Avanzados
+        %br
         = hidden_field_tag :filter, true
         %br
         .panel.collapse.pl-3.pr-3.mb-3{id: 'filtros'}
@@ -57,13 +56,8 @@
               = label_tag "AÑO"
               .input-append.date.year-datepicker{}
                 %span.add-on
-                  = text_field_tag :year, params[:year], class: 'form-control'
-                
+                  = text_field_tag :year, params[:year], class: 'form-control'   
           %br
-          .row.mb-2
-            .col-md-12
-              %button.btn.mt-1.btn-primary.pull-xs-right{:type => "submit"} Buscar
-              %button.btn.mt-1.mr-1.h-42.btn-default.btn-outline.pull-xs-right.clear_form Cancelar
   .row
     .col-md-6
       = image_tag "logoSMV.png", width: '150px'
@@ -77,7 +71,7 @@
       %h3 SUPERINTENDENCIA DEL MERCADO DE VALORES
       %h3 DEPARTAMENTO DE TESORERÍA
       %hr/
-      %h3 COMPARATIVA DE INGRESOS POR TARIFAS Y CLIENTES
+      %h3 LISTADO DE RECIBOS
       %hr/
   .row
     .col-lg-12
@@ -135,13 +129,6 @@
 :javascript
   $(document).ready(function(){
     
-    $(document).on('click', '#print_every_page', function() {
-      $('#print').val("true")
-    });
-
-    if ($('#print_condition').val() == "true"){
-      
-    }
 
     $('.datepicker').datepicker({
       autoclose: true,
@@ -166,103 +153,7 @@
     });
 
 
-    $("#client-select").select2({
-      ajax: {
-        url: '#{"\#{t_clientes_all_clients_path}"}',
-        dataType: 'json',
-        data: function (params) {
-          var query = {
-            search: params.term
-          }
-
-          return query;
-        },
-        processResults: function (data) {
-          return {
-            results: $.map(data, function(t_cliente, i) {
-              return {
-                id: t_cliente.id,
-                text: `${t_cliente.ide} - ${t_cliente.rs}`
-              }
-            })
-          };
-        },
-        delay: 250
-      },
-      placeholder: 'Seleccione Cliente',
-      allowClear: true
-    });
-
-    $("#tariff-select").select2({
-      ajax: {
-        url: '#{"\#{all_services_t_tarifa_servicios_path}"}',
-        dataType: 'json',
-        data: function (params) {
-          var query = {
-            search: params.term
-          }
-
-          return query;
-        },
-        processResults: function (data) {
-          return {
-            results: $.map(data, function(t_tarifa_servicio, i) {
-              return {
-                id: t_tarifa_servicio.id,
-                text: `${t_tarifa_servicio.tipo ? t_tarifa_servicio.tipo : ''} - ${t_tarifa_servicio.codigo} - ${t_tarifa_servicio.nombre}`
-              }
-            })
-          };
-        },
-        delay: 250
-      },
-      placeholder: 'Seleccione Servicio',
-      allowClear: true
-    });
-
-    $.extend({
-      useDataInAjaxCall: function (d) {
-        d.t_cliente_id = $("#client-select").val();
-        d.t_tarifa_servicio_id = $("#tariff-select").val();
-      },
-      useDataTableFooter: function (footer) {
-        $.ajax({
-          url: '#{pago_recibido_total_t_recibos_path}',
-          contentType: "application/json",
-          type: 'get',
-          data: {
-            from: $('#from').val(),
-            to: $('#to').val()
-          }
-        })
-        .done(function (data) {
-          if (data.procesado) {
-            footer.empty().append($("<tr />")
-              .append($("<td />").html("<b>Total</b>"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />"))
-              .append($("<td />").html(data.total))
-            )
-          }
-        });
-      }
-    });
-
-    function refreshTable () {
-      $("#ajax-datatable").DataTable().ajax.reload();
-    }
-
-    $('.datepicker').on('changeDate', function (e) {
-      refreshTable();
-    });
-
-    $('#execute').click(function () {
-      refreshTable();
-    });
+    
   });
 
 
