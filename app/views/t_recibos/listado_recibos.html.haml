@@ -127,33 +127,79 @@
       - unless @recibos.nil? || @recibos.count == 0 || params[:filter] == "true"
         = will_paginate @recibos
 :javascript
-  $(document).ready(function(){
-    
-
+  (function() {
+  $(document).ready(function() {
+    $('#test_id').on("change", function() {
+      var variable;
+      variable = $(this).val();
+      if (variable === "1") {
+        $('.day').removeClass("hide");
+        $('.from_to').addClass("hide");
+        $('#from').val(null);
+        $('#to').val(null);
+        $('.month').addClass("hide");
+        $('#month').val(null);
+        $('.year').addClass("hide");
+        return $('#year').val(null);
+      } else if (variable === "2") {
+        $('.day').addClass("hide");
+        $('#day').val(null);
+        $('.from_to').removeClass("hide");
+        $('.month').addClass("hide");
+        $('#month').val(null);
+        $('.year').addClass("hide");
+        return $('#year').val(null);
+      } else if (variable === "3") {
+        $('.day').addClass("hide");
+        $('#day').val(null);
+        $('.from_to').addClass("hide");
+        $('#from').val(null);
+        $('#to').val(null);
+        $('.month').removeClass("hide");
+        $('.year').addClass("hide");
+        return $('#year').val(null);
+      } else if (variable === "4") {
+        $('.day').addClass("hide");
+        $('#day').val(null);
+        $('.from_to').addClass("hide");
+        $('#from').val(null);
+        $('#to').val(null);
+        $('.month').addClass("hide");
+        $('#month').val(null);
+        return $('.year').removeClass("hide");
+      } else {
+        $('.day').addClass("hide");
+        $('#day').val(null);
+        $('.from_to').addClass("hide");
+        $('#from').val(null);
+        $('#to').val(null);
+        $('.month').addClass("hide");
+        $('#month').val(null);
+        $('.year').addClass("hide");
+        return $('#year').val(null);
+      }
+    });
     $('.datepicker').datepicker({
       autoclose: true,
-      format: "dd/mm/yyyy",
+      format: 'dd/mm/yyyy',
       clearBtn: true
     });
-
     $('.month-datepicker').datepicker({
       autoclose: true,
-      format: "mm/yyyy",
-      viewMode: "months", 
-      minViewMode: "months",
+      format: 'mm/yyyy',
+      viewMode: 'months',
+      minViewMode: 'months',
       clearBtn: true
     });
-
-    $('.year-datepicker').datepicker({
+    return $('.year-datepicker').datepicker({
       autoclose: true,
-      format: "yyyy",
-      viewMode: "years", 
-      minViewMode: "years",
+      format: 'yyyy',
+      viewMode: 'years',
+      minViewMode: 'years',
       clearBtn: true
     });
-
-
-    
   });
+
+  }).call(this);
 
 

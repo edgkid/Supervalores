@@ -2221,3 +2221,23 @@ development:
 test:
   <<: *default
   database: sm_test
+
+
+
+
+
+
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: postgres
+  password: archer20900
+  # For details on connection pooling, see Rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  host: localhost
+  database: supervalores_january_15_2020
