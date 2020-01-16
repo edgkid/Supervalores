@@ -74,7 +74,10 @@ class TRecibosController < ApplicationController
   end
 
   def destroy
-    @t_recibo.destroy
+    @t_recibo.t_nota_creditos.first.destroy! if @t_recibo.t_nota_creditos.count != 0
+    @t_recibo.estatus = 4
+    @t_recibo.save!
+    # @t_recibo.destroy
 
     redirect_to t_factura_t_recibos_path(@t_factura)
   end
@@ -183,12 +186,12 @@ class TRecibosController < ApplicationController
 
     @tarifas_servicios.each do |tarifa_servicio|
       @recargos = @servicio_mes_monto.select{|e| e["SERVICIO"].downcase.include?("recargo") }.first
-      recibos = TRecibo.where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')})").joins(:t_factura => [:t_factura_detalles => :t_tarifa_servicio]).where(:t_factura_detalles => {:t_tarifa_servicio_id => tarifa_servicio.id}).includes(t_factura: [:t_factura_detalles, :t_recargo_facturas])
+      recibos = TRecibo.where("extract(year from Date(t_recibos.fecha_pago)) in (#{query_years.join(',')}) and t_recibos.estatus = 1").joins(:t_factura => [:t_factura_detalles => :t_tarifa_servicio]).where(:t_factura_detalles => {:t_tarifa_servicio_id => tarifa_servicio.id}).includes(t_factura: [:t_factura_detalles, :t_recargo_facturas])
       mes = 1
       while mes <= 12
 
         recibos.where("extract(month from Date(t_recibos.fecha_pago)) = #{mes}").each do |recibo|
-
+          # next if recibo.estatus == 4
           monto_de_servicio = recibo.pago_recibido
           recargos_a_cancelar = 0
 

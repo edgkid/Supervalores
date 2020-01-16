@@ -1,12 +1,234 @@
-<%= render template: 't_facturas/preview' %>
+<div class="row">
+  <div class="col-md-6">
+    <%= image_tag "logoSMV.png", width: '200px' %>
+  </div>
+  <div align="right" class="col-md-6">
+    <h5><b>Fecha de impresión:</b> <%= Date.today.strftime('%d/%m/%Y') %></h5>
+  </div>
+</div>
+
+<div align="center" class="row">
+  <div class="col-sm-12">
+    <h3><b>REPÚBLICA DE PANAMÁ</b></h3>
+    <h3><b>SUPERINTENDENCIA DEL MERCADO DE VALORES</b></h3>
+    <h3><b>DEPARTAMENTO DE TESORERÍA</b></h3>
+  </div>
+</div>
+
+<% if params[:action] == "new" %>
+  <div align="center" class="row">
+    <div class="col-sm-12">
+      <h3>FACTURA</h3>
+    </div>
+  </div>
+<% end %>
 
 <hr>
-<% if @is_show %>
-  <h3 align="center">RECIBO</h3>
-<% else %>
-  <h3 align="center">RECIBOS</h3>
-<% end %>
+
+<div class="row">
+  <div class="col-md-4">
+    <b>Dirección:</b> <%= @t_empresa.try(:direccion_empresa) || @t_persona.try(:direccion) %><br>
+    <b>Apartado Postal:</b> <%= '' %><br>
+    <b>Teléfono:</b> <%= @t_empresa.try(:telefono) || @t_persona.try(:telefono) || @t_otro.try(:telefono) %><br>
+    <b>Email:</b> <%= @t_empresa.try(:email) || @t_persona.try(:email) || @t_otro.try(:email) %>
+  </div>
+  <div class="col-md-4">
+    <b>Para</b><br>
+    <b>Cliente:</b> <%= @t_empresa.try(:razon_social) || @t_persona.try(:full_name) || @t_otro.try(:razon_social) %><br>
+    <b>Resolución:</b> <%= @t_resolucion.resolucion if @t_resolucion %><br>
+    <b>CIP / RUC:</b> <%= @t_empresa.try(:rif) || @t_persona.try(:cedula) || @t_otro.try(:identificacion) %><br>
+    <b>Teléfono:</b> <%= @t_empresa.try(:telefono) || @t_persona.try(:telefono) || @t_otro.try(:telefono) %><br>
+    <b>Email:</b> <%= @t_empresa.try(:email) || @t_persona.try(:email) || @t_otro.try(:email) %>
+  </div>
+  <div class="col-md-4">
+    <b>Número de Factura:</b> <%= @t_factura.id %><br>
+    <b>Número de Recibo:</b> <%= @t_recibo.id %><br>
+    <b>Estatus:</b> <%= @t_estatus.descripcion %><br>
+    <b>Fecha de vencimiento:</b> <%= @t_factura.fecha_vencimiento.strftime('%d/%m/%Y') %><br>
+  </div>
+</div>
+
+
 <hr>
+
+
+<% if params[:action] == "new"%>
+  <hr>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Cantidad</th>
+        <th>Ítem</th>
+        <th>Descripción</th>
+        <!-- <th>Tasa (%)</th> -->
+        <th>Precio Unitario (B/.)</th>
+        <th>Importe (B/.)</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr>
+        <td>1</td>
+        <td><%#= @t_tarifa.nombre %></td>
+        <td><%#= @t_tarifa.descripcion %></td>
+        <td><%#= number_to_balboa(@t_tarifa.monto, false) %></td>
+        <td><%#= number_to_balboa(@t_tarifa.monto, false) %></td>
+      </tr> -->
+      <% @t_factura.t_factura_detalles.each do |fd| %>
+        <tr>
+          <td><%= fd.cantidad %></td>
+          <td><%= fd.t_tarifa_servicio.nombre %></td>
+          <td><%= "#{fd.t_tarifa_servicio.descripcion} | #{fd.t_tarifa_servicio.codigo} | #{fd.cuenta_desc}" %></td>
+          <!-- <td>N/A</td> -->
+          <td><%= number_to_balboa(fd.precio_unitario, false) %></td>
+          <td><%= number_to_balboa(fd.precio_unitario * fd.cantidad, false) %></td>
+           
+        </tr>
+      <% end %>
+
+      <% @t_factura.t_recargo_facturas.each do |r| %>
+
+        <tr>
+          <td><%= r.cantidad %></td>
+          <td>Recargo</td>
+          <td><%= r.t_recargo.descripcion %></td>
+          <!-- <td><%#= r.precio_unitario * 100 %></td> -->
+          <td><%= number_to_balboa(r.monto / r.cantidad, false) %></td>
+          <td><%= number_to_balboa(r.monto, false) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div align="justify" class="card-body card-header">
+          <p class="card-text">
+            Mediante la ley 67 de 1 de septiembre de 2011 publicada en la Gaceta Oficial No. 26863-A de 2 de septiembre de 2011, se crea la Superintendencia del Mercado de Valores como un organismo autónomo del Estado, con personería jurídica, patrimonio propio e independencia administrativa, presupuestaria y financiera, con competencia privativa para regular y supervisar a los emisores, sociedades de inversiones, intermediarios y demás participantes del mercados de valores.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <h2 style="margin-top: 0;">Importe Debido</h2>
+      <table class="table">
+        <tbody>
+          <tr>
+            <th>Últimos pagos:</th>
+            <td style="text-align: right;"><%= number_to_balboa(@t_factura.t_recibos.sum(:pago_recibido)) %></td>
+          </tr>
+          <tr>
+            <th>Total de items:</th>
+            <td style="text-align: right;"><%= number_to_balboa(@t_factura.calcular_total_factura) %></td>
+          </tr>
+          <tr>
+            <th>Pendiente a pagar:</th>
+            <td style="text-align: right;"><%= @t_factura.calcular_saldo_pendiente >= 0 ? number_to_balboa(@t_factura.calcular_saldo_pendiente) : 0 %></td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div align="center" class="col-sm-12">
+      <%= link_to new_t_factura_path, class: 'btn btn-default' do %>
+        <i class="fa fa-credit-card"></i>
+        Crear Otra
+      <% end %>
+      <%= link_to edit_t_factura_path(@t_factura), class: 'btn btn-warning' do %>
+        <i class="fa fa-edit"></i>
+        Editar Factura
+      <% end %>
+
+      <% if can? :destroy, TFactura %>
+        <%= link_to @t_factura, method: :delete, data: { confirm: '¿Está seguro de querer eliminar esta factura?' }, class: 'btn btn-danger' do %>
+          <i class="fa fa-trash"></i>
+          Eliminar Factura
+        <% end %>
+      <% end %>
+
+      <% if can? :send_email, TFactura %>
+        <button type="button" class="btn btn-info"><i class="fa fa-envelope"></i> Enviar al Correo</button>
+      <% end %>
+      
+      <% if can? :generate_pdf, TFactura %>
+        <%= link_to generar_pdf_t_factura_path(@t_factura, format:'pdf'), target: "_blank", class: 'btn btn-primary' do %>
+          <i class="fa fa-download"></i>
+          Generar PDF
+        <% end %>
+      <% end %>
+
+      <% if can? :create, TRecibo %>
+        <%= link_to new_t_factura_t_recibo_path(@t_factura), class: 'btn btn-success' do %>
+          <i class="fa fa-credit-card"></i>
+          Realizar Recibo
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+<% if (@is_show && @t_factura.t_recibos.any?)%>
+  <hr>
+    <h3 align="center">RECIBO</h3>
+<% elsif @t_factura.t_recibos.any?%>
+  <hr>
+    <h3 align="center">RECIBOS</h3>
+<% end %>
+
+  <br>
+
+<% else %>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Cantidad</th>
+        <th>Ítem</th>
+        <th>Descripción</th>
+        <!-- <th>Tasa (%)</th> -->
+        <th>Precio Unitario (B/.)</th>
+        <th>Importe (B/.)</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr>
+        <td>1</td>
+        <td><%#= @t_tarifa.nombre %></td>
+        <td><%#= @t_tarifa.descripcion %></td>
+        <td><%#= number_to_balboa(@t_tarifa.monto, false) %></td>
+        <td><%#= number_to_balboa(@t_tarifa.monto, false) %></td>
+      </tr> -->
+      <% @t_factura.t_factura_detalles.each do |fd| %>
+        <tr>
+          <td><%= fd.cantidad %></td>
+          <td><%= fd.t_tarifa_servicio.nombre %></td>
+          <td><%= "#{fd.t_tarifa_servicio.descripcion} | #{fd.t_tarifa_servicio.codigo} | #{fd.cuenta_desc}" %></td>
+          <!-- <td>N/A</td> -->
+          <td><%= number_to_balboa(fd.precio_unitario, false) %></td>
+          <td><%= number_to_balboa(fd.precio_unitario * fd.cantidad, false) %></td>
+           
+        </tr>
+      <% end %>
+
+      <% @t_factura.t_recargo_facturas.each do |r| %>
+
+        <tr>
+          <td><%= r.cantidad %></td>
+          <td>Recargo</td>
+          <td><%= r.t_recargo.descripcion %></td>
+          <!-- <td><%#= r.precio_unitario * 100 %></td> -->
+          <td><%= number_to_balboa(r.monto / r.cantidad, false) %></td>
+          <td><%= number_to_balboa(r.monto, false) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>  
 
 <%= render 't_recibos' if !@is_show && @t_recibos.any? %>
 <% if !@is_show && @t_nota_creditos.any? %>
@@ -116,6 +338,7 @@
                 button_size: "xs"
               %>
             <% end %>
+            
             <% unless @t_recibo.t_nota_creditos.where.not(status: "Usada").count == 0 %>
               <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf', notas_credito: true), target: "_blank", class: 'btn btn-primary' do %>
                 <i class="fa fa-download">
@@ -123,6 +346,7 @@
                 </i>
               <% end %>
             <% end %>
+
 
             <% if can? :generate_receipt, TRecibo %>
               <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @t_recibo, format:'pdf'), target: "_blank", class: 'btn btn-primary' do %>
@@ -156,7 +380,7 @@
               <% end %>
               <%= link_to generar_pdf_t_factura_t_recibo_path(@t_factura, @last_t_recibo, format:'pdf'), id: "generated_pdf", target: "_blank", class: 'btn btn-primary' do %>
                 <i class="fa fa-download"></i>
-                Generar PDF
+                Generar Recibo
               <% end %>
             <% end %>
 
