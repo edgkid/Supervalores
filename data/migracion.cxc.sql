@@ -806,30 +806,68 @@ FROM (
 ) dt
 WHERE id = dt.prediction_id;
 
+CREATE MATERIALIZED VIEW presupuesto_normalizados AS
+SELECT
+	row_number() OVER (ORDER BY ctp.idt_presupuesto) AS prediction_id
+	, ctp.idt_presupuesto prev_id
+	, ctp.codigo
+	, ctp.descripcion
+	, ctp.estatus
+	, CURRENT_TIMESTAMP created_at
+	, CURRENT_TIMESTAMP updated_at
+FROM cxc_t_presupuesto ctp;
+
+INSERT INTO t_presupuestos (codigo, descripcion, estatus, created_at, updated_at)
+SELECT codigo, descripcion, estatus, created_at, updated_at
+FROM presupuesto_normalizados
+GROUP BY prediction_id, codigo, descripcion, estatus, created_at, updated_at
+ORDER BY prediction_id;
+
+CREATE MATERIALIZED VIEW tarifa_servicios_group_normalizadas AS
+SELECT
+	row_number() OVER (ORDER BY cttsg.idt_tarifa_servicios_group) AS prediction_id
+	, cttsg.idt_tarifa_servicios_group prev_id
+	, pns.prediction_id t_presupuesto_id
+	, cttsg.nombre
+	, cttsg.estatus
+	, CURRENT_TIMESTAMP created_at
+	, CURRENT_TIMESTAMP updated_at
+FROM cxc_t_tarifa_servicios_group cttsg
+JOIN presupuesto_normalizados pns ON cttsg.idt_presupuesto = pns.prev_id;
+
+INSERT INTO t_tarifa_servicio_groups (nombre, estatus, created_at, updated_at, t_presupuesto_id)
+SELECT nombre, estatus, created_at, updated_at, t_presupuesto_id
+FROM tarifa_servicios_group_normalizadas
+GROUP BY prediction_id, nombre, estatus, created_at, updated_at, t_presupuesto_id
+ORDER BY prediction_id;
+
 CREATE MATERIALIZED VIEW tarifa_servicios_normalizados AS
 SELECT 
 	row_number() OVER (ORDER BY dt.prev_id, dt.codigo, dt.descripcion, dt.nombre, dt.clase, dt.precio, dt.estatus, dt.created_at, dt.updated_at) AS prediction_id
-	, dt.tipo, dt.codigo, dt.descripcion, dt.nombre, dt.clase, dt.precio, dt.estatus, dt.created_at, dt.updated_at, dt.prev_id
-FROM (SELECT '0000' codigo, 'Desconocida' descripcion, 'Desconocido' nombre, 'Desconocido' clase, 0 precio, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id, '' tipo
+	, dt.tipo, dt.codigo, dt.descripcion, dt.nombre, dt.clase, dt.precio, dt.estatus, dt.created_at, dt.updated_at, dt.prev_id, dt.presupuesto_id
+FROM (SELECT '0000' codigo, 'Desconocida' descripcion, 'Desconocido' nombre, 'Desconocido' clase, 0 precio, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id, '' tipo, 1 presupuesto_id
 UNION ALL (
 	SELECT 
-		ctts.codigo codigo
-		, TRIM(ctts.descripcion) descripcion
-		, TRIM(ctts.nombre) nombre
-		, ctts.clase clase
-		, ctts.precio precio
-		, ctts.estatus estatus
+		tta.codigo codigo
+		, TRIM(tta.descripcion) descripcion
+		, TRIM(tta.nombre) nombre
+		, tta.clase clase
+		, tta.precio precio
+		, tta.estatus estatus
 		, CURRENT_TIMESTAMP created_at
 		, CURRENT_TIMESTAMP updated_at
-		, ctts.idt_tarifa_servicios prev_id
-		, CASE WHEN ctts.nombre~'.*(TR\s)' THEN 'TR' WHEN ctts.nombre~'.*(TS\s)' THEN 'TS' ELSE '' END tipo
-	FROM cxc_t_tarifa_servicios ctts	
-	)) dt;
+		, tta.idt_tarifa_servicios prev_id
+		, CASE WHEN tta.nombre~'.*(TR\s)' THEN 'TR' WHEN tta.nombre~'.*(TS\s)' THEN 'TS' ELSE '' END tipo
+		, pre.prediction_id presupuesto_id
+	from cxc_t_tarifa_servicios tta
+	join cxc_t_tarifa_servicios_group tgr ON tta.idt_tarifa_servicios_group = tgr.idt_tarifa_servicios_group
+	join presupuesto_normalizados pre on tgr.idt_presupuesto = pre.prev_id
+)) dt;
 
-INSERT INTO t_tarifa_servicios (codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at)
-SELECT codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at
+INSERT INTO t_tarifa_servicios (codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at, t_presupuesto_id)
+SELECT codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at, presupuesto_id
 FROM tarifa_servicios_normalizados
-GROUP by prediction_id, codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at
+GROUP by prediction_id, codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at, presupuesto_id
 ORDER BY prediction_id;
 
 CREATE MATERIALIZED VIEW factura_detalle_normalizado AS
@@ -929,41 +967,6 @@ FROM (
 	FROM recibos_normalizado
 ) dt
 WHERE id = dt.prediction_id;
-
-CREATE MATERIALIZED VIEW presupuesto_normalizados AS
-SELECT
-	row_number() OVER (ORDER BY ctp.idt_presupuesto) AS prediction_id
-	, ctp.idt_presupuesto prev_id
-	, ctp.codigo
-	, ctp.descripcion
-	, ctp.estatus
-	, CURRENT_TIMESTAMP created_at
-	, CURRENT_TIMESTAMP updated_at
-FROM cxc_t_presupuesto ctp;
-
-INSERT INTO t_presupuestos (codigo, descripcion, estatus, created_at, updated_at)
-SELECT codigo, descripcion, estatus, created_at, updated_at
-FROM presupuesto_normalizados
-GROUP BY prediction_id, codigo, descripcion, estatus, created_at, updated_at
-ORDER BY prediction_id;
-
-CREATE MATERIALIZED VIEW tarifa_servicios_group_normalizadas AS
-SELECT
-	row_number() OVER (ORDER BY cttsg.idt_tarifa_servicios_group) AS prediction_id
-	, cttsg.idt_tarifa_servicios_group prev_id
-	, pns.prediction_id t_presupuesto_id
-	, cttsg.nombre
-	, cttsg.estatus
-	, CURRENT_TIMESTAMP created_at
-	, CURRENT_TIMESTAMP updated_at
-FROM cxc_t_tarifa_servicios_group cttsg
-JOIN presupuesto_normalizados pns ON cttsg.idt_presupuesto = pns.prev_id;
-
-INSERT INTO t_tarifa_servicio_groups (nombre, estatus, created_at, updated_at, t_presupuesto_id)
-SELECT nombre, estatus, created_at, updated_at, t_presupuesto_id
-FROM tarifa_servicios_group_normalizadas
-GROUP BY prediction_id, nombre, estatus, created_at, updated_at, t_presupuesto_id
-ORDER BY prediction_id;
 
 CREATE MATERIALIZED VIEW cuentas_financieras_normalizadas AS
 SELECT
