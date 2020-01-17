@@ -2202,3 +2202,42 @@ las facturas se estan generando multiples veces cuando el usuario solo lo hace 1
 
 error de datatables en el informe de presupuesto, filtros
 
+
+13 segundos
+9 segundos
+
+
+factura.schedule_custom_percent_monthly_surcharge(0.02)
+
+default: &default
+adapter: postgresql
+encoding: unicode
+pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: sm_development
+
+test:
+  <<: *default
+  database: sm_test
+
+
+
+
+
+
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: postgres
+  password: archer20900
+  # For details on connection pooling, see Rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  host: localhost
+  database: supervalores_january_15_2020

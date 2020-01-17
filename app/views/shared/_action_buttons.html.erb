@@ -24,7 +24,7 @@ btn_size = defined?(button_size) ? "btn-#{button_size}" : "btn-xs"
     <% end if defined?(save_form) %>
     
     <%= link_to delete_route, method: :delete,
-    data: { confirm: defined?(delete_message) ? delete_message : '¿Está seguro de querer eliminarlo?' },
+    data: { confirm: defined?(delete_message) ? delete_message : '¿Está seguro de querer anularlo?' },
     class: "btn btn-danger #{btn_size}", title: 'Eliminar registro', 'data-toggle' => 'tooltip', 'data-placement' => 'right' do %>
       <i class="glyphicon glyphicon-trash"></i> <%= delete_text if defined?(delete_text) %>
     <% end if defined?(delete_route) %>

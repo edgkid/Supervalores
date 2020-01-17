@@ -87,8 +87,9 @@
         <td>Recargo</td>
         <td><%= r.t_recargo.descripcion %></td>
         <!-- <td><%#= r.precio_unitario * 100 %></td> -->
-        <td><%= number_to_balboa(r.monto / r.cantidad, false) %></td>
-        <td><%= number_to_balboa(r.monto, false) %></td>
+        
+        <td><%= number_to_balboa((r.monto || 0) / (r.cantidad || 1), false) %></td>
+        <td><%= number_to_balboa((r.monto || 0), false) %></td>
       </tr>
     <% end %>
   </tbody>

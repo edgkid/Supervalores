@@ -295,11 +295,7 @@
               <%= f.label :justificacion, 'Justificación', class: "text-right opcional" %>
             </div>
             <div class="col-sm-6 input-value">
-              <% unless @is_show %>
-                <%= f.text_field :justificacion, class: "form-control" %>
-              <% else %>
-                <%= @t_recibo.justificacion %>
-              <% end %>
+              <%= f.text_field :justificacion, class: "form-control" %>
             </div>
           </div>
         </div>
@@ -337,6 +333,7 @@
                 delete_route: t_factura_t_recibo_path(@t_factura, @t_recibo), delete_text: "Borrar",
                 button_size: "xs"
               %>
+              <%= link_to 'Anular', t_factura_t_recibo_path(@t_factura, @t_recibo), data: {confirm: '¿Está seguro de querer anularlo?'}, :method => :delete, class: "btn btn-danger btn-xs" %>
             <% end %>
             
             <% unless @t_recibo.t_nota_creditos.where.not(status: "Usada").count == 0 %>
