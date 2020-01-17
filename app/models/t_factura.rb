@@ -122,7 +122,7 @@ class TFactura < ApplicationRecord
     next_surcharge_date
   end
 
-  def generate_surcharge(rate, job)
+  def generate_surcharge(price_rate, job)
     t_factura_actual = TFactura.find(self.id)
 
     estatus_fac = t_factura_actual.t_estatus.descripcion
@@ -142,10 +142,11 @@ class TFactura < ApplicationRecord
 
     t_factura_actual.t_recargo_facturas.build(
       cantidad: 1,
-      precio_unitario: rate,
+      precio_unitario: price_rate[1],
+      monto: price_rate[0],
       t_recargo: TRecargo.where(
-        descripcion: "Recargo automático del #{rate * 100}\%",
-        tasa: rate,
+        descripcion: "Recargo automático del #{price_rate[1] * 100}\%",
+        tasa: price_rate[1],
         estatus: 1,
         t_periodo: TPeriodo.where(
           descripcion: 'Periodo Mensual',
@@ -158,7 +159,7 @@ class TFactura < ApplicationRecord
       ).first_or_create!
     )
 
-    update_surcharges(rate, t_factura_actual)
+    update_surcharges(price_rate[1], t_factura_actual)
   end
 
   def schedule_surcharge(t_recargo)
@@ -321,7 +322,7 @@ class TFactura < ApplicationRecord
     # Si el recargo (tasa * el total se los servicios) es mayor que la diferencia,
     # entonces se retornará la tasa de la diferencia (ya que el recargo total no puede ser mayor que
     # el total de los servicios)
-    # nuevo_precio = tasa * total_servicios > diferencia ? diferencia : tasa * total_servicios
+    nuevo_precio = tasa * total_servicios > diferencia ? diferencia : tasa * total_servicios,
     tasa * total_servicios > diferencia ? (diferencia / total_servicios) : tasa
   end
 
