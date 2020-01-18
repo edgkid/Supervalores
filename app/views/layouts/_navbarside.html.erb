@@ -61,13 +61,23 @@
         </li>
       <% end %>
 
-      <% if can?(:read, TTipoCliente) || can?(:read, TTipoClienteTipo) ||
-        can?(:read, TTipoPersona) || can?(:read, TEstatus) || can?(:read, TEmpresa) ||
-        can?(:read, TEmpresaTipoValor) || can?(:read, TEmpresaSectorEconomico) ||
-        can?(:read, TConfFacAutomatica) || can?(:read, TRecargo) ||
-        can?(:read, TPeriodo) || can?(:read, TTarifa) || can?(:read, TTarifaServicio) ||
-        can?(:read, TLeyenda) || can?(:read, TTipoEmision) ||
-        can?(:read, TMetodoPago) || can?(:read, TConfiguracionRecargoT) %>
+      <% if can?(:read, TTipoCliente) ||
+            can?(:read, TTipoClienteTipo) ||
+            can?(:read, TTipoPersona) ||
+            can?(:read, TEstatus) ||
+            can?(:read, TEmpresa) ||
+            can?(:read, TEmpresaTipoValor) ||
+            can?(:read, TEmpresaSectorEconomico) ||
+            can?(:read, TConfFacAutomatica) ||
+            can?(:read, TRecargo) ||
+            can?(:read, TPeriodo) ||
+            can?(:read, TTarifa) ||
+            can?(:read, TTarifaServicio) ||
+            can?(:read, TTarifaServicioGroup) ||
+            can?(:read, TLeyenda) ||
+            can?(:read, TTipoEmision) ||
+            can?(:read, TMetodoPago) ||
+            can?(:read, TConfiguracionRecargoT) %>
         <li>
           <a href="#">
             <i class="fa fa-edit"></i>
@@ -109,6 +119,9 @@
             <% end %>
             <% if can? :read, TTarifa %>
               <li><%= link_to 'Tarifas', t_tarifas_path %></li>
+            <% end %>
+            <% if can? :read, TTarifaServicioGroup %>
+              <li><%= link_to 'Grupo de Servicios', t_tarifa_servicio_groups_path %></li>
             <% end %>
             <% if can? :read, TTarifaServicio %>
               <li><%= link_to 'Servicios', t_tarifa_servicios_path %></li>

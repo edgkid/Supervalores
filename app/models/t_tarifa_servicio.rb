@@ -17,11 +17,13 @@
 
 class TTarifaServicio < ApplicationRecord
   require 'csv'
-  belongs_to :t_presupuesto, optional: true
+  belongs_to :t_tarifa_servicio_group
   has_many :t_factura_detalles, dependent: :destroy
   has_many :t_estado_cuenta_conts, dependent: :destroy
 
   def self.match_code_by_budget_code_from_csv(path)
+    #Revisar como se actualiza esto para que use tarifa_servicio_group
+    return
     CSV.foreach(path, headers: true) do |row|
       hash_row = row.to_hash
 

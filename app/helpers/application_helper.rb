@@ -52,6 +52,14 @@ module ApplicationHelper
     return TTarifa.where(estatus: 1).order(:nombre).pluck :nombre, :id
   end
 
+  def opciones_de_presupuestos
+    return TPresupuesto.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
+  end
+
+  def opciones_de_grupos_de_servicios
+    return TTarifaServicioGroup.where(estatus: 1).order(:nombre).pluck :nombre, :id
+  end
+
   def opciones_de_tipos_de_personas
     return TTipoPersona.where(estatus: 1).order(:descripcion).pluck :descripcion, :id
   end  

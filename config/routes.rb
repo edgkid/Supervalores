@@ -328,6 +328,8 @@ Rails.application.routes.draw do
       get 'pago_recibido_total'
     end
   end
+  resources :t_tarifa_servicio_groups do
+  end
   resources :t_tarifa_servicios do
     collection do
       get 'informe_tramites_tarifas_registradas'

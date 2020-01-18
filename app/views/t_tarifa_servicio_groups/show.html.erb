@@ -1,0 +1,10 @@
+<div class="row justify-content-md-center">
+  <div class="col-md-9 col-lg-7">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>Grupo, <%= @registro.nombre %></h5>
+      </div>
+      <%= render 'form', registro: @registro, editable: false, return_to: t_tarifa_servicio_groups_path %>
+    </div>
+  </div>
+</div>

@@ -844,8 +844,8 @@ ORDER BY prediction_id;
 CREATE MATERIALIZED VIEW tarifa_servicios_normalizados AS
 SELECT 
 	row_number() OVER (ORDER BY dt.prev_id, dt.codigo, dt.descripcion, dt.nombre, dt.clase, dt.precio, dt.estatus, dt.created_at, dt.updated_at) AS prediction_id
-	, dt.tipo, dt.codigo, dt.descripcion, dt.nombre, dt.clase, dt.precio, dt.estatus, dt.created_at, dt.updated_at, dt.prev_id, dt.presupuesto_id
-FROM (SELECT '0000' codigo, 'Desconocida' descripcion, 'Desconocido' nombre, 'Desconocido' clase, 0 precio, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id, '' tipo, 1 presupuesto_id
+	, dt.tipo, dt.codigo, dt.descripcion, dt.nombre, dt.clase, dt.precio, dt.estatus, dt.created_at, dt.updated_at, dt.prev_id, dt.t_tarifa_servicio_group_id
+FROM (SELECT '0000' codigo, 'Desconocida' descripcion, 'Desconocido' nombre, 'Desconocido' clase, 0 precio, 0 estatus, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, 0 prev_id, '' tipo, 1 t_tarifa_servicio_group_id
 UNION ALL (
 	SELECT 
 		tta.codigo codigo
@@ -858,16 +858,15 @@ UNION ALL (
 		, CURRENT_TIMESTAMP updated_at
 		, tta.idt_tarifa_servicios prev_id
 		, CASE WHEN tta.nombre~'.*(TR\s)' THEN 'TR' WHEN tta.nombre~'.*(TS\s)' THEN 'TS' ELSE '' END tipo
-		, pre.prediction_id presupuesto_id
+		, tgr.prediction_id t_tarifa_servicio_group_id
 	from cxc_t_tarifa_servicios tta
-	join cxc_t_tarifa_servicios_group tgr ON tta.idt_tarifa_servicios_group = tgr.idt_tarifa_servicios_group
-	join presupuesto_normalizados pre on tgr.idt_presupuesto = pre.prev_id
+	join tarifa_servicios_group_normalizadas tgr ON tta.idt_tarifa_servicios_group = tgr.prev_id
 )) dt;
 
-INSERT INTO t_tarifa_servicios (codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at, t_presupuesto_id)
-SELECT codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at, presupuesto_id
+INSERT INTO t_tarifa_servicios (codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at, t_tarifa_servicio_group_id)
+SELECT codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at, t_tarifa_servicio_group_id
 FROM tarifa_servicios_normalizados
-GROUP by prediction_id, codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at, presupuesto_id
+GROUP by prediction_id, codigo, tipo, descripcion, nombre, clase, precio, estatus, created_at, updated_at, t_tarifa_servicio_group_id
 ORDER BY prediction_id;
 
 CREATE MATERIALIZED VIEW factura_detalle_normalizado AS
