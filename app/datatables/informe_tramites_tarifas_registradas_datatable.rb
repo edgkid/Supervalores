@@ -14,9 +14,9 @@ class InformeTramitesTarifasRegistradasDatatable < ApplicationDatatable
       {
         codigo: record.id,
         nombre: record.nombre,
-        total: record.total_cantidad * record.total_monto,        
+        total: (record.total_cantidad * record.total_monto*100).round / 100.0,        
         anio: record.anio,
-        anio_total: record.anio_cantidad.to_f * record.anio_monto.to_f,
+        anio_total: (record.anio_cantidad.to_f * record.anio_monto.to_f*100).round / 100.0,
         DT_RowId: url_for({
           id: record.id, controller: 't_tarifa_servicios', action: 'show', only_path: true
         })

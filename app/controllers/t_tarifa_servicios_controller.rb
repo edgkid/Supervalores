@@ -45,8 +45,8 @@ class TTarifaServiciosController < ApplicationController
     total_anios_servicios = dt.get_raw_records().sum("CAST(anio_cantidad as numeric) * CAST(anio_monto as numeric)")
     render json: {
       procesado: true,
-      total_servicios: total_servicios,
-      total_anios_servicios: total_anios_servicios,
+      total_servicios: (total_servicios*100).round / 100.0,
+      total_anios_servicios: (total_anios_servicios*100).round / 100.0,
     }
   end
   
@@ -89,8 +89,8 @@ class TTarifaServiciosController < ApplicationController
     total_anios_servicios = dt.get_raw_records().sum("CAST(anio_cantidad as numeric) * CAST(anio_monto as numeric)")
     render json: {
       procesado: true,
-      total_servicios: total_servicios,
-      total_anios_servicios: total_anios_servicios,
+      total_servicios: (total_servicios*100).round / 100.0,
+      total_anios_servicios: (total_anios_servicios*100).round / 100.0,
     }
   end
 
