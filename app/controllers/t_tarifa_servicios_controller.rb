@@ -6,15 +6,14 @@ class TTarifaServiciosController < ApplicationController
   
   def estadistica_cuentas_x_cobrar
     @usar_dataTables = true
-    @useDataTableFooter = false
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @attributes_to_display = [
-      :codigo_nombre,
-      :total_cantidad,
-      :total_monto,
+      :codigo,
+      :nombre,
+      :total,
       :anio,
-      :anio_cantidad,
-      :anio_monto
+      :anio_total
     ]
 
     respond_to do |format|
@@ -27,20 +26,41 @@ class TTarifaServiciosController < ApplicationController
       }
     end
   end
+
+  def total_estadistica_cuentas_x_cobrar
+    attributes_to_display = [
+      :codigo,
+      :nombre,
+      :total,
+      :anio,
+      :anio_total
+    ]
+    dt = EstadisticaDeCuentasXCobrarDatatable.new(
+      params.merge({
+        attributes_to_display: attributes_to_display
+      }),
+      view_context: view_context)
+      
+    total_servicios = dt.get_raw_records().sum("total_cantidad * total_monto")
+    total_anios_servicios = dt.get_raw_records().sum("CAST(anio_cantidad as numeric) * CAST(anio_monto as numeric)")
+    render json: {
+      procesado: true,
+      total_servicios: total_servicios,
+      total_anios_servicios: total_anios_servicios,
+    }
+  end
   
   def informe_tramites_tarifas_registradas
     @usar_dataTables = true
-    @useDataTableFooter = false
+    @useDataTableFooter = true
     @do_not_use_plain_select2 = true
     @attributes_to_display = [
-      :codigo_nombre,
-      :total_cantidad,
-      :total_monto,
+      :codigo,
+      :nombre,
+      :total,
       :anio,
-      :anio_cantidad,
-      :anio_monto
+      :anio_total
     ]
-
     respond_to do |format|
       format.html
       format.json { render json: InformeTramitesTarifasRegistradasDatatable.new(
@@ -50,6 +70,28 @@ class TTarifaServiciosController < ApplicationController
         view_context: view_context)
       }
     end
+  end
+
+  def total_informe_tramites_tarifas_registradas
+    attributes_to_display = [
+      :codigo,
+      :nombre,
+      :total,
+      :anio,
+      :anio_total
+    ]
+    dt = InformeTramitesTarifasRegistradasDatatable.new(
+      params.merge({
+        attributes_to_display: attributes_to_display
+      }),
+      view_context: view_context)
+    total_servicios = dt.get_raw_records().sum("total_cantidad * total_monto")
+    total_anios_servicios = dt.get_raw_records().sum("CAST(anio_cantidad as numeric) * CAST(anio_monto as numeric)")
+    render json: {
+      procesado: true,
+      total_servicios: total_servicios,
+      total_anios_servicios: total_anios_servicios,
+    }
   end
 
   def all_services

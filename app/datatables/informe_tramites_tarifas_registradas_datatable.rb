@@ -1,24 +1,22 @@
 class InformeTramitesTarifasRegistradasDatatable < ApplicationDatatable
   def view_columns
     @view_columns ||= {
-      codigo_nombre: { source: "InformeTramitesTarifasRegistradasView.codigo_nombre" },
-      total_cantidad: { source: "InformeTramitesTarifasRegistradasView.total_cantidad" },
-      total_monto: { source: "InformeTramitesTarifasRegistradasView.total_monto" },
+      codigo: { source: "InformeTramitesTarifasRegistradasView.id" },
+      nombre: { source: "InformeTramitesTarifasRegistradasView.nombre" },
+      total: { source: "InformeTramitesTarifasRegistradasView.total_cantidad", searchable: false },
       anio: { source: "InformeTramitesTarifasRegistradasView.anio" },
-      anio_cantidad: { source: "InformeTramitesTarifasRegistradasView.anio_cantidad" },
-      anio_monto: { source: "InformeTramitesTarifasRegistradasView.anio_monto" }
+      anio_total: { source: "InformeTramitesTarifasRegistradasView.anio_cantidad", searchable: false }
     }
   end
 
   def data
     records.map do |record|
       {
-        codigo_nombre: record.codigo_nombre,
-        total_cantidad: record.total_cantidad,
-        total_monto: record.total_monto,
+        codigo: record.id,
+        nombre: record.nombre,
+        total: record.total_cantidad * record.total_monto,        
         anio: record.anio,
-        anio_cantidad: record.anio_cantidad,
-        anio_monto: record.anio_monto,
+        anio_total: record.anio_cantidad.to_f * record.anio_monto.to_f,
         DT_RowId: url_for({
           id: record.id, controller: 't_tarifa_servicios', action: 'show', only_path: true
         })

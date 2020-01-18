@@ -1,24 +1,22 @@
 class EstadisticaDeCuentasXCobrarDatatable < ApplicationDatatable
   def view_columns
     @view_columns ||= {
-      codigo_nombre: { source: "EstadisticaDeCuentasXCobrarView.codigo_nombre" },
-      total_cantidad: { source: "EstadisticaDeCuentasXCobrarView.total_cantidad" },
-      total_monto: { source: "EstadisticaDeCuentasXCobrarView.total_monto" },
+      codigo: { source: "EstadisticaDeCuentasXCobrarView.id" },
+      nombre: { source: "EstadisticaDeCuentasXCobrarView.nombre" },
+      total: { source: "EstadisticaDeCuentasXCobrarView.total_cantidad", searchable: false },
       anio: { source: "EstadisticaDeCuentasXCobrarView.anio" },
-      anio_cantidad: { source: "EstadisticaDeCuentasXCobrarView.anio_cantidad" },
-      anio_monto: { source: "EstadisticaDeCuentasXCobrarView.anio_monto" }
+      anio_total: { source: "EstadisticaDeCuentasXCobrarView.anio_cantidad", searchable: false }
     }
   end
 
   def data
     records.map do |record|
       {
-        codigo_nombre: record.codigo_nombre,
-        total_cantidad: record.total_cantidad,
-        total_monto: record.total_monto,
+        codigo: record.id,
+        nombre: record.nombre,
+        total: record.total_cantidad * record.total_monto,        
         anio: record.anio,
-        anio_cantidad: record.anio_cantidad,
-        anio_monto: record.anio_monto,
+        anio_total: record.anio_cantidad.to_f * record.anio_monto.to_f,
         DT_RowId: url_for({
           id: record.id, controller: 't_tarifa_servicios', action: 'show', only_path: true
         })
