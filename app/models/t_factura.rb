@@ -159,7 +159,7 @@ class TFactura < ApplicationRecord
       ).first_or_create!
     )
 
-    update_surcharges(price_rate[1], t_factura_actual)
+    update_surcharges(price_rate[0], t_factura_actual)
   end
 
   def schedule_surcharge(t_recargo)
@@ -183,15 +183,15 @@ class TFactura < ApplicationRecord
     end
   end
 
-  def schedule_custom_percent_monthly_surcharge(rate)
+  def schedule_custom_percent_monthly_surcharge
     # debugger
     scheduler = Rufus::Scheduler.singleton
 
     if self.t_estatus.descripcion.downcase == 'facturada' || self.t_estatus.descripcion.downcase == 'pago pendiente'
       # El primer recargo se aplicará un día después de la fecha de vencimiento a las 00:00.
       # scheduler.at "#{self.fecha_vencimiento + 1.day} 0000" do |j0b|
-      scheduler.in "3" do |job1|
-        find_invoice_and_generate_surcharge(rate, job1)
+      scheduler.in "3s" do |job1|
+        find_invoice_and_generate_surcharge(TConfiguracionRecargoT.take.try(:tasa) || 0, job1)
 
         t_factura = find_self
         # El siguiente recargo se hará dependiendo de si fue en enero o no.
@@ -202,7 +202,7 @@ class TFactura < ApplicationRecord
           # Los siguientes recargos se harán cada mes
           scheduler.schedule_every '1month' do |job3|
           # scheduler.schedule_every '15s' do |job3|
-            find_invoice_and_generate_surcharge(rate, job3)
+            find_invoice_and_generate_surcharge(TConfiguracionRecargoT.take.try(:tasa) || 0, job3)
           end
         end
       end
@@ -264,22 +264,23 @@ class TFactura < ApplicationRecord
     end
   end
 
-  def update_surcharges(rate, t_factura_actual = self)
+  def update_surcharges(surcharge_price, t_factura_actual = self)
     t_recibos = t_factura_actual.t_recibos
 
     if (ultimo_recibo = t_recibos.find_by(ultimo_recibo: true))
-      new_surcharge_price = ultimo_recibo.servicios_x_pagar * rate
       t_recibos.each do |t_recibo|
-        t_recibo.recargo_x_pagar += new_surcharge_price
-        t_recibo.pago_pendiente += new_surcharge_price
+        t_recibo.recargo_x_pagar += surcharge_price
+        t_recibo.pago_pendiente += surcharge_price
         t_recibo.save
       end
     else
-      new_surcharge_price = t_factura_actual.calculate_services_total_price * rate
-      t_factura_actual.recargo += new_surcharge_price
-      t_factura_actual.total_factura += new_surcharge_price
-      t_factura_actual.pendiente_fact += new_surcharge_price
+      # t_factura_actual.recargo += surcharge_price
+      # t_factura_actual.total_factura += surcharge_price
+      # t_factura_actual.pendiente_fact += surcharge_price
     end
+    t_factura_actual.recargo += surcharge_price
+    t_factura_actual.total_factura += surcharge_price
+    t_factura_actual.pendiente_fact += surcharge_price
 
     t_factura_actual.save
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_07_194947) do
+ActiveRecord::Schema.define(version: 2020_01_07_194948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -524,8 +524,8 @@ ActiveRecord::Schema.define(version: 2020_01_07_194947) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "tipo"
-    t.bigint "t_presupuesto_id"
-    t.index ["t_presupuesto_id"], name: "index_t_tarifa_servicios_on_t_presupuesto_id"
+    t.bigint "t_tarifa_servicio_group_id", null: false
+    t.index ["t_tarifa_servicio_group_id"], name: "index_t_tarifa_servicios_on_t_tarifa_servicio_group_id"
   end
 
   create_table "t_tarifas", force: :cascade do |t|
@@ -676,7 +676,7 @@ ActiveRecord::Schema.define(version: 2020_01_07_194947) do
   add_foreign_key "t_rol_usuarios", "t_rols"
   add_foreign_key "t_rol_usuarios", "users"
   add_foreign_key "t_tarifa_servicio_groups", "t_presupuestos"
-  add_foreign_key "t_tarifa_servicios", "t_presupuestos"
+  add_foreign_key "t_tarifa_servicios", "t_tarifa_servicio_groups"
   add_foreign_key "t_tarifas_periodos", "t_periodos"
   add_foreign_key "t_tarifas_periodos", "t_tarifas"
   add_foreign_key "t_tipo_clientes", "t_tarifas"
