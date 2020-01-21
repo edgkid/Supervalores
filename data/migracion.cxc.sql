@@ -626,7 +626,7 @@ FROM (
 			cxc_t_clientes cxccli
 			LEFT JOIN clientes_normalizados cns ON cxccli.idt_clientes = cns.prev_client_id
 			LEFT JOIN tipo_clientes_normalizados cttc ON cxccli.idt_tipo_cliente = cttc.prev_id
-			WHERE cxccli.prospecto = 0 AND (cns.prev_client_id NOT IN (3709,217,218,219,221,223,224,225,226,227,512,513,511,116,192,3341,426,319,1481,448,235,403,228,3330,3325,2842,343,3968,4028,627,241,3599,598,3710,3576,603,1759,3477,3489,3598,3021,664,3578,3165,3577) OR cxccli.estatus <> 0)
+			WHERE (cns.prev_client_id NOT IN (3709,217,218,219,221,223,224,225,226,227,512,513,511,116,192,3341,426,319,1481,448,235,403,228,3330,3325,2842,343,3968,4028,627,241,3599,598,3710,3576,603,1759,3477,3489,3598,3021,664,3578,3165,3577) OR cxccli.estatus <> 0)
 		GROUP BY 1 
 		) cli,
 		UNNEST ( cli.prev_client_ids ) s ( prev_client_id ),
@@ -655,6 +655,16 @@ UPDATE t_clientes
 	SET prospecto_at = CURRENT_TIMESTAMP
 FROM t_resolucions trs
 WHERE trs.t_cliente_id = t_clientes."id";
+
+UPDATE t_clientes 
+	SET prospecto_at = NULL
+FROM (
+	SELECT nor.prediction_id
+	FROM cxc_t_clientes cxc 
+	JOIN clientes_normalizados nor on cxc.idt_clientes = nor.prev_client_id
+	WHERE cxc.prospecto = 1
+) dt
+WHERE id = dt.prediction_id;;
 
 --CREATE MATERIALIZED VIEW rols_normalizados AS
 --SELECT url direccion_url, li_class, i_class, u_class, trim(nombre) nombre, descripcion, peso, estatus, icon_class, CURRENT_TIMESTAMP created_at, CURRENT_TIMESTAMP updated_at, idt_rol prev_id
