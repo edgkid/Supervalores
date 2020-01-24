@@ -20,7 +20,7 @@ class TRecibosController < ApplicationController
     @t_recibo.set_surcharge_and_services_total(@t_recibo.pago_recibido || 0, @t_factura, @t_factura.t_recibos.empty?)
     @t_recibo.calculate_default_attributes(@t_factura, @t_cliente, current_user)
     penultimo_recibo = @t_factura.t_recibos.find_by(ultimo_recibo: true)
-    penultimo_recibo.ultimo_recibo = false if penultimo_recibo
+    # penultimo_recibo.ultimo_recibo = false if penultimo_recibo
     if @t_recibo.save
       penultimo_recibo.update_attribute(:ultimo_recibo, false) if penultimo_recibo
       if @t_recibo.monto_acreditado > 0

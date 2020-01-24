@@ -123,7 +123,7 @@ class TFactura < ApplicationRecord
   end
 
   def generate_surcharge(price_rate, job)
-    t_factura_actual = TFactura.find(self.id)
+    t_factura_actual = find_self
 
     estatus_fac = t_factura_actual.t_estatus.descripcion
     if estatus_fac.downcase != 'facturada' && estatus_fac.downcase != 'pago pendiente'
@@ -158,6 +158,8 @@ class TFactura < ApplicationRecord
         ).first_or_create!
       ).first_or_create!
     )
+
+    # debugger
 
     update_surcharges(price_rate[0], t_factura_actual)
   end
@@ -201,7 +203,7 @@ class TFactura < ApplicationRecord
         scheduler.at "#{(t_factura.fecha_vencimiento + months_to_wait.month).at_beginning_of_month} 0000" do |job2|
           # Los siguientes recargos se harán cada mes
           scheduler.schedule_every '1month' do |job3|
-          # scheduler.schedule_every '15s' do |job3|
+          # scheduler.schedule_every '20s' do |job3|
             find_invoice_and_generate_surcharge(TConfiguracionRecargoT.take.try(:tasa) || 0, job3)
           end
         end

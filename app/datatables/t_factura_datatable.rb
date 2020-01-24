@@ -9,7 +9,7 @@ class TFacturaDatatable < ApplicationDatatable
       resolucion: { source: "resolucion", searchable: false },
       fecha_notificacion: { source: "TFactura.created_at" },
       fecha_vencimiento: { source: "TFactura.fecha_vencimiento" },
-      recargo: { source: "recargo", searchable: false },
+      recargo: { source: "TFactura.recargo" },
       total_factura: { source: "TFactura.total_factura" },
       pendiente_fact: { source: "TFactura.pendiente_total", searchable: false }
     }
@@ -25,7 +25,7 @@ class TFacturaDatatable < ApplicationDatatable
         resolucion: record[:resolucion],
         fecha_notificacion: record.created_at.strftime("%d/%m/%Y"),
         fecha_vencimiento: record.fecha_vencimiento.strftime("%d/%m/%Y"),
-        recargo: record[:recargo],
+        recargo: record.recargo,
         total_factura: record.total_factura.truncate(2),
         pendiente_fact: record.pendiente_total, #TRecibo.find_by(id: record[:t_recibo_id]).try(:pago_pendiente) || record.total_factura.truncate(2),
         DT_RowId: url_for({
@@ -39,7 +39,7 @@ class TFacturaDatatable < ApplicationDatatable
     TFactura
       .select("
         t_facturas.id, t_facturas.created_at, res.resolucion resolucion, t_facturas.fecha_notificacion,
-        t_facturas.fecha_vencimiento, COALESCE(rec.recargo_x_pagar, t_facturas.recargo) recargo,
+        t_facturas.fecha_vencimiento, t_facturas.recargo,
         t_facturas.total_factura, COALESCE(e.razon_social, o.razon_social,
         CONCAT(p.nombre, ' ', p.apellido)) razon_social, MAX(rec.id) t_recibo_id")
       .joins("
@@ -57,7 +57,7 @@ class TFacturaDatatable < ApplicationDatatable
         (params[:automatica] && params[:automatica] == 'true') ? true : false)
       .group("
         t_facturas.id, res.resolucion, t_facturas.fecha_notificacion, t_facturas.fecha_vencimiento,
-        COALESCE(rec.recargo_x_pagar, t_facturas.recargo), t_facturas.total_factura,
+        t_facturas.recargo, t_facturas.total_factura,
         COALESCE(e.razon_social, o.razon_social, CONCAT(p.nombre, ' ', p.apellido))
       ")
   end
