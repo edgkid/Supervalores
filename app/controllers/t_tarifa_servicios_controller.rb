@@ -11,9 +11,9 @@ class TTarifaServiciosController < ApplicationController
     @attributes_to_display = [
       :codigo,
       :nombre,
-      :total,
-      :anio,
-      :anio_total
+      :cantidad,
+      :monto,
+      :anio
     ]
 
     respond_to do |format|
@@ -31,9 +31,9 @@ class TTarifaServiciosController < ApplicationController
     attributes_to_display = [
       :codigo,
       :nombre,
-      :total,
-      :anio,
-      :anio_total
+      :cantidad,
+      :monto,
+      :anio
     ]
     dt = EstadisticaDeCuentasXCobrarDatatable.new(
       params.merge({
@@ -57,9 +57,9 @@ class TTarifaServiciosController < ApplicationController
     @attributes_to_display = [
       :codigo,
       :nombre,
-      :total,
-      :anio,
-      :anio_total
+      :cantidad,
+      :monto,
+      :anio
     ]
     respond_to do |format|
       format.html
@@ -76,9 +76,9 @@ class TTarifaServiciosController < ApplicationController
     attributes_to_display = [
       :codigo,
       :nombre,
-      :total,
-      :anio,
-      :anio_total
+      :cantidad,
+      :monto,
+      :anio
     ]
     dt = InformeTramitesTarifasRegistradasDatatable.new(
       params.merge({

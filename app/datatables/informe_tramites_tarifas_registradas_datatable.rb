@@ -1,11 +1,11 @@
 class InformeTramitesTarifasRegistradasDatatable < ApplicationDatatable
   def view_columns
-    @view_columns ||= {
-      codigo: { source: "InformeTramitesTarifasRegistradasView.id" },
-      nombre: { source: "InformeTramitesTarifasRegistradasView.nombre" },
-      total: { source: "InformeTramitesTarifasRegistradasView.total_cantidad", searchable: false },
-      anio: { source: "InformeTramitesTarifasRegistradasView.anio" },
-      anio_total: { source: "InformeTramitesTarifasRegistradasView.anio_cantidad", searchable: false }
+    @view_columns ||= {      
+      codigo: { source: "InformeTramitesTarifasRegistradasView.id" },,
+      nombre: { source: "InformeTramitesTarifasRegistradasView.nombre" },,
+      cantidad: { source: "InformeTramitesTarifasRegistradasView.anio_cantidad", searchable: false },,
+      monto: { source: "InformeTramitesTarifasRegistradasView.anio_monto" },,
+      anio: { source: "InformeTramitesTarifasRegistradasView.anio", searchable: false }
     }
   end
 
@@ -14,9 +14,9 @@ class InformeTramitesTarifasRegistradasDatatable < ApplicationDatatable
       {
         codigo: record.id,
         nombre: record.nombre,
-        total: record.total_cantidad,        
+        anio_cantidad: record.anio_cantidad.to_f,
+        anio_monto: record.anio_monto.to_f,        
         anio: record.anio,
-        anio_total: record.anio_cantidad.to_f,
         DT_RowId: url_for({
           id: record.id, controller: 't_tarifa_servicios', action: 'show', only_path: true
         })
