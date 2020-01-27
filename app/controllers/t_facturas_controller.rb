@@ -133,7 +133,7 @@ class TFacturasController < ApplicationController
     t_factura_params[:t_factura_detalles_attributes].each do |_, attribute|
       precios_y_cantidades << [attribute[:precio_unitario], attribute[:cantidad]]
     end
-    precios_y_cantidades.map! {|pr_c| pr_c[0].to_d * pr_c[1].to_i}
+    precios_y_cantidades.map! {|pr_c| (pr_c[0].try(:to_d) || 0) * (pr_c[1].try(:to_i) || 0)}
     precios_y_cantidades.sum
 
     invalid_t_recargo = false
