@@ -69,13 +69,13 @@ class TRecibo < ApplicationRecord
   end
 
   def get_services_total(t_factura, has_no_receipts)
-    ammount = has_no_receipts ? t_factura.calculate_services_total_price : t_factura.t_recibos.last.servicios_x_pagar
-    credit = t_factura.t_nota_creditos.last.nil? ? 0 :  t_factura.t_nota_creditos.last.monto
-    (ammount.to_f - credit)
+    amount = has_no_receipts ? t_factura.calculate_services_total_price : t_factura.t_recibos.last.servicios_x_pagar
+    credit = t_factura.t_nota_creditos.last.nil? ? 0 : t_factura.t_nota_creditos.last.monto
+    (amount.to_d - credit)
   end
 
   def get_total_surcharge(t_factura, has_no_receipts)
-    has_no_receipts ? t_factura.recargo : t_factura.t_recibos.last.recargo_x_pagar
+    has_no_receipts ? t_factura.recargo : t_factura.t_recibos.find_by(ultimo_recibo: true).recargo_x_pagar
   end
 
   def set_surcharge_and_services_total(received_payment, t_factura, has_no_receipts)
@@ -84,7 +84,7 @@ class TRecibo < ApplicationRecord
 
     if surcharge_remaining     > 0
       self.recargo_x_pagar     = surcharge_remaining.truncate(2)
-      self.servicios_x_pagar   = t_factura.calculate_services_total_price.truncate(2)
+      self.servicios_x_pagar   = services_total# t_factura.calculate_services_total_price.truncate(2)
       self.pago_pendiente      = (self.recargo_x_pagar + self.servicios_x_pagar).truncate(2)
       self.monto_acreditado    = 0
     else
