@@ -1,9 +1,9 @@
 class InformeTramitesTarifasRegistradasDatatable < ApplicationDatatable
   def view_columns
     @view_columns ||= {      
-      codigo: { source: "InformeTramitesTarifasRegistradasView.id" },,
-      nombre: { source: "InformeTramitesTarifasRegistradasView.nombre" },,
-      cantidad: { source: "InformeTramitesTarifasRegistradasView.anio_cantidad", searchable: false },,
+      codigo: { source: "InformeTramitesTarifasRegistradasView.id" },
+      nombre: { source: "InformeTramitesTarifasRegistradasView.nombre" },
+      cantidad: { source: "InformeTramitesTarifasRegistradasView.anio_cantidad", searchable: false },
       monto: { source: "InformeTramitesTarifasRegistradasView.anio_monto" },
       anio: { source: "InformeTramitesTarifasRegistradasView.anio", searchable: false }
     }

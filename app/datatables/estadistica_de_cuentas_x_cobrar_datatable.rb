@@ -1,9 +1,9 @@
 class EstadisticaDeCuentasXCobrarDatatable < ApplicationDatatable
   def view_columns
     @view_columns ||= {      
-      codigo: { source: "EstadisticaDeCuentasXCobrarView.id" },,
-      nombre: { source: "EstadisticaDeCuentasXCobrarView.nombre" },,
-      cantidad: { source: "EstadisticaDeCuentasXCobrarView.anio_cantidad", searchable: false },,
+      codigo: { source: "EstadisticaDeCuentasXCobrarView.id" },
+      nombre: { source: "EstadisticaDeCuentasXCobrarView.nombre" },
+      cantidad: { source: "EstadisticaDeCuentasXCobrarView.anio_cantidad", searchable: false },
       monto: { source: "EstadisticaDeCuentasXCobrarView.anio_monto" },
       anio: { source: "EstadisticaDeCuentasXCobrarView.anio", searchable: false }
     }
