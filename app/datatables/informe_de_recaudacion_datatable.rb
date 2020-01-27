@@ -23,9 +23,9 @@ class InformeDeRecaudacionDatatable < ApplicationDatatable
         fecha_pago: record.fecha_pago.strftime('%d/%m/%Y'),
         forma_pago: record.forma_pago,
         pago_recibido: number_to_balboa(record.pago_recibido, false),
-        DT_RowId: url_for({
-          id: record.id, controller: 't_facturas', action: 'preview', only_path: true
-        })
+        DT_RowId: url_with_or_without_parent_resource_for(
+          TFactura.find(record.t_factura_id), TRecibo.find(record.id)
+        )
       }
     end
   end
