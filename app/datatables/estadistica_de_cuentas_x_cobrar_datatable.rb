@@ -4,7 +4,7 @@ class EstadisticaDeCuentasXCobrarDatatable < ApplicationDatatable
       codigo: { source: "EstadisticaDeCuentasXCobrarView.id" },,
       nombre: { source: "EstadisticaDeCuentasXCobrarView.nombre" },,
       cantidad: { source: "EstadisticaDeCuentasXCobrarView.anio_cantidad", searchable: false },,
-      monto: { source: "EstadisticaDeCuentasXCobrarView.anio_monto" },,
+      monto: { source: "EstadisticaDeCuentasXCobrarView.anio_monto" },
       anio: { source: "EstadisticaDeCuentasXCobrarView.anio", searchable: false }
     }
   end

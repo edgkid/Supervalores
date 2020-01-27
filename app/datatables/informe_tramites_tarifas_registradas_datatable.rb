@@ -4,7 +4,7 @@ class InformeTramitesTarifasRegistradasDatatable < ApplicationDatatable
       codigo: { source: "InformeTramitesTarifasRegistradasView.id" },,
       nombre: { source: "InformeTramitesTarifasRegistradasView.nombre" },,
       cantidad: { source: "InformeTramitesTarifasRegistradasView.anio_cantidad", searchable: false },,
-      monto: { source: "InformeTramitesTarifasRegistradasView.anio_monto" },,
+      monto: { source: "InformeTramitesTarifasRegistradasView.anio_monto" },
       anio: { source: "InformeTramitesTarifasRegistradasView.anio", searchable: false }
     }
   end
